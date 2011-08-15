@@ -1,0 +1,22 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="config.lua"/>
+	<Script file="modules\datatext.lua"/>
+	<Script file="modules\autogreed.lua"/>
+	<Script file="modules\buff.lua"/>
+	<Script file="modules\castbar.lua"/>
+	<Script file="modules\chat.lua"/>	
+	<Script file="modules\colors.lua"/>
+	<Script file="modules\fonts.lua"/>
+	<Script file="modules\hyperlink.lua"/>
+	<Script file="modules\macro.lua"/>	
+	<Script file="modules\merchant.lua"/>
+	<Script file="modules\minimap.lua"/>
+	<Script file="modules\omnicc.lua"/>
+	<Script file="modules\power.lua"/>
+	<Script file="modules\quest.lua"/>
+	<Script file="modules\range.lua"/>
+	<Script file="modules\scale.lua"/>
+	<Script file="modules\selfbuffs.lua"/>	
+	<Script file="modules\slash.lua"/>	
+	<Script file="modules\tooltip.lua"/>	
+</Ui>
