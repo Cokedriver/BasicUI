@@ -1,7 +1,8 @@
 ## Interface: 40200
 ## Author: Cokedriver
-## Title: !|cff00B4FFbdc|rUI
+## Title: _|cff00B4FFbdc|rUI
 ## Notes: Blizzard Default Customized User Interface.
+## Version: 1.0
 ## SavedVariables: bdcUI
 ## SavedVariablesPerCharacter: bdcUIPerCharacter
 

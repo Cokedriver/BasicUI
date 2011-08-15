@@ -114,7 +114,7 @@ if (buffs and buffs[1]) then
 			end
 			self:Show()
 			if cfg.selfbuffs.sound == true and sound == true then
-				PlaySoundFile("Interface\\AddOns\\!bdcUI\\media\\Warning.mp3")
+				PlaySoundFile("Interface\\AddOns\\_bdcUI\\media\\Warning.mp3")
 				sound = false
 			end
 		else
@@ -128,7 +128,7 @@ if (buffs and buffs[1]) then
     frame:SetSize(50, 50)
 	local bgsize = 3,
 	frame:SetBackdrop({
-		edgeFile = "Interface\\AddOns\\!bdcUI\\media\\UI-Tooltip-Border",
+		edgeFile = "Interface\\AddOns\\_bdcUI\\media\\UI-Tooltip-Border",
 		tile = true, tileSize = 16, edgeSize = 18,
 		insets = {left = bgsize, right = bgsize, top = bgsize, bottom = bgsize}
 	})
@@ -216,7 +216,7 @@ if (enchants and enchants[1]) then
 			end
 			self:Show()
 			if cfg.remindbuffs.sound == true and sound == true then
-				PlaySoundFile("Interface\\AddOns\\!bdcUI\\media\\Warning.mp3")
+				PlaySoundFile("Interface\\AddOns\\_bdcUI\\media\\Warning.mp3")
 				sound = false
 			end
 		else
@@ -230,7 +230,7 @@ if (enchants and enchants[1]) then
     frame:SetSize(50, 50)
 	local bgsize = 3,
 	frame:SetBackdrop({
-		edgeFile = "Interface\\AddOns\\!bdcUI\\media\\UI-Tooltip-Border",
+		edgeFile = "Interface\\AddOns\\_bdcUI\\media\\UI-Tooltip-Border",
 		tile = true, tileSize = 16, edgeSize = 18,
 		insets = {left = bgsize, right = bgsize, top = bgsize, bottom = bgsize}
 	})

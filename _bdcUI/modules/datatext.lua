@@ -22,7 +22,7 @@ if cfg.datatext.datapanel.enable == true then
 		DataBorderPanel:SetFrameLevel(0)
 		DataBorderPanel:SetBackdrop({
 			bgFile = "Interface\\TutorialFrame\\TutorialFrameBackground",
-			edgeFile = "Interface\\AddOns\\!bdcUI\\media\\UI-Tooltip-Border",
+			edgeFile = "Interface\\AddOns\\_bdcUI\\media\\UI-Tooltip-Border",
 			tile = true, tileSize = 16, edgeSize = 18,
 			insets = {left = 3, right = 3, top = 3, bottom = 3},
 		})

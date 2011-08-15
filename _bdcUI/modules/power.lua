@@ -148,7 +148,7 @@ f.Power.BackgroundShadow:SetPoint('TOPLEFT', -4, 4)
 f.Power.BackgroundShadow:SetPoint('BOTTOMRIGHT', 4, -4)
 f.Power.BackgroundShadow:SetBackdrop({
     bgFile = 'Interface\\Buttons\\WHITE8x8',
-    edgeFile = 'Interface\\AddOns\\!bdcUI\\media\\UI-Tooltip-Border',
+    edgeFile = 'Interface\\AddOns\\_bdcUI\\media\\UI-Tooltip-Border',
     tile = true, tileSize = 16, edgeSize = 12,
     insets = {left = 3, right = 3, top = 3, bottom = 3},
 })
@@ -158,12 +158,12 @@ f.Power.BackgroundShadow:SetBackdropColor(0.15, 0.15, 0.15, 1)
 f.Power.Below = f.Power:CreateTexture(nil, 'BACKGROUND')
 f.Power.Below:SetHeight(14)
 f.Power.Below:SetWidth(14)
-f.Power.Below:SetTexture('Interface\\AddOns\\!bdcUI\\media\\textureArrowBelow')
+f.Power.Below:SetTexture('Interface\\AddOns\\_bdcUI\\media\\textureArrowBelow')
 
 f.Power.Above = f.Power:CreateTexture(nil, 'BACKGROUND')
 f.Power.Above:SetHeight(14)
 f.Power.Above:SetWidth(14)
-f.Power.Above:SetTexture('Interface\\AddOns\\!bdcUI\\media\\textureArrowAbove')
+f.Power.Above:SetTexture('Interface\\AddOns\\_bdcUI\\media\\textureArrowAbove')
 f.Power.Above:SetPoint('BOTTOM', f.Power.Below, 'TOP', 0, f.Power:GetHeight() + 4)
 
 if (cfg.power.showCombatRegen) then

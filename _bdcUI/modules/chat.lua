@@ -132,7 +132,7 @@ ChatFrame1EditBox:SetPoint('BOTTOMLEFT', ChatFrame1, 'TOPLEFT', 2, 33)
 ChatFrame1EditBox:SetPoint('BOTTOMRIGHT', ChatFrame1, 'TOPRIGHT', 0, 33)
 ChatFrame1EditBox:SetBackdrop({
     bgFile = 'Interface\\DialogFrame\\UI-DialogBox-Background',
-    edgeFile = 'Interface\\AddOns\\!bdcUI\\media\\UI-Tooltip-Border',
+    edgeFile = 'Interface\\AddOns\\_bdcUI\\media\\UI-Tooltip-Border',
     tile = true, tileSize = 16, edgeSize = 18,
     insets = {left = 3, right = 3, top = 3, bottom = 3},
 })
@@ -592,10 +592,10 @@ local function CreateCopyButton(self)
     self.Copy:SetSize(20, 20)
     self.Copy:SetPoint('TOPRIGHT', self, -5, -5)
 
-    self.Copy:SetNormalTexture('Interface\\AddOns\\!bdcUI\\media\\textureCopyNormal')
+    self.Copy:SetNormalTexture('Interface\\AddOns\\_bdcUI\\media\\textureCopyNormal')
     self.Copy:GetNormalTexture():SetSize(20, 20)
 
-    self.Copy:SetHighlightTexture('Interface\\AddOns\\!bdcUI\\media\\textureCopyHighlight')
+    self.Copy:SetHighlightTexture('Interface\\AddOns\\_bdcUI\\media\\textureCopyHighlight')
     self.Copy:GetHighlightTexture():SetAllPoints(self.Copy:GetNormalTexture())
 
     local tab = _G[self:GetName()..'Tab']

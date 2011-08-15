@@ -199,7 +199,7 @@ end
 local holder = CreateFrame("Frame")
 holder:RegisterEvent("ADDON_LOADED")
 holder:SetScript("OnEvent", function(f, event, addon)
-	if addon == "!bdcUI" then
+	if addon == "_bdcUI" then
 		bdcUI = bdcUI or {}
 		bdcUIPerCharacter = bdcUIPerCharacter or {}
 

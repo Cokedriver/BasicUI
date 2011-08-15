@@ -57,7 +57,7 @@ local function ApplyTooltipStyle(self)
     
     self:SetBackdrop({
         bgFile = 'Interface\\Buttons\\WHITE8x8',
-		edgeFile = 'Interface\\AddOns\\!bdcUI\\media\\UI-Tooltip-Border',
+		edgeFile = 'Interface\\AddOns\\_bdcUI\\media\\UI-Tooltip-Border',
 		tile = true, tileSize = 16, edgeSize = esize,
         insets = {left = bgsize, right = bgsize, top = bgsize, bottom = bgsize}
     })
@@ -311,13 +311,13 @@ local function GameTooltip_GetUnitPVPIcon(unit)
     
     if (UnitIsPVPFreeForAll(unit)) then
         if (cfg.tooltip.showPVPIcons) then
-            return '|TInterface\\AddOns\\!bdcUI\\media\\UI-PVP-FFA:12|t'
+            return '|TInterface\\AddOns\\_bdcUI\\media\\UI-PVP-FFA:12|t'
         else
             return '|cffFF0000# |r'
         end
     elseif (factionGroup and UnitIsPVP(unit)) then
         if (cfg.tooltip.showPVPIcons) then
-            return '|TInterface\\AddOns\\!bdcUI\\media\\UI-PVP-'..factionGroup..':12|t'
+            return '|TInterface\\AddOns\\_bdcUI\\media\\UI-PVP-'..factionGroup..':12|t'
         else
             return '|cff00FF00# |r'
         end
