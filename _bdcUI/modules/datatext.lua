@@ -15,14 +15,14 @@ if cfg.datatext.datapanel.enable == true then
 	
 	local DataBorderPanel = CreateFrame('Frame', 'DataBorderPanel', UIParent)
 	if cfg.datatext.datapanel.border == true then
-		DataBorderPanel:SetPoint('TOPLEFT', UIParent, 'TOPLEFT', 0, 0)
-		DataBorderPanel:SetPoint('TOPRIGHT', UIParent, 'TOPRIGHT', 0, 0)
+		DataBorderPanel:SetPoint('TOP', UIParent, 0, 0)
 		DataBorderPanel:SetHeight(28)
+		DataBorderPanel:SetWidth(GetScreenWidth())
 		DataBorderPanel:SetFrameStrata('LOW')
 		DataBorderPanel:SetFrameLevel(0)
 		DataBorderPanel:SetBackdrop({
 			bgFile = "Interface\\TutorialFrame\\TutorialFrameBackground",
-			edgeFile = "Interface\\AddOns\\_bdcUI\\media\\UI-Tooltip-Border",
+			edgeFile = "Interface\\AddOns\\!bdcUI\\media\\UI-Tooltip-Border",
 			tile = true, tileSize = 16, edgeSize = 18,
 			insets = {left = 3, right = 3, top = 3, bottom = 3},
 		})
@@ -69,23 +69,26 @@ if cfg.datatext.datapanel.enable == true then
 	})
 	BattleGroundPanel:SetBackdropColor(0, 0, 0, 0)
 
+	-- move some frames to make way for the datapanel
+	
+	hooksecurefunc("PlayerFrame_ResetPosition", function(self)
+		self:ClearAllPoints()
+		self:SetPoint("TOPLEFT", -19, -20)
+	end)	
+	
+	local bf = BuffFrame
+	bf:ClearAllPoints()
+	bf:SetPoint('TOP', MinimapCluster, -100, -6)
+	
+	local mc = MinimapCluster
+	mc:ClearAllPoints()
+	mc:SetPoint('TOPRIGHT', UIParent, 0, -32)
+	
+	local tf = TargetFrame
+	tf:ClearAllPoints()
+	tf:SetPoint("TOPLEFT", 250, -20)
+	
 
-	BuffFrame:SetPoint('TOP', MinimapCluster, 0, -6)
-	
-	MinimapCluster:ClearAllPoints()
-	MinimapCluster:SetPoint('TOPRIGHT', UIParent, 0, -32)
-	
-	local oldSetPoint = PlayerFrame.SetPoint
-	PlayerFrame.SetPoint = function() end
-	PlayerFrame:ClearAllPoints()
-	oldSetPoint(PlayerFrame, "TOPLEFT", -19, -20)
-	
-	local oldSetPoint = TargetFrame.SetPoint
-	TargetFrame.SetPoint = function() end
-	TargetFrame:ClearAllPoints()
-	oldSetPoint(TargetFrame, "TOPLEFT", 250, -20)
-	
-	
 
 end
 
