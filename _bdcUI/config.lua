@@ -63,6 +63,8 @@ bc.config = {
 			border = true,									
 		},
 		
+		top = false,											-- position the datpanel true = top, false = bottom
+		
 		toc = 40200,
 		
 		fontsize = 15,                                  	-- font size for panels.
@@ -107,7 +109,7 @@ bc.config = {
 			home = false,									-- Only Show Home Latency
 			world = false,									-- Only Show World Latency
 			both = true,									-- Show both Home and World Latency
-		},	
+		},
 		
 	},
 	
