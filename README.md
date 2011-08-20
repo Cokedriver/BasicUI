@@ -22,10 +22,12 @@
  - Range					-- tullaRange Edited.
  - Slash Commands			-- Neav UI Slash Edited.
  
- ## Thank You...
+## Thank You...
  
  - I would just like to thank all those that created the above
  - addons for me to use and combine to make this UI.
- - Thanks goes to 
+
+##Thanks goes to
+ 
 ## Neal - NeavUI, Tuks and Programers - Tukui, Nightcracker - ncQuest/ncBiggerMacro and all the others.
 
