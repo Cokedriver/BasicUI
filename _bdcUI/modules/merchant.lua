@@ -71,9 +71,9 @@ f:SetScript("OnEvent", function()
                     local s = math.floor((cost%10000)/100)
                     local g = math.floor(cost/10000)
 					if guildRepairFlag == 1 then
-						DEFAULT_CHAT_FRAME:AddMessage("Your guild payed ".." |cffffffff"..g.."|cffffd700g|r".." |cffffffff"..s.."|cffc7c7cfs|r".." |cffffffff"..c.."|cffeda55fc|r".." to repair your gear.",255,255,0)
+						DEFAULT_CHAT_FRAME:AddMessage("Your guild payed".." |cffffffff"..g.."|cffffd700g|r".." |cffffffff"..s.."|cffc7c7cfs|r".." |cffffffff"..c.."|cffeda55fc|r".." to repair your gear.",255,255,0)
 					else
-						DEFAULT_CHAT_FRAME:AddMessage("You payed ".." |cffffffff"..g.."|cffffd700g|r".." |cffffffff"..s.."|cffc7c7cfs|r".." |cffffffff"..c.."|cffeda55fc|r".." to repair your gear.",255,255,0)
+						DEFAULT_CHAT_FRAME:AddMessage("You payed".." |cffffffff"..g.."|cffffd700g|r".." |cffffffff"..s.."|cffc7c7cfs|r".." |cffffffff"..c.."|cffeda55fc|r".." to repair your gear.",255,255,0)
 					end	
 				else
 					DEFAULT_CHAT_FRAME:AddMessage("You don't have enough money for repair!",255,0,0)

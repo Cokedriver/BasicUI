@@ -1,18 +1,14 @@
 --[[
 
-	All Create for omnicc.lua goes to Neal and ballagarba.
+	All Create for cooldown.lua goes to Neal and ballagarba.
 	Neav UI = http://www.wowinterface.com/downloads/info13981-NeavUI.html.
-	
-	OmniCC Basic
-    
-    A featureless, 'pure' version of OmniCC.
-    This version should work on absolutely everything, but I've removed pretty much all of the options
+
 --]]
 
 local _, bc = ...
 local cfg = bc.config
 
-if cfg.omnicc.enable ~= true then return end
+if cfg.cooldown.enable ~= true then return end
 
 OmniCC = true                               -- hack to work around detection from other addons for OmniCC
 

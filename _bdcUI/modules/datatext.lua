@@ -125,7 +125,7 @@ if cfg.datatext.datapanel.enable == true then
 			MainMenuBar:ClearAllPoints()
 			MainMenuBar:SetPoint('BOTTOM', DataBorderPanel, 0, 25)
 			VehicleMenuBar:ClearAllPoints()
-			VehicleMenuBar:SetPoint('BOTTOM', DataBorderPanel, 0, 40)
+			VehicleMenuBar:SetPoint('BOTTOM', DataBorderPanel, 0, 28)
 
 		end
 		Movebar:SetScript("OnUpdate", function(MainMenuBar) RaiseBars(); end)
@@ -371,7 +371,7 @@ end
 -- Threat Text
 ---------------
 
-if cfg.threatbar.enable == true then
+if cfg.datatext.threatbar.enable == true then
 
 	local aggroColors = {
 		[1] = {1, 0, 0},

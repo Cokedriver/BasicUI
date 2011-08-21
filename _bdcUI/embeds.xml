@@ -1,9 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="config.lua"/>
+	<Script file="modules\mypanel.lua"/>
 	<Script file="modules\datatext.lua"/>
 	<Script file="modules\autogreed.lua"/>
 	<Script file="modules\buff.lua"/>
-	<Script file="modules\castbar.lua"/>
 	<Script file="modules\chat.lua"/>	
 	<Script file="modules\colors.lua"/>
 	<Script file="modules\fonts.lua"/>

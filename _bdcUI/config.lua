@@ -51,6 +51,13 @@ bc.config = {
 		enable = true,
 	},	
 
+	------------------
+	-- Cooldown Options
+	------------------
+	cooldown = {
+		enable = true,
+	},
+	
 	---------------------
 	-- Datatext Options
 	---------------------
@@ -111,6 +118,10 @@ bc.config = {
 			both = true,									-- Show both Home and World Latency
 		},
 		
+		threatbar = {
+			enable = true,									-- Enable the threatbar over the Center Panel.
+		},
+		
 	},
 	
 	-----------------
@@ -141,13 +152,6 @@ bc.config = {
 	--Minimap Options
 	------------------
 	minimap = {
-		enable = true,
-	},
-	
-	------------------
-	-- OmniCC Options
-	------------------
-	omnicc = {
 		enable = true,
 	},
 	
@@ -255,13 +259,6 @@ bc.config = {
 		enable = true,
 	},
 
-	---------------------
-	-- Threatbar Options
-	---------------------
-	threatbar = {
-		enable = true,										-- Enable the threatbar over the Center Panel.
-	},
-	
 	-------------------
 	-- Tooltip Options
 	-------------------
