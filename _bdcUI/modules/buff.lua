@@ -1,8 +1,7 @@
-local _, bc = ...
-local cfg = bc.config
+local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
 
 
-if cfg.buff.enable ~= true then return end
+if C.buff.enable ~= true then return end
 
 local f = CreateFrame("Frame");
 local match = string.match;
@@ -25,9 +24,9 @@ local customTimers = true;  -- custom look for the buff timers, uses the above f
 local function Buff_Event(self, event)
 	-- scale and reposition!
 	if event == "PLAYER_LOGIN" then
-		BuffFrame:SetScale(cfg.buff.scale);
-		TemporaryEnchantFrame:SetScale(cfg.buff.scale);
-		ConsolidatedBuffs:SetScale(cfg.buff.scale);
+		BuffFrame:SetScale(C.buff.scale);
+		TemporaryEnchantFrame:SetScale(C.buff.scale);
+		ConsolidatedBuffs:SetScale(C.buff.scale);
 		
 		-- hook the duration update function
 		if customTimers then

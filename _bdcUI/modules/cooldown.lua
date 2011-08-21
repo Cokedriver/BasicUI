@@ -5,10 +5,9 @@
 
 --]]
 
-local _, bc = ...
-local cfg = bc.config
+local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
 
-if cfg.cooldown.enable ~= true then return end
+if C.cooldown.enable ~= true then return end
 
 OmniCC = true                               -- hack to work around detection from other addons for OmniCC
 

@@ -1,8 +1,6 @@
+local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
 
-local _, bc = ...
-local cfg = bc.config
-
-if cfg.merchant.enable ~= true then return end
+if C.merchant.enable ~= true then return end
 
 --[[
 
@@ -29,19 +27,19 @@ local filter = {
 
 local f = CreateFrame("Frame")
 f:SetScript("OnEvent", function()
-	if cfg.merchant.autoSellGrey or cfg.merchant.sellMisc then
+	if C.merchant.autoSellGrey or C.merchant.sellMisc then
 		local c = 0
 		for b=0,4 do
 			for s=1,GetContainerNumSlots(b) do
 				local l,lid = GetContainerItemLink(b, s), GetContainerItemID(b, s)
 				if l and lid then
 					local p = select(11, GetItemInfo(l))*select(2, GetContainerItemInfo(b, s))
-					if cfg.merchant.autoSellGrey and select(3, GetItemInfo(l))==0 then
+					if C.merchant.autoSellGrey and select(3, GetItemInfo(l))==0 then
 						UseContainerItem(b, s)
 						PickupMerchantItem()
 						c = c+p
 					end
-					if cfg.merchant.sellMisc and filter[ lid ] then
+					if C.merchant.sellMisc and filter[ lid ] then
 						UseContainerItem(b, s)
 						PickupMerchantItem()
 						c = c+p
@@ -55,7 +53,7 @@ f:SetScript("OnEvent", function()
 		end
 	end
 	if not IsShiftKeyDown() then
-		if CanMerchantRepair() and cfg.merchant.autoRepair then	
+		if CanMerchantRepair() and C.merchant.autoRepair then	
             guildRepairFlag = 0
             local cost, possible = GetRepairAllCost()
             -- additional checks for guild repairs

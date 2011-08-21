@@ -1,4 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="init.lua"/>
+	<Script file="localization.lua"/>
 	<Script file="config.lua"/>
 	<Script file="modules\mypanel.lua"/>
 	<Script file="modules\datatext.lua"/>

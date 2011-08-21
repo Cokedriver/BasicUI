@@ -1,8 +1,6 @@
+local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
 
-local _, bc = ...
-local cfg = bc.config
-
-if cfg.minimap.enable ~= true then return end
+if C.minimap.enable ~= true then return end
 
 --[[
 

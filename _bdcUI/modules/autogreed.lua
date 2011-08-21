@@ -1,7 +1,6 @@
-local _, bc = ...
-local cfg = bc.config
+local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
 
-if cfg.autogreed.enable ~= true then return end
+if C.autogreed.enable ~= true then return end
 
 --[[
 

@@ -1,7 +1,6 @@
-local _, bc = ...
-local cfg = bc.config
+local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
 
-if cfg.selfbuffs.enable ~= true then return end
+if C.selfbuffs.enable ~= true then return end
 
 --[[
 
@@ -113,7 +112,7 @@ if (buffs and buffs[1]) then
 				end
 			end
 			self:Show()
-			if cfg.selfbuffs.sound == true and sound == true then
+			if C.selfbuffs.sound == true and sound == true then
 				PlaySoundFile("Interface\\AddOns\\_bdcUI\\media\\Warning.mp3")
 				sound = false
 			end
@@ -215,7 +214,7 @@ if (enchants and enchants[1]) then
 				end
 			end
 			self:Show()
-			if cfg.remindbuffs.sound == true and sound == true then
+			if C.remindbuffs.sound == true and sound == true then
 				PlaySoundFile("Interface\\AddOns\\_bdcUI\\media\\Warning.mp3")
 				sound = false
 			end

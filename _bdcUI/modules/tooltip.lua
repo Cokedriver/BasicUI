@@ -1,7 +1,6 @@
-local _, bc = ...
-local cfg = bc.config
+local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
 
-if cfg.tooltip.enable ~= true then return end
+if C.tooltip.enable ~= true then return end
 
 --[[
 
@@ -120,7 +119,7 @@ end
 
     -- itemquaility border, we use our custom functions
     
-if (cfg.tooltip.itemqualityBorderColor) then
+if (C.tooltip.itemqualityBorderColor) then
     for _, tooltip in pairs({
         GameTooltip,
         ItemRefTooltip,
@@ -216,7 +215,7 @@ end
     -- tooltip position
 --[[    
 hooksecurefunc('GameTooltip_SetDefaultAnchor', function(self)
-	self:SetPoint(unpack(cfg.tooltip.position))
+	self:SetPoint(unpack(C.tooltip.position))
 end)]]
 
     -- set all to the defaults if tooltip hides
@@ -230,7 +229,7 @@ GameTooltip:HookScript('OnTooltipCleared', function(self)
         GameTooltip.PVPIcon:SetTexture(nil)
     end
 
-    if (cfg.tooltip.reactionBorderColor) then
+    if (C.tooltip.reactionBorderColor) then
         self:SetBackdropBorderColor(1, 1, 1)
     end
 end)
@@ -240,9 +239,9 @@ end)
 local function HealthBarColor(unit)
     local r, g, b
 
-    if (cfg.tooltip.healthbar.customColor.apply and not cfg.tooltip.healthbar.reactionColoring) then
-        r, g, b = cfg.tooltip.healthbar.customColor.r, cfg.tooltip.healthbar.customColor.g, cfg.tooltip.healthbar.customColor.b
-    elseif (cfg.tooltip.healthbar.reactionColoring) then
+    if (C.tooltip.healthbar.customColor.apply and not C.tooltip.healthbar.reactionColoring) then
+        r, g, b = C.tooltip.healthbar.customColor.r, C.tooltip.healthbar.customColor.g, C.tooltip.healthbar.customColor.b
+    elseif (C.tooltip.healthbar.reactionColoring) then
         r, g, b = UnitSelectionColor(unit)
     else
         r, g, b = 0, 1, 0
@@ -296,7 +295,7 @@ local function GetUnitRaidIcon(unit)
     local index = GetRaidTargetIndex(unit)
 
     if (index) then
-        if (UnitIsPVP(unit) and cfg.tooltip.showPVPIcons) then
+        if (UnitIsPVP(unit) and C.tooltip.showPVPIcons) then
             return ICON_LIST[index]..'11|t'
         else
             return ICON_LIST[index]..'11|t '
@@ -310,13 +309,13 @@ local function GameTooltip_GetUnitPVPIcon(unit)
     local factionGroup = UnitFactionGroup(unit)
     
     if (UnitIsPVPFreeForAll(unit)) then
-        if (cfg.tooltip.showPVPIcons) then
+        if (C.tooltip.showPVPIcons) then
             return '|TInterface\\AddOns\\_bdcUI\\media\\UI-PVP-FFA:12|t'
         else
             return '|cffFF0000# |r'
         end
     elseif (factionGroup and UnitIsPVP(unit)) then
-        if (cfg.tooltip.showPVPIcons) then
+        if (C.tooltip.showPVPIcons) then
             return '|TInterface\\AddOns\\_bdcUI\\media\\UI-PVP-'..factionGroup..':12|t'
         else
             return '|cff00FF00# |r'
@@ -372,7 +371,7 @@ GameTooltip:HookScript('OnTooltipSetUnit', function(self, ...)
         
             -- hide player titles
             
-        if (cfg.tooltip.showPlayerTitles) then
+        if (C.tooltip.showPlayerTitles) then
             if (UnitPVPName(unit)) then 
                 name = UnitPVPName(unit) 
             end
@@ -398,7 +397,7 @@ GameTooltip:HookScript('OnTooltipSetUnit', function(self, ...)
         
             -- mouse over target with raidicon support
             
-        if (cfg.tooltip.showMouseoverTarget) then
+        if (C.tooltip.showMouseoverTarget) then
             AddMouseoverTarget(self, unit)
         end
   
@@ -427,7 +426,7 @@ GameTooltip:HookScript('OnTooltipSetUnit', function(self, ...)
             -- player realm names
             
         if (realm and realm ~= '') then
-            if (cfg.tooltip.abbrevRealmNames)   then
+            if (C.tooltip.abbrevRealmNames)   then
                 self:AppendText(' (*)')
             else
                 self:AppendText(' - '..realm)
@@ -436,7 +435,7 @@ GameTooltip:HookScript('OnTooltipSetUnit', function(self, ...)
 		
             -- show player item lvl       
 		
-        if (cfg.tooltip.showItemLevel) then
+        if (C.tooltip.showItemLevel) then
             if (unit and CanInspect(unit)) then
                 if (not ((InspectFrame and InspectFrame:IsShown()) or (Examiner and Examiner:IsShown()))) then
                     NotifyInspect(unit)
@@ -455,7 +454,7 @@ GameTooltip:HookScript('OnTooltipSetUnit', function(self, ...)
         
             -- border coloring
             
-        if (cfg.tooltip.reactionBorderColor) then
+        if (C.tooltip.reactionBorderColor) then
             local r, g, b = UnitSelectionColor(unit)
             
             self:SetBackdropBorderColor(r, g, b)
@@ -466,7 +465,7 @@ GameTooltip:HookScript('OnTooltipSetUnit', function(self, ...)
         if (UnitIsDead(unit) or UnitIsGhost(unit)) then
             GameTooltipStatusBar:SetBackdropColor(0.5, 0.5, 0.5, 0.3)
         else
-            if (not cfg.tooltip.healthbar.customColor.apply and not cfg.tooltip.healthbar.reactionColoring) then
+            if (not C.tooltip.healthbar.customColor.apply and not C.tooltip.healthbar.reactionColoring) then
                 GameTooltipStatusBar:SetBackdropColor(27/255, 243/255, 27/255, 0.3)
             else
                 HealthBarColor(unit)
@@ -475,7 +474,7 @@ GameTooltip:HookScript('OnTooltipSetUnit', function(self, ...)
 
             -- tooltip HP bar & value
             
-        if (not GameTooltipStatusBar.hasHealthText and cfg.tooltip.healthbar.showHealthValue or cfg.tooltip.healthbar.customColor.apply or cfg.tooltip.healthbar.reactionColoring) then
+        if (not GameTooltipStatusBar.hasHealthText and C.tooltip.healthbar.showHealthValue or C.tooltip.healthbar.customColor.apply or C.tooltip.healthbar.reactionColoring) then
             GameTooltipStatusBar:SetScript('OnValueChanged', function(self, value)
                 if (not value) then
                     return
@@ -497,14 +496,14 @@ GameTooltip:HookScript('OnTooltipSetUnit', function(self, ...)
                     
                 HealthBarColor(unit)
                 
-                if (cfg.tooltip.healthbar.showHealthValue) then
+                if (C.tooltip.healthbar.showHealthValue) then
                     if (not self.text) then
                         self.text = self:CreateFontString(nil, 'MEDIUM')
                         
-                        if (cfg.tooltip.healthbar.textPos == 'TOP') then
+                        if (C.tooltip.healthbar.textPos == 'TOP') then
                             self.text:SetPoint('RIGHT', GameTooltipStatusBar, 'TOPRIGHT', -10, 1)
                             self.text:SetPoint('LEFT', GameTooltipStatusBar, 'TOPLEFT', 10, 1)
-                        elseif (cfg.tooltip.healthbar.textPos == 'BOTTOM') then
+                        elseif (C.tooltip.healthbar.textPos == 'BOTTOM') then
                             self.text:SetPoint('RIGHT', GameTooltipStatusBar, 'BOTTOMRIGHT', -10, 1)
                             self.text:SetPoint('LEFT', GameTooltipStatusBar, 'BOTTOMLEFT', 10, 1)
                         else
@@ -512,11 +511,11 @@ GameTooltip:HookScript('OnTooltipSetUnit', function(self, ...)
                             self.text:SetPoint('LEFT', GameTooltipStatusBar, 'LEFT', 10, 1)
                         end
                         
-                        if (cfg.tooltip.healthbar.showOutline) then
-                            self.text:SetFont(cfg.tooltip.healthbar.font, cfg.tooltip.healthbar.fontSize, 'THINOUTLINE')
+                        if (C.tooltip.healthbar.showOutline) then
+                            self.text:SetFont(C.tooltip.healthbar.font, C.tooltip.healthbar.fontSize, 'THINOUTLINE')
                             self.text:SetShadowOffset(0, 0)
                         else
-                            self.text:SetFont(cfg.tooltip.healthbar.font, cfg.tooltip.healthbar.fontSize)
+                            self.text:SetFont(C.tooltip.healthbar.font, C.tooltip.healthbar.fontSize)
                             self.text:SetShadowOffset(1, -1)
                         end
                         
@@ -546,7 +545,7 @@ end)
 
     -- disable fade
     
-if (cfg.tooltip.disableFade) then
+if (C.tooltip.disableFade) then
     GameTooltip.UpdateTime = 0
     GameTooltip:HookScript('OnUpdate', function(self, elapsed)
         self.UpdateTime = self.UpdateTime + elapsed

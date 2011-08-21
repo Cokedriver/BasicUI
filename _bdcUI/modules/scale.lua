@@ -1,41 +1,40 @@
-local _, bc = ...
-local cfg = bc.config
+local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
 
-if cfg.scale.enable ~= true then return end
+if C.scale.enable ~= true then return end
 
 local _G = _G
 
  -- Player Frame
 local player = _G['PlayerFrame']
 if player then
-	player:SetScale(cfg.scale.size)
+	player:SetScale(C.scale.size)
 end
 
  -- Target Frame
 local target = _G['TargetFrame']
 if target then
-	target:SetScale(cfg.scale.size)
+	target:SetScale(C.scale.size)
 end
 
  -- Party Frames
 for i = 1,4 do
 	local party = _G['PartyMemberFrame'..i]
 	if party then
-		party:SetScale(cfg.scale.size)
+		party:SetScale(C.scale.size)
 	end
 end
 
  -- Focus Frame
 local focus = _G['FocusFrame']
 if focus then
-	focus:SetScale(cfg.scale.size)
+	focus:SetScale(C.scale.size)
 end
 
  -- Arena Frames
 for i = 1,2 do
 	local arena = _G['ArenaEnemyFrame'..i]
 	if arena then
-		arena:SetScale(cfg.scale.size)
+		arena:SetScale(C.scale.size)
 	end
 end
 
@@ -43,14 +42,14 @@ end
 for i = 1,4 do
 	local boss = _G['BossFrame'..i]
 	if boss then
-		boss:SetScale(cfg.scale.size)
+		boss:SetScale(C.scale.size)
 	end
 end
 	
  -- Casting Bar
 local cast = _G['CastingBarFrame'] 
 if cast then
-	cast:SetScale(cfg.scale.size)
+	cast:SetScale(C.scale.size)
 end
 
  -- Hide Keybindings
