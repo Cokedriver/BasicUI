@@ -1,6 +1,6 @@
-local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
+local DB, L = unpack(select(2, ...)) -- Import: DB - config; L - locales
 
-if C.quest.enable ~= true then return end
+if DB.quest.enable ~= true then return end
 
 --[[
 
@@ -32,7 +32,7 @@ local function MostValueable()
 end
 
 
-if C.quest.autocomplete == true then
+if DB.quest.autocomplete == true then
 	f:SetScript("OnEvent", function(self, event, ...)	
 		if (event == "QUEST_DETAIL") then
 			AcceptQuest()
@@ -47,7 +47,7 @@ if C.quest.autocomplete == true then
 			ConfirmAcceptQuest()
 		end
 	end)
-elseif C.quest.autocomplete == false then
+elseif DB.quest.autocomplete == false then
 	f:SetScript("OnEvent", function(self, event, ...)
 		if (event == "QUEST_COMPLETE") then
 			if (GetNumQuestChoices() and GetNumQuestChoices() < 1) then

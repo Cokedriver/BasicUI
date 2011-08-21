@@ -1,6 +1,6 @@
-local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
+local DB, L = unpack(select(2, ...)) -- Import: DB - config; L - locales
 
-if C.range.enable ~= true then return end
+if DB.range.enable ~= true then return end
 
 --[[
 

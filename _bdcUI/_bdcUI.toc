@@ -2,7 +2,7 @@
 ## Author: Cokedriver
 ## Title: _|cff00B4FFbdc|rUI
 ## Notes: Blizzard Default Customized User Interface.
-## Version: 1.0
+## Version: 1.1
 ## SavedVariables: bdcUI
 ## SavedVariablesPerCharacter: bdcUIPerCharacter
 

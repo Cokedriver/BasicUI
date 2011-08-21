@@ -1,16 +1,16 @@
-local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
+local DB, L = unpack(select(2, ...)) -- Import: DB - config; L - locales
 
 ---------------------
 -- AutoGreed Options
 ---------------------
-C.autogreed = {
+DB.autogreed = {
 	enable = true,
 }
 	
 ----------------
 -- Buff Options
 ----------------
-C.buff = {
+DB.buff = {
 	enable = true,
 	scale = 1.2,
 }	
@@ -18,14 +18,14 @@ C.buff = {
 ----------------
 -- Castbar 
 ----------------
-C.castbar = {
+DB.castbar = {
 	enable = true,
 }
 
 ----------------
 -- Chat Options
 ----------------
-C.chat = {
+DB.chat = {
 	enable = true,
 	disableFade = false,
 	chatOutline = true,
@@ -46,21 +46,21 @@ C.chat = {
 -----------------------
 -- Class Color Options
 -----------------------
-C.colors = {
+DB.colors = {
 	enable = true,
 }	
 
 ------------------
 -- Cooldown Options
 ------------------
-C.cooldown = {
+DB.cooldown = {
 	enable = true,
 }
 	
 ---------------------
 -- Datatext Options
 ---------------------
-C.datatext = {
+DB.datatext = {
 	
 	enable = true,
 		
@@ -123,21 +123,21 @@ C.datatext = {
 -----------------
 -- Macro Options
 -----------------
-C.macro = {					
+DB.macro = {					
 	enable = true,			-- enable bigger macros.
 }
 	
 -----------------
 -- Media Options
 -----------------
-C.media = {
+DB.media = {
 	font = 'Fonts\\ARIALN.ttf',
 }
 	
 --------------------
 -- Merchant Options
 --------------------
-C.merchant = {
+DB.merchant = {
 	enable = true,			-- enable merchant module.
 	sellMisc = true, 		-- allows the user to add spacific items to sell at merchant (please see the local filter in merchant.lua)
 	autoSellGrey = true,	-- autosell grey items at merchant.
@@ -147,14 +147,14 @@ C.merchant = {
 ------------------
 --Minimap Options
 ------------------
-C.minimap = {
+DB.minimap = {
 	enable = true,
 }
 	
 --------------------
 -- Powerbar Options 
 --------------------
-C.power = {
+DB.power = {
 	enable = true,
 	position = {'CENTER', UIParent, 0, -165},
 	sizeWidth = 200,
@@ -221,7 +221,7 @@ C.power = {
 -----------------
 -- Quest Options
 -----------------
-C.quest = {
+DB.quest = {
 	enable = true,			-- enable quest module.
 	autocomplete = false,	-- enable the autoaccept quest and autocomplete quest if no reward.
 }
@@ -229,7 +229,7 @@ C.quest = {
 ---------------------------
 -- Unitframe Scale Options
 ---------------------------
-C.scale = {
+DB.scale = {
 	enable = true,
 	size = 1.15,
 }
@@ -237,14 +237,14 @@ C.scale = {
 ----------------
 --Range Options
 ----------------
-C.range = {
+DB.range = {
 	enable = true,
 }
 
 -------------------------
 -- Reminder Buff Options
 -------------------------
-C.selfbuffs = {
+DB.selfbuffs = {
 	enable = true,			-- enable selbuffs module.
 	sound = true,			-- sound warning
 }
@@ -252,14 +252,14 @@ C.selfbuffs = {
 -------------------------
 -- Slash Command Options
 -------------------------
-C.slash = {
+DB.slash = {
 	enable = true,
 }
 
 -------------------
 -- Tooltip Options
 -------------------
-C.tooltip = {											
+DB.tooltip = {											
 	enable = true,										-- Move the tooltip up so its not overlapping the MainMenubar
 	position = {
 		'BOTTOMRIGHT', UIParent, -95, 150

@@ -5,9 +5,9 @@
 
 --]]
 
-local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
+local DB, L = unpack(select(2, ...)) -- Import: DB - config; L - locales
 
-if C.cooldown.enable ~= true then return end
+if DB.cooldown.enable ~= true then return end
 
 OmniCC = true                               -- hack to work around detection from other addons for OmniCC
 

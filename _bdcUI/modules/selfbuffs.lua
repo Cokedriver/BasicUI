@@ -1,6 +1,6 @@
-local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
+local DB, L = unpack(select(2, ...)) -- Import: DB - config; L - locales
 
-if C.selfbuffs.enable ~= true then return end
+if DB.selfbuffs.enable ~= true then return end
 
 --[[
 
@@ -112,7 +112,7 @@ if (buffs and buffs[1]) then
 				end
 			end
 			self:Show()
-			if C.selfbuffs.sound == true and sound == true then
+			if DB.selfbuffs.sound == true and sound == true then
 				PlaySoundFile("Interface\\AddOns\\_bdcUI\\media\\Warning.mp3")
 				sound = false
 			end
@@ -214,7 +214,7 @@ if (enchants and enchants[1]) then
 				end
 			end
 			self:Show()
-			if C.remindbuffs.sound == true and sound == true then
+			if DB.remindbuffs.sound == true and sound == true then
 				PlaySoundFile("Interface\\AddOns\\_bdcUI\\media\\Warning.mp3")
 				sound = false
 			end

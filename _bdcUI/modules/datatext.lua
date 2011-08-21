@@ -1,6 +1,6 @@
-local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
+local DB, L = unpack(select(2, ...)) -- Import: DB - config; L - locales
 
-if C.datatext.enable ~= true then return end
+if DB.datatext.enable ~= true then return end
 
 --[[
 
@@ -10,10 +10,10 @@ if C.datatext.enable ~= true then return end
 	
 ]]
 
-if C.datatext.datapanel.enable == true then
+if DB.datatext.datapanel.enable == true then
 	
 	local DataBorderPanel = CreateFrame('Frame', 'DataBorderPanel', UIParent)
-	if C.datatext.top == true then
+	if DB.datatext.top == true then
 		DataBorderPanel:SetPoint('TOP', UIParent, 0, 0)
 		DataBorderPanel:SetHeight(28)
 		DataBorderPanel:SetWidth(GetScreenWidth())
@@ -27,7 +27,7 @@ if C.datatext.datapanel.enable == true then
 		})
 		local ccolor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[select(2,UnitClass("player"))]
 		DataBorderPanel:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b, 1)
-	elseif C.datatext.top == false then
+	elseif DB.datatext.top == false then
 		DataBorderPanel:SetPoint('BOTTOM', UIParent, 0, 0)
 		DataBorderPanel:SetHeight(28)
 		DataBorderPanel:SetWidth(1200)
@@ -46,9 +46,9 @@ if C.datatext.datapanel.enable == true then
 	local DataPanelLeft = CreateFrame('Frame', 'DataPanelLeft', UIParent)
 	DataPanelLeft:SetPoint('LEFT', DataBorderPanel, 5, 0)
 	DataPanelLeft:SetHeight(25)
-	if C.datatext.top == true then
+	if DB.datatext.top == true then
 		DataPanelLeft:SetWidth(GetScreenWidth() / 3)
-	elseif C.datatext.top == false then
+	elseif DB.datatext.top == false then
 		DataPanelLeft:SetWidth(1200 / 3)
 	end
 	DataPanelLeft:SetFrameStrata('LOW')
@@ -58,9 +58,9 @@ if C.datatext.datapanel.enable == true then
 	local DataPanelCenter = CreateFrame('Frame', 'DataPanelCenter', UIParent)
 	DataPanelCenter:SetPoint('CENTER', DataBorderPanel, 0, 0)
 	DataPanelCenter:SetHeight(25)
-	if C.datatext.top == true then
+	if DB.datatext.top == true then
 		DataPanelCenter:SetWidth(GetScreenWidth() / 3)
-	elseif C.datatext.top == false then
+	elseif DB.datatext.top == false then
 		DataPanelCenter:SetWidth(1200 / 3)
 	end
 	DataPanelCenter:SetFrameStrata('LOW')
@@ -70,9 +70,9 @@ if C.datatext.datapanel.enable == true then
 	local DataPanelRight = CreateFrame('Frame', 'DataPanelRight', UIParent)
 	DataPanelRight:SetPoint('RIGHT', DataBorderPanel, -5, 0)
 	DataPanelRight:SetHeight(25)
-	if C.datatext.top == true then
+	if DB.datatext.top == true then
 		DataPanelRight:SetWidth(GetScreenWidth() / 3)
-	elseif C.datatext.top == false then
+	elseif DB.datatext.top == false then
 		DataPanelRight:SetWidth(1200 / 3)
 	end
 	DataPanelRight:SetFrameStrata('LOW')
@@ -91,7 +91,7 @@ if C.datatext.datapanel.enable == true then
 	BattleGroundPanel:SetBackdropColor(0, 0, 0, 0)
 
 	-- move some frames to make way for the datapanel
-	if C.datatext.top == true then
+	if DB.datatext.top == true then
 		hooksecurefunc("PlayerFrame_ResetPosition", function(self)
 			self:ClearAllPoints()
 			self:SetPoint("TOPLEFT", -19, -20)
@@ -108,7 +108,7 @@ if C.datatext.datapanel.enable == true then
 		local tf = TargetFrame
 		tf:ClearAllPoints()
 		tf:SetPoint("TOPLEFT", 250, -20)
-	elseif C.datatext.top == false then
+	elseif DB.datatext.top == false then
 		-- Move the Bottom Action Bar Up on Top of the Datapanel
 		-- Code help from Nibelheim on Wowinterface Forums
 		local Movebar = CreateFrame("Frame")
@@ -132,7 +132,7 @@ if C.datatext.datapanel.enable == true then
 
 		
 		 -- Move the tooltip above the Actionbar
-		if C.tooltip.enable == true then
+		if DB.tooltip.enable == true then
 			hooksecurefunc('GameTooltip_SetDefaultAnchor', function(self)
 				self:SetPoint('BOTTOMRIGHT', UIParent, -95, 175)
 			end)
@@ -302,7 +302,7 @@ DataTextTooltipAnchor = function(self)
 		DataPanelCenter,
 		DataPanelRight,
 	})	do
-		if C.datatext.top == true then
+		if DB.datatext.top == true then
 			anchor = 'ANCHOR_BOTTOM'
 		else
 			anchor = 'ANCHOR_TOP'
@@ -360,9 +360,9 @@ CheckRole()
 ---------------------------------------------------
 
 local ccolor = RAID_CLASS_COLORS[select(2, UnitClass('player'))]
-hexa, hexb = C.datatext.color, '|r'
+hexa, hexb = DB.datatext.color, '|r'
 
-if C.datatext.classcolor then
+if DB.datatext.classcolor then
 	hexa = string.format('|c%02x%02x%02x%02x', 255, ccolor.r * 255, ccolor.g * 255, ccolor.b * 255,'THINOUTLINE')
 end
 
@@ -370,7 +370,7 @@ end
 -- Threat Text
 ---------------
 
-if C.datatext.threatbar.enable == true then
+if DB.datatext.threatbar.enable == true then
 
 	local aggroColors = {
 		[1] = {1, 0, 0},
@@ -383,7 +383,7 @@ if C.datatext.threatbar.enable == true then
 	nDataThreatBar:SetPoint("BOTTOMRIGHT", DataPanelCenter, -2, 2)
 	nDataThreatBar:SetFrameLevel(1)
 
-	nDataThreatBar.text = SetFontString(nDataThreatBar, C.media.font, 18)
+	nDataThreatBar.text = SetFontString(nDataThreatBar, DB.media.font, 18)
 	nDataThreatBar.text:SetPoint("CENTER", nDataThreatBar, 0, 0)
 		 
 
@@ -451,7 +451,7 @@ end
 -- Datatext for Battleground Data
 ----------------------------------
 
-if C.datatext.battleground == true then 
+if DB.datatext.battleground == true then 
 
 	--Map IDs
 	local WSG = 443
@@ -511,17 +511,17 @@ if C.datatext.battleground == true then
 	Stat:EnableMouse(true)
 
 	local Text1  = BattleGroundPanel:CreateFontString(nil, 'OVERLAY')
-	Text1:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
+	Text1:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
 	Text1:SetPoint('LEFT', BattleGroundPanel, 30, 0)
 	Text1:SetHeight(DataPanelLeft:GetHeight())
 
 	local Text2  = BattleGroundPanel:CreateFontString(nil, 'OVERLAY')
-	Text2:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
+	Text2:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
 	Text2:SetPoint('CENTER', BattleGroundPanel, 0, 0)
 	Text2:SetHeight(DataPanelLeft:GetHeight())
 
 	local Text3  = BattleGroundPanel:CreateFontString(nil, 'OVERLAY')
-	Text3:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
+	Text3:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
 	Text3:SetPoint('RIGHT', BattleGroundPanel, -30, 0)
 	Text3:SetHeight(DataPanelLeft:GetHeight())
 
@@ -578,15 +578,15 @@ end
 -- Datatext for Bags
 ---------------------
 --[[
-if C.datatext.bags and C.datatext.bags > 0 then
+if DB.datatext.bags and DB.datatext.bags > 0 then
 	local Stat = CreateFrame('Frame')
 	Stat:EnableMouse(true)
 	Stat:SetFrameStrata('BACKGROUND')
 	Stat:SetFrameLevel(3)
 
 	local Text  = DataPanelLeft:CreateFontString(nil, 'OVERLAY')
-	Text:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
-	PP(C.datatext.bags, Text)
+	Text:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
+	PP(DB.datatext.bags, Text)
 
 	local function OnEvent(self, event, ...)
 		local totalSlots, freeSlots = 0, 0
@@ -620,9 +620,9 @@ if C.datatext.bags and C.datatext.bags > 0 then
 	Stat:RegisterEvent('BAG_UPDATE')
 	Stat:SetScript('OnMouseDown', 
 		function()
-			if C.datatext.bags.single == true then
+			if DB.datatext.bags.single == true then
 				ToggleBag(0)
-			elseif C.datatext.bags.single == false then
+			elseif DB.datatext.bags.single == false then
 				ToggleAllBags()
 			end
 		end)
@@ -634,15 +634,15 @@ end
 -- Datatext for Call To Arms Data
 ----------------------------------
 
-if C.datatext.calltoarms and C.datatext.calltoarms > 0 then
+if DB.datatext.calltoarms and DB.datatext.calltoarms > 0 then
 	local Stat = CreateFrame("Frame")
 	Stat:EnableMouse(true)
 	Stat:SetFrameStrata("MEDIUM")
 	Stat:SetFrameLevel(3)
 
 	local Text  = DataPanelLeft:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
-	PP(C.datatext.calltoarms, Text)
+	Text:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
+	PP(DB.datatext.calltoarms, Text)
 	
 	local function MakeIconString(tank, healer, damage)
 		local str = ""
@@ -751,15 +751,15 @@ end
 -- Datatext for Player Coords
 ------------------------------
 
-if C.datatext.coords and C.datatext.coords > 0 then
+if DB.datatext.coords and DB.datatext.coords > 0 then
 	local Stat = CreateFrame("Frame")
 	Stat:EnableMouse(true)
 	Stat:SetFrameStrata('BACKGROUND')
 	Stat:SetFrameLevel(3)
 
 	local Text = DataPanelLeft:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
-	PP(C.datatext.coords, Text)
+	Text:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
+	PP(DB.datatext.coords, Text)
 
 	local function Update(self)
 	local px,py=GetPlayerMapPosition("player")
@@ -774,15 +774,15 @@ end
 -- Datatext for CURRENCY
 -------------------------
 
-if C.datatext.currency and C.datatext.currency > 0 then
+if DB.datatext.currency and DB.datatext.currency > 0 then
 	local Stat = CreateFrame('Frame')
 	Stat:EnableMouse(true)
 	Stat:SetFrameStrata('BACKGROUND')
 	Stat:SetFrameLevel(3)
 
 	local Text  = DataPanelLeft:CreateFontString(nil, 'OVERLAY')
-	Text:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
-	PP(C.datatext.currency, Text)
+	Text:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
+	PP(DB.datatext.currency, Text)
 	
 	local function update()
 		local _text = '---'
@@ -817,7 +817,7 @@ end
 -- Datatext for DPS Feed... 
 ----------------------------
 
-if C.datatext.dps_text and C.datatext.dps_text > 0 then
+if DB.datatext.dps_text and DB.datatext.dps_text > 0 then
 	local events = {SWING_DAMAGE = true, RANGE_DAMAGE = true, SPELL_DAMAGE = true, SPELL_PERIODIC_DAMAGE = true, DAMAGE_SHIELD = true, DAMAGE_SPLIT = true, SPELL_EXTRA_ATTACKS = true}
 	local DPS_FEED = CreateFrame('Frame')
 	local player_id = UnitGUID('player')
@@ -827,10 +827,10 @@ if C.datatext.dps_text and C.datatext.dps_text > 0 then
 	local pet_id = UnitGUID('pet')
      
 	local dText = DataPanelLeft:CreateFontString(nil, 'OVERLAY')
-	dText:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
+	dText:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
 	dText:SetText('0 ',L.datatext_dps)
 
-	PP(C.datatext.dps_text, dText)
+	PP(DB.datatext.dps_text, dText)
 
 	DPS_FEED:EnableMouse(true)
 	DPS_FEED:SetFrameStrata('BACKGROUND')
@@ -912,15 +912,15 @@ end
 -- Datatext for DURABILITY
 ---------------------------
 	
-if C.datatext.dur and C.datatext.dur > 0 then
+if DB.datatext.dur and DB.datatext.dur > 0 then
 	local Stat = CreateFrame("Frame")
 	Stat:EnableMouse(true)
 	Stat:SetFrameStrata("BACKGROUND")
 	Stat:SetFrameLevel(3)
 
 	local Text  = DataPanelLeft:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
-	PP(C.datatext.dur, Text)
+	Text:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
+	PP(DB.datatext.dur, Text)
 
 	local Total = 0
 	local current, max
@@ -974,7 +974,7 @@ end
 -- Datatext for Friends List
 -----------------------------
 
-if C.datatext.friends and C.datatext.friends > 0 then
+if DB.datatext.friends and DB.datatext.friends > 0 then
 
 	-- create a popup
 	StaticPopupDialogs.SET_BN_BROADCAST = {
@@ -1001,8 +1001,8 @@ if C.datatext.friends and C.datatext.friends > 0 then
 	Stat:SetFrameLevel(3)
 
 	local Text  = DataPanelLeft:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
-	PP(C.datatext.friends, Text)
+	Text:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
+	PP(DB.datatext.friends, Text)
 
 	local menuFrame = CreateFrame("Frame", "FriendRightClickMenu", UIParent, "UIDropDownMenuTemplate")
 	local menuList = {
@@ -1104,7 +1104,7 @@ if C.datatext.friends and C.datatext.friends > 0 then
 		local _, presenceID, givenName, surname, toonName, toonID, client, isOnline, isAFK, isDND, noteText, realmName, faction, race, class, zoneName, level
 		for i = 1, total do
 			presenceID, givenName, surname, toonName, toonID, client, isOnline, _, isAFK, isDND, _, noteText = BNGetFriendInfo(i)
-			if C.datatext.toc < 40200 then
+			if DB.datatext.toc < 40200 then
 				_, _, _, realmName, faction, race, class, _, zoneName, level = BNGetToonInfo(presenceID)
 			else
 				_, _, _, realmName, _, faction, race, class, _, zoneName, level = BNGetToonInfo(presenceID)
@@ -1129,7 +1129,7 @@ if C.datatext.friends and C.datatext.friends > 0 then
 		for i = 1, #BNTable do
 			-- get guild roster information
 			presenceID, givenName, surname, toonName, toonID, client, isOnline, _, isAFK, isDND, _, noteText = BNGetFriendInfo(i)
-			if C.datatext.toc < 40200 then
+			if DB.datatext.toc < 40200 then
 				_, _, _, realmName, faction, race, class, _, zoneName, level = BNGetToonInfo(presenceID)
 			else
 				_, _, _, realmName, _, faction, race, class, _, zoneName, level = BNGetToonInfo(presenceID)
@@ -1318,15 +1318,15 @@ end
 -- Datatext for Player Gold
 --------------------------------------------------------------------
 
-if C.datatext.gold and C.datatext.gold > 0 then
+if DB.datatext.gold and DB.datatext.gold > 0 then
 	local Stat = CreateFrame('Frame')
 	Stat:EnableMouse(true)
 	Stat:SetFrameStrata('BACKGROUND')
 	Stat:SetFrameLevel(3)
 
 	local Text  = DataPanelLeft:CreateFontString(nil, 'OVERLAY')
-	Text:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
-	PP(C.datatext.gold, Text)
+	Text:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
+	PP(DB.datatext.gold, Text)
 
 	local Profit	= 0
 	local Spent		= 0
@@ -1447,7 +1447,7 @@ end
 
 local USE_EPGP = true
 
-if C.datatext.guild and C.datatext.guild > 0 then	
+if DB.datatext.guild and DB.datatext.guild > 0 then	
 
 	function sortGuildByRank(a,b)
 
@@ -1483,8 +1483,8 @@ if C.datatext.guild and C.datatext.guild > 0 then
 	local ttsubh = {r=0.75,g=0.9,b=1}
 
 	local Text  = DataPanelLeft:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
-	PP(C.datatext.guild, Text)
+	Text:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
+	PP(DB.datatext.guild, Text)
 
 	local BASE_GP = 1
 	local function ParseGuildInfo(info)
@@ -1755,17 +1755,17 @@ end
 -- Datatext for HPS Feed... 
 ----------------------------
 
-if C.datatext.hps_text and C.datatext.hps_text > 0 then
+if DB.datatext.hps_text and DB.datatext.hps_text > 0 then
 	local events = {SPELL_HEAL = true, SPELL_PERIODIC_HEAL = true}
 	local HPS_FEED = CreateFrame('Frame')
 	local player_id = UnitGUID('player')
 	local actual_heals_total, cmbt_time = 0
  
 	local hText = DataPanelLeft:CreateFontString(nil, 'OVERLAY')
-	hText:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
+	hText:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
 	hText:SetText('0 ',L.datatext_hps)
  
-	PP(C.datatext.hps_text, hText)
+	PP(DB.datatext.hps_text, hText)
  
 	HPS_FEED:EnableMouse(true)
 	HPS_FEED:SetFrameStrata('BACKGROUND')
@@ -1841,15 +1841,15 @@ end
 -- Datatext for Micro Menu
 ---------------------------
 
-if C.datatext.micromenu and C.datatext.micromenu > 0 then
+if DB.datatext.micromenu and DB.datatext.micromenu > 0 then
 	local Stat = CreateFrame("Frame")
 	Stat:EnableMouse(true)
 	Stat:SetFrameStrata("BACKGROUND")
 	Stat:SetFrameLevel(3)
 
 	local Text  = DataPanelLeft:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
-	PP(C.datatext.micromenu, Text)
+	Text:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
+	PP(DB.datatext.micromenu, Text)
 
 	local function OnEvent(self, event, ...)
 		Text:SetText(hexa..MAINMENU_BUTTON..hexb)
@@ -1899,7 +1899,7 @@ end
 ---------------------------
 --Datatext for Professions
 ---------------------------
-if C.datatext.pro and C.datatext.pro > 0 then
+if DB.datatext.pro and DB.datatext.pro > 0 then
 
 	local Stat = CreateFrame('Frame')
 	Stat:RegisterEvent('PLAYER_ENTERING_WORLD')
@@ -1909,8 +1909,8 @@ if C.datatext.pro and C.datatext.pro > 0 then
 	Stat.tooltip = false
 
 	local Text  = DataPanelLeft:CreateFontString(nil, 'OVERLAY')
-	Text:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
-	PP(C.datatext.pro, Text)
+	Text:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
+	PP(DB.datatext.pro, Text)
 
 	local function Update(self)
 		for _, v in pairs({GetProfessions()}) do
@@ -1955,7 +1955,7 @@ end
 ------------------------
 local currentFightDPS
 
-if C.datatext.recount and C.datatext.recount > 0 then 
+if DB.datatext.recount and DB.datatext.recount > 0 then 
 
 	local RecountDPS = CreateFrame("Frame")
 	RecountDPS:EnableMouse(true)
@@ -1963,8 +1963,8 @@ if C.datatext.recount and C.datatext.recount > 0 then
 	RecountDPS:SetFrameLevel(3)
 
 	local Text  = DataPanelLeft:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
-	PP(C.datatext.recount, Text)
+	Text:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
+	PP(DB.datatext.recount, Text)
 	RecountDPS:SetAllPoints(Text)
 
 	function OnEvent(self, event, ...)
@@ -1994,7 +1994,7 @@ if C.datatext.recount and C.datatext.recount > 0 then
 
 	function RecountDPS:getDPS()
 		if not IsAddOnLoaded("Recount") then return "N/A" end
-		if C.datatext.recountraiddps == true then
+		if DB.datatext.recountraiddps == true then
 			-- show raid dps
 			_, dps = RecountDPS:getRaidValuePerSecond(Recount.db.profile.CurDataSet)
 			return dps
@@ -2087,7 +2087,7 @@ end
 -- Datatext for Spec Swap
 --------------------------
 
-if C.datatext.spec and C.datatext.spec > 0 then
+if DB.datatext.spec and DB.datatext.spec > 0 then
 
 	local Stat = CreateFrame('Frame')
 	Stat:EnableMouse(true)
@@ -2095,8 +2095,8 @@ if C.datatext.spec and C.datatext.spec > 0 then
 	Stat:SetFrameLevel(3)
 
 	local Text  = DataPanelLeft:CreateFontString(nil, 'OVERLAY')
-	Text:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
-	PP(C.datatext.spec, Text)
+	Text:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
+	PP(DB.datatext.spec, Text)
 
 	local talent = {}
 	local active
@@ -2188,7 +2188,7 @@ end
 -- Datatext for Stat 1 
 -----------------------
 
-if C.datatext.stat1 and C.datatext.stat1 > 0 then
+if DB.datatext.stat1 and DB.datatext.stat1 > 0 then
 
 	local Stat = CreateFrame("Frame")
 	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -2197,8 +2197,8 @@ if C.datatext.stat1 and C.datatext.stat1 > 0 then
 	Stat:EnableMouse(true)
 
 	local Text  = DataPanelLeft:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
-	PP(C.datatext.stat1, Text)
+	Text:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
+	PP(DB.datatext.stat1, Text)
 
 	local format = string.format
 	local targetlv, playerlv = UnitLevel("target"), UnitLevel("player")
@@ -2388,7 +2388,7 @@ end
 -- Datatext for Stat 2
 -----------------------
 
-if C.datatext.stat2 and C.datatext.stat2 > 0 then
+if DB.datatext.stat2 and DB.datatext.stat2 > 0 then
 
 	local Stat = CreateFrame("Frame")
 	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -2397,8 +2397,8 @@ if C.datatext.stat2 and C.datatext.stat2 > 0 then
 	Stat:EnableMouse(true)
 
 	local Text  = DataPanelLeft:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
-	PP(C.datatext.stat2, Text)
+	Text:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
+	PP(DB.datatext.stat2, Text)
 
 	local _G = getfenv(0)
 	local format = string.format
@@ -2525,7 +2525,7 @@ end
 -- Datatext for System Stats
 ---------------------------------------------------
 
-if C.datatext.system and C.datatext.system > 0 then
+if DB.datatext.system and DB.datatext.system > 0 then
 
 	local Stat = CreateFrame("Frame")
 	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -2535,8 +2535,8 @@ if C.datatext.system and C.datatext.system > 0 then
 	Stat.tooltip = false
 
 	local Text  = DataPanelLeft:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
-	PP(C.datatext.system, Text)
+	Text:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
+	PP(DB.datatext.system, Text)
 
 	local bandwidthString = "%.2f Mbps"
 	local percentageString = "%.2f%%"
@@ -2640,12 +2640,12 @@ if C.datatext.system and C.datatext.system > 0 then
 		local anchor, panel, xoff, yoff = DataTextTooltipAnchor(Text)
 		GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 		GameTooltip:ClearLines()
-		if C.datatext.fps.enable == true then 
-			if C.datatext.fps.home == true then
+		if DB.datatext.fps.enable == true then 
+			if DB.datatext.fps.home == true then
 				GameTooltip:AddDoubleLine(L.datatext_homelatency, string.format(homeLatencyString, latencyHome), 0.80, 0.31, 0.31,0.84, 0.75, 0.65)
-			elseif C.datatext.fps.world == true then
+			elseif DB.datatext.fps.world == true then
 				GameTooltip:AddDoubleLine(L.datatext_worldlatency, string.format(worldLatencyString, latencyWorld), 0.80, 0.31, 0.31,0.84, 0.75, 0.65)
-			elseif C.datatext.fps.both == true then
+			elseif DB.datatext.fps.both == true then
 				GameTooltip:AddDoubleLine(L.datatext_homelatency, string.format(homeLatencyString, latencyHome), 0.80, 0.31, 0.31,0.84, 0.75, 0.65)
 				GameTooltip:AddDoubleLine(L.datatext_worldlatency, string.format(worldLatencyString, latencyWorld), 0.80, 0.31, 0.31,0.84, 0.75, 0.65)
 			end
@@ -2676,7 +2676,7 @@ end
 -- Datatext for TIME
 ---------------------
 
-if C.datatext.wowtime and C.datatext.wowtime > 0 then
+if DB.datatext.wowtime and DB.datatext.wowtime > 0 then
 
 	local europeDisplayFormat = string.join("", "%02d", ":|r%02d")
 	local ukDisplayFormat = string.join("", "", "%d", ":|r%02d", " %s|r")
@@ -2694,8 +2694,8 @@ if C.datatext.wowtime and C.datatext.wowtime > 0 then
 	Stat:SetFrameLevel(3)
 
 	local Text  = DataPanelLeft:CreateFontString(nil, 'OVERLAY')
-	Text:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
-	PP(C.datatext.wowtime, Text)
+	Text:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
+	PP(DB.datatext.wowtime, Text)
 
 	local APM = { TIMEMANAGER_PM, TIMEMANAGER_AM }
 
@@ -2703,9 +2703,9 @@ if C.datatext.wowtime and C.datatext.wowtime > 0 then
 		if tt == nil then tt = false end
 		local Hr, Min, AmPm
 		if tt == true then
-			if C.datatext.localtime == true then
+			if DB.datatext.localtime == true then
 				Hr, Min = GetGameTime()
-				if C.datatext.time24 == true then
+				if DB.datatext.time24 == true then
 					return Hr, Min, -1
 				else
 					if Hr>=12 then
@@ -2721,7 +2721,7 @@ if C.datatext.wowtime and C.datatext.wowtime > 0 then
 				local Hr24 = tonumber(date("%H"))
 				Hr = tonumber(date("%I"))
 				Min = tonumber(date("%M"))
-				if C.datatext.time24 == true then
+				if DB.datatext.time24 == true then
 					return Hr24, Min, -1
 				else
 					if Hr24>=12 then AmPm = 1 else AmPm = 2 end
@@ -2729,11 +2729,11 @@ if C.datatext.wowtime and C.datatext.wowtime > 0 then
 				end
 			end
 		else
-			if C.datatext.localtime == true then
+			if DB.datatext.localtime == true then
 				local Hr24 = tonumber(date("%H"))
 				Hr = tonumber(date("%I"))
 				Min = tonumber(date("%M"))
-				if C.datatext.time24 == true then
+				if DB.datatext.time24 == true then
 					return Hr24, Min, -1
 				else
 					if Hr24>=12 then AmPm = 1 else AmPm = 2 end
@@ -2741,7 +2741,7 @@ if C.datatext.wowtime and C.datatext.wowtime > 0 then
 				end
 			else
 				Hr, Min = GetGameTime()
-				if C.datatext.time24 == true then
+				if DB.datatext.time24 == true then
 					return Hr, Min, -1
 				else
 					if Hr>=12 then
@@ -2835,7 +2835,7 @@ if C.datatext.wowtime and C.datatext.wowtime > 0 then
 		local timeText
 		local Hr, Min, AmPm = CalculateTimeValues(true)
 
-		if C.datatext.localtime == true then
+		if DB.datatext.localtime == true then
 			timeText = L.datatext_servertime
 		else
 			timeText = L.datatext_localtime
@@ -2882,15 +2882,15 @@ end
 ---------------------------------------------------
 -- Datatext for Zone Text
 ---------------------------------------------------
-if C.datatext.zone and C.datatext.zone > 0 then
+if DB.datatext.zone and DB.datatext.zone > 0 then
 	local Stat = CreateFrame("Frame")
 	Stat:EnableMouse(true)
 	Stat:SetFrameStrata('BACKGROUND')
 	Stat:SetFrameLevel(3)
 
 	local Text = DataPanelLeft:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C.media.font, C.datatext.fontsize,'THINOUTLINE')
-	PP(C.datatext.zone, Text)
+	Text:SetFont(DB.media.font, DB.datatext.fontsize,'THINOUTLINE')
+	PP(DB.datatext.zone, Text)
 
 	local function Update(self)
 		if GetMinimapZoneText() == "Putricide's Laboratory of Alchemical Horrors and Fun" then

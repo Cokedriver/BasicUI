@@ -1,6 +1,6 @@
-local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
+local DB, L = unpack(select(2, ...)) -- Import: DB - config; L - locales
 
-if C.chat.enable ~= true then return end
+if DB.chat.enable ~= true then return end
 
 --[[
 
@@ -139,7 +139,7 @@ ChatFrame1EditBox:SetBackdrop({
 
 ChatFrame1EditBox:SetBackdropColor(0, 0, 0, 0.5)
 
-if (C.chat.enableBorderColoring) then
+if (DB.chat.enableBorderColoring) then
 
     hooksecurefunc('ChatEdit_UpdateHeader', function(editBox)
         local type = editBox:GetAttribute('chatType')
@@ -210,7 +210,7 @@ hooksecurefunc('FloatingChatFrame_OnMouseScroll', function(self, direction)
         end
     end
 
-    if (C.chat.enableBottomButton) then
+    if (DB.chat.enableBottomButton) then
         local buttonBottom = _G[self:GetName() .. 'ButtonFrameBottomButton']
         if (self:AtBottom()) then
             buttonBottom:SetAlpha(0)
@@ -245,20 +245,20 @@ function SkinTab(self)
     local tabText = _G[self..'TabText']
     tabText:SetJustifyH('CENTER')
     tabText:SetWidth(60)
-    if (C.chat.tab.fontOutline) then
-        tabText:SetFont('Fonts\\ARIALN.ttf', C.chat.tab.fontSize, 'THINOUTLINE')
+    if (DB.chat.tab.fontOutline) then
+        tabText:SetFont('Fonts\\ARIALN.ttf', DB.chat.tab.fontSize, 'THINOUTLINE')
         tabText:SetShadowOffset(0, 0)
     else
-        tabText:SetFont('Fonts\\ARIALN.ttf', C.chat.tab.fontSize)
+        tabText:SetFont('Fonts\\ARIALN.ttf', DB.chat.tab.fontSize)
         tabText:SetShadowOffset(1, -1)
     end
 
     local a1, a2, a3, a4, a5 = tabText:GetPoint()
     tabText:SetPoint(a1, a2, a3, a4, 1)
 
-    local s1, s2, s3 = unpack(C.chat.tab.specialColor)
-    local e1, e2, e3 = unpack(C.chat.tab.selectedColor)
-    local n1, n2, n3 = unpack(C.chat.tab.normalColor)
+    local s1, s2, s3 = unpack(DB.chat.tab.specialColor)
+    local e1, e2, e3 = unpack(DB.chat.tab.selectedColor)
+    local n1, n2, n3 = unpack(DB.chat.tab.normalColor)
 
     local tabGlow = _G[self..'TabGlow']
     hooksecurefunc(tabGlow, 'Show', function()
@@ -317,18 +317,18 @@ end
 local function ModChat(self)
     local chat = _G[self]
 
-    if (not C.chatOutline) then
+    if (not DB.chatOutline) then
         chat:SetShadowOffset(1, -1)
     end
 
-    if (C.chat.disableFade) then
+    if (DB.chat.disableFade) then
         chat:SetFading(false)
     end
 
     SkinTab(self)
 
     local font, fontsize, fontflags = chat:GetFont()
-    chat:SetFont(font, fontsize, C.chatOutline and 'THINOUTLINE' or fontflags)
+    chat:SetFont(font, fontsize, DB.chatOutline and 'THINOUTLINE' or fontflags)
     chat:SetClampedToScreen(false)
 
     chat:SetClampRectInsets(0, 0, 0, 0)
@@ -351,7 +351,7 @@ local function ModChat(self)
 	buttonBottom:SetAlpha(0)
     buttonBottom:EnableMouse(false)
 	
-    if (C.chat.enableBottomButton) then
+    if (DB.chat.enableBottomButton) then
         buttonBottom:ClearAllPoints()
         buttonBottom:SetPoint('BOTTOMRIGHT', chat, -1, -3)
         buttonBottom:HookScript('OnClick', function(self)

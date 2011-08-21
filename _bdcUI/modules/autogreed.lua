@@ -1,6 +1,6 @@
-local T, C, L = unpack(select(2, ...)) -- Import: T - functions, constants, variables; C - config; L - locales
+local DB, L = unpack(select(2, ...)) -- Import: DB - config; L - locales
 
-if C.autogreed.enable ~= true then return end
+if DB.autogreed.enable ~= true then return end
 
 --[[
 
