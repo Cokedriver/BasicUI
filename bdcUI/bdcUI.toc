@@ -1,0 +1,12 @@
+## Interface: 40200
+## Author: Cokedriver
+## Version: 1.1
+## Title: |cff00B4FFbdc|rUI
+## Notes: Blizzard Default Customized User Interface.
+## SavedVariables: bdcUIData
+## RequiredDeps: bdcUI_Config
+
+
+embeds.xml
+locale.lua
+core.lua

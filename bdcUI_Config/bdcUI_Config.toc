@@ -1,0 +1,11 @@
+## Interface: 40200
+## Title: |cff00B4FFbdc|rUI Config
+## Notes: Config for bdcUI
+## Author: Cokedrivers
+## SavedVariables: bdcUIConfig
+## RequiredDeps: bdcUI
+
+
+libs\load_libs.xml
+locale.lua
+core.lua

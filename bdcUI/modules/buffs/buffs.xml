@@ -1,0 +1,4 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">	
+	<Script file='buff.lua'/>
+	<Script file='selfbuffs.lua'/>	
+</Ui>
