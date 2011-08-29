@@ -161,6 +161,58 @@ L["Automatically repair when visiting a vendor"] = true
 
 -- Powerbar Locale
 L["Powerbar Options"] = true
+L["POWER_DESC"] = "Powerbar for all classes with ComboPoints, Runes, Shards, and HolyPower."
+L["Enables Powerbar Module"] = true
+L["Width"] = true
+L["Controls the width of Powerbar."] = true
+L["CombatRegen"] = true
+L["Shows a players Regen while in combat."] = true
+L["Value"] = true
+L["VALUE_DESC"] = "Shows the Value on the PowerBar"
+L["valueAbbrev"] = true
+L["Abbreviates the value."] = true
+L["valueFontSize"] = true
+L["Controls the value font size."] = true
+L["valueFontOutline"] = true
+L["Adds a font outline to value."] = true
+L["showSoulshards"] = true
+L["Shows Shards as a number value."] = true
+L["showHolypower"] = true
+L["Shows Holypower as a number value."] = true
+L["Extra"] = true
+L["Extra_DESC"] = "Options for Shards and Holypower Text."
+L["extraFontSize"] = true
+L["Controls the Extra font size."] = true
+L["extraFontOutline"] = true
+L["Adds a font outline to Extra."] = true
+L["Manabar"] = true
+L["Shows Mana Powerbar."] = true
+L["Energybar"] = true
+L["Shows Energy Powerbar."] = true
+L["showComboPoints"] = true
+L["Combo"] = true
+L["COMBO_DESC"] = "Options for ComboPoint Text"
+L["Shows ComboPoints as a number value."] = true
+L["comboFontSize"] = true
+L["Controls the ComboPoints font size."] = true
+L["comboFontOutline"] = true
+L["Adds a font outline to ComboPoints."] = true
+L["Focusbar"] = true
+L["Shows Focus Powerbar."] = true
+L["Ragebar"] = true
+L["Shows Rage Powerbar."] = true
+L["Runebar"] = true
+L["Shows Rune Powerbar."] = true
+L["showRuneCooldown"] = true
+L["Rune"] = true
+L["RUNE_DESC"] = "Options for Rune Text."
+L["Shows Runes cooldowns as numbers."] = true
+L["runeFontSize"] = true
+L["Controls the Runes font size."] = true
+L["runeFontOutline"] = true
+L["Adds a font outline to Runes."] = true
+
+
 
 -- Quest Locale
 L["Quests"] = true

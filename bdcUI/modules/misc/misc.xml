@@ -6,7 +6,7 @@
 	<Script file="macro.lua"/>
 	<Script file="merchant.lua"/>
 	<Script file="quest.lua"/>
-	<Script file="power.lua"/>
+	<Script file="powerbar.lua"/>
 	<Script file="range.lua"/>
 	<Script file="scale.lua"/>
 	<Script file="slash.lua"/>
