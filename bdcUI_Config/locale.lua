@@ -8,6 +8,7 @@ L["Enables bdcUI"] = true
 L["Open configuration dialog"] = true
 L["Configure"] = true
 
+
 --Buff Locale
 L["Buffs"] = true
 L["Buff Options"] = true
@@ -16,6 +17,7 @@ L["Enable"] = true
 L["Enables Buff Module"] = true
 L["Scale"] = true
 L["Controls the scaling of Blizzard's Buff Frames"] = true
+
 		
 -- Chat Locale	
 L["Chat"] = true		
@@ -49,7 +51,6 @@ L["Selected Tab Color"] = true
 L["Enables the outlineing of tab font."] = true
 
 
-
 -- Datapanel Locale
 L["Datapanel"] = true
 L["Enables Datapanel Module."] = true
@@ -58,7 +59,6 @@ L["Datapanel Location"] = true
 L["Checked puts panel on top of the screen, Unchecked puts panel below MainMenuBar."] = true
 
 
-			
 -- Datatext Locale
 L["Datatexts"] = true
 L["Enables Datatext Module."] = true
@@ -146,6 +146,7 @@ L["Size"] = true
 L["Controls the scaling of Blizzard's Unit Frames"] = true
 L["Slash"] = true
 L["Enables slash commands."] = true
+
 		
 -- Merchant Locale
 L["Merchants"] = true
@@ -159,6 +160,7 @@ L["Automatically sell gray items when visiting a vendor"] = true
 L["Auto Repair"] = true
 L["Automatically repair when visiting a vendor"] = true
 
+
 -- Powerbar Locale
 L["Powerbar Options"] = true
 L["POWER_DESC"] = "Powerbar for all classes with ComboPoints, Runes, Shards, and HolyPower."
@@ -169,33 +171,33 @@ L["CombatRegen"] = true
 L["Shows a players Regen while in combat."] = true
 L["Value"] = true
 L["VALUE_DESC"] = "Shows the Value on the PowerBar"
-L["valueAbbrev"] = true
-L["Abbreviates the value."] = true
-L["valueFontSize"] = true
+L["Abbrev"] = true
+L["Abbreviates the value. 17000 = 17K"] = true
+L["Font Size"] = true
 L["Controls the value font size."] = true
-L["valueFontOutline"] = true
+L["Font Outline"] = true
 L["Adds a font outline to value."] = true
-L["showSoulshards"] = true
+L["Soulshards"] = true
 L["Shows Shards as a number value."] = true
-L["showHolypower"] = true
+L["Holypower"] = true
 L["Shows Holypower as a number value."] = true
 L["Extra"] = true
-L["Extra_DESC"] = "Options for Shards and Holypower Text."
-L["extraFontSize"] = true
+L["Extra_DESC"] = "Options for Soulshards and Holypower Text."
+L["Font Size"] = true
 L["Controls the Extra font size."] = true
-L["extraFontOutline"] = true
+L["Font Outline"] = true
 L["Adds a font outline to Extra."] = true
 L["Manabar"] = true
 L["Shows Mana Powerbar."] = true
 L["Energybar"] = true
 L["Shows Energy Powerbar."] = true
-L["showComboPoints"] = true
+L["ComboPoints"] = true
 L["Combo"] = true
 L["COMBO_DESC"] = "Options for ComboPoint Text"
 L["Shows ComboPoints as a number value."] = true
-L["comboFontSize"] = true
+L["Font Size"] = true
 L["Controls the ComboPoints font size."] = true
-L["comboFontOutline"] = true
+L["Font Outline"] = true
 L["Adds a font outline to ComboPoints."] = true
 L["Focusbar"] = true
 L["Shows Focus Powerbar."] = true
@@ -203,15 +205,14 @@ L["Ragebar"] = true
 L["Shows Rage Powerbar."] = true
 L["Runebar"] = true
 L["Shows Rune Powerbar."] = true
-L["showRuneCooldown"] = true
+L["Rune Cooldown"] = true
 L["Rune"] = true
 L["RUNE_DESC"] = "Options for Rune Text."
 L["Shows Runes cooldowns as numbers."] = true
-L["runeFontSize"] = true
+L["Font Size"] = true
 L["Controls the Runes font size."] = true
-L["runeFontOutline"] = true
+L["Font Outline"] = true
 L["Adds a font outline to Runes."] = true
-
 
 
 -- Quest Locale
@@ -221,6 +222,7 @@ L["QUEST_DESC"] = "Options for autocompleting your quests."
 L["Enables Quest Module"] = true
 L["Autocomplete"] = true
 L["Automatically complete your quest."] = true
+
 
 -- Selfbuff Locale
 L["Selfbuffs"] = true
@@ -232,6 +234,42 @@ L["Play's a warning sound when a players class buff is not applied."] = true
 
 --Tooltip Locale
 L["Tooltip Options"] = true
+L["TOOLTIP_DESC"] = "Options for custom tooltip."
+L["Enables Tooltip Module"] = true
+L["Disable Fade"] = true
+L["Disables Tooltip Fade."] = true
+L["Reaction Border Color"] = true
+L["Colors the borders match targets classcolors."] = true
+L["Item Quality Border Color"] = true
+L["Colors the border of the tooltip to match the items quality."] = true
+L["Player Titles"] = true
+L["Shows players title in tooltip."] = true
+L["PVP Icons"] = true
+L["Shows PvP Icons in tooltip."] = true
+L["Abberviate Realm Names"] = true
+L["Abberviates Players Realm Name."] = true
+L["Mouseover Target"] = true
+L["Shows mouseover target."] = true
+L["Item Level"] = true
+L["Shows targets average item level."] = true
+L["Healthbar"] = true
+L["HEALTH_DESC"] = "Players Healthbar Options"
+L["Health Value"] = true
+L["Shows health value over healthbar."] = true
+L["Font Outline"] = true
+L["Adds a font outline to health value."] = true
+L["Text Position"] = true
+L["Health Value Position."] = true
+L["TOP"] = true
+L["CENTER"] = true
+L["BOTTOM"] = true
+L["Reaction Coloring"] = true
+L["Change healthbar color to targets classcolor."] = true
+L["Font Size"] = true
+L["Controls the healthbar value font size."] = true
+
+
+
 
 --Profiles Locale
 L["Profiles"] = true

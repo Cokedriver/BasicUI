@@ -198,12 +198,10 @@ DB['tooltip'] = {
 	
 	['healthbar'] = {
 		['showHealthValue'] = true,
-		['fontSize'] = 14,
 		['showOutline'] = false,
-		['textPos'] = 'CENTER',                     -- Possible 'TOP' 'BOTTOM' 'CENTER'
-			
-		['reactionColoring'] = false,		-- Overrides customColor 
-		['customColor'] = false,
+		['textPos'] = 'CENTER',                     -- Possible 'TOP' 'BOTTOM' 'CENTER'	
+		['reactionColoring'] = false,		
+		['fontSize'] = 14,
 	},		
 }
 

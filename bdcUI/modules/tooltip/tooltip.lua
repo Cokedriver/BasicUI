@@ -239,9 +239,7 @@ end)
 local function HealthBarColor(unit)
     local r, g, b
 
-    if (C['tooltip'].healthbar.customColor and not C['tooltip'].healthbar.reactionColoring) then
-        r, g, b = 0, 1, 1
-    elseif (C['tooltip'].healthbar.reactionColoring) then
+    if (C['tooltip'].healthbar.reactionColoring) then
         r, g, b = UnitSelectionColor(unit)
     else
         r, g, b = 0, 1, 0
@@ -465,7 +463,7 @@ GameTooltip:HookScript('OnTooltipSetUnit', function(self, ...)
         if (UnitIsDead(unit) or UnitIsGhost(unit)) then
             GameTooltipStatusBar:SetBackdropColor(0.5, 0.5, 0.5, 0.3)
         else
-            if (not C['tooltip'].healthbar.customColor and not C['tooltip'].healthbar.reactionColoring) then
+            if (not C['tooltip'].healthbar.reactionColoring) then
                 GameTooltipStatusBar:SetBackdropColor(27/255, 243/255, 27/255, 0.3)
             else
                 HealthBarColor(unit)
@@ -474,7 +472,7 @@ GameTooltip:HookScript('OnTooltipSetUnit', function(self, ...)
 
             -- tooltip HP bar & value
             
-        if (not GameTooltipStatusBar.hasHealthText and C['tooltip'].healthbar.showHealthValue or C['tooltip'].healthbar.customColor or C['tooltip'].healthbar.reactionColoring) then
+        if (not GameTooltipStatusBar.hasHealthText and C['tooltip'].healthbar.showHealthValue or C['tooltip'].healthbar.reactionColoring) then
             GameTooltipStatusBar:SetScript('OnValueChanged', function(self, value)
                 if (not value) then
                     return
