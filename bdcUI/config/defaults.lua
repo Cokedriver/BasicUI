@@ -22,7 +22,7 @@ DB['chat'] = {
 
 	['tab'] = {
 		['fontSize'] = 15,
-		['fontOutline'] = true, 
+		['fontOutline'] = false, 
 		['normalColor'] = {1, 1, 1},
 		['specialColor'] = {1, 0, 1},
 		['selectedColor'] = {0, 0.75, 1},
