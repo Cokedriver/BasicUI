@@ -5,7 +5,7 @@ local B, C, L, DB = unpack(select(2, ...)) -- Import:  B - function; C - config;
 ----------------
 DB['buff'] = {
 	['enable'] = true,
-	['scale'] = 1.2,
+	['scale'] = 1.15,
 }	
 
 ----------------

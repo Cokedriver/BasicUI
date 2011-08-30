@@ -33,7 +33,7 @@ local RuneColor = {
 local f = CreateFrame('Frame', nil, UIParent)
 f:SetScale(1.4)
 f:SetSize(18, 18)
-f:SetPoint('CENTER', UIParent, 0, -165)
+f:SetPoint('CENTER', UIParent, 0, -160)
 f:EnableMouse(false)
 
 f:RegisterEvent('PLAYER_REGEN_ENABLED')
