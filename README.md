@@ -1,4 +1,4 @@
-# _bdcUI
+# bdcUI
 
 ## What does _bdcUI stand for?
 
@@ -24,8 +24,7 @@
  
 ## Thank You...
  
- - I would just like to thank all those that created the above
- - addons for me to use and combine to make this UI.
+ - I would just like to thank all those that created the above addons for me to use and combine to make this UI.
 
 ##Thanks goes to
  
