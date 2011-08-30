@@ -109,7 +109,9 @@ if C['datatext'].enable == true then
 			local tf = TargetFrame
 			tf:ClearAllPoints()
 			tf:SetPoint("TOPLEFT", 250, -20)
+			
 		elseif C['datatext'].top == false then
+		
 			-- Move the Bottom Action Bar Up on Top of the Datapanel
 			-- Code help from Nibelheim on Wowinterface Forums
 			local Movebar = CreateFrame("Frame")
@@ -128,17 +130,25 @@ if C['datatext'].enable == true then
 				VehicleMenuBar:SetPoint('BOTTOM', DataBorderPanel, 0, 40)
 
 			end
-			Movebar:SetScript("OnUpdate", function(MainMenuBar) RaiseBars(); end)
-			RaiseBars()
+				Movebar:SetScript("OnUpdate", function(MainMenuBar) RaiseBars(); end)
+				RaiseBars()
 
 			
 			 -- Move the tooltip above the Actionbar
 			if C['tooltip'].enable == true then
 				hooksecurefunc('GameTooltip_SetDefaultAnchor', function(self)
-					self:SetPoint('BOTTOMRIGHT', UIParent, -95, 175)
+					self:SetPoint('BOTTOMRIGHT', UIParent, -95, 135)
 				end)
 			end
-
+			
+			-- Move PetBar above the Actionbar
+			for _, button in pairs({        
+				_G['PetActionButton1'],
+			}) do
+				button:ClearAllPoints()
+				button:SetPoint('BOTTOM', UIParent, -170, 135)
+			end
+			
 			 -- Move the Bags above the Actionbar
 			CONTAINER_WIDTH = 192;
 			CONTAINER_SPACING = 5;

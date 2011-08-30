@@ -56,10 +56,3 @@ end
 function ActionButton_UpdateHotkeys (self, actionButtonType)
     
 end
-
-for _, button in pairs({        
-    _G['PetActionButton1'],
-}) do
-    button:ClearAllPoints()
-    button:SetPoint('BOTTOM', UIParent, -170, 105)
-end
