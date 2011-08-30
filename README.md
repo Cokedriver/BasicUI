@@ -1,8 +1,8 @@
 # bdcUI
 
-## What does _bdcUI stand for?
+## What does bdcUI stand for?
 
- - _bdcUI stands for Blizzard Default Customized User Interface
+ - bdcUI stands for Blizzard Default Customized User Interface
  
 ## Included in the UI
 
@@ -11,7 +11,7 @@
  - Unitframe Scaling.		-- Custom Scaleing.
  - Chat 					-- nChat Edited.
  - Powerbar  				-- nPower Edited.
- - Selfbuff					-- Tukui Seflbuff Edited.
+ - Selfbuff					-- Tukui Selfbuff Edited.
  - Autogreed Roll			-- Tukui Autogreed Edited.
  - Buff						-- Buffy Edited.
  - Hyperlink				-- Tukui Hyperlink Edited.
