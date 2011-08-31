@@ -3,7 +3,7 @@ local B, C, L, DB = unpack(select(2, ...)) -- Import:  B - function; C - config;
 if C['general'].mail.enable ~= true then return end
 
 if C['general'].mail.gold == true then
-	local gbutton = CreateFrame("Button", "MailButton", InboxFrame, "UIPanelButtonTemplate")
+	local gbutton = CreateFrame("Button", "GoldButton", InboxFrame, "UIPanelButtonTemplate")
 	
 	if C['general'].mail.item == false then
 		gbutton:SetPoint("TOP", InboxFrame, "TOP", 0, -42)
@@ -69,7 +69,7 @@ if C['general'].mail.gold == true then
 end
 
 if C['general'].mail.item == true then
-	local ibutton = CreateFrame("Button", "MailButton", InboxFrame, "UIPanelButtonTemplate")
+	local ibutton = CreateFrame("Button", "ItemButton", InboxFrame, "UIPanelButtonTemplate")
 	if C['general'].mail.gold == false then
 		ibutton:SetPoint("TOP", InboxFrame, "TOP", 0, -42)
 		ibutton:SetWidth(175)
@@ -133,6 +133,71 @@ if C['general'].mail.item == true then
 	ibutton:SetScript("OnHide", OnHide)
 end
 
+if C['general'].mail.openall == true then
+	local button = CreateFrame("Button", "MailButton", InboxFrame, "UIPanelButtonTemplate")
+	button:SetPoint("BOTTOM", InboxFrame, "BOTTOM", -10, 92)
+	button:SetWidth(100)
+	button:SetHeight(25)
+
+	local text = button:CreateFontString(nil, "OVERLAY")
+	text:SetFont("Fonts\\FRIZQT__.TTF", 13, "OUTLINE")
+	text:SetShadowColor(0, 0, 0, 0)
+	text:SetTextColor(1, .82, 0)
+	text:SetPoint"CENTER"
+
+	local processing = false
+
+	local function OnEvent()
+		if(not MailFrame:IsShown()) then return end
+
+		local num = GetInboxNumItems()
+
+		local cash = 0
+		local items = 0
+		for i = 1, num do
+			local _, _, _, _, money, COD, _, item = GetInboxHeaderInfo(i)
+			if(item and COD<1) then items = items + item end
+			cash = cash + money
+		end
+		text:SetText("OPEN ALL")
+
+		if(processing) then
+			if(num==0) then
+				MiniMapMailFrame:Hide()
+				processing = false
+				return
+			end
+
+			for i = num, 1, -1 do
+				local _, _, _, _, money, COD, _, item = GetInboxHeaderInfo(i)
+				if(item and COD<1) then
+					TakeInboxItem(i)
+					return
+				end
+				if(money>0) then
+					TakeInboxMoney(i)
+					return
+				end
+			end
+		end
+	end
+	
+	local function OnClick()
+		if(not processing) then
+			processing = true
+			OnEvent()
+		end
+	end
+
+	local function OnHide()
+		processing = false
+	end
+
+	button:RegisterEvent"MAIL_INBOX_UPDATE"
+	button:SetScript("OnEvent", OnEvent)
+	button:SetScript("OnClick", OnClick)
+	button:SetScript("OnHide", OnHide)
+end
 
  -- Credit for BlackBook goes to Xinhuan and grennon from WoWAce.com
 

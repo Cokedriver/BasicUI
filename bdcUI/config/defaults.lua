@@ -107,6 +107,7 @@ DB['general'] = {
 		['enable'] = true,
 		['gold'] = true,
 		['item'] = true,
+		['openall'] = true,
 		['BlackBook'] = {
 			['AutoFill'] = true,
 			['contacts'] = {},
