@@ -19,6 +19,11 @@ function bdcUIConfig:LoadDefaults()
 			selfbuffs = DB["selfbuffs"],
 			tooltip = DB["tooltip"],
 		},
+		global = {
+			BlackBook = {
+				alts = {},
+			},
+		},		
 	}
 end	
 
@@ -106,7 +111,7 @@ function bdcUIConfig.GenerateOptionsInternal()
 					autogreed = {
 						order = 2,
 						name = L["Autogreed"],
-						desc = L["Enables Automaticly rolling greed on green items when in a instance."],
+						desc = L["Enables Automatically rolling greed on green items when in a instance."],
 						type = "toggle",							
 					},
 					colors = {
@@ -120,13 +125,7 @@ function bdcUIConfig.GenerateOptionsInternal()
 						name = L["Cooldown"],
 						desc = L["Enables cooldown counts on action buttons."],
 						type = "toggle",						
-					},
-					macro = {
-						order = 5,
-						name = L["Macro"],
-						desc = L["Enables user to creat macros up to 1500 charactors."],
-						type = "toggle",							
-					},
+					},					
 					range = {
 						order = 6,
 						name = L["Range"],
@@ -169,6 +168,40 @@ function bdcUIConfig.GenerateOptionsInternal()
 							},
 						},
 					},
+					mail = {
+						type = "group",
+						order = 9,
+						name = L["Mail"],
+						desc = L["MAIL_DESC"],
+						guiInline = true,
+						get = function(info) return db.general.mail[ info[#info] ] end,
+						set = function(info, value) db.general.mail[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+						args = {
+							intro = {
+								order = 1,
+								type = "description",
+								name = L["MAIL_DESC"],
+							},					
+							enable = {
+								order = 2,
+								name = L["Enable"],
+								desc = L["Enables Mail Module"],
+								type = "toggle",								
+							},						
+							gold = {
+								order = 3,
+								name = L["Gold"],
+								desc = L["Enables Gold Collect Button on Mailbox."],
+								type = "toggle",								
+							},
+							item = {
+								order = 4,
+								name = L["Item"],
+								desc = L["Enables Item Collect Button on Mailbox"],
+								type = "toggle",								
+							},					
+						},
+					},					
 				},
 			},
 			buff = {
@@ -308,13 +341,6 @@ function bdcUIConfig.GenerateOptionsInternal()
 						name = L["Enable"],
 						desc = L["Enables Datatext Module."],
 						type = "toggle",							
-					},
-					datapanel = {
-						order = 3,
-						name = L["Datapanel"],
-						desc = L["Enables Datapanel Module."],
-						type = "toggle",
-						disabled = function() return not db.datatext.enable end,
 					},
 					top = {
 						order = 3,

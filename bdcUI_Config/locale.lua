@@ -51,14 +51,6 @@ L["Selected Tab Color"] = true
 L["Enables the outlineing of tab font."] = true
 
 
--- Datapanel Locale
-L["Datapanel"] = true
-L["Enables Datapanel Module."] = true
-L["DATAPANEL_DESC"] = "Panel for Datatext" 
-L["Datapanel Location"] = true
-L["Checked puts panel on top of the screen, Unchecked puts panel below MainMenuBar."] = true
-
-
 -- Datatext Locale
 L["Datatexts"] = true
 L["Enables Datatext Module."] = true
@@ -66,6 +58,8 @@ L["Datatext Options"] = true
 L["DATATEXT_DESC"] = "Edit the display of information text on Datapanel"
 L["DATATEXT_POS"] = "\n\n0 - Disabled\n1 - POSITION #1\n2 - POSITION #2\n3 - POSITION #3\n4 - POSITION #4\n5 - POSITION #5\n6 - POSITION #6\n7 - POSITION #7\n8 - POSITION #8\n9 - POSITION #9"
 L["Text Positions"] = true
+L["Datapanel Location"] = true
+L["Checked puts panel on top of the screen, Unchecked puts panel below MainMenuBar."] = true
 L["Threatbar"] = true
 L["Display Threat Text in center of panel."] = true
 L["BG Text"] = true
@@ -128,15 +122,20 @@ L["GENERAL_DESC"] = "General Modules for bdcUI"
 L["Font"] = true
 L["The font that the core of the UI will use"] = true
 L["Autogreed"] = true
-L["Enables Automaticly rolling greed on green items when in a instance."] = true
+L["Enables Automatically rolling greed on green items when in a instance."] = true
 L["Castbar"] = true
 L["Enables count down of cast on castbar."] = true
 L["Colors"] = true
 L["Enables class colors for UI."] = true
 L["Cooldown"] = true
 L["Enables cooldown counts on action buttons."] = true
-L["Macro"] = true
-L["Enables user to creat macros up to 1500 charactors."] = true
+L["Mail"] = true
+L["MAIL_DESC"] = "Enables Mailbox Modifications."
+L["Enables Mail Module"] = true
+L["Gold"] = true
+L["Enables Gold Collect Button on Mailbox."] = true
+L["Item"] = true
+L["Enables Item Collect Button on Mailbox"] = true
 L["Range"] = true
 L["Enables action buttons to turn red when target is out of range."] = true
 L["Unitframe Scale"] = true

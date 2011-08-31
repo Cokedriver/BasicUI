@@ -5,7 +5,7 @@ local B, C, L, DB = unpack(select(2, ...)) -- Import:  B - function; C - config;
 ----------------
 DB['buff'] = {
 	['enable'] = true,
-	['scale'] = 1.15,
+	['scale'] = 1.2,
 }	
 
 ----------------
@@ -35,9 +35,7 @@ DB['chat'] = {
 DB['datatext'] = {
 	
 	['enable'] = true,
-		
-	['datapanel'] =  true,									
-	
+
 	['top'] = false,											-- position the datpanel true = top, false = bottom
 	
 	['toc'] = 40200,
@@ -97,15 +95,32 @@ DB['general'] = {
 
 	['autogreed'] = true,
 	['colors'] = true,
-	['cooldown'] = true,
-	['macro'] = true,										-- enable bigger macros.
+	['cooldown'] = true,										-- enable bigger macros.
 	['font'] = "Fonts\\ARIALN.ttf",							-- general font for UI
 	['range'] = true,
 	['slash'] = true,
 	['scale'] = {
 		['enable'] = true,
 		['size'] = 1.2,
-	},	
+	},
+	['mail'] = {
+		['enable'] = true,
+		['gold'] = true,
+		['item'] = true,
+		['BlackBook'] = {
+			['AutoFill'] = true,
+			['contacts'] = {},
+			['recent'] = {},
+			['AutoCompleteAlts'] = true,
+			['AutoCompleteRecent'] = true,
+			['AutoCompleteContacts'] = true,
+			['AutoCompleteFriends'] = true,
+			['AutoCompleteGuild'] = true,
+			['ExcludeRandoms'] = true,
+			['DisableBlizzardAutoComplete'] = false,
+			['UseAutoComplete'] = true,
+		},		
+	},
 }
 
 -------------------

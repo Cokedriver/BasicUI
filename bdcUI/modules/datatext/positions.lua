@@ -13,7 +13,7 @@ B.PP = function(p, obj)
 	if p == 1 then
 		obj:SetParent(left)
 		obj:SetHeight(left:GetHeight())
-		obj:SetPoint('LEFT', left, 20, 0)
+		obj:SetPoint('LEFT', left, 30, 0)
 		obj:SetPoint('TOP', left)
 		obj:SetPoint('BOTTOM', left)
 	elseif p == 2 then
@@ -24,7 +24,7 @@ B.PP = function(p, obj)
 	elseif p == 3 then
 		obj:SetParent(left)
 		obj:SetHeight(left:GetHeight())
-		obj:SetPoint('RIGHT', left, -20, 0)
+		obj:SetPoint('RIGHT', left, -30, 0)
 		obj:SetPoint('TOP', left)
 		obj:SetPoint('BOTTOM', left)
 		
@@ -32,7 +32,7 @@ B.PP = function(p, obj)
 	elseif p == 4 then
 		obj:SetParent(center)
 		obj:SetHeight(center:GetHeight())
-		obj:SetPoint('LEFT', center, 20, 0)
+		obj:SetPoint('LEFT', center, 30, 0)
 		obj:SetPoint('TOP', center)
 		obj:SetPoint('BOTTOM', center)
 	elseif p == 5 then
@@ -43,7 +43,7 @@ B.PP = function(p, obj)
 	elseif p == 6 then
 		obj:SetParent(center)
 		obj:SetHeight(center:GetHeight())
-		obj:SetPoint('RIGHT', center, -20, 0)
+		obj:SetPoint('RIGHT', center, -30, 0)
 		obj:SetPoint('TOP', center)
 		obj:SetPoint('BOTTOM', center)
 		
@@ -51,7 +51,7 @@ B.PP = function(p, obj)
 	elseif p == 7 then
 		obj:SetParent(right)
 		obj:SetHeight(right:GetHeight())
-		obj:SetPoint('LEFT', right, 20, 0)
+		obj:SetPoint('LEFT', right, 30, 0)
 		obj:SetPoint('TOP', right)
 		obj:SetPoint('BOTTOM', right)
 	elseif p == 8 then
@@ -62,7 +62,7 @@ B.PP = function(p, obj)
 	elseif p == 9 then
 		obj:SetParent(right)
 		obj:SetHeight(right:GetHeight())
-		obj:SetPoint('RIGHT', right, -20, 0)
+		obj:SetPoint('RIGHT', right, -30, 0)
 		obj:SetPoint('TOP', right)
 		obj:SetPoint('BOTTOM', right)
 	end

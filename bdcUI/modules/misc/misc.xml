@@ -3,11 +3,11 @@
 	<Script file="colorz.lua"/>
 	<Script file="cooldown.lua"/>
 	<Script file="fonts.lua"/>
-	<Script file="macro.lua"/>
 	<Script file="merchant.lua"/>
 	<Script file="quest.lua"/>
 	<Script file="powerbar.lua"/>
 	<Script file="range.lua"/>
 	<Script file="scale.lua"/>
 	<Script file="slash.lua"/>
+	<Script file="mail.lua"/>
 </Ui>

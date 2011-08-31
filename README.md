@@ -15,9 +15,9 @@
  - Autogreed Roll			-- Tukui Autogreed Edited.
  - Buff						-- Buffy Edited.
  - Hyperlink				-- Tukui Hyperlink Edited.
- - Macro					-- ncBiggerMacro Edited.
+ - Mail						-- aMail @ Postal Edited.
  - Merchant					-- Tukui Merchant Edited.
- - Omnicc					-- Omnicc Edited.
+ - Cooldown					-- Omnicc Edited.
  - Quest					-- ncQuest Edited.
  - Range					-- tullaRange Edited.
  - Slash Commands			-- Neav UI Slash Edited.
@@ -28,5 +28,5 @@
 
 ##Thanks goes to
  
-## Neal - NeavUI, Tuks and Programers - Tukui, Nightcracker - ncQuest/ncBiggerMacro and all the others.
+## Neal - NeavUI, Tuks and Programers - Tukui, Nightcracker - ncQuest and all the others.
 
