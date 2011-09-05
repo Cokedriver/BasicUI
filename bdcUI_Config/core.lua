@@ -27,6 +27,7 @@ function bdcUIConfig:LoadDefaults()
 	}
 end	
 
+
 function bdcUIConfig:OnInitialize()	
 	bdcUIConfig:RegisterChatCommand("bc", "ShowConfig")
 	bdcUIConfig:RegisterChatCommand("bdcUI", "ShowConfig")
@@ -44,15 +45,18 @@ function bdcUIConfig:Load()
 
 	-- Create savedvariables
 	self.db = LibStub("AceDB-3.0"):New("bdcUIConfig", defaults)
-	self.db.RegisterCallback(self, "OnProfileChanged", "OnProfileChanged")
-	self.db.RegisterCallback(self, "OnProfileCopied", "OnProfileChanged")
-	self.db.RegisterCallback(self, "OnProfileReset", "OnProfileChanged")
+	self.db.RegisterCallback(self, "OnProfileChanged", "RefreshConfig")
+	self.db.RegisterCallback(self, "OnProfileCopied", "RefreshConfig")
+	self.db.RegisterCallback(self, "OnProfileReset", "RefreshConfig")
 	db = self.db.profile
 	
 	self:SetupOptions()
 end
 
-function bdcUIConfig:OnProfileChanged(event, database, newProfileKey)
+function bdcUIConfig:RefreshConfig(db, name)
+	db = self.db.profile
+	self:Print("Profile changed.")
+	self:updateConfig(true)
 	StaticPopup_Show("CFG_RELOAD")
 end
 
@@ -82,29 +86,27 @@ function bdcUIConfig.GenerateOptionsInternal()
 
 	StaticPopupDialogs["CFG_RELOAD"] = {
 		text = L["CFG_RELOAD"],
-		button1 = ACCEPT,
-		button2 = CANCEL,
-		OnAccept = function() ReloadUI() end,
 		timeout = 0,
 		whileDead = 1,
-	}
-
+	}	
+	
 	bdcUIConfig.Options = {
 		type = "group",
 		name = "bdcUI",
 		handler = bdcUI,
+		childGroups = "tree",
 		args = {
 			general = {
 				order = 1,
 				type = "group",
 				name = L["General Options"],
 				desc = L["GENERAL_DESC"],
-				guiInline = true,
+				childGroups = "tree",
 				get = function(info) return db.general[ info[#info] ] end,
 				set = function(info, value) db.general[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,				
 				args = {
 					intro = {
-						order = 0,
+						order = 1,
 						type = "description",
 						name = L["GENERAL_DESC"],
 					},
@@ -127,16 +129,59 @@ function bdcUIConfig.GenerateOptionsInternal()
 						type = "toggle",						
 					},					
 					range = {
-						order = 6,
+						order = 5,
 						name = L["Range"],
 						desc = L["Enables action buttons to turn red when target is out of range."],
 						type = "toggle",						
 					},
 					slash = {
-						order = 7,
+						order = 6,
 						name = L["Slash"],
 						desc = L["Enables slash commands."],
 						type = "toggle",						
+					},
+					mail = {
+						type = "group",
+						order = 7,
+						name = L["Mail"],
+						desc = L["MAIL_DESC"],
+						guiInline = true,
+						get = function(info) return db.general.mail[ info[#info] ] end,
+						set = function(info, value) db.general.mail[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+						args = {
+							intro = {
+								order = 1,
+								type = "description",
+								name = L["MAIL_DESC"],
+							},					
+							enable = {
+								order = 2,
+								name = L["Enable"],
+								desc = L["Enables Mail Module"],
+								type = "toggle",								
+							},						
+							gold = {
+								order = 3,
+								name = L["Gold"],
+								desc = L["Enables Gold Collect Button on Mailbox."],
+								type = "toggle",
+								disabled = function() return not db.general.mail.enable end,
+							},
+							item = {
+								order = 4,
+								name = L["Item"],
+								desc = L["Enables Item Collect Button on Mailbox"],
+								type = "toggle",
+								disabled = function() return not db.general.mail.enable end,
+							},
+							openall = {
+								order = 5,
+								name = L["Open All"],
+								desc = L["Enables Open All Collect Button on Mailbox"],
+								type = "toggle",
+								disabled = function() return not db.general.mail.enable end,
+							},							
+						},
 					},					
 					scale = {
 						type = "group",
@@ -167,46 +212,6 @@ function bdcUIConfig.GenerateOptionsInternal()
 								disabled = function() return not db.general.scale.enable end,
 							},
 						},
-					},
-					mail = {
-						type = "group",
-						order = 9,
-						name = L["Mail"],
-						desc = L["MAIL_DESC"],
-						guiInline = true,
-						get = function(info) return db.general.mail[ info[#info] ] end,
-						set = function(info, value) db.general.mail[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
-						args = {
-							intro = {
-								order = 1,
-								type = "description",
-								name = L["MAIL_DESC"],
-							},					
-							enable = {
-								order = 2,
-								name = L["Enable"],
-								desc = L["Enables Mail Module"],
-								type = "toggle",								
-							},						
-							gold = {
-								order = 3,
-								name = L["Gold"],
-								desc = L["Enables Gold Collect Button on Mailbox."],
-								type = "toggle",								
-							},
-							item = {
-								order = 4,
-								name = L["Item"],
-								desc = L["Enables Item Collect Button on Mailbox"],
-								type = "toggle",								
-							},
-							openall = {
-								order = 5,
-								name = L["Open All"],
-								desc = L["Enables Open All Collect Button on Mailbox"],
-								type = "toggle",								
-							},							
-						},
 					},					
 				},
 			},
@@ -215,7 +220,7 @@ function bdcUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = L["Buff Options"],
 				desc = L["BUFF_DESC"],
-				guiInline = true,
+				childGroups = "tree",
 				get = function(info) return db.buff[ info[#info] ] end,
 				set = function(info, value) db.buff[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,				
 				args = {
@@ -231,7 +236,7 @@ function bdcUIConfig.GenerateOptionsInternal()
 						type = "toggle",							
 					},					
 					scale = {
-						order = 3,
+						order = 4,
 						name = L["Scale"],
 						desc = L["Controls the scaling of Blizzard's Buff Frames"],
 						type = "range",
@@ -245,7 +250,7 @@ function bdcUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = L["Chat Options"],
 				desc = L["CHAT_DESC"],
-				guiInline = true,
+				childGroups = "tree",
 				get = function(info) return db.chat[ info[#info] ] end,
 				set = function(info, value) db.chat[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,				
 				args = {
@@ -299,8 +304,8 @@ function bdcUIConfig.GenerateOptionsInternal()
 						type = "group",
 						order = 8,
 						name = L["Tabs"],
-						guiInline = true,
 						desc = L["TAB_DESC"],
+						guiInline = true,
 						disabled = function() return not db.chat.enable end,
 						get = function(info) return db.chat.tab[ info[#info] ] end,
 						set = function(info, value) db.chat.tab[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,					
@@ -333,7 +338,7 @@ function bdcUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = L["Datatext Options"],
 				desc = L["DATATEXT_DESC"],
-				guiInline = true,
+				childGroups = "tree",
 				get = function(info) return db.datatext[ info[#info] ] end,
 				set = function(info, value) db.datatext[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,				
 				args = {
@@ -348,42 +353,40 @@ function bdcUIConfig.GenerateOptionsInternal()
 						desc = L["Enables Datatext Module."],
 						type = "toggle",							
 					},
-					top = {
-						order = 3,
-						name = L["Datapanel Location"],
-						desc = L["Checked puts panel on top of the screen, Unchecked puts panel below MainMenuBar."],
-						type = "toggle",
-						disabled = function() return not db.datatext.enable end,						
-					},					
-					battleground = {
-						order = 4,
-						type = "toggle",
-						name = L["BG Text"],
-						desc = L["Display special datatexts when inside a battleground"],
-						disabled = function() return not db.datatext.enable end,						
-					},
-					fontsize = {
-						order = 5,
-						name = L["Font Scale"],
-						desc = L["Font size for datatexts"],
-						type = "range",
-						min = 9, max = 25, step = 1,
-						disabled = function() return not db.datatext.enable end,						
-					},
 					time24 = {
-						order = 6,
+						order = 3,
 						type = "toggle",
 						name = L["24-Hour Time"],
 						desc = L["Display time datatext on a 24 hour time scale"],
 							disabled = function() return not db.datatext.enable end,					
+					},					
+					bag = {
+						order = 4,
+						type = "toggle",
+						name = L["Bag Open"],
+						desc = L["Checked opens Backpack only, Unchecked opens all bags."],
+						disabled = function() return not db.datatext.enable end,						
+					},				
+					battleground = {
+						order = 5,
+						type = "toggle",
+						name = L["Battleground Text"],
+						desc = L["Display special datatexts when inside a battleground"],
+						disabled = function() return not db.datatext.enable end,						
 					},
+					top = {
+						order = 6,
+						name = L["Datapanel"],
+						desc = L["If checked then panel moves to top of screen, If unchecked panel moves below MainMenuBar"],
+						type = "toggle",
+						disabled = function() return not db.datatext.enable end,						
+					},					
 					localtime = {
 						order = 7,
 						type = "toggle",
 						name = L["Local Time"],
 						desc = L["Display local time instead of server time"],
 						disabled = function() return not db.datatext.enable end,						
-						disabled = function() return db.datatext.wowtime == 0 end,
 					},
 					threatbar = {
 						order = 8,
@@ -391,153 +394,187 @@ function bdcUIConfig.GenerateOptionsInternal()
 						name = L["Threatbar"],
 						desc = L["Display Threat Text in center of panel."],
 						disabled = function() return not db.datatext.enable end,						
-					},					
-					classcolor = {
-						order = 9,
-						type = "toggle",
-						name = L["Class Color"],
-						desc = L["Color the datatext values based on your class"],
-						disabled = function() return not db.datatext.enable end,						
 					},
-					bag = {
-						order = 10,
-						type = "toggle",
-						name = L["Bag Open"],
-						desc = L["Checked opens Backpack only, Unchecked opens all bags."],
+					fontsize = {
+						order = 9,
+						name = L["Font Scale"],
+						desc = L["Font size for datatexts"],
+						type = "range",
+						min = 9, max = 25, step = 1,
 						disabled = function() return not db.datatext.enable end,						
+					},					
+					colors = {
+						order = 10,
+						type = "group",
+						name = L["Text Colors"],
+						guiInline = true,
+						get = function(info) return db.datatext.colors[ info[#info] ] end,
+						set = function(info, value) db.datatext.colors[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,							
+						disabled = function() return not db.datatext.enable end,						
+						args = {
+							intro = {
+								order = 1,
+								type = "description",
+								name = L["Datatext Text Colors."],
+							},						
+							classcolor = {
+								order = 2,
+								type = "toggle",
+								name = L["Class Color"],
+								desc = L["Color the datatext values based on your class"],
+								disabled = function() return not db.datatext.enable end,						
+							},
+							color = {
+								type = "color",
+								name = L["Custom Color"],
+								desc = L["Picks a Custom Color for the datatext values."],
+								hasAlpha = false,
+								disabled = function() return db.datatext.colors.classcolor end,
+								get = function(info)
+									local dt = db.datatext.colors[ info[#info] ]
+									return dt.r, dt.g, dt.b
+								end,
+								set = function(info, r, g, b)
+									db.datatext.colors[ info[#info] ] = {}
+									local dt = db.datatext.colors[ info[#info] ]
+									dt.r, dt.g, dt.b = r, g, b
+									StaticPopup_Show("CFG_RELOAD")
+								end,					
+							},								
+						},
 					},					
 					DataGroup = {
 						order = 11,
 						type = "group",
 						name = L["Text Positions"],
-						guiInline = true,
+						childGroups = "tree",
 						disabled = function() return not db.datatext.enable end,						
 						args = {
-							stat1 = {
+							bags = {
 								order = 1,
 								type = "range",
-								name = L["Stat #1"],
-								desc = L["Display stat based on your role (Avoidance-Tank, AP-Melee, SP/HP-Caster)"]..L["DATATEXT_POS"],
-								min = 0, max = 9, step = 1,			
+								name = L["Bags"],
+								desc = L["Display ammount of bag space"]..L["DATATEXT_POS"],
+								min = 0, max = 9, step = 1,															
 							},
-							dur = {
+							calltoarms = {
 								order = 2,
+								type = "range",
+								name = L["Call to Arms"],
+								desc = L["Display the active roles that will recieve a reward for completing a random dungeon"]..L["DATATEXT_POS"],
+								min = 0, max = 9, step = 1,																
+							},
+							coords = {
+								order = 3,
+								type = "range",
+								name = L["Coordinates"],
+								desc = L["Display Player's Coordinates"]..L["DATATEXT_POS"],
+								min = 0, max = 9, step = 1,																
+							},							
+							dps_text = {
+								order = 4,
+								type = "range",
+								name = L["DPS"],
+								desc = L["Display ammount of DPS"]..L["DATATEXT_POS"],
+								min = 0, max = 9, step = 1,																
+							},						
+							dur = {
+								order = 5,
 								type = "range",
 								name = L["Durability"],
 								desc = L["Display your current durability"]..L["DATATEXT_POS"],
 								min = 0, max = 9, step = 1,
 							},
-							stat2 = {
-								order = 3,
+							friends = {
+								order = 6,
 								type = "range",
-								name = L["Stat #2"],
-								desc = L["Display stat based on your role (Armor-Tank, Crit-Melee, Crit-Caster)"]..L["DATATEXT_POS"],
-								min = 0, max = 9, step = 1,						
-							},
-							system = {
-								order = 4,
-								type = "range",
-								name = L["System"],
-								desc = L["Display FPS and Latency"]..L["DATATEXT_POS"],
-								min = 0, max = 9, step = 1,															
-							},
-							wowtime = {
-								order = 5,
-								type = "range",
-								name = L["Time"],
-								desc = L["Display current time"]..L["DATATEXT_POS"],
+								name = L["Friends"],
+								desc = L["Display current online friends"]..L["DATATEXT_POS"],
 								min = 0, max = 9, step = 1,															
 							},
 							gold = {
-								order = 6,
+								order = 7,
 								type = "range",
 								name = L["Gold"],
 								desc = L["Display current gold"]..L["DATATEXT_POS"],
 								min = 0, max = 9, step = 1,															
 							},
 							guild = {
-								order = 7,
+								order = 8,
 								type = "range",
 								name = L["Guild"],
 								desc = L["Display current online people in guild"]..L["DATATEXT_POS"],
 								min = 0, max = 9, step = 1,															
 							},
-							friends = {
-								order = 8,
-								type = "range",
-								name = L["Friends"],
-								desc = L["Display current online friends"]..L["DATATEXT_POS"],
-								min = 0, max = 9, step = 1,															
-							},
-							bags = {
-								order = 9,
-								type = "range",
-								name = L["Bags"],
-								desc = L["Display ammount of bag space"]..L["DATATEXT_POS"],
-								min = 0, max = 9, step = 1,															
-							},
-							dps_text = {
-								order = 10,
-								type = "range",
-								name = L["DPS"],
-								desc = L["Display ammount of DPS"]..L["DATATEXT_POS"],
-								min = 0, max = 9, step = 1,																
-							},
 							hps_text = {
-								order = 11,
+								order = 9,
 								type = "range",
 								name = L["HPS"],
 								desc = L["Display ammount of HPS"]..L["DATATEXT_POS"],
 								min = 0, max = 9, step = 1,															
 							},
-							currency = {
-								order = 12,
-								type = "range",
-								name = L["Currency"],
-								desc = L["Display current watched items in backpack"]..L["DATATEXT_POS"],
-								min = 0, max = 9, step = 1,															
-							},
-							spec = {
-								order = 13,
-								type = "range",
-								name = L["Talent Spec"],
-								desc = L["Display current spec"]..L["DATATEXT_POS"],
-								min = 0, max = 9, step = 1,															
-							},
-							pro = {
-								order = 14,
-								type = "range",
-								name = L["Professions"],
-								desc = L["Display Professions"]..L["DATATEXT_POS"],
-								min = 0, max = 9, step = 1,															
-							},
 							micromenu = {
-								order = 15,
+								order = 10,
 								type = "range",
 								name = L["Micromenu"],
 								desc = L["Display the Micromenu"]..L["DATATEXT_POS"],
 								min = 0, max = 9, step = 1,								
 							},
+							pro = {
+								order = 11,
+								type = "range",
+								name = L["Professions"],
+								desc = L["Display Professions"]..L["DATATEXT_POS"],
+								min = 0, max = 9, step = 1,															
+							},
 							recount = {
-								order = 16,
+								order = 12,
 								type = "range",
 								name = L["Recount"],
 								desc = L["Display Recount's DPS (RECOUNT MUST BE INSTALLED)"]..L["DATATEXT_POS"],
 								min = 0, max = 9, step = 1,								
 							},							
 							recountraiddps = {
-								order = 17,
+								order = 13,
 								type = "range",
 								name = L["Recount Raid DPS"],
 								desc = L["Display Recount's Raid DPS (RECOUNT MUST BE INSTALLED)"]..L["DATATEXT_POS"],
 								min = 0, max = 9, step = 1,																
 							},
-							coords = {
+							spec = {
+								order = 14,
+								type = "range",
+								name = L["Talent Spec"],
+								desc = L["Display current spec"]..L["DATATEXT_POS"],
+								min = 0, max = 9, step = 1,															
+							},
+							stat1 = {
+								order = 15,
+								type = "range",
+								name = L["Stat #1"],
+								desc = L["Display stat based on your role (Avoidance-Tank, AP-Melee, SP/HP-Caster)"]..L["DATATEXT_POS"],
+								min = 0, max = 9, step = 1,			
+							},							
+							stat2 = {
+								order = 16,
+								type = "range",
+								name = L["Stat #2"],
+								desc = L["Display stat based on your role (Armor-Tank, Crit-Melee, Crit-Caster)"]..L["DATATEXT_POS"],
+								min = 0, max = 9, step = 1,						
+							},
+							system = {
+								order = 17,
+								type = "range",
+								name = L["System"],
+								desc = L["Display FPS and Latency"]..L["DATATEXT_POS"],
+								min = 0, max = 9, step = 1,															
+							},
+							wowtime = {
 								order = 18,
 								type = "range",
-								name = L["Coordinates"],
-								desc = L["Display Player's Coordinates"]..L["DATATEXT_POS"],
-								min = 0, max = 9, step = 1,																
+								name = L["Time"],
+								desc = L["Display current time"]..L["DATATEXT_POS"],
+								min = 0, max = 9, step = 1,															
 							},
 							zone = {
 								order = 19,
@@ -545,13 +582,6 @@ function bdcUIConfig.GenerateOptionsInternal()
 								name = L["Zone"],
 								desc = L["Display Player's Current Zone."]..L["DATATEXT_POS"],
 								min = 0, max = 9, step = 1,															
-							},
-							calltoarms = {
-								order = 20,
-								type = "range",
-								name = L["Call to Arms"],
-								desc = L["Display the active roles that will recieve a reward for completing a random dungeon"]..L["DATATEXT_POS"],
-								min = 0, max = 9, step = 1,																
 							},
 						},
 					},
@@ -562,7 +592,7 @@ function bdcUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = L["Merchant Options"],
 				desc = L["MERCH_DESC"],
-				guiInline = true,
+				childGroups = "tree",
 				get = function(info) return db.merchant[ info[#info] ] end,
 				set = function(info, value) db.merchant[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,					
 				args = {
@@ -577,11 +607,11 @@ function bdcUIConfig.GenerateOptionsInternal()
 						name = L["Enable"],
 						desc = L["Enable Merchant Settings"],							
 					},
-					sellMisc = {
+					autoRepair = {
 						type = "toggle",
 						order = 3,
-						name = L["Sell Misc Items"],
-						desc = L["Automatically sell a user selected item."],
+						name = L["Auto Repair"],
+						desc = L["Automatically repair when visiting a vendor"],
 						disabled = function() return not db.merchant.enable end,
 					},
 					autoSellGrey = {
@@ -590,12 +620,12 @@ function bdcUIConfig.GenerateOptionsInternal()
 						name = L["Sell Grays"],
 						desc = L["Automatically sell gray items when visiting a vendor"],
 						disabled = function() return not db.merchant.enable end,
-					},
-					autoRepair = {
+					},					
+					sellMisc = {
 						type = "toggle",
 						order = 5,
-						name = L["Auto Repair"],
-						desc = L["Automatically repair when visiting a vendor"],
+						name = L["Sell Misc Items"],
+						desc = L["Automatically sell a user selected item."],
 						disabled = function() return not db.merchant.enable end,
 					},
 				},
@@ -605,7 +635,7 @@ function bdcUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = L["Powerbar Options"],
 				desc = L["POWER_DESC"],
-				guiInline = true,
+				childGroups = "tree",
 				get = function(info) return db.powerbar[ info[#info] ] end,
 				set = function(info, value) db.powerbar[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,					
 				args = {
@@ -798,7 +828,7 @@ function bdcUIConfig.GenerateOptionsInternal()
 						type = "group",
 						order = 17,
 						name = L["Value"],
-						desc = L["VALUE_DESC"],	
+						desc = L["VALUE_DESC"],
 						guiInline = true,
 						disabled = function() return not db.powerbar.enable end,
 						get = function(info) return db.powerbar.value[ info[#info] ] end,
@@ -840,7 +870,7 @@ function bdcUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = L["Quest Options"],
 				desc = L["QUEST_DESC"],
-				guiInline = true,
+				childGroups = "tree",
 				get = function(info) return db.quest[ info[#info] ] end,
 				set = function(info, value) db.quest[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,					
 				args = {
@@ -869,7 +899,7 @@ function bdcUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = L["Selfbuff Options"],
 				desc = L["SELFBUFF_DESC"],
-				guiInline = true,
+				childGroups = "tree",
 				get = function(info) return db.selfbuffs[ info[#info] ] end,
 				set = function(info, value) db.selfbuffs[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,					
 				args = {
@@ -898,7 +928,7 @@ function bdcUIConfig.GenerateOptionsInternal()
 				type = "group",
 				name = L["Tooltip Options"],
 				desc = L["TOOLTIP_DESC"],
-				guiInline = true,
+				childGroups = "tree",
 				get = function(info) return db.tooltip[ info[#info] ] end,
 				set = function(info, value) db.tooltip[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,					
 				args = {
@@ -973,7 +1003,7 @@ function bdcUIConfig.GenerateOptionsInternal()
 						type = "group",
 						order = 11,
 						name = L["Healthbar"],
-						desc = L["HEALTH_DESC"],	
+						desc = L["HEALTH_DESC"],
 						guiInline = true,
 						disabled = function() return not db.tooltip.enable end,
 						get = function(info) return db.tooltip.healthbar[ info[#info] ] end,
@@ -998,8 +1028,41 @@ function bdcUIConfig.GenerateOptionsInternal()
 								type = "toggle",
 								disabled = function() return not db.tooltip.enable end,
 							},
-							textPos = {
+							reactionColoring = {
 								order = 4,
+								name = L["Reaction Coloring"],
+								desc = L["Change healthbar color to targets classcolor."],
+								type = "toggle",
+								width = "full",
+								disabled = function() return not db.tooltip.enable end,
+							},														
+							customColor = {
+								order = 5,
+								type = "color",
+								name = L["Custom Color"],
+								desc = L["Picks a Custom Color for the tooltip border."],
+								hasAlpha = false,
+								disabled = function() return not db.tooltip.enable end,
+								get = function(info)
+									local hb = db.tooltip.healthbar[ info[#info] ]
+									return hb.r, hb.g, hb.b
+								end,
+								set = function(info, r, g, b)
+									db.tooltip.healthbar[ info[#info] ] = {}
+									local hb = db.tooltip.healthbar[ info[#info] ]
+									hb.r, hb.g, hb.b = r, g, b
+									StaticPopup_Show("CFG_RELOAD")
+								end,					
+							},
+							customColorapply = {
+								order = 6,
+								name = L["Apply Custom Color"],
+								desc = L["Use the Custom Color you have chosen."],
+								type = "toggle",
+								disabled = function() return not db.tooltip.enable end,
+							},
+							textPos = {
+								order = 7,
 								name = L["Text Position"],
 								desc = L["Health Value Position."],
 								disabled = function() return not db.tooltip.enable end,
@@ -1009,16 +1072,9 @@ function bdcUIConfig.GenerateOptionsInternal()
 									["CENTER"] = L["CENTER"],
 									["TOP"] = L["TOP"],
 								},
-							},
-							reactionColoring = {
-								order = 5,
-								name = L["Reaction Coloring"],
-								desc = L["Change healthbar color to targets classcolor."],
-								type = "toggle",
-								disabled = function() return not db.tooltip.enable end,
-							},	
+							},						
 							fontSize= {
-								order = 7,
+								order = 8,
 								name = L["Font Size"],
 								desc = L["Controls the healthbar value font size."],
 								type = "range",
@@ -1028,7 +1084,16 @@ function bdcUIConfig.GenerateOptionsInternal()
 						},
 					},					
 				},
-			},		
-		},
+			},
+			reloadUI = {
+				type = "execute",
+				name = "APPLY CHANGES",
+				desc = "Apply changes you made to the UI.",
+				order = 2,
+				func = 	function()
+					ReloadUI()
+				end,
+			},			
+		},		
 	}
 end
