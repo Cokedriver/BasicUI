@@ -15,7 +15,7 @@
  - Autogreed Roll			-- Tukui Autogreed Edited.
  - Buff						-- Buffy Edited.
  - Hyperlink				-- Tukui Hyperlink Edited.
- - Mail						-- aMail @ Postal Edited.
+ - Mail						-- aMail & Postal Edited.
  - Merchant					-- Tukui Merchant Edited.
  - Cooldown					-- Omnicc Edited.
  - Quest					-- ncQuest Edited.
