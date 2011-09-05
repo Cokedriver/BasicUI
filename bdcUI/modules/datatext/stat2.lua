@@ -10,7 +10,7 @@ if C['datatext'].stat2 and C['datatext'].stat2 > 0 then
 	Stat:SetFrameLevel(3)
 	Stat:EnableMouse(true)
 
-	local Text  = DataPanelLeft:CreateFontString(nil, "OVERLAY")
+	local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
 	Text:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
 	B.PP(C['datatext'].stat2, Text)
 

@@ -5,9 +5,9 @@ if C['datatext'].enable ~= true then return end
 -- Datatext Positions
 B.PP = function(p, obj)
 
-	local left = DataPanelLeft
-	local center = DataPanelCenter
-	local right = DataPanelRight
+	local left = PanelLeft
+	local center = PanelCenter
+	local right = PanelRight
 	
 		-- Left Panel Data
 	if p == 1 then
@@ -77,9 +77,9 @@ B.DataTextTooltipAnchor = function(self)
 	
 	
 	for _, panel in pairs ({
-		DataPanelLeft,
-		DataPanelCenter,
-		DataPanelRight,
+		PanelLeft,
+		PanelCenter,
+		PanelRight,
 	})	do
 		if C['datatext'].top == true then
 			anchor = 'ANCHOR_BOTTOM'

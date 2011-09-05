@@ -1,5 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="datatextpanel.lua"/>
+	<Script file="datapanel.lua"/>
 	<Script file="positions.lua"/>
 	<Script file="colors.lua"/>
 	<Script file="coords.lua"/>	
@@ -18,7 +18,6 @@
 	<Script file="bags.lua"/>
 	<Script file="dps.lua"/>
 	<Script file="hps.lua"/>
-	<Script file="currency.lua"/>
 	<Script file="spec.lua"/>
 	<Script file="threatbar.lua"/>
 	<Script file="zone.lua"/>	

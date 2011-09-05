@@ -11,7 +11,7 @@ if C['datatext'].dps_text and C['datatext'].dps_text > 0 then
 
 	local pet_id = UnitGUID('pet')
      
-	local dText = DataPanelLeft:CreateFontString(nil, 'OVERLAY')
+	local dText = DataPanel:CreateFontString(nil, 'OVERLAY')
 	dText:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
 	dText:SetText('0 ',L.datatext_dps)
 
@@ -59,10 +59,18 @@ if C['datatext'].dps_text and C['datatext'].dps_text > 0 then
 		local id = select(4, ...)
 		   
 		if id == player_id or id == pet_id then
-			if select(2, ...) == 'SWING_DAMAGE' then
-				last_dmg_amount = select(10, ...)
+			if select(2, ...) == "SWING_DAMAGE" then
+				if B.toc < 40200 then
+					last_dmg_amount = select(10, ...)
+				else
+					last_dmg_amount = select(12, ...)
+				end
 			else
-				last_dmg_amount = select(13, ...)
+				if B.toc < 40200 then
+					last_dmg_amount = select(13, ...)
+				else
+					last_dmg_amount = select(15, ...)
+				end
 			end
 			dmg_total = dmg_total + last_dmg_amount
 		end       

@@ -5,7 +5,7 @@ local B, C, L, DB = unpack(select(2, ...)) -- Import:  B - function; C - config;
 ----------------
 DB['buff'] = {
 	['enable'] = true,
-	['scale'] = 1.2,
+	['scale'] = 1.15,
 }	
 
 ----------------
@@ -36,9 +36,7 @@ DB['datatext'] = {
 	
 	['enable'] = true,
 
-	['top'] = false,											-- position the datpanel true = top, false = bottom
-	
-	['toc'] = 40200,
+	['top'] = false,										-- if = true then panel on top of screen, if = false panel below mainmenubar
 	
 	['fontsize'] = 15,                                  	-- font size for panels.
 	['bags'] = 0,                                       	-- show space used in bags on panel.
@@ -50,7 +48,6 @@ DB['datatext'] = {
 	['friends'] = 7,                                    	-- show number of friends connected.
 	['dps_text'] = 0,                                   	-- show a dps meter on panel.
 	['hps_text'] = 0,                                   	-- show a heal meter on panel.
-	['currency'] = 0,                                   	-- show your tracked currency on panel.
 	['micromenu'] = 0,										-- show the micromenu on panel.
 	['spec'] = 5,											-- show your current spec on panel.
 	['zone'] = 0,											-- show your current zone on panel.
@@ -63,12 +60,14 @@ DB['datatext'] = {
 	['calltoarms'] = 6,										-- Show Current Call to Arms.
 	
 	-- Color Datatext
-	['classcolor'] = true,               			    	-- classcolored datatexts
-	['color'] = '|cffFFFF33',                           	-- datatext color if classcolor = false (|cffFFFF33 = yellow)
+	['colors'] = {
+		['classcolor'] = true,               			    	-- classcolored datatexts
+		['color'] = { r = 0, g = 0, b = 1 },                    -- datatext color if classcolor = false 
+	},
 	
 	['battleground'] = true,                            	-- enable 3 stats in battleground only that replace stat1,stat2,stat3.
 
-	['bag'] = true,
+	['bag'] = false,										-- True = Open Backpack; False = Open All bags
 
 	-- Clock Settings
 	['time24'] = false,                                  	-- set time to 24h format.
@@ -101,7 +100,7 @@ DB['general'] = {
 	['slash'] = true,
 	['scale'] = {
 		['enable'] = true,
-		['size'] = 1.2,
+		['size'] = 1.15,
 	},
 	['mail'] = {
 		['enable'] = true,
@@ -216,7 +215,9 @@ DB['tooltip'] = {
 		['showHealthValue'] = true,
 		['showOutline'] = false,
 		['textPos'] = 'CENTER',                     -- Possible 'TOP' 'BOTTOM' 'CENTER'	
-		['reactionColoring'] = false,		
+		['reactionColoring'] = false,
+		['customColorapply'] = false, 
+        ['customColor'] = { r = 0, g = 0, b = 1 }, 		
 		['fontSize'] = 14,
 	},		
 }

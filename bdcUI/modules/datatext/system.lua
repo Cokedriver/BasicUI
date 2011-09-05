@@ -11,7 +11,7 @@ if C['datatext'].system and C['datatext'].system > 0 then
 	Stat:EnableMouse(true)
 	Stat.tooltip = false
 
-	local Text  = DataPanelLeft:CreateFontString(nil, "OVERLAY")
+	local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
 	Text:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
 	B.PP(C['datatext'].system, Text)
 

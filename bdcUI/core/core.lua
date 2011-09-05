@@ -1,7 +1,7 @@
 local B, C, L, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; L - locales; DB - Database
 
 --Constants
-B.dummy = function() return end
+B.toc = select(4, GetBuildInfo())
 B.myname, _ = UnitName("player")
 B.myrealm = GetRealmName()
 _, B.myclass = UnitClass("player")
@@ -60,4 +60,38 @@ B.SetFontString = function(parent, fontName, fontHeight, fontStyle)
 	fs:SetShadowOffset(1.25, -1.25)
 	return fs
 end
+
+-- Greeting
+local EventFrame = CreateFrame("Frame")
+EventFrame:RegisterEvent("PLAYER_LOGIN")
+EventFrame:SetScript("OnEvent", function(self,event,...) 
+	if type(bdcUIPerCharacter) ~= "number" then
+		bdcUIPerCharacter = 1
+		ChatFrame1:AddMessage('Welcome to Azeroth '.. UnitName("Player")..". I do believe this is the first time we've met. Nice to meet you! Your using |cff00B4FFbdcUI v"..B.version..'|r.')
+	else
+		if bdcUIPerCharacter == 1 then
+			ChatFrame1:AddMessage('Welcome to Azeroth '.. UnitName("Player")..". How nice to see you again. Your using |cff00B4FFbdcUI v"..B.version..'|r.')
+		else
+			ChatFrame1:AddMessage('Welcome to Azeroth '.. UnitName("Player")..". How nice to see you again. Your using |cff00B4FFbdcUI v"..B.version..'|r.')
+		end
+		bdcUIPerCharacter = bdcUIPerCharacter + 1
+	end
+end)
+
+--RGB to Hex
+function B.RGBToHex(r, g, b)
+	r = r <= 1 and r >= 0 and r or 0
+	g = g <= 1 and g >= 0 and g or 0
+	b = b <= 1 and b >= 0 and b or 0
+	return string.format("|cff%02x%02x%02x", r*255, g*255, b*255)
+end
+
+--Hex to RGB
+function B.HexToRGB(hex)
+	local rhex, ghex, bhex = string.sub(hex, 1, 2), string.sub(hex, 3, 4), string.sub(hex, 5, 6)
+	return tonumber(rhex, 16), tonumber(ghex, 16), tonumber(bhex, 16)
+end
+
+
+
 

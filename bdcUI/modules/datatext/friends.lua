@@ -28,7 +28,7 @@ if C['datatext'].friends and C['datatext'].friends > 0 then
 	Stat:SetFrameStrata("BACKGROUND")
 	Stat:SetFrameLevel(3)
 
-	local Text  = DataPanelLeft:CreateFontString(nil, "OVERLAY")
+	local Text = DataPanel:CreateFontString(nil, "OVERLAY")
 	Text:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
 	B.PP(C['datatext'].friends, Text)
 
@@ -131,7 +131,7 @@ if C['datatext'].friends and C['datatext'].friends > 0 then
 		local _, presenceID, givenName, surname, toonName, toonID, client, isOnline, isAFK, isDND, noteText, realmName, faction, race, class, zoneName, level
 		for i = 1, total do
 			presenceID, givenName, surname, toonName, toonID, client, isOnline, _, isAFK, isDND, _, noteText = BNGetFriendInfo(i)
-			if C['datatext'].toc < 40200 then
+			if B.toc < 40200 then
 				_, _, _, realmName, faction, race, class, _, zoneName, level = BNGetToonInfo(presenceID)
 			else
 				_, _, _, realmName, _, faction, race, class, _, zoneName, level = BNGetToonInfo(presenceID)
@@ -156,7 +156,7 @@ if C['datatext'].friends and C['datatext'].friends > 0 then
 		for i = 1, #BNTable do
 			-- get guild roster information
 			presenceID, givenName, surname, toonName, toonID, client, isOnline, _, isAFK, isDND, _, noteText = BNGetFriendInfo(i)
-			if C['datatext'].toc < 40200 then
+			if B.toc < 40200 then
 				_, _, _, realmName, faction, race, class, _, zoneName, level = BNGetToonInfo(presenceID)
 			else
 				_, _, _, realmName, _, faction, race, class, _, zoneName, level = BNGetToonInfo(presenceID)

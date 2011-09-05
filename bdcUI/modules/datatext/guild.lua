@@ -39,7 +39,7 @@ if C['datatext'].guild and C['datatext'].guild > 0 then
 	local tthead = {r=0.4,g=0.78,b=1}
 	local ttsubh = {r=0.75,g=0.9,b=1}
 
-	local Text  = DataPanelLeft:CreateFontString(nil, "OVERLAY")
+	local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
 	Text:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
 	B.PP(C['datatext'].guild, Text)
 

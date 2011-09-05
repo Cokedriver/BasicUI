@@ -19,7 +19,7 @@ if C['datatext'].wowtime and C['datatext'].wowtime > 0 then
 	Stat:SetFrameStrata("MEDIUM")
 	Stat:SetFrameLevel(3)
 
-	local Text  = DataPanelLeft:CreateFontString(nil, 'OVERLAY')
+	local Text  = DataPanel:CreateFontString(nil, 'OVERLAY')
 	Text:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
 	B.PP(C['datatext'].wowtime, Text)
 

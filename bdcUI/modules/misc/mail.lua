@@ -279,7 +279,7 @@ function Mail_BlackBook:OnEnable()
 	SendMailNameEditBox.autoCompleteParams = Mail_BlackBook_Autocomplete_Flags
 
 	-- Delete Real ID database. Patch 4.0.1 onwards no longer allows addons to obtain Real ID information.
-	C['general'].mail.global.BlackBook.realID = nil
+	bdcUIConfig.db.global.BlackBook.realID = nil
 	db.AutoCompleteRealIDFriends = nil
 
 	-- Delete old recent data without faction and realm data

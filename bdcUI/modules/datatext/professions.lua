@@ -11,7 +11,7 @@ if C['datatext'].pro and C['datatext'].pro > 0 then
 	Stat:EnableMouse(true)
 	Stat.tooltip = false
 
-	local Text  = DataPanelLeft:CreateFontString(nil, 'OVERLAY')
+	local Text = DataPanel:CreateFontString(nil, 'OVERLAY')
 	Text:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
 	B.PP(C['datatext'].pro, Text)
 
@@ -19,7 +19,7 @@ if C['datatext'].pro and C['datatext'].pro > 0 then
 		for _, v in pairs({GetProfessions()}) do
 			if v ~= nil then
 				local name, texture, rank, maxRank = GetProfessionInfo(v)
-				Text:SetFormattedText(hexa..'Profession'..hexb)
+				Text:SetFormattedText(hexa.."Profession's"..hexb)
 			end
 		end
 		self:SetAllPoints(Text)
@@ -29,7 +29,7 @@ if C['datatext'].pro and C['datatext'].pro > 0 then
 		local anchor, panel, xoff, yoff = B.DataTextTooltipAnchor(Text)
 		GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine(hexa..B.myname.."'s"..hexb..' Professions', .4,.78,1)
+		GameTooltip:AddLine(hexa..B.myname.."'s"..hexb.." Profession's", .4,.78,1)
 		for _, v in pairs({GetProfessions()}) do
 			if v ~= nil then
 				local name, texture, rank, maxRank = GetProfessionInfo(v)

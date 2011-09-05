@@ -8,7 +8,7 @@ if C['datatext'].zone and C['datatext'].zone > 0 then
 	Stat:SetFrameStrata('BACKGROUND')
 	Stat:SetFrameLevel(3)
 
-	local Text = DataPanelLeft:CreateFontString(nil, "OVERLAY")
+	local Text = DataPanel:CreateFontString(nil, "OVERLAY")
 	Text:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
 	B.PP(C['datatext'].zone, Text)
 

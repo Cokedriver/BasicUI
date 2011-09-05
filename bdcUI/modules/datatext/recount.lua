@@ -11,7 +11,7 @@ if C['datatext'].recount and C['datatext'].recount > 0 then
 	RecountDPS:SetFrameStrata("MEDIUM")
 	RecountDPS:SetFrameLevel(3)
 
-	local Text  = DataPanelLeft:CreateFontString(nil, "OVERLAY")
+	local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
 	Text:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
 	B.PP(C['datatext'].recount, Text)
 	RecountDPS:SetAllPoints(Text)

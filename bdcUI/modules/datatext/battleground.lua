@@ -64,17 +64,17 @@ if C['datatext'].battleground == true then
 	local Text1  = BattleGroundPanel:CreateFontString(nil, 'OVERLAY')
 	Text1:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
 	Text1:SetPoint('LEFT', BattleGroundPanel, 30, 0)
-	Text1:SetHeight(DataPanelLeft:GetHeight())
+	Text1:SetHeight(DataPanel:GetHeight())
 
 	local Text2  = BattleGroundPanel:CreateFontString(nil, 'OVERLAY')
 	Text2:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
 	Text2:SetPoint('CENTER', BattleGroundPanel, 0, 0)
-	Text2:SetHeight(DataPanelLeft:GetHeight())
+	Text2:SetHeight(DataPanel:GetHeight())
 
 	local Text3  = BattleGroundPanel:CreateFontString(nil, 'OVERLAY')
 	Text3:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
 	Text3:SetPoint('RIGHT', BattleGroundPanel, -30, 0)
-	Text3:SetHeight(DataPanelLeft:GetHeight())
+	Text3:SetHeight(DataPanel:GetHeight())
 
 	local int = 2
 	local function Update(self, t)
@@ -108,13 +108,13 @@ if C['datatext'].battleground == true then
 			local inInstance, instanceType = IsInInstance()
 			if inInstance and (instanceType == 'pvp') then			
 				bgframe:Show()
-				DataPanelLeft:Hide()
+				PanelLeft:Hide()
 			else
 				Text1:SetText('')
 				Text2:SetText('')
 				Text3:SetText('')
 				bgframe:Hide()
-				DataPanelLeft:Show()
+				PanelLeft:Show()
 			end
 		end
 	end
