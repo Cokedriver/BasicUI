@@ -7,7 +7,7 @@ L["bdcUI"] = true
 L["Enables bdcUI"] = true
 L["Open configuration dialog"] = true
 L["Configure"] = true
-
+L["FOR CHANGES TO TAKE EFFECT PLEASE CLICK |cff00B4FFAPPLY CHANGES|r BUTTON"] = true
 
 --Buff Locale
 L["Buffs"] = true
@@ -269,16 +269,17 @@ L["TOP"] = true
 L["CENTER"] = true
 L["BOTTOM"] = true
 L["Reaction Coloring"] = true
-L["Change healthbar color to targets classcolor."] = true
+L["Change healthbar color to targets classcolor. (Overides Custom Color)"] = true
 L["Picks a Custom Color for the tooltip border."] = true
 L["Apply Custom Color"] = true
 L["Use the Custom Color you have chosen."] = true
 L["Font Size"] = true
 L["Controls the healthbar value font size."] = true
-
+L["Custom"] = true
+L["Custom Coloring"] = true
 
 
 
 --Profiles Locale
 L["Profiles"] = true
-L["CFG_RELOAD"] = "A setting you have changed requires a ReloadUI for changes to take effect, when you are done configing click |cffFFFF33APPLY CHANGES|r."
+L["CFG_RELOAD"] = "One or more of the changes you have made require a ReloadUI, please click |cffFFFF33APPLY CHANGES|r."

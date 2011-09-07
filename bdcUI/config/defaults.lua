@@ -48,6 +48,7 @@ DB['datatext'] = {
 	['friends'] = 7,                                    	-- show number of friends connected.
 	['dps_text'] = 0,                                   	-- show a dps meter on panel.
 	['hps_text'] = 0,                                   	-- show a heal meter on panel.
+	['currency'] = 0,                                   	-- show your tracked currency on panel.
 	['micromenu'] = 0,										-- show the micromenu on panel.
 	['spec'] = 5,											-- show your current spec on panel.
 	['zone'] = 0,											-- show your current zone on panel.
@@ -62,7 +63,7 @@ DB['datatext'] = {
 	-- Color Datatext
 	['colors'] = {
 		['classcolor'] = true,               			    	-- classcolored datatexts
-		['color'] = { r = 0, g = 0, b = 1 },                    -- datatext color if classcolor = false 
+		['color'] = { r = 1, g = 1, b = 1},                  				-- datatext color if classcolor = false 
 	},
 	
 	['battleground'] = true,                            	-- enable 3 stats in battleground only that replace stat1,stat2,stat3.
@@ -217,7 +218,10 @@ DB['tooltip'] = {
 		['textPos'] = 'CENTER',                     -- Possible 'TOP' 'BOTTOM' 'CENTER'	
 		['reactionColoring'] = false,
 		['customColorapply'] = false, 
-        ['customColor'] = { r = 0, g = 0, b = 1 }, 		
+        ['custom'] = {
+			['apply'] = false,
+			['color'] =	{ r = 1, g = 1, b = 1},
+		},		
 		['fontSize'] = 14,
 	},		
 }
