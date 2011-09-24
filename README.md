@@ -1,9 +1,5 @@
-# bdcUI
+# BasicUI
 
-## What does bdcUI stand for?
-
- - bdcUI stands for Blizzard Default Customized User Interface
- 
 ## Included in the UI
 
  - Datatext  				-- Tukui Datatext Edited

@@ -1,0 +1,65 @@
+## Interface: 40200
+## Author: Cokedriver
+## Version: 1.1
+## Title: |cff00B4FFBasic|rUI
+## Notes: A Basic UI Replacement for the World of Warcraft Interface.
+## SavedVariables: BasicDB
+## SavedVariablesPerCharacter: BasicDBPerCharacter
+## RequiredDeps: BasicUI_Config
+
+
+-- Ace Libs
+#@no-lib-strip@
+BasicLibs\LibStub\LibStub.lua
+BasicLibs\CallbackHandler-1.0\CallbackHandler-1.0.xml
+BasicLibs\AceAddon-3.0\AceAddon-3.0.xml
+BasicLibs\AceEvent-3.0\AceEvent-3.0.xml
+BasicLibs\AceTimer-3.0\AceTimer-3.0.xml
+BasicLibs\AceHook-3.0\AceHook-3.0.xml
+#@end-no-lib-strip@
+
+-- Core
+BasicCore\init.lua
+BasicCore\core.lua
+
+-- Config
+BasicConfig\defaults.lua
+BasicConfig\configui.lua
+
+-- Modules
+BasicModules\buffs\buff.lua
+BasicModules\buffs\selfbuffs.lua
+BasicModules\chat\chat.lua
+BasicModules\datatext\datapanel.lua
+BasicModules\datatext\positions.lua
+BasicModules\datatext\colors.lua
+BasicModules\datatext\coords.lua
+BasicModules\datatext\professions.lua
+BasicModules\datatext\stat1.lua
+BasicModules\datatext\stat2.lua
+BasicModules\datatext\battleground.lua
+BasicModules\datatext\durability.lua
+BasicModules\datatext\system.lua
+BasicModules\datatext\friends.lua
+BasicModules\datatext\gold.lua
+BasicModules\datatext\guild.lua
+BasicModules\datatext\time.lua
+BasicModules\datatext\bags.lua
+BasicModules\datatext\dps.lua
+BasicModules\datatext\hps.lua
+BasicModules\datatext\spec.lua
+BasicModules\datatext\threatbar.lua
+BasicModules\datatext\zone.lua	
+BasicModules\datatext\calltoarms.lua
+BasicModules\datatext\recount.lua
+BasicModules\general\autogreed.lua
+BasicModules\general\colorz.lua
+BasicModules\general\cooldown.lua
+BasicModules\general\merchant.lua
+BasicModules\general\quest.lua
+BasicModules\general\powerbar.lua
+BasicModules\general\range.lua
+BasicModules\general\scale.lua
+BasicModules\general\skinning.lua
+BasicModules\general\mail.lua
+BasicModules\tooltip\tooltip.lua

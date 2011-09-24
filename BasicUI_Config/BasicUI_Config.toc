@@ -1,0 +1,10 @@
+## Interface: 40200
+## Title: |cff00B4FFBasic|rUI Config
+## Notes: Config for BasicUI
+## Author: Cokedrivers
+## SavedVariables: BasicUIConfig
+## RequiredDeps: BasicUI
+
+
+libs\load_libs.xml
+core.lua
