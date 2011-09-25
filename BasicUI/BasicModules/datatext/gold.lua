@@ -56,10 +56,10 @@ if C['datatext'].gold and C['datatext'].gold > 0 then
 		self:SetAllPoints(Text)
 
 		local myname  = UnitName('player');				
-		if (bdcUI == nil) then bdcUI = {}; end
-		if (bdcUI.gold == nil) then bdcUI.gold = {}; end
-		if (bdcUI.gold[myPlayerRealm]==nil) then bdcUI.gold[myPlayerRealm]={}; end
-		bdcUI.gold[myPlayerRealm][myname] = GetMoney();
+		if (BasicDB == nil) then BasicDB = {}; end
+		if (BasicDB.gold == nil) then BasicDB.gold = {}; end
+		if (BasicDB.gold[myPlayerRealm]==nil) then BasicDB.gold[myPlayerRealm]={}; end
+		BasicDB.gold[myPlayerRealm][myname] = GetMoney();
 				
 		OldMoney = NewMoney
 	end
@@ -91,7 +91,7 @@ if C['datatext'].gold and C['datatext'].gold > 0 then
 		
 			local totalGold = 0				
 			GameTooltip:AddLine("Character: ")			
-			local thisRealmList = bdcUI.gold[myPlayerRealm];
+			local thisRealmList = BasicDB.gold[myPlayerRealm];
 			for k,v in pairs(thisRealmList) do
 				GameTooltip:AddDoubleLine(k, FormatTooltipMoney(v), 1, 1, 1, 1, 1, 1)
 				totalGold=totalGold+v;
@@ -119,9 +119,9 @@ if C['datatext'].gold and C['datatext'].gold > 0 then
 		local myPlayerRealm = GetCVar('realmName');
 		local myname  = UnitName('player');
 		
-		bdcUI.gold = {}
-		bdcUI.gold[myPlayerRealm]={}
-		bdcUI.gold[myPlayerRealm][myname] = GetMoney();
+		BasicDB.gold = {}
+		BasicDB.gold[myPlayerRealm]={}
+		BasicDB.gold[myPlayerRealm][myname] = GetMoney();
 	end
 	SLASH_RESETGOLD1 = '/resetgold'
 	SlashCmdList['RESETGOLD'] = RESETGOLD

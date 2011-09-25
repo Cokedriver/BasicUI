@@ -52,7 +52,7 @@ if C['datatext'].spec and C['datatext'].spec > 0 then
 		GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine(hexa..B.myname.."'s"..hexb.." Spec's")
+		GameTooltip:AddLine(hexa..B.myname.."'s"..hexb.." Spec")
 		GameTooltip:AddLine' '		
 		for i = 1, GetNumTalentGroups() do
 			if GetPrimaryTalentTree(false, false, i) then

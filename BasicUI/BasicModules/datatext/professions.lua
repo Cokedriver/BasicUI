@@ -4,7 +4,7 @@ if C['datatext'].enable ~= true then return end
 
 if C['datatext'].pro and C['datatext'].pro > 0 then
 
-	local Stat = CreateFrame('Frame')
+	local Stat = CreateFrame('Button')
 	Stat:RegisterEvent('PLAYER_ENTERING_WORLD')
 	Stat:SetFrameStrata('BACKGROUND')
 	Stat:SetFrameLevel(3)
@@ -29,7 +29,7 @@ if C['datatext'].pro and C['datatext'].pro > 0 then
 		local anchor, panel, xoff, yoff = B.DataTextTooltipAnchor(Text)
 		GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 		GameTooltip:ClearLines()
-		GameTooltip:AddLine(hexa..B.myname.."'s"..hexb.." Profession's")
+		GameTooltip:AddLine(hexa..B.myname.."'s"..hexb.." Professions")
 		GameTooltip:AddLine' '		
 		for _, v in pairs({GetProfessions()}) do
 			if v ~= nil then
@@ -41,15 +41,39 @@ if C['datatext'].pro and C['datatext'].pro > 0 then
 	end)
 
 
-	Stat:SetScript('OnMouseDown', function(self, btn)
-
-		if btn == 'LeftButton' then
-			ToggleFrame(SpellBookFrame)
+	Stat:SetScript("OnClick",function(self,btn)
+		local prof1, prof2 = GetProfessions()
+		if btn == "LeftButton" then
+			if prof1 then
+				if (GetProfessionInfo(prof1) == 'Herbalism')then
+						print('|cff00B4FFBasic|rUI: |cffFF0000Herbalism has no options!|r')
+				elseif(GetProfessionInfo(prof1) == 'Skinning') then
+						print('|cff00B4FFBasic|rUI: |cffFF0000Skinning has no options!|r')
+				else	
+					CastSpellByName((GetProfessionInfo(prof1)))
+				end
+			else
+				print('|cff00B4FFBasic|rUI: |cffFF0000No Profession Found!|r')
+			end
+		elseif btn == 'MiddleButton' then
+			ToggleFrame(SpellBookFrame)		
+		elseif btn == "RightButton" then
+			if prof2 then
+				if (GetProfessionInfo(prof2) == 'Herbalism')then
+						print('|cff00B4FFBasic|rUI: |cffFF0000Herbalism has no options!|r')
+				elseif(GetProfessionInfo(prof2) == 'Skinning') then
+						print('|cff00B4FFBasic|rUI: |cffFF0000Skinning has no options!|r')
+				else	
+					CastSpellByName((GetProfessionInfo(prof2)))
+				end
+			else
+				print('|cff00B4FFBasic|rUI: |cffFF0000No Profession Found!|r')
+			end
 		end
-
 	end)
 
 
+	Stat:RegisterForClicks("AnyUp")
 	Stat:SetScript('OnUpdate', Update)
 	Stat:SetScript('OnLeave', function() GameTooltip:Hide() end)
 end
