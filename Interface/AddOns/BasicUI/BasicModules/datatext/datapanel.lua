@@ -62,7 +62,7 @@ else
 	DataPanel:SetFrameLevel(0)
 	DataPanel:SetBackdrop({
 		bgFile = "Interface\\TutorialFrame\\TutorialFrameBackground",
-		edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border",
+		edgeFile = "Interface\\AddOns\\BasicUI\\BasicMedia\\UI-DialogBox-Border",
 		edgeSize = 25,
 		insets = {left = 9, right = 9, top = 9, bottom = 8}
 	})

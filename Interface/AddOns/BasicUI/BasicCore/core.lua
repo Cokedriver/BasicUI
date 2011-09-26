@@ -1,6 +1,7 @@
 local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
 
 --Constants
+B.dummy = function() return end
 B.toc = select(4, GetBuildInfo())
 B.myname, _ = UnitName("player")
 B.myrealm = GetRealmName()

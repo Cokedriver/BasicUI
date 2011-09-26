@@ -49,6 +49,8 @@ if C['datatext'].pro and C['datatext'].pro > 0 then
 						print('|cff00B4FFBasic|rUI: |cffFF0000Herbalism has no options!|r')
 				elseif(GetProfessionInfo(prof1) == 'Skinning') then
 						print('|cff00B4FFBasic|rUI: |cffFF0000Skinning has no options!|r')
+				elseif(GetProfessionInfo(prof1) == 'Mining') then
+						CastSpellByName("Smelting")							
 				else	
 					CastSpellByName((GetProfessionInfo(prof1)))
 				end
@@ -63,6 +65,8 @@ if C['datatext'].pro and C['datatext'].pro > 0 then
 						print('|cff00B4FFBasic|rUI: |cffFF0000Herbalism has no options!|r')
 				elseif(GetProfessionInfo(prof2) == 'Skinning') then
 						print('|cff00B4FFBasic|rUI: |cffFF0000Skinning has no options!|r')
+				elseif(GetProfessionInfo(prof2) == 'Mining') then
+						CastSpellByName("Smelting")						
 				else	
 					CastSpellByName((GetProfessionInfo(prof2)))
 				end

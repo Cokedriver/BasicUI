@@ -63,3 +63,4 @@ BasicModules\general\scale.lua
 BasicModules\general\skinning.lua
 BasicModules\general\mail.lua
 BasicModules\tooltip\tooltip.lua
+BasicModules\tooltip\nameplates.lua
