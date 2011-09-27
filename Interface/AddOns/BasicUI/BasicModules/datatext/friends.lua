@@ -365,7 +365,11 @@ function FriendEnter(self)
 				end
 
 				line = tooltip:AddLine()
-				line = tooltip:SetCell(line, 1, ColoredLevel(player["LEVEL"]).." "..player["FCOLOR"])
+				if player["CLIENT"] == "WoW" then
+					line = tooltip:SetCell(line, 1, ColoredLevel(player["LEVEL"]).." "..player["FCOLOR"])
+				else
+					line = tooltip:SetCell(line, 1, ColoredLevel(player["LEVEL"]))
+				end
 				line = tooltip:SetCell(line, 2, player["STATUS"])
 				line = tooltip:SetCell(line, 3,
 					format("|cff%s%s",CLASS_COLORS[player["CLASS"]] or "B8B8B8", player["TOONNAME"] .. "|r")..
