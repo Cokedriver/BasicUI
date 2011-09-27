@@ -1,311 +1,374 @@
 local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local LibQTip = LibStub('LibQTip-1.0')	-- tooltip library
+local tooltip
 
-if C['datatext'].enable ~= true then return end
+if not C["datatext"].guild or C["datatext"].guild == 0 then return end
 
-local USE_EPGP = true
+-- localized references for global functions (about 50% faster)
+local join 			= string.join
+local format		= string.format
+local find			= string.find
+local gsub			= string.gsub
+local sort			= table.sort
+local insert		= table.insert
+local ceil			= math.ceil
+local sizeof		= table.getn
+local displayString = join("", hexa.."Guild"..hexb, ": ", "%d|r")
+local noGuildString = join("", hexa.."No Guild"..hexb)
 
-if C['datatext'].guild and C['datatext'].guild > 0 then	
+-------------------------------------------------------------------------------
+-- Font definitions.
+-------------------------------------------------------------------------------
+-- Setup the Title Font. 14
+local ssTitleFont = CreateFont("ssTitleFont")
+ssTitleFont:SetTextColor(1,0.823529,0)
+ssTitleFont:SetFont(GameTooltipText:GetFont(), 20)
 
-	function sortGuildByRank(a,b)
+-- Setup the Header Font. 12
+local ssHeaderFont = CreateFont("ssHeaderFont")
+ssHeaderFont:SetTextColor(1,0.823529,0)
+ssHeaderFont:SetFont(GameTooltipHeaderText:GetFont(), 15)
 
-		texta = string.format("%02d",a.rankIndex)..a.name
-		textb = string.format("%02d",b.rankIndex)..b.name
+-- Setup the Regular Font. 12
+local ssRegFont = CreateFont("ssRegFont")
+ssRegFont:SetTextColor(1,0.823529,0)
+ssRegFont:SetFont(GameTooltipText:GetFont(), 15)
 
-		return texta<textb
-	end
-
-	function sortGuildByName(a,b)
-		texta = a.name
-		textb = b.name
-
-		return texta<textb
-	end
-
-	function sortGuildByZone(a,b)
-
-		texta = a.zone..a.name
-		textb = b.zone..b.name
-
-		return texta<textb
-	end
-
-	sortGuildFunc = sortGuildByName
-
-	local Stat = CreateFrame("Frame")
-	Stat:EnableMouse(true)
-	Stat:SetFrameStrata("BACKGROUND")
-	Stat:SetFrameLevel(3)
-
-	local tthead = {r=0.4,g=0.78,b=1}
-	local ttsubh = {r=0.75,g=0.9,b=1}
-
-	local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
-	B.PP(C['datatext'].guild, Text)
-
-	local BASE_GP = 1
-	local function ParseGuildInfo(info)
-		BASE_GP = 1
-		local v
-		local lines = {string.split("\n", info)}
-		for _,line in pairs(lines) do
-			v = string.match(line,"@BASE_GP:(%d+)")
-			if(v) then
-				BASE_GP = v
-				break
-			end
-		end
-	end
-
-	local displayString = string.join("", hexa..GUILD..hexb, ": ", "%d|r")
-
-	local function Update(self, event, ...)	
-
-		if (event=="ADDON_LOADED") then
-
-			if USE_EPGP then
-				ParseGuildInfo(GetGuildInfoText())
-			end
-
-		else
-			if IsInGuild() then
-				GuildRoster()
-				local numOnline = (GetNumGuildMembers())
-				local total = (GetNumGuildMembers())
-				local numOnline = 0
-				for i = 1, total do
-					local _, _, _, _, _, _, _, _, online, _, _ = GetGuildRosterInfo(i)
-					if online then
-						numOnline = numOnline + 1
-					end
-				end 			
-
-				Text:SetFormattedText(displayString, numOnline)
-				self:SetAllPoints(Text)
-			else
-				Text:SetText(hexa.."No Guild"..hexb)
-			end
-		end
-	end
-
-	local guildMenuFrame = nil
-
-	function setGuildSort(self,fun)
-
-		guildMenuFrame:Hide()
-		sortGuildFunc = fun
-	end	
-
-	local guildMenuList = {
-		{ text = "Select an Option", isTitle = true,notCheckable=true},
-		{ text = "Invite", hasArrow = true,notCheckable=true,
-			menuList = {
-				{ text = "Option 3", func = function() print("You've chosen option 3"); end }
-			}
-		},
-		{ text = "Whisper", hasArrow = true,notCheckable=true,
-			menuList = {
-				{ text = "Option 4", func = function() print("You've chosen option 4"); end }
-			}
-		},
-		{ text = "Sort", hasArrow = true,notCheckable=true,
-			menuList = {
-				{ notCheckable=true,text = "Name", func = setGuildSort, arg1=sortGuildByName},
-				{ notCheckable=true,text = "Zone", func = setGuildSort, arg1=sortGuildByZone},
-				{ notCheckable=true,text = "Rank", func = setGuildSort, arg1=sortGuildByRank},
-			}
-		}
-	}
-
-	if USE_EPGP then
-
-		function sortEPGP(a,b)
-			if a.PR == b.PR then
-				return a.name < b.name
-			else
-				return a.PR>b.PR
-			end
-		end
-
-		guildMenuList[4].menuList[4] = { notCheckable=true,text = "EPGP (PR)", func = setGuildSort, arg1=sortEPGP}
-	end
-
-	function inviteFriendClick(self, arg1, arg2, checked)
-		guildMenuFrame:Hide()
-		InviteUnit(arg1)
-	end
-
-	function whisperFriendClick(self,arg1,arg2,checked)
-		guildMenuFrame:Hide()
-		SetItemRef( "player:"..arg1, ("|Hplayer:%1$s|h[%1$s]|h"):format(arg1), "LeftButton" )
-	end
-
-	local menuCountWhispers = 0
-	local menuCountInvites = 0
-
-	Stat:SetScript("OnMouseUp", function(self, btn)
-		if btn == "RightButton" then
-			GameTooltip:Hide()
-
-			if(guildMenuFrame==nil) then
-				guildMenuFrame = CreateFrame("Frame", "guildMenuFrame", nil, "UIDropDownMenuTemplate")
-				guildMenuFrame.relativeTo = self
-			else
-				guildMenuFrame:Show()
-			end			
-
-			EasyMenu(guildMenuList, guildMenuFrame, "cursor", 0, 0, "MENU", 2)
-		end
-	end)	
-
-	local function EPGPDecodeNote(note)
-	  if note then
-		if note == "" then
-		  return 0, 0
-		else
-		  local ep, gp = string.match(note, "^(%d+),(%d+)$")
-		  if ep then
-			return tonumber(ep), tonumber(gp)
-		  end
-		end
-	  end
-	end	
-
-	Stat:RegisterEvent("ADDON_LOADED")
-	Stat:RegisterEvent("GUILD_ROSTER_UPDATE")
-	Stat:RegisterEvent("PLAYER_GUILD_UPDATE")
-	Stat:RegisterEvent("GUILD_PERK_UPDATE")
-	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
-	Stat:RegisterEvent("CHAT_MSG_SYSTEM")
-	Stat:SetScript("OnEnter", function(self)
-		if not InCombatLockdown() or self.altdow then					
-
-			if IsInGuild() then			
-
-				menuCountWhispers = 0
-				menuCountInvites = 0
-
-				guildMenuList[2].menuList = {}
-				guildMenuList[3].menuList = {}
-
-				colors = {
-					note = { .14, .76, .15 },
-					officerNote = { 1, .56, .25 }
-				}	
-
-				local r,g,b = unpack(colors.officerNote)
-				local officerColor = ("\124cff%.2x%.2x%.2x"):format( r*255, g*255, b*255 )
-				r,g,b = unpack(colors.note)
-				local noteColor = ("\124cff%.2x%.2x%.2x"):format( r*255, g*255, b*255 )
-
-				self.hovered = true
-				GuildRoster()
-				local name, rank,rankIndex, level, zone, note, officernote, EP,GP,PR, connected, status, class, zone_r, zone_g, zone_b, classc, levelc,grouped
-				local online, total, gmotd = 0, GetNumGuildMembers(true), GetGuildRosterMOTD()
-				for i = 0, total do if select(9, GetGuildRosterInfo(i)) then online = online + 1 end end
-				
-				local anchor, panel, xoff, yoff = B.DataTextTooltipAnchor(Text)
-				GameTooltip:SetOwner(panel, anchor, xoff, yoff)
-				GameTooltip:ClearAllPoints()
-				GameTooltip:ClearLines()
-				GameTooltip:AddLine(hexa..B.myname.."'s"..hexb.." Guild")
-				GameTooltip:AddLine' '				
-				GameTooltip:AddDoubleLine(GetGuildInfo'player',format("%s: %d/%d",GUILD,online,total))
-				GameTooltip:AddLine(' ')
-				if gmotd ~= "" then GameTooltip:AddLine(format("  %s |cffaaaaaa- |cffffffff%s",GUILD_MOTD,gmotd),ttsubh.r,ttsubh.g,ttsubh.b,1) end
-				if online > 1 then
-					GameTooltip:AddLine' '
-					sortable = {}
-					for i = 1, total do
-						tabletemp = {}
-						tabletemp.index=i
-						tabletemp.name, tabletemp.rank, tabletemp.rankIndex , tabletemp.level, _, tabletemp.zone, tabletemp.note, tabletemp.officernote, tabletemp.connected, tabletemp.status, tabletemp.class = GetGuildRosterInfo(i)
-
-						if tabletemp.zone==nil then
-							tabletemp.zone = "Unknow Zone"
+local list_sort = {
+	TOONNAME	=	function(a, b)
+						return a["TOONNAME"] < b["TOONNAME"]
+					end,
+	LEVEL		=	function(a, b)
+						if a["LEVEL"] < b["LEVEL"] then
+							return true
+						elseif a["LEVEL"] > b["LEVEL"] then
+							return false
+						else  -- TOONNAME
+							return a["TOONNAME"] < b["TOONNAME"]
 						end
-
-						if USE_EPGP then
-							if tabletemp.officernote then
-								tabletemp.EP,tabletemp.GP = EPGPDecodeNote(tabletemp.officernote)
-								if(tabletemp.EP) then
-
-									tabletemp.GP = tabletemp.GP + BASE_GP
-									tabletemp.PR = tabletemp.EP / tabletemp.GP
-									tabletemp.officernote = format("EP: %d GP: %d PR:%.2f",tabletemp.EP,tabletemp.GP,tabletemp.PR)
-								else
-									tabletemp.EP = 0
-									tabletemp.GP = 0
-									tabletemp.PR = -1
-								end
-							end
+					end,
+	RANKINDEX	=	function(a, b)
+						if a["RANKINDEX"] > b["RANKINDEX"] then
+							return true
+						elseif a["RANKINDEX"] < b["RANKINDEX"] then
+							return false
+						else -- TOONNAME
+							return a["TOONNAME"] < b["TOONNAME"]
 						end
-
-						if tabletemp.connected~=nil and tabletemp.connected==1 then
-							table.insert(sortable,tabletemp)
+					end,
+	ZONENAME	=	function(a, b)
+						if a["ZONENAME"] < b["ZONENAME"] then
+							return true
+						elseif a["ZONENAME"] > b["ZONENAME"] then
+							return false
+						else -- TOONNAME
+							return a["TOONNAME"] < b["TOONNAME"]
 						end
-
-					end
-
-					table.sort(sortable,sortGuildFunc)
-
-					for i,v in ipairs(sortable) do
-						if online <= 1 then
-							if online > 1 then GameTooltip:AddLine(format("+ %d More...", online - modules.Guild.maxguild),ttsubh.r,ttsubh.g,ttsubh.b) end
-							break
-						end						
-
-						name = v.name
-						rank = v.rank
-						rankIndex = v.rankIndex
-						level = v.level
-						zone = v.zone
-						note = v.note
-						officernote = v.officernote
-						connected = v.connected
-						status = v.status
-						class = v.class
-
-						if connected then
-
-							if GetRealZoneText() == zone then zone_r, zone_g, zone_b = 0.3, 1.0, 0.3 else zone_r, zone_g, zone_b = 0.65, 0.65, 0.65 end
-							classc, levelc = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class], GetQuestDifficultyColor(level)
-
-							notes = format(" %s%s",noteColor,note)
-							if officernote ~= "" then
-								notes = notes .. format(" %s%s",officerColor,officernote)
-							end
-							rank = noteColor..rank
-
-							if (UnitInParty(name) or UnitInRaid(name)) and (name ~= UnitName'player') then
-								grouped = "|cffaaaaaa*|r"
-							else
-								grouped = ""
-								if name ~= UnitName'player' then
-									menuCountInvites = menuCountInvites +1
-									guildMenuList[2].menuList[menuCountInvites] = {text = format("|cff%02x%02x%02x%d|r |cff%02x%02x%02x%s|r",levelDB.r*255,levelDB.g*255,levelDB.b*255,level,classDB.r*255,classDB.g*255,classDB.b*255,name), arg1 = name,notCheckable=true, func = inviteFriendClick}
-								end
-							end
-
-							GameTooltip:AddDoubleLine(format("|cff%02x%02x%02x%d|r %s%s%s%s",levelDB.r*255,levelDB.g*255,levelDB.b*255,level,name,grouped,notes,' '..status),zone.." "..rank,classDB.r,classDB.g,classDB.b,zone_r,zone_g,zone_b)
-
-							if name ~= UnitName'player' then
-								menuCountWhispers = menuCountWhispers + 1
-
-								guildMenuList[3].menuList[menuCountWhispers] = {text = format("|cff%02x%02x%02x%d|r |cff%02x%02x%02x%s|r",levelDB.r*255,levelDB.g*255,levelDB.b*255,level,classDB.r*255,classDB.g*255,classDB.b*255,name), arg1 = name,notCheckable=true, func = whisperFriendClick}
-							end
-
+					end,
+	revTOONNAME	=	function(a, b)
+						return a["TOONNAME"] > b["TOONNAME"]
+					end,
+	revLEVEL		=	function(a, b)
+						if a["LEVEL"] > b["LEVEL"] then
+							return true
+						elseif a["LEVEL"] < b["LEVEL"] then
+							return false
+						else  -- TOONNAME
+							return a["TOONNAME"] < b["TOONNAME"]
 						end
-					end
-				end
-				GameTooltip:Show()
-			end
-		end
-	end)
-	Stat:SetScript("OnLeave", function() GameTooltip:Hide() end)
-	Stat:SetScript("OnMouseDown", function(self, btn)
-		if btn == "LeftButton" then
-			if not GuildFrame and IsInGuild() then LoadAddOn("Blizzard_GuildUI") end GuildFrame_Toggle() end
-		end)
-	Stat:SetScript("OnEvent", Update)
+					end,
+	revRANKINDEX	=	function(a, b)
+						if a["RANKINDEX"] < b["RANKINDEX"] then
+							return true
+						elseif a["RANKINDEX"] > b["RANKINDEX"] then
+							return false
+						else -- TOONNAME
+							return a["TOONNAME"] < b["TOONNAME"]
+						end
+					end,
+	revZONENAME	=	function(a, b)
+						if a["ZONENAME"] > b["ZONENAME"] then
+							return true
+						elseif a["ZONENAME"] < b["ZONENAME"] then
+							return false
+						else -- TOONNAME
+							return a["TOONNAME"] < b["TOONNAME"]
+						end
+					end,
+}
+
+local Stat = CreateFrame("Frame")
+Stat:EnableMouse(true)
+Stat:SetFrameStrata("MEDIUM")
+Stat:SetFrameLevel(3)
+
+local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
+Text:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
+B.PP(C['datatext'].guild, Text)
+Stat:SetAllPoints(Text)
+
+------------------------
+--	Helper Functions  --
+------------------------
+local function ColoredLevel(level)
+	if level ~= "" then
+		local color = GetQuestDifficultyColor(level)
+		return string.format("|cff%02x%02x%02x%d|r", color.r * 255, color.g * 255, color.b * 255, level)
+	end
 end
+
+local function inGroup(name)
+	if GetNumPartyMembers() > 0 and UnitInParty(name) then
+		return true
+	elseif GetNumRaidMembers() > 0 and UnitInRaid(name) then
+		return true
+	end
+
+	return false
+end
+
+local function SetGuildSort(cell, sortsection)
+	if C["datatext"].gsort == sortsection then
+		C["datatext"].gsort = "rev" .. sortsection
+	else
+		C["datatext"].gsort = sortsection
+	end
+	OnEnter(Stat)
+end
+
+local function EventHelper(self, event, ...)
+	if event == "PLAYER_ENTERING_WORLD" and IsInGuild() then
+		local _, online = GetNumGuildMembers()
+		Text:SetFormattedText(displayString, online)
+	else
+		Text:SetText(noGuildString)
+	end
+end
+
+----------------------------
+--  If names are clicked  --
+----------------------------
+
+local function Entry_OnMouseUp(frame, info, button)
+	local i_type, toon_name, full_name, presence_id = string.split(":", info)
+
+	if button == "LeftButton" then
+		-- Invite to group/raid
+		if IsAltKeyDown() then
+			InviteUnit(toon_name)
+			return
+		-- Lookup player via /who
+		elseif IsShiftKeyDown() then
+			SetItemRef("player:"..toon_name, "|Hplayer:"..toon_name.."|h["..toon_name.."|h", "LeftButton")
+			return
+		-- Edit Player Note
+		elseif IsControlKeyDown() then
+			if i_type == "guild" and CanEditPublicNote() then
+				SetGuildRosterSelection(guild_name_to_index(toon_name))
+				StaticPopup_Show("SET_GUILDPLAYERNOTE")
+				return
+			end
+		-- Send a tell to player
+		else 
+			SetItemRef("player:"..full_name, "|Hplayer:"..full_name.."|h["..full_name.."|h", "LeftButton")
+		end
+	elseif button == "RightButton" then
+		-- Edit Guild Officer Notes
+		if IsControlKeyDown() then
+			if i_type == "guild" and CanEditOfficerNote() then
+				SetGuildRosterSelection(guild_name_to_index(toon_name))
+				StaticPopup_Show("SET_GUILDOFFICERNOTE")
+			end
+		end
+	end
+end
+
+------------------------
+--      Tooltip!      --
+------------------------
+local GROUP_CHECKMARK	= "|TInterface\\Buttons\\UI-CheckBox-Check:0|t"
+local AWAY_ICON		= "|TInterface\\FriendsFrame\\StatusIcon-Away:18|t"
+local BUSY_ICON		= "|TInterface\\FriendsFrame\\StatusIcon-DnD:18|t"
+local MINIMIZE		= "|TInterface\\BUTTONS\\UI-PlusButton-Up:0|t"
+local BROADCAST_ICON = "|TInterface\\FriendsFrame\\BroadcastIcon:0|t"
+local MOBILE_ICON	= "|TInterface\\ChatFrame\\UI-ChatIcon-ArmoryChat:18|t"
+
+local FACTION_COLOR_HORDE = RED_FONT_COLOR_CODE
+local FACTION_COLOR_ALLIANCE = "|cff0070dd"
+
+local function ColoredLevel(level)
+	if level ~= "" then
+		local color = GetQuestDifficultyColor(level)
+		return string.format("|cff%02x%02x%02x%d|r", color.r * 255, color.g * 255, color.b * 255, level)
+	end
+end
+
+local CLASS_COLORS, color = {}
+local classes_female, classes_male = {}, {}
+
+FillLocalizedClassList(classes_female, true)
+FillLocalizedClassList(classes_male, false)
+
+for token, localizedName in pairs(classes_female) do
+	color = RAID_CLASS_COLORS[token]
+	CLASS_COLORS[localizedName] = string.format("%02x%02x%02x", color.r * 255, color.g * 255, color.b * 255) 
+end
+
+for token, localizedName in pairs(classes_male) do
+	color = RAID_CLASS_COLORS[token]
+	CLASS_COLORS[localizedName] = string.format("%02x%02x%02x", color.r * 255, color.g * 255, color.b * 255) 
+end
+
+-- click the datatext
+Stat:SetScript("OnMouseUp", function() ToggleGuildFrame(1) end)
+
+-- build and show the tooltip!
+function OnEnter(self)
+	if InCombatLockdown() then return end
+
+	if LibQTip:IsAcquired("GuildList") then
+		tooltip:Clear()
+	else
+		local _, panel, _, _ = B.DataTextTooltipAnchor(Text)	-- to properly place the tooltip
+		tooltip = LibQTip:Acquire("GuildList", 7, "RIGHT", "RIGHT", "LEFT", "LEFT", "CENTER", "CENTER", "RIGHT")
+		self.tooltip = tooltip
+		tooltip:SetBackdropColor(0,0,0,1)
+		tooltip:SetHeaderFont(ssHeaderFont)
+		tooltip:SetFont(ssRegFont)
+		tooltip:SmartAnchorTo(panel)
+		tooltip:SetAutoHideDelay(0.1, self)
+	end
+
+	------------------------
+	--  Begin guild list  --
+	------------------------
+
+	if IsInGuild() then
+		local guild_table = {}
+
+		for i = 1, GetNumGuildMembers() do
+			local toonName, rank, rankindex, level, class, zoneName, note, onote, connected, status, classFileName, achievementPoints, achievementRank, isMobile = GetGuildRosterInfo(i)
+
+			if connected then
+				if note and note ~= '' then note="|cff00ff00["..note.."]|r" end
+				if onote and onote ~= '' then onote = "|cff00ffff["..onote.."]|r" end
+
+				if status == CHAT_FLAG_AFK then
+					status = AWAY_ICON
+				elseif status == CHAT_FLAG_DND then
+					status = BUSY_ICON
+				elseif isMobile then
+					status = MOBILE_ICON
+					zoneName = "Remote Chat"
+				end
+
+				insert(guild_table, {
+					TOONNAME = toonName,
+					RANK = rank,
+					RANKINDEX = rankindex,
+					LEVEL = level,
+					CLASS = class,
+					ZONENAME = zoneName,
+					NOTE = note,
+					ONOTE = onote,
+					STATUS = status
+				})
+			end
+		end
+
+		-- Header for Guild
+		local guildName, guildLevel = GetGuildInfo("player"), GetGuildLevel()
+		
+		line = tooltip:AddLine()
+		tooltip:SetCell(line, 1, hexa..B.myname.."'s "..hexb.."|cff00ff00Guild Info|r", "CENTER", 0)
+		
+		line = tooltip:AddLine()
+		tooltip:SetCell(line, 1, "|cffffffff" .. guildName .."|r |cff00ff00[ Level " .. guildLevel .. " ]|r ", "LEFT",3)
+		tooltip:SetCell(line, 7, "|cffffffff" .. sizeof(guild_table) .. " of " .. GetNumGuildMembers() .. "|r |cff00ff00Online|r", "RIGHT")
+
+		line = tooltip:AddLine()
+		tooltip:SetCell(line, 1, "|cff00ff00"..GetGuildRosterMOTD().."|r", "LEFT", 0, nil, nil, nil, 100)
+
+		line = tooltip:AddHeader()
+		line = tooltip:SetCell(line, 1, _G.LEVEL)
+		tooltip:SetCellScript(line, 1, "OnMouseUp", SetGuildSort, "LEVEL")
+		line = tooltip:SetCell(line, 3, _G.NAME)
+		tooltip:SetCellScript(line, 3, "OnMouseUp", SetGuildSort, "TOONNAME")
+		line = tooltip:SetCell(line, 5, _G.ZONE)
+		tooltip:SetCellScript(line, 5, "OnMouseUp", SetGuildSort, "ZONENAME")
+		line = tooltip:SetCell(line, 6, _G.RANK)
+		tooltip:SetCellScript(line, 6, "OnMouseUp", SetGuildSort, "RANKINDEX")
+		tooltip:AddSeparator()
+		
+		if not C["datatext"].gsort then
+			sort(guild_table, list_sort["TOONNAME"])
+		else
+			sort(guild_table, list_sort[C["datatext"].gsort])
+		end
+
+		for _, player in ipairs(guild_table) do
+			line = tooltip:AddLine()
+			line = tooltip:SetCell(line, 1, ColoredLevel(player["LEVEL"]))
+			line = tooltip:SetCell(line, 2, player["STATUS"])
+			line = tooltip:SetCell(line, 3,
+				format("|cff%s%s", CLASS_COLORS[player["CLASS"]] or "ffffff", player["TOONNAME"] .. "|r") .. (inGroup(player["TOONNAME"]) and GROUP_CHECKMARK or ""))
+			line = tooltip:SetCell(line, 5, player["ZONENAME"] or "???")
+			line = tooltip:SetCell(line, 6, player["RANK"])
+			line = tooltip:SetCell(line, 7, player["NOTE"] .. player["ONOTE"])
+			tooltip:SetLineScript(line, "OnMouseUp", Entry_OnMouseUp, format("guild:%s:%s", player["TOONNAME"], player["TOONNAME"]))
+		end
+	end
+	
+	tooltip:AddLine(" ")
+
+	------------------
+	--  HINT HINT!  --
+	------------------
+	line = tooltip:AddLine()
+	tooltip:SetCell(line, 1, "Hint:", "LEFT", 3)
+	line = tooltip:AddLine()
+	tooltip:SetCell(line, 1, "|cffeda55fAlt-Click|r to open the guild panel.", "LEFT", 0)
+	line = tooltip:AddLine()
+	tooltip:SetCell(line, 1, "|cffeda55fClick|r a line to whisper a player.  |cffeda55fShift-Click|r a line to lookup a player.", "LEFT", 0)
+	line = tooltip:AddLine()
+	tooltip:SetCell(line, 1, "|cffeda55fCtrl-Click|r a line to edit a note.    |cffeda55fCtrl-RightClick|r a line to edit an officer note.", "LEFT", 0)
+	line = tooltip:AddLine()
+	tooltip:SetCell(line, 1, "|cffeda55fAlt-Click|r a line to invite.    |cffeda55fClick|r a Header to sort it.", "LEFT", 0)
+
+	tooltip:UpdateScrolling()
+	
+	-- set the look of the tooltip
+	tooltip:SetBackdrop({
+		bgFile = "Interface\\TutorialFrame\\TutorialFrameBackground",
+		edgeFile = "Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border",							
+		tile = true, tileSize = 16, edgeSize = 18,
+		insets = {left = 3, right = 3, top = 3, bottom = 3},
+	})
+	tooltip:Show()
+end
+
+Stat:SetScript("OnEnter", OnEnter)
+--[[Stat:SetScript("OnLeave", function(self)
+	LibQTip:Release(self.tooltip)
+	self.tooltip = nil
+end)]]
+
+local DELAY = 15  --  Update every 15 seconds
+local elapsed = DELAY - 5
+
+Stat:SetScript("OnUpdate", function (self, el)
+	elapsed = elapsed + el
+
+	if elapsed >= DELAY then
+		elapsed = 0
+		if IsInGuild() then
+			local _, online = GetNumGuildMembers()
+			Text:SetFormattedText(displayString, online)
+		else
+			Text:SetText(noGuildString)
+		end
+	end
+end)
+
+Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
+Stat:SetScript("OnEvent", EventHandler)

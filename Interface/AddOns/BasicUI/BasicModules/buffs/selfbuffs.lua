@@ -76,6 +76,7 @@ remindenchants = {
 local buffs = remindbuffs[B.myclass]
 local enchants = remindenchants[B.myclass]
 local sound 
+local ccolor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[B.myclass]
 
 if (buffs and buffs[1]) then
 	local function OnEvent(self, event)	
@@ -130,7 +131,7 @@ if (buffs and buffs[1]) then
 		tile = true, tileSize = 16, edgeSize = 18,
 		insets = {left = bgsize, right = bgsize, top = bgsize, bottom = bgsize}
 	})
-	local ccolor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[select(2,UnitClass("player"))]
+	
     frame:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor, 1)	
 	frame:Hide()
 	
@@ -232,7 +233,6 @@ if (enchants and enchants[1]) then
 		tile = true, tileSize = 16, edgeSize = 18,
 		insets = {left = bgsize, right = bgsize, top = bgsize, bottom = bgsize}
 	})
-	local ccolor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[select(2,UnitClass("player"))]
     frame:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor, 1)
 	frame:Hide()
 	

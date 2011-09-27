@@ -59,6 +59,10 @@ if C['datatext'].spec and C['datatext'].spec > 0 then
 				GameTooltip:AddLine(string.join(' ', string.format(talentStringTip, select(2, GetTalentTabInfo(GetPrimaryTalentTree(false, false, i))), talent[i][1], talent[i][2], talent[i][3]), (i == active and activeString or inactiveString)),1,1,1)
 			end
 		end
+		
+		GameTooltip:AddLine' '
+		GameTooltip:AddLine("|cffeda55fLeft Click|r to Switch Spec's")		
+		GameTooltip:AddLine("|cffeda55fRight Click|r to Open Talent Tree")
 		GameTooltip:Show()
 	end)
 

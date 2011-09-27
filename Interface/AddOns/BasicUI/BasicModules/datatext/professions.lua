@@ -37,6 +37,11 @@ if C['datatext'].pro and C['datatext'].pro > 0 then
 				GameTooltip:AddDoubleLine(name, rank..' / '..maxRank,.75,.9,1,.3,1,.3)
 			end
 		end
+		GameTooltip:AddLine' '
+		GameTooltip:AddLine("|cffeda55fLeft Click|r to Open Profession #1")
+		GameTooltip:AddLine("|cffeda55fMiddle Click|r to Open Spell Book")
+		GameTooltip:AddLine("|cffeda55fRight Click|r to Open Profession #2")
+		
 		GameTooltip:Show()
 	end)
 

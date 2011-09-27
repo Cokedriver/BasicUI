@@ -93,6 +93,43 @@ function B.HexToRGB(hex)
 	return tonumber(rhex, 16), tonumber(ghex, 16), tonumber(bhex, 16)
 end
 
+function B.ShortValue(v)
+	if v >= 1e6 then
+		return ("%.1fm"):format(v / 1e6):gsub("%.?0+([km])$", "%1")
+	elseif v >= 1e3 or v <= -1e3 then
+		return ("%.1fk"):format(v / 1e3):gsub("%.?0+([km])$", "%1")
+	else
+		return v
+	end
+end
+
+B.SetUpAnimGroup = function(self)
+	self.anim = self:CreateAnimationGroup("Flash")
+	self.anim.fadein = self.anim:CreateAnimation("ALPHA", "FadeIn")
+	self.anim.fadein:SetChange(1)
+	self.anim.fadein:SetOrder(2)
+
+	self.anim.fadeout = self.anim:CreateAnimation("ALPHA", "FadeOut")
+	self.anim.fadeout:SetChange(-1)
+	self.anim.fadeout:SetOrder(1)
+end
+
+B.Flash = function(self, duration)
+	if not self.anim then
+		E.SetUpAnimGroup(self)
+	end
+
+	self.anim.fadein:SetDuration(duration)
+	self.anim.fadeout:SetDuration(duration)
+	self.anim:Play()
+end
+
+B.StopFlash = function(self)
+	if self.anim then
+		self.anim:Finish()
+	end
+end
+
 SlashCmdList['RELOADUI'] = function()
     ReloadUI()
 end

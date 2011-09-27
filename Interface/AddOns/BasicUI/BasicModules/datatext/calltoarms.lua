@@ -104,6 +104,8 @@ if C['datatext'].calltoarms and C['datatext'].calltoarms > 0 then
 		elseif numCTA == 0 then 
 			GameTooltip:AddLine("Could not get Call To Arms information.") 
 		end
+		GameTooltip:AddLine' '
+		GameTooltip:AddLine("|cffeda55fClick|r to Open Dungeon Finder")		
 		GameTooltip:Show()	
 	end
     
