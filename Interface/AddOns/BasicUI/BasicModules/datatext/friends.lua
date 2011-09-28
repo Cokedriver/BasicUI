@@ -65,15 +65,6 @@ ssRegFont:SetFont(GameTooltipText:GetFont(), 15)
 local list_sort = {
 	TOONNAME	=	function(a, b)
 						return a["TOONNAME"] < b["TOONNAME"]
-					end,
-	FACTION		=	function(a, b)
-						if a["FACTION"] < b["FACTION"] then
-							return true
-						elseif a["FACTION"] > b["FACTION"] then
-							return false
-						else  -- TOONNAME
-							return a["TOONNAME"] < b["TOONNAME"]
-						end
 					end,					
 	LEVEL		=	function(a, b)
 						if a["LEVEL"] < b["LEVEL"] then
@@ -104,15 +95,6 @@ local list_sort = {
 					end,
 	revTOONNAME	=	function(a, b)
 						return a["TOONNAME"] > b["TOONNAME"]
-					end,
-	revFACTION	=	function(a, b)
-						if a["FACTION"] < b["FACTION"] then
-							return true
-						elseif a["FACTION"] > b["FACTION"] then
-							return false
-						else  -- TOONNAME
-							return a["TOONNAME"] < b["TOONNAME"]
-						end
 					end,						
 	revLEVEL		=	function(a, b)
 						if a["LEVEL"] > b["LEVEL"] then
@@ -414,6 +396,16 @@ function FriendEnter(self)
 						end
 					end
 
+				local fcolor = ""
+				
+				if faction then
+						if faction == 0 then
+							fcolor = HORDE_FACTION
+						else
+							fcolor = ALLIANCE_FACTION
+						end
+					end
+
 				note = note and "|cffff8800{"..note.."}|r" or ""
 
 				if status == CHAT_FLAG_AFK then
@@ -493,8 +485,8 @@ Stat:SetScript("OnEnter", FriendEnter)
 	self.tooltip = nil
 end)]]
 
-local DELAY = 15  --  Update every 15 seconds
-local elapsed = DELAY - 5
+local DELAY = 5  --  Update every 15 seconds
+local elapsed = DELAY - 1
 
 Stat:SetScript("OnUpdate", function (self, el)
 	elapsed = elapsed + el

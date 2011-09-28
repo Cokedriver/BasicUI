@@ -125,10 +125,11 @@ end
 
 f.Power = CreateFrame('StatusBar', nil, UIParent)
 f.Power:SetScale(UIParent:GetScale())
-f.Power:SetSize(C['powerbar'].sizeWidth, 8)
+f.Power:SetSize(C['powerbar'].sizeWidth, 10)
 f.Power:SetPoint('CENTER', f, 0, -23)
-f.Power:SetStatusBarTexture('Interface\\TargetingFrame\\UI-StatusBar')
+f.Power:SetStatusBarTexture('Interface\\AddOns\\BasicUI\\BasicMedia\\normTex')
 f.Power:SetAlpha(0)
+
 
 f.Power.Value = f.Power:CreateFontString(nil, 'ARTWORK')
 
@@ -145,21 +146,20 @@ f.Power.Value:SetVertexColor(1, 1, 1)
 
 f.Power.Background = f.Power:CreateTexture(nil, 'BACKGROUND')
 f.Power.Background:SetAllPoints(f.Power)
-f.Power.Background:SetTexture('Interface\\TargetingFrame\\UI-StatusBar')
+f.Power.Background:SetTexture('Interface\\AddOns\\BasicUI\\BasicMedia\\normTex')
 f.Power.Background:SetVertexColor(0.25, 0.25, 0.25, 1)
+
 
 f.Power.BackgroundShadow = CreateFrame('Frame', nil, f.Power)
 f.Power.BackgroundShadow:SetFrameStrata('BACKGROUND')
 f.Power.BackgroundShadow:SetPoint('TOPLEFT', -4, 4)
 f.Power.BackgroundShadow:SetPoint('BOTTOMRIGHT', 4, -4)
 f.Power.BackgroundShadow:SetBackdrop({
-    bgFile = 'Interface\\Buttons\\WHITE8x8',
+    --bgFile = 'Interface\\Buttons\\WHITE8x8',
     edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
-    tile = true, tileSize = 16, edgeSize = 12,
+    tile = true, tileSize = 16, edgeSize = 14,
     insets = {left = 3, right = 3, top = 3, bottom = 3},
 })
-f.Power.BackgroundShadow:SetBackdropColor(0.15, 0.15, 0.15, 1)
---f.Power.BackgroundShadow:SetBackdropBorderColor(0, 0, 0)
 
 f.Power.Below = f.Power:CreateTexture(nil, 'BACKGROUND')
 f.Power.Below:SetHeight(14)
@@ -248,9 +248,9 @@ local function UpdateBarVisibility()
     if ((not C['powerbar'].energybar and powerType == 'ENERGY') or (not C['powerbar'].focusbar and powerType == 'FOCUS') or (not C['powerbar'].ragebar and powerType == 'RAGE') or (not C['powerbar'].manabar and powerType == 'MANA') or (not C['powerbar'].runebar and powerType == 'RUNEPOWER') or UnitIsDeadOrGhost('player') or UnitHasVehicleUI('player')) then
         f.Power:SetAlpha(0)
     elseif (InCombatLockdown()) then
-        securecall('UIFrameFadeIn', f.Power, 0.3, f.Power:GetAlpha(), 1)
+        securecall('UIFrameFadeIn', f.Power, 0.3, f.Power:GetAlpha(), .8)
     elseif (not InCombatLockdown() and UnitPower('player') > 0) then
-        securecall('UIFrameFadeOut', f.Power, 0.3, f.Power:GetAlpha(), 0.3)
+        securecall('UIFrameFadeOut', f.Power, 0.3, f.Power:GetAlpha(), 0)
     else
         securecall('UIFrameFadeOut', f.Power, 0.3, f.Power:GetAlpha(), 0)
     end
@@ -322,7 +322,7 @@ f:SetScript('OnEvent', function(self, event, arg1)
         if (InCombatLockdown()) then
             securecall('UIFrameFadeIn', f, 0.35, f:GetAlpha(), 1)
         else
-            securecall('UIFrameFadeOut', f, 0.35, f:GetAlpha(), 0.3)
+            securecall('UIFrameFadeOut', f, 0.35, f:GetAlpha(), 0)
         end
     end
 
@@ -331,7 +331,7 @@ f:SetScript('OnEvent', function(self, event, arg1)
     end
     
     if (event == 'PLAYER_REGEN_ENABLED') then
-        securecall('UIFrameFadeOut', f, 0.35, f:GetAlpha(), 0.3)
+        securecall('UIFrameFadeOut', f, 0.35, f:GetAlpha(), 0)
     end
 end)
 

@@ -133,6 +133,7 @@ if C['datatext'].wowtime and C['datatext'].wowtime > 0 then
 	end
 
 	Stat:SetScript("OnEnter", function(self)
+		if InCombatLockdown() then return end
 		OnLoad = function(self) RequestRaidInfo() end
 		local anchor, panel, xoff, yoff = B.DataTextTooltipAnchor(Text)
 		GameTooltip:SetOwner(panel, anchor, xoff, yoff)

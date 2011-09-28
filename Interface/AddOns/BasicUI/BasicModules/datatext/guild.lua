@@ -13,7 +13,7 @@ local sort			= table.sort
 local insert		= table.insert
 local ceil			= math.ceil
 local sizeof		= table.getn
-local displayString = join("", hexa.."Guild"..hexb, ": ", "%d|r")
+local displayString = join("", hexa.."%s: "..hexb, ": ", "%d|r")
 local noGuildString = join("", hexa.."No Guild"..hexb)
 
 -------------------------------------------------------------------------------
@@ -290,14 +290,15 @@ function OnEnter(self)
 		tooltip:SetCell(line, 1, "|cff00ff00"..GetGuildRosterMOTD().."|r", "LEFT", 0, nil, nil, nil, 100)
 
 		line = tooltip:AddHeader()
-		line = tooltip:SetCell(line, 1, _G.LEVEL)
+		line = tooltip:SetCell(line, 1, _G.LEVEL, "CENTER")
 		tooltip:SetCellScript(line, 1, "OnMouseUp", SetGuildSort, "LEVEL")
-		line = tooltip:SetCell(line, 3, _G.NAME)
+		line = tooltip:SetCell(line, 3, _G.NAME, "CENTER")
 		tooltip:SetCellScript(line, 3, "OnMouseUp", SetGuildSort, "TOONNAME")
-		line = tooltip:SetCell(line, 5, _G.ZONE)
+		line = tooltip:SetCell(line, 5, _G.ZONE, "CENTER")
 		tooltip:SetCellScript(line, 5, "OnMouseUp", SetGuildSort, "ZONENAME")
-		line = tooltip:SetCell(line, 6, _G.RANK)
+		line = tooltip:SetCell(line, 6, _G.RANK, "CENTER")
 		tooltip:SetCellScript(line, 6, "OnMouseUp", SetGuildSort, "RANKINDEX")
+		line = tooltip:SetCell(line, 7, _G.NOTE, "CENTER")
 		tooltip:AddSeparator()
 		
 		if not C["datatext"].gsort then
@@ -314,7 +315,7 @@ function OnEnter(self)
 				format("|cff%s%s", CLASS_COLORS[player["CLASS"]] or "ffffff", player["TOONNAME"] .. "|r") .. (inGroup(player["TOONNAME"]) and GROUP_CHECKMARK or ""))
 			line = tooltip:SetCell(line, 5, player["ZONENAME"] or "???")
 			line = tooltip:SetCell(line, 6, player["RANK"])
-			line = tooltip:SetCell(line, 7, player["NOTE"] .. player["ONOTE"])
+			line = tooltip:SetCell(line, 7, player["NOTE"])
 			tooltip:SetLineScript(line, "OnMouseUp", Entry_OnMouseUp, format("guild:%s:%s", player["TOONNAME"], player["TOONNAME"]))
 		end
 	end
@@ -353,8 +354,8 @@ Stat:SetScript("OnEnter", OnEnter)
 	self.tooltip = nil
 end)]]
 
-local DELAY = 15  --  Update every 15 seconds
-local elapsed = DELAY - 5
+local DELAY = 5  --  Update every 15 seconds
+local elapsed = DELAY - 1
 
 Stat:SetScript("OnUpdate", function (self, el)
 	elapsed = elapsed + el
@@ -363,7 +364,7 @@ Stat:SetScript("OnUpdate", function (self, el)
 		elapsed = 0
 		if IsInGuild() then
 			local _, online = GetNumGuildMembers()
-			Text:SetFormattedText(displayString, online)
+			Text:SetFormattedText(displayString, "Guild", online)
 		else
 			Text:SetText(noGuildString)
 		end

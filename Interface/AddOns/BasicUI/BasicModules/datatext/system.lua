@@ -112,6 +112,7 @@ if C['datatext'].system and C['datatext'].system > 0 then
 	end
 	Stat:SetScript("OnMouseDown", function () collectgarbage("collect") Update(Stat, 20) end)
 	Stat:SetScript("OnEnter", function(self)
+		if InCombatLockdown() then return end
 		local bandwidth = GetAvailableBandwidth()
 		local _, _, latencyHome, latencyWorld = GetNetStats() 
 		local anchor, panel, xoff, yoff = B.DataTextTooltipAnchor(Text)

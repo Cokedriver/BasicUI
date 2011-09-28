@@ -83,23 +83,23 @@ if C['datatext'].dur and C['datatext'].dur > 0 then
 	end
 
 	Stat:SetScript("OnEnter", function()
-		if not InCombatLockdown() then
-			local anchor, panel, xoff, yoff = B.DataTextTooltipAnchor(Text)
-			GameTooltip:SetOwner(panel, anchor, xoff, yoff)
-			GameTooltip:ClearLines()
-			GameTooltip:AddLine(hexa..B.myname.."'s"..hexb.." Armor")
-			for i = 1, 11 do
-				if Slots[i][3] ~= 1000 then
-					green = Slots[i][3]*2
-					red = 1 - green
-					-- print(green); print(red);
-					GameTooltip:AddDoubleLine(Slots[i][2], format(tooltipString, floor(Slots[i][3]*100)), 1 ,1 , 1, red + 1, green, 0)
-				end
+		if InCombatLockdown() then return end
+		local anchor, panel, xoff, yoff = B.DataTextTooltipAnchor(Text)
+		GameTooltip:SetOwner(panel, anchor, xoff, yoff)
+		GameTooltip:ClearLines()
+		GameTooltip:AddLine(hexa..B.myname.."'s"..hexb.." Armor")
+		for i = 1, 11 do
+			if Slots[i][3] ~= 1000 then
+				green = Slots[i][3]*2
+				red = 1 - green
+				-- print(green); print(red);
+				GameTooltip:AddDoubleLine(Slots[i][2], format(tooltipString, floor(Slots[i][3]*100)), 1 ,1 , 1, red + 1, green, 0)
 			end
-			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine("|cffeda55fClick|r to Show Character Panel")
-			GameTooltip:Show()
 		end
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddLine("|cffeda55fClick|r to Show Character Panel")
+		GameTooltip:Show()
+	
 	end)
 	Stat:SetScript("OnLeave", function() GameTooltip:Hide() end)
 

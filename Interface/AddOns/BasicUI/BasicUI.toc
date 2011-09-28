@@ -43,7 +43,6 @@ BasicModules\datatext\battleground.lua
 BasicModules\datatext\durability.lua
 BasicModules\datatext\system.lua
 BasicModules\datatext\friends.lua
-BasicModules\datatext\gold.lua
 BasicModules\datatext\guild.lua
 BasicModules\datatext\time.lua
 BasicModules\datatext\bags.lua

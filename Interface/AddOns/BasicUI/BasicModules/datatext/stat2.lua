@@ -49,6 +49,8 @@ if C['datatext'].stat2 and C['datatext'].stat2 > 0 then
 	end
 
 	local function ShowTooltip(self)
+		if InCombatLockdown() then return end
+	
 		local anchor, panel, xoff, yoff = B.DataTextTooltipAnchor(Text)
 		GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 		GameTooltip:ClearLines()

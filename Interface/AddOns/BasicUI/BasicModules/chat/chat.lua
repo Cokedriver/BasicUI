@@ -133,7 +133,7 @@ ChatFrame1EditBox:SetBackdrop({
     bgFile = 'Interface\\DialogFrame\\UI-DialogBox-Background',
     edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
     tile = true, tileSize = 16, edgeSize = 18,
-    insets = {left = 3, right = 3, top = 3, bottom = 3},
+    insets = {left = 3, right = 3, top = 2, bottom = 3},
 })
 
 
@@ -770,3 +770,42 @@ local function EnableItemLinkTooltip()
 end
 hooksecurefunc('FCF_OpenTemporaryWindow', EnableItemLinkTooltip)
 EnableItemLinkTooltip()
+
+for i = 3, NUM_CHAT_WINDOWS do
+	local cf1 = _G['ChatFrame1']
+	local cf2 = _G['ChatFrame2']
+	local cf3 = _G['ChatFrame'..i]
+	local bg1 = CreateFrame("Frame", nil, cf1);
+	local bg2 = CreateFrame("Frame", nil, cf2);
+	local bg3 = CreateFrame("Frame", nil, cf3);
+	
+	if cf1 then
+		bg1:SetFrameStrata("BACKGROUND");
+		bg1:SetPoint("TOPLEFT", -8, 8);
+		bg1:SetPoint("BOTTOMRIGHT", 8, -8);
+		bg1:SetBackdrop({
+			edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
+			edgeSize = 18,
+		})
+	end	
+	
+	if cf2 then
+		bg2:SetFrameStrata("BACKGROUND");
+		bg2:SetPoint("TOPLEFT", -8, 32);
+		bg2:SetPoint("BOTTOMRIGHT", 8, -8);
+		bg2:SetBackdrop({
+			edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
+			edgeSize = 18,
+		})
+	end
+	
+	if cf3 then
+		bg3:SetFrameStrata("BACKGROUND");
+		bg3:SetPoint("TOPLEFT", -8, 8);
+		bg3:SetPoint("BOTTOMRIGHT", 8, -8);
+		bg3:SetBackdrop({
+			edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
+			edgeSize = 18,
+		})
+	end		
+end
