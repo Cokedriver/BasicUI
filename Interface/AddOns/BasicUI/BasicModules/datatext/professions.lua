@@ -26,6 +26,7 @@ if C['datatext'].pro and C['datatext'].pro > 0 then
 	end
 
 	Stat:SetScript('OnEnter', function()
+		if InCombatLockdown() then return end
 		local anchor, panel, xoff, yoff = B.DataTextTooltipAnchor(Text)
 		GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 		GameTooltip:ClearLines()

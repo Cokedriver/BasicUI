@@ -39,17 +39,14 @@ DB['datatext'] = {
 	['top'] = false,										-- if = true then panel on top of screen, if = false panel below mainmenubar
 	
 	['fontsize'] = 15,                                  	-- font size for panels.
-	['bags'] = 0,                                       	-- show space used in bags on panel.
+	['bags'] = 9,                                       	-- show space used in bags on panel.
 	['system'] = 0,                                     	-- show total memory and others systems info (FPS/MS) on panel.
-	['gold'] = 9,                                       	-- show your current gold on panel.
 	['wowtime'] = 0,                                    	-- show time on panel.
 	['guild'] = 0,                                      	-- show number on guildmate connected on panel.
 	['dur'] = 8,                                        	-- show your equipment durability on panel.
 	['friends'] = 7,                                    	-- show number of friends connected.
 	['dps_text'] = 0,                                   	-- show a dps meter on panel.
 	['hps_text'] = 0,                                   	-- show a heal meter on panel.
-	['currency'] = 0,                                   	-- show your tracked currency on panel.
-	['micromenu'] = 0,										-- show the micromenu on panel.
 	['spec'] = 5,											-- show your current spec on panel.
 	['zone'] = 0,											-- show your current zone on panel.
 	['coords'] = 0,											-- show your current coords on panel.
@@ -63,7 +60,7 @@ DB['datatext'] = {
 	-- Color Datatext
 	['colors'] = {
 		['classcolor'] = true,               			    -- classcolored datatexts
-		['color'] = { r = 0, g = 0, b = 0},                  				-- datatext color if classcolor = false 
+		['color'] = { r = 0, g = 0, b = 1},                 -- datatext color if classcolor = false 
 	},
 	
 	['battleground'] = true,                            	-- enable 3 stats in battleground only that replace stat1,stat2,stat3.
@@ -231,7 +228,7 @@ DB['tooltip'] = {
 		['customColorapply'] = false, 
         ['custom'] = {
 			['apply'] = false,
-			['color'] =	{ r = 1, g = 1, b = 1},
+			['color'] =	{ r = 1, g = 1, b = 0},
 		},		
 		['fontSize'] = 14,
 	},		

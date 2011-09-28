@@ -27,6 +27,8 @@ if C['datatext'].stat1 and C['datatext'].stat1 > 0 then
 	local level = UnitLevel("player")
 
 	local function ShowTooltip(self)
+		if InCombatLockdown() then return end
+	
 		local anchor, panel, xoff, yoff = B.DataTextTooltipAnchor(Text)
 		GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 		GameTooltip:ClearLines()
