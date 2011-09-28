@@ -774,18 +774,17 @@ EnableItemLinkTooltip()
 for i = 1, NUM_CHAT_WINDOWS do
 	local cf = _G['ChatFrame'..i]
 	local bg = CreateFrame("Frame", nil, cf);
-			bg:SetFrameStrata("BACKGROUND");
+	bg:SetFrameStrata("BACKGROUND");
 	
 	if i == 2 then
-
 		bg:SetPoint("TOPLEFT", -8, 32);
 
 	else
 		bg:SetPoint("TOPLEFT", -8, 8);
 	end	
-			bg:SetPoint("BOTTOMRIGHT", 8, -8);
-		bg:SetBackdrop({
-			edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
-			edgeSize = 18,
-		})
+	bg:SetPoint("BOTTOMRIGHT", 8, -8);
+	bg:SetBackdrop({
+		edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
+		edgeSize = 18,
+	})
 end
