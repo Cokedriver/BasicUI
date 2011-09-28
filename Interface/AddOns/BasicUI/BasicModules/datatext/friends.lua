@@ -403,6 +403,16 @@ function FriendEnter(self)
 			local friend_table = {}
 			for i = 1,numFriendsOnline do
 				local toonName, level, class, zoneName, connected, status, note = GetFriendInfo(i)
+				
+				local fcolor = ""
+				
+				if faction then
+						if faction == 0 then
+							fcolor = HORDE_FACTION
+						else
+							fcolor = ALLIANCE_FACTION
+						end
+					end
 
 				note = note and "|cffff8800{"..note.."}|r" or ""
 
@@ -414,6 +424,7 @@ function FriendEnter(self)
 
 				insert(friend_table, {
 					TOONNAME = toonName,
+					FCOLOR = fcolor,
 					LEVEL = level,
 					CLASS = class,
 					ZONENAME = zoneName,
