@@ -385,26 +385,6 @@ function FriendEnter(self)
 			local friend_table = {}
 			for i = 1,numFriendsOnline do
 				local toonName, level, class, zoneName, connected, status, note = GetFriendInfo(i)
-				
-				local fcolor = ""
-				
-				if faction then
-						if faction == 0 then
-							fcolor = HORDE_FACTION
-						else
-							fcolor = ALLIANCE_FACTION
-						end
-					end
-
-				local fcolor = ""
-				
-				if faction then
-						if faction == 0 then
-							fcolor = HORDE_FACTION
-						else
-							fcolor = ALLIANCE_FACTION
-						end
-					end
 
 				note = note and "|cffff8800{"..note.."}|r" or ""
 
@@ -416,7 +396,6 @@ function FriendEnter(self)
 
 				insert(friend_table, {
 					TOONNAME = toonName,
-					FCOLOR = fcolor,
 					LEVEL = level,
 					CLASS = class,
 					ZONENAME = zoneName,
@@ -434,7 +413,7 @@ function FriendEnter(self)
 
 			for _, player in ipairs(friend_table) do
 				line = tooltip:AddLine()
-				line = tooltip:SetCell(line, 1, ColoredLevel(player["LEVEL"]).." "..player["FCOLOR"])
+				line = tooltip:SetCell(line, 1, ColoredLevel(player["LEVEL"]))
 				line = tooltip:SetCell(line, 2, player["STATUS"])
 				line = tooltip:SetCell(line, 3,
 					format("|cff%s%s", CLASS_COLORS[player["CLASS"]] or "ffffff", player["TOONNAME"] .. "|r") .. (inGroup(player["TOONNAME"]) and GROUP_CHECKMARK or ""));
