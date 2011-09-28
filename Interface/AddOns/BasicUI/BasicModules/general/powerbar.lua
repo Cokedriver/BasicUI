@@ -10,7 +10,7 @@ if C['powerbar'].enable ~= true then return end
 	
 ]]
 
-
+local ccolor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[B.myclass]
 local playerClass = select(2, UnitClass('player'))
 
 local ComboColor = {
@@ -125,11 +125,10 @@ end
 
 f.Power = CreateFrame('StatusBar', nil, UIParent)
 f.Power:SetScale(UIParent:GetScale())
-f.Power:SetSize(C['powerbar'].sizeWidth, 10)
+f.Power:SetSize(C['powerbar'].sizeWidth, 12)
 f.Power:SetPoint('CENTER', f, 0, -23)
 f.Power:SetStatusBarTexture('Interface\\AddOns\\BasicUI\\BasicMedia\\normTex')
 f.Power:SetAlpha(0)
-
 
 f.Power.Value = f.Power:CreateFontString(nil, 'ARTWORK')
 
@@ -151,26 +150,25 @@ f.Power.Background:SetVertexColor(0.25, 0.25, 0.25, 1)
 
 
 f.Power.BackgroundShadow = CreateFrame('Frame', nil, f.Power)
-f.Power.BackgroundShadow:SetFrameStrata('BACKGROUND')
 f.Power.BackgroundShadow:SetPoint('TOPLEFT', -4, 4)
 f.Power.BackgroundShadow:SetPoint('BOTTOMRIGHT', 4, -4)
 f.Power.BackgroundShadow:SetBackdrop({
-    --bgFile = 'Interface\\Buttons\\WHITE8x8',
     edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
-    tile = true, tileSize = 16, edgeSize = 14,
-    insets = {left = 3, right = 3, top = 3, bottom = 3},
+    edgeSize = 13,
 })
+f.Power.BackgroundShadow:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b)
 
 f.Power.Below = f.Power:CreateTexture(nil, 'BACKGROUND')
 f.Power.Below:SetHeight(14)
 f.Power.Below:SetWidth(14)
 f.Power.Below:SetTexture('Interface\\AddOns\\BasicUI\\BasicMedia\\textureArrowBelow')
+f.Power.Below:SetPoint('BOTTOM', f.Power, 0, -17)
 
 f.Power.Above = f.Power:CreateTexture(nil, 'BACKGROUND')
 f.Power.Above:SetHeight(14)
 f.Power.Above:SetWidth(14)
 f.Power.Above:SetTexture('Interface\\AddOns\\BasicUI\\BasicMedia\\textureArrowAbove')
-f.Power.Above:SetPoint('BOTTOM', f.Power.Below, 'TOP', 0, f.Power:GetHeight() + 4)
+f.Power.Above:SetPoint('BOTTOM', f.Power.Below, 'TOP', 0, f.Power:GetHeight() + 6)
 
 if (C['powerbar'].showCombatRegen) then
     f.mpreg = f.Power:CreateFontString(nil, 'ARTWORK')
@@ -248,7 +246,7 @@ local function UpdateBarVisibility()
     if ((not C['powerbar'].energybar and powerType == 'ENERGY') or (not C['powerbar'].focusbar and powerType == 'FOCUS') or (not C['powerbar'].ragebar and powerType == 'RAGE') or (not C['powerbar'].manabar and powerType == 'MANA') or (not C['powerbar'].runebar and powerType == 'RUNEPOWER') or UnitIsDeadOrGhost('player') or UnitHasVehicleUI('player')) then
         f.Power:SetAlpha(0)
     elseif (InCombatLockdown()) then
-        securecall('UIFrameFadeIn', f.Power, 0.3, f.Power:GetAlpha(), .8)
+        securecall('UIFrameFadeIn', f.Power, 0.3, f.Power:GetAlpha(), 1)
     elseif (not InCombatLockdown() and UnitPower('player') > 0) then
         securecall('UIFrameFadeOut', f.Power, 0.3, f.Power:GetAlpha(), 0)
     else

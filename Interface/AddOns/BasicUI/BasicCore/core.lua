@@ -13,6 +13,7 @@ B.resolution = GetCurrentResolution()
 B.getscreenresolution = select(B.resolution, GetScreenResolutions())
 B.getscreenheight = tonumber(string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)"))
 B.getscreenwidth = tonumber(string.match(({GetScreenResolutions()})[GetCurrentResolution()], "(%d+)x+%d"))
+B.ccolor = RAID_CLASS_COLORS[select(2, UnitClass("player"))]
 
 --Check Player's Role
 local RoleUpdater = CreateFrame("Frame")

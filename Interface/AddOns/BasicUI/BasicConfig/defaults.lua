@@ -1,5 +1,6 @@
 local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
 
+
 ---------------
 -- Buff Options
 ----------------
@@ -7,6 +8,65 @@ DB['buff'] = {
 	['enable'] = true,
 	['scale'] = 1.15,
 }	
+
+------------------
+--Castbar Options
+------------------
+DB['castbar'] = {
+	["CastingBarFrame"] = {
+		enabled             = true,
+		textPosition        = {"CENTER"},
+		textFont            = {"Fonts\\FRIZQT__.TTF", 14, ""},
+		castbarSize         = {245, 24, 5, 5},
+		castbarColor        = {B.ccolor.r, B.ccolor.g, B.ccolor.b},
+		castbarBGColor      = {.1, .1, .1, .95},
+		castbarTextures     = {"Interface\\AddOns\\BasicUI\\BasicMedia\\bar", "Interface/Tooltips/UI-Tooltip-Background"},
+		enableLag           = true,
+		enableTimer         = true,
+	},
+	["TargetFrameSpellBar"] = {
+		enabled             = true,
+		textPosition        = {"CENTER"},
+		textFont            = {"Fonts\\FRIZQT__.TTF", 14, ""},
+		castbarSize         = {245, 24, 5, 5},
+		castbarColor        = {B.ccolor.r, B.ccolor.g, B.ccolor.b},
+		castbarBGColor      = {.1, .1, .1, .95},
+		castbarTextures     = {"Interface\\AddOns\\BasicUI\\BasicMedia\\bar", "Interface/Tooltips/UI-Tooltip-Background"},
+		enableLag           = true,
+		enableTimer         = true,
+	},
+	["FocusFrameSpellBar"] = {
+		enabled             = true,
+		textPosition        = {"CENTER"},
+		textFont            = {"Fonts\\FRIZQT__.TTF", 14, ""},
+		castbarSize         = {245, 24, 5, 5},
+		castbarColor        = {B.ccolor.r, B.ccolor.g, B.ccolor.b},
+		castbarBGColor      = {.1, .1, .1, .95},
+		castbarTextures     = {"Interface\\AddOns\\BasicUI\\BasicMedia\\bar", "Interface/Tooltips/UI-Tooltip-Background"},
+		enableLag           = true,
+		enableTimer         = true,
+	},
+	["MirrorTimer1"] = {
+		enabled             = true,
+		textPosition        = {"CENTER"},
+		textFont            = {"Fonts\\FRIZQT__.TTF", 14, ""},
+		castbarSize         = {245, 24, 5, 5},
+		castbarColor        = {B.ccolor.r, B.ccolor.g, B.ccolor.b},
+		castbarBGColor      = {.1, .1, .1, .95},
+		castbarTextures     = {"Interface\\AddOns\\BasicUI\\BasicMedia\\bar", "Interface/Tooltips/UI-Tooltip-Background"},
+		enableTimer         = true
+	},
+	["PetCastingBarFrame"] = {
+		enabled             = true,
+		textPosition        = {"CENTER"},
+		textFont            = {"Fonts\\FRIZQT__.TTF", 14, ""},
+		castbarSize         = {245, 24, 5, 5},
+		castbarColor        = {B.ccolor.r, B.ccolor.g, B.ccolor.b},
+		castbarBGColor      = {.1, .1, .1, .95},
+		castbarTextures     = {"Interface\\AddOns\\BasicUI\\BasicMedia\\bar", "Interface/Tooltips/UI-Tooltip-Background"},
+		enableTimer         = true
+	},
+}
 
 ----------------
 -- Chat Options
@@ -16,6 +76,7 @@ DB['chat'] = {
 	['disableFade'] = false,
 	['chatOutline'] = false,
 
+	
 	['enableBottomButton'] = true, 
 	['enableHyperlinkTooltip'] = true, 
 	['enableBorderColoring'] = true,
@@ -118,7 +179,7 @@ DB['general'] = {
 			['DisableBlizzardAutoComplete'] = false,
 			['UseAutoComplete'] = true,
 		},		
-	},
+	},	
 }
 
 -------------------

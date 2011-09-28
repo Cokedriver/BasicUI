@@ -7,7 +7,7 @@ local _G = _G
 _G["PlayerFrame"]:SetScale(C["general"].scale.size)
 _G["TargetFrame"]:SetScale(C["general"].scale.size)
 _G["FocusFrame"]:SetScale(C["general"].scale.size)
-_G["CastingBarFrame"]:SetScale(C["general"].scale.size)
+--_G["CastingBarFrame"]:SetScale(C["general"].scale.size)
 
  -- Party Frames
 for i = 1,4 do

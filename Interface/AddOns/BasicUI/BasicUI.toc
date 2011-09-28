@@ -54,6 +54,7 @@ BasicModules\datatext\zone.lua
 BasicModules\datatext\calltoarms.lua
 BasicModules\datatext\recount.lua
 BasicModules\general\autogreed.lua
+BasicModules\general\castbar.lua
 BasicModules\general\colorz.lua
 BasicModules\general\cooldown.lua
 BasicModules\general\merchant.lua
