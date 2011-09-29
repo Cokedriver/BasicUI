@@ -13,6 +13,9 @@ DB['buff'] = {
 --Castbar Options
 ------------------
 DB['castbar'] = {
+	
+	['enable'] = true,
+
 	["CastingBarFrame"] = {
 		enabled             = true,
 		textPosition        = {"CENTER"},
@@ -41,7 +44,7 @@ DB['castbar'] = {
 		selfAnchor			= "BOTTOM",
 		relAnchor			= "BOTTOM",
 		offSetX				= 0,
-		offSetY				= 350,
+		offSetY				= 300,
 	},
 	["FocusFrameSpellBar"] = {
 		enabled             = true,
@@ -56,7 +59,7 @@ DB['castbar'] = {
 		selfAnchor			= "TOP",
 		relAnchor			= "TOP",
 		offSetX				= 0,
-		offSetY				= -175,
+		offSetY				= -165,
 	},
 	["MirrorTimer1"] = {
 		enabled             = true,

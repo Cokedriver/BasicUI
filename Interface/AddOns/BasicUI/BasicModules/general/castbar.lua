@@ -1,5 +1,7 @@
 local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
 
+if C['castbar'].enable ~= true then return end
+
 --[[
 --  thekCastbar
 --  version: 3.0.cataclysm
