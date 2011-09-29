@@ -2,7 +2,6 @@ local BasicUIConfig = LibStub("AceAddon-3.0"):NewAddon("BasicUIConfig", "AceCons
 local db
 local defaults
 
-
 local L = setmetatable({}, { __index = function(t,k)
     local v = tostring(k)
     rawset(t, k, v)
@@ -296,11 +295,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Spell Text Position."],
 								disabled = function() return not db.castbar.enable end,
 								type = "select",
-								values = {
-									["LEFT"] = L["LEFT"],
-									["CENTER"] = L["CENTER"],
-									["RIGHT"] = L["RIGHT"],
-								},
+								values = B.regions;
 							},
 							enableLag = {
 								order = 4,
@@ -322,11 +317,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Self Anchor Position."],
 								disabled = function() return not db.castbar.enable end,
 								type = "select",
-								values = {
-									["BOTTOM"] = L["BOTTOM"],
-									["CENTER"] = L["CENTER"],
-									["TOP"] = L["TOP"],
-								},
+								values = B.regions;
 							},
 							relAnchor = {
 								order = 7,
@@ -334,11 +325,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Relative Anchor Position."],
 								disabled = function() return not db.castbar.enable end,
 								type = "select",
-								values = {
-									["BOTTOM"] = L["BOTTOM"],
-									["CENTER"] = L["CENTER"],
-									["TOP"] = L["TOP"],
-								},
+								values = B.regions;
 							},
 							offSetX = {
 								order = 8,
@@ -387,11 +374,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Spell Text Position."],
 								disabled = function() return not db.castbar.enable end,
 								type = "select",
-								values = {
-									["LEFT"] = L["LEFT"],
-									["CENTER"] = L["CENTER"],
-									["RIGHT"] = L["RIGHT"],
-								},
+								values = B.regions;
 							},
 							enableLag = {
 								order = 4,
@@ -413,11 +396,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Self Anchor Position."],
 								disabled = function() return not db.castbar.enable end,
 								type = "select",
-								values = {
-									["BOTTOM"] = L["BOTTOM"],
-									["CENTER"] = L["CENTER"],
-									["TOP"] = L["TOP"],
-								},
+								values = B.regions;
 							},
 							relAnchor = {
 								order = 7,
@@ -425,11 +404,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Relative Anchor Position."],
 								disabled = function() return not db.castbar.enable end,
 								type = "select",
-								values = {
-									["BOTTOM"] = L["BOTTOM"],
-									["CENTER"] = L["CENTER"],
-									["TOP"] = L["TOP"],
-								},
+								values = B.regions;
 							},
 							offSetX = {
 								order = 8,
@@ -478,11 +453,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Spell Text Position."],
 								disabled = function() return not db.castbar.enable end,
 								type = "select",
-								values = {
-									["LEFT"] = L["LEFT"],
-									["CENTER"] = L["CENTER"],
-									["RIGHT"] = L["RIGHT"],
-								},
+								values = B.regions;
 							},
 							enableLag = {
 								order = 4,
@@ -504,11 +475,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Self Anchor Position."],
 								disabled = function() return not db.castbar.enable end,
 								type = "select",
-								values = {
-									["BOTTOM"] = L["BOTTOM"],
-									["CENTER"] = L["CENTER"],
-									["TOP"] = L["TOP"],
-								},
+								values = B.regions;
 							},
 							relAnchor = {
 								order = 7,
@@ -516,11 +483,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Relative Anchor Position."],
 								disabled = function() return not db.castbar.enable end,
 								type = "select",
-								values = {
-									["BOTTOM"] = L["BOTTOM"],
-									["CENTER"] = L["CENTER"],
-									["TOP"] = L["TOP"],
-								},
+								values = B.regions;
 							},
 							offSetX = {
 								order = 8,
@@ -569,11 +532,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Spell Text Position."],
 								disabled = function() return not db.castbar.enable end,
 								type = "select",
-								values = {
-									["LEFT"] = L["LEFT"],
-									["CENTER"] = L["CENTER"],
-									["RIGHT"] = L["RIGHT"],
-								},
+								values = B.regions;
 							},
 							enableTimer = {
 								order = 5,
@@ -589,11 +548,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Self Anchor Position."],
 								disabled = function() return not db.castbar.enable end,
 								type = "select",
-								values = {
-									["BOTTOM"] = L["BOTTOM"],
-									["CENTER"] = L["CENTER"],
-									["TOP"] = L["TOP"],
-								},
+								values = B.regions;
 							},
 							relAnchor = {
 								order = 7,
@@ -601,11 +556,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Relative Anchor Position."],
 								disabled = function() return not db.castbar.enable end,
 								type = "select",
-								values = {
-									["BOTTOM"] = L["BOTTOM"],
-									["CENTER"] = L["CENTER"],
-									["TOP"] = L["TOP"],
-								},
+								values = B.regions;
 							},
 							offSetX = {
 								order = 8,
@@ -654,11 +605,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Spell Text Position."],
 								disabled = function() return not db.castbar.enable end,
 								type = "select",
-								values = {
-									["LEFT"] = L["LEFT"],
-									["CENTER"] = L["CENTER"],
-									["RIGHT"] = L["RIGHT"],
-								},
+								values = B.regions;
 							},
 							enableTimer = {
 								order = 5,
@@ -674,11 +621,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Self Anchor Position."],
 								disabled = function() return not db.castbar.enable end,
 								type = "select",
-								values = {
-									["BOTTOM"] = L["BOTTOM"],
-									["CENTER"] = L["CENTER"],
-									["TOP"] = L["TOP"],
-								},
+								values = B.regions;
 							},
 							relAnchor = {
 								order = 7,
@@ -686,11 +629,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Relative Anchor Position."],
 								disabled = function() return not db.castbar.enable end,
 								type = "select",
-								values = {
-									["BOTTOM"] = L["BOTTOM"],
-									["CENTER"] = L["CENTER"],
-									["TOP"] = L["TOP"],
-								},
+								values = B.regions;
 							},
 							offSetX = {
 								order = 8,
@@ -1531,11 +1470,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Health Value Position."],
 								disabled = function() return not db.tooltip.enable end,
 								type = "select",
-								values = {
-									["BOTTOM"] = L["BOTTOM"],
-									["CENTER"] = L["CENTER"],
-									["TOP"] = L["TOP"],
-								},
+								values = B.regions;
 							},						
 							fontSize= {
 								order = 7,

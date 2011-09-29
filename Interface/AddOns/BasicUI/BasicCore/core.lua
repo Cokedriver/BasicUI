@@ -1,5 +1,11 @@
 local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
 
+local L = setmetatable({}, { __index = function(t,k)
+    local v = tostring(k)
+    rawset(t, k, v)
+    return v
+end })
+
 --Constants
 B.dummy = function() return end
 B.toc = select(4, GetBuildInfo())
@@ -14,6 +20,7 @@ B.getscreenresolution = select(B.resolution, GetScreenResolutions())
 B.getscreenheight = tonumber(string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)"))
 B.getscreenwidth = tonumber(string.match(({GetScreenResolutions()})[GetCurrentResolution()], "(%d+)x+%d"))
 B.ccolor = RAID_CLASS_COLORS[select(2, UnitClass("player"))]
+B.regions ={['TOPLEFT'] = L['TOPLEFT'], ['TOP'] = L['TOP'], ['TOPRIGHT'] = L['TOPRIGHT'], ['LEFT'] = L['LEFT'], ['CENTER'] = L['CENTER'], ['RIGHT'] = L['RIGHT'], ['BOTTOMLEFT'] = L['BOTTOMLEFT'], ['BOTTOM'] = L['BOTTOM'], ['BOTTOMRIGHT'] = L['BOTTOMRIGHT']}
 
 --Check Player's Role
 local RoleUpdater = CreateFrame("Frame")
