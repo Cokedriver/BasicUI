@@ -1,6 +1,6 @@
 ## Interface: 40200
-## Author: Cokedriver
-## Version: 1.1
+## Author: Cokedriver / Baine
+## Version: 1.2
 ## Title: |cff00B4FFBasic|rUI
 ## Notes: A Basic UI Replacement for the World of Warcraft Interface.
 ## SavedVariables: BasicDB
