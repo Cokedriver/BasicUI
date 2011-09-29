@@ -18,7 +18,7 @@ DB['castbar'] = {
 
 	["CastingBarFrame"] = {
 		enabled             = true,
-		textPosition        = {"CENTER"},
+		textPosition        = "CENTER",
 		textFont            = {"Fonts\\FRIZQT__.TTF", 14, ""},
 		castbarSize         = {245, 24, 5, 5},
 		castbarColor        = {B.ccolor.r, B.ccolor.g, B.ccolor.b},
@@ -33,7 +33,7 @@ DB['castbar'] = {
 	},
 	["TargetFrameSpellBar"] = {
 		enabled             = true,
-		textPosition        = {"CENTER"},
+		textPosition        = "CENTER",
 		textFont            = {"Fonts\\FRIZQT__.TTF", 14, ""},
 		castbarSize         = {245, 24, 5, 5},
 		castbarColor        = {B.ccolor.r, B.ccolor.g, B.ccolor.b},
@@ -48,7 +48,7 @@ DB['castbar'] = {
 	},
 	["FocusFrameSpellBar"] = {
 		enabled             = true,
-		textPosition        = {"CENTER"},
+		textPosition        = "CENTER",
 		textFont            = {"Fonts\\FRIZQT__.TTF", 14, ""},
 		castbarSize         = {245, 24, 5, 5},
 		castbarColor        = {B.ccolor.r, B.ccolor.g, B.ccolor.b},
@@ -63,7 +63,7 @@ DB['castbar'] = {
 	},
 	["MirrorTimer1"] = {
 		enabled             = true,
-		textPosition        = {"CENTER"},
+		textPosition        = "CENTER",
 		textFont            = {"Fonts\\FRIZQT__.TTF", 14, ""},
 		castbarSize         = {245, 24, 5, 5},
 		castbarColor        = {B.ccolor.r, B.ccolor.g, B.ccolor.b},
@@ -77,7 +77,7 @@ DB['castbar'] = {
 	},
 	["PetCastingBarFrame"] = {
 		enabled             = true,
-		textPosition        = {"CENTER"},
+		textPosition        = "CENTER",
 		textFont            = {"Fonts\\FRIZQT__.TTF", 14, ""},
 		castbarSize         = {245, 24, 5, 5},
 		castbarColor        = {B.ccolor.r, B.ccolor.g, B.ccolor.b},

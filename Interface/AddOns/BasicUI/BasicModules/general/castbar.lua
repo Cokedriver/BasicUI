@@ -62,13 +62,13 @@ if C['castbar']["FocusFrameSpellBar"].enabled then
 end
 
 for k, _ in pairs(C['castbar']) do
-    if C['castbar'][k].enabled then
+    if (k ~="enable" and C['castbar'][k].enabled) then
         local a = CreateFrame("Frame", "Castbar"..k, UIParent);
         d.w, d.h, d.x, d.y = nil, nil, nil, nil;
 
         _G[k.."Border"]:SetTexture("");
         _G[k.."Text"]:ClearAllPoints("");
-        _G[k.."Text"]:SetPoint(unpack(C['castbar'][k].textPosition));
+        _G[k.."Text"]:SetPoint(C['castbar'][k].textPosition);
         _G[k.."Text"]:SetFont(unpack(C['castbar'][k].textFont));
 
         if find(k, "MirrorTimer") then
