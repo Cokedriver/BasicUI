@@ -23,6 +23,10 @@ DB['castbar'] = {
 		castbarTextures     = {"Interface\\TargetingFrame\\UI-StatusBar", "Interface\\Tooltips\\UI-Tooltip-Background"},
 		enableLag           = true,
 		enableTimer         = true,
+		selfAnchor			= "BOTTOM",
+		relAnchor			= "BOTTOM",
+		offSetX				= 0,
+		offSetY				= 175,
 	},
 	["TargetFrameSpellBar"] = {
 		enabled             = true,
@@ -34,6 +38,10 @@ DB['castbar'] = {
 		castbarTextures     = {"Interface\\TargetingFrame\\UI-StatusBar", "Interface\\Tooltips\\UI-Tooltip-Background"},
 		enableLag           = true,
 		enableTimer         = true,
+		selfAnchor			= "BOTTOM",
+		relAnchor			= "BOTTOM",
+		offSetX				= 0,
+		offSetY				= 350,
 	},
 	["FocusFrameSpellBar"] = {
 		enabled             = true,
@@ -45,6 +53,10 @@ DB['castbar'] = {
 		castbarTextures     = {"Interface\\TargetingFrame\\UI-StatusBar", "Interface\\Tooltips\\UI-Tooltip-Background"},
 		enableLag           = true,
 		enableTimer         = true,
+		selfAnchor			= "TOP",
+		relAnchor			= "TOP",
+		offSetX				= 0,
+		offSetY				= -175,
 	},
 	["MirrorTimer1"] = {
 		enabled             = true,
@@ -54,7 +66,11 @@ DB['castbar'] = {
 		castbarColor        = {B.ccolor.r, B.ccolor.g, B.ccolor.b},
 		castbarBGColor      = {.1, .1, .1, .95},
 		castbarTextures     = {"Interface\\TargetingFrame\\UI-StatusBar", "Interface\\Tooltips\\UI-Tooltip-Background"},
-		enableTimer         = true
+		enableTimer         = true,
+		selfAnchor			= "TOP",
+		relAnchor			= "TOP",
+		offSetX				= 0,
+		offSetY				= -10,
 	},
 	["PetCastingBarFrame"] = {
 		enabled             = true,
@@ -64,7 +80,11 @@ DB['castbar'] = {
 		castbarColor        = {B.ccolor.r, B.ccolor.g, B.ccolor.b},
 		castbarBGColor      = {.1, .1, .1, .95},
 		castbarTextures     = {"Interface\\TargetingFrame\\UI-StatusBar", "Interface\\Tooltips\\UI-Tooltip-Background"},
-		enableTimer         = true
+		enableTimer         = true,
+		selfAnchor			= "BOTTOM",
+		relAnchor			= "BOTTOM",
+		offSetX				= 0,
+		offSetY				= 200,
 	},
 }
 

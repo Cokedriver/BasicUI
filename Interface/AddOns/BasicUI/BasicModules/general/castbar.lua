@@ -124,12 +124,8 @@ for k, _ in pairs(C['castbar']) do
             _G[k].timer:SetPoint("RIGHT", _G[k], "RIGHT", -5, 0);
             _G[k].update = .1;
         end;
-        
-        if not _G[k]:GetPoint() then
-            a:SetPoint("CENTER", UIParent, "CENTER")
-        else
-            a:SetPoint(unpack({_G[k]:GetPoint()}))
-        end
+		
+		a:SetPoint(C['castbar'][k].relAnchor,"UIParent",C['castbar'][k].selfAnchor, scale(C['castbar'][k].offSetX),scale(C['castbar'][k].offSetY))
             
         a:SetWidth(d.w); a:SetHeight(d.h);
         a:SetBackdropColor(unpack(C['castbar'][k].castbarBGColor));
@@ -170,23 +166,4 @@ hooksecurefunc("CastingBarFrame_OnUpdate", function(self, elapsed)
 		self.update = self.update - elapsed
 	end
 end)
-
-SLASH_Castbar1 = "/cb";
-SlashCmdList["Castbar"] = function()
-	for k, _ in pairs(C['castbar']) do
-		if C['castbar'][k].enabled then
-			_G[k].l = not _G[k].l
-			if _G[k].l then
-				_G[k].df:SetParent(_G[k])
-				_G[k].df:EnableMouse(false)
-				_G[k].df:SetFrameLevel(_G[k]:GetFrameLevel() - 1)
-				_G[k].name:SetText("")
-			else
-				_G[k].df:SetParent("UIParent")
-				_G[k].df:EnableMouse(true)
-				_G[k].name:SetText(k)
-			end
-		end
-	end
-end
 UIPARENT_MANAGED_FRAME_POSITIONS["CastingBarFrame"] = nil;
