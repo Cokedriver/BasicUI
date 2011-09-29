@@ -20,7 +20,7 @@ DB['castbar'] = {
 		castbarSize         = {245, 24, 5, 5},
 		castbarColor        = {B.ccolor.r, B.ccolor.g, B.ccolor.b},
 		castbarBGColor      = {.1, .1, .1, .95},
-		castbarTextures     = {"Interface\\AddOns\\BasicUI\\BasicMedia\\bar", "Interface/Tooltips/UI-Tooltip-Background"},
+		castbarTextures     = {"Interface\\TargetingFrame\\UI-StatusBar", "Interface\\Tooltips\\UI-Tooltip-Background"},
 		enableLag           = true,
 		enableTimer         = true,
 	},
@@ -31,7 +31,7 @@ DB['castbar'] = {
 		castbarSize         = {245, 24, 5, 5},
 		castbarColor        = {B.ccolor.r, B.ccolor.g, B.ccolor.b},
 		castbarBGColor      = {.1, .1, .1, .95},
-		castbarTextures     = {"Interface\\AddOns\\BasicUI\\BasicMedia\\bar", "Interface/Tooltips/UI-Tooltip-Background"},
+		castbarTextures     = {"Interface\\TargetingFrame\\UI-StatusBar", "Interface\\Tooltips\\UI-Tooltip-Background"},
 		enableLag           = true,
 		enableTimer         = true,
 	},
@@ -42,7 +42,7 @@ DB['castbar'] = {
 		castbarSize         = {245, 24, 5, 5},
 		castbarColor        = {B.ccolor.r, B.ccolor.g, B.ccolor.b},
 		castbarBGColor      = {.1, .1, .1, .95},
-		castbarTextures     = {"Interface\\AddOns\\BasicUI\\BasicMedia\\bar", "Interface/Tooltips/UI-Tooltip-Background"},
+		castbarTextures     = {"Interface\\TargetingFrame\\UI-StatusBar", "Interface\\Tooltips\\UI-Tooltip-Background"},
 		enableLag           = true,
 		enableTimer         = true,
 	},
@@ -53,7 +53,7 @@ DB['castbar'] = {
 		castbarSize         = {245, 24, 5, 5},
 		castbarColor        = {B.ccolor.r, B.ccolor.g, B.ccolor.b},
 		castbarBGColor      = {.1, .1, .1, .95},
-		castbarTextures     = {"Interface\\AddOns\\BasicUI\\BasicMedia\\bar", "Interface/Tooltips/UI-Tooltip-Background"},
+		castbarTextures     = {"Interface\\TargetingFrame\\UI-StatusBar", "Interface\\Tooltips\\UI-Tooltip-Background"},
 		enableTimer         = true
 	},
 	["PetCastingBarFrame"] = {
@@ -63,7 +63,7 @@ DB['castbar'] = {
 		castbarSize         = {245, 24, 5, 5},
 		castbarColor        = {B.ccolor.r, B.ccolor.g, B.ccolor.b},
 		castbarBGColor      = {.1, .1, .1, .95},
-		castbarTextures     = {"Interface\\AddOns\\BasicUI\\BasicMedia\\bar", "Interface/Tooltips/UI-Tooltip-Background"},
+		castbarTextures     = {"Interface\\TargetingFrame\\UI-StatusBar", "Interface\\Tooltips\\UI-Tooltip-Background"},
 		enableTimer         = true
 	},
 }

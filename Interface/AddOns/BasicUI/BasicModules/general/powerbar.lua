@@ -127,7 +127,7 @@ f.Power = CreateFrame('StatusBar', nil, UIParent)
 f.Power:SetScale(UIParent:GetScale())
 f.Power:SetSize(C['powerbar'].sizeWidth, 12)
 f.Power:SetPoint('CENTER', f, 0, -23)
-f.Power:SetStatusBarTexture('Interface\\AddOns\\BasicUI\\BasicMedia\\normTex')
+f.Power:SetStatusBarTexture('Interface\\TargetingFrame\\UI-StatusBar')
 f.Power:SetAlpha(0)
 
 f.Power.Value = f.Power:CreateFontString(nil, 'ARTWORK')
@@ -145,7 +145,7 @@ f.Power.Value:SetVertexColor(1, 1, 1)
 
 f.Power.Background = f.Power:CreateTexture(nil, 'BACKGROUND')
 f.Power.Background:SetAllPoints(f.Power)
-f.Power.Background:SetTexture('Interface\\AddOns\\BasicUI\\BasicMedia\\normTex')
+f.Power.Background:SetTexture('Interface\\TargetingFrame\\UI-StatusBar')
 f.Power.Background:SetVertexColor(0.25, 0.25, 0.25, 1)
 
 

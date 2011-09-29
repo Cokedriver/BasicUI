@@ -780,24 +780,13 @@ for i = 1, NUM_CHAT_WINDOWS do
 	
 	if i == 2 then
 		bg:SetPoint("TOPLEFT", -8, 32);
-<<<<<<< HEAD
 	else
 		bg:SetPoint("TOPLEFT", -8, 8);
 	end	
 	bg:SetPoint("BOTTOMRIGHT", 8, -12);
-=======
-
-	else
-		bg:SetPoint("TOPLEFT", -8, 8);
-	end	
-	bg:SetPoint("BOTTOMRIGHT", 8, -8);
->>>>>>> 7fe3778ffe3f67204a52f8627ded05c16cc1e241
 	bg:SetBackdrop({
 		edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
 		edgeSize = 18,
 	})
-<<<<<<< HEAD
 	bg:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
-=======
->>>>>>> 7fe3778ffe3f67204a52f8627ded05c16cc1e241
 end
