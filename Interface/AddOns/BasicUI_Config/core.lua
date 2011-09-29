@@ -2,6 +2,7 @@ local BasicUIConfig = LibStub("AceAddon-3.0"):NewAddon("BasicUIConfig", "AceCons
 local db
 local defaults
 
+
 local L = setmetatable({}, { __index = function(t,k)
     local v = tostring(k)
     rawset(t, k, v)
