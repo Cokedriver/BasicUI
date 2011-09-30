@@ -180,16 +180,6 @@ DB['general'] = {
 	},	
 }
 
--------------------
--- Nameplate Options
---------------------
-DB['nameplates'] = {
-	['enable'] = true,
-
-	['colorswitcher'] = true,  			 						-- true/false will swap back- and foregroundcolor
-	['showhpvalue']   = true, 									-- true/false will enable disable of hp value on the nameplate
-	['alwaysshowhp']  = true, 									-- true/false will make the hp value appear even if the unit has 100% life, requires showhpvalue to be true	
-}
 
 -------------------
 -- Merchant Options
@@ -213,6 +203,7 @@ DB['powerbar'] = {
 	['showHolypower'] = true,
 	['showComboPoints'] = true,
 	['showRuneCooldown'] = true,
+	['showEclipse'] = true,
 
 	
 	['energybar'] = true,

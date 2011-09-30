@@ -4,14 +4,12 @@ if C['powerbar'].enable ~= true then return end
 
 --[[
 
-	All Create for powerbar.lua goes to Neal and ballagarba.
+	All Credit for powerbar.lua goes to Neal and ballagarba.
 	nPower = http://www.wowinterface.com/downloads/info19876-nPower.html.
 	Edited by Cokedriver.
 	
 ]]
 
-local ccolor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[B.myclass]
-local playerClass = select(2, UnitClass('player'))
 
 local ComboColor = {
 	[1] = {r = 1.0, g = 1.0, b = 1.0},
@@ -76,7 +74,7 @@ if (C['powerbar'].showComboPoints) then
     f.ComboPoints[5]:SetPoint('CENTER', 52, 3)
 end
 
-if (playerClass == 'WARLOCK' and C['powerbar'].showSoulshards or playerClass == 'PALADIN' and C['powerbar'].showHolypower) then
+if (B.myclass == 'WARLOCK' and C['powerbar'].showSoulshards) then
     f.extraPoints = f:CreateFontString(nil, 'ARTWORK')
     
     if (C['powerbar'].extra.FontOutline) then
@@ -91,7 +89,7 @@ if (playerClass == 'WARLOCK' and C['powerbar'].showSoulshards or playerClass == 
     f.extraPoints:SetPoint('CENTER', 0, 0)
 end
 
-if (playerClass == 'DEATHKNIGHT' and C['powerbar'].showRuneCooldown) then
+if (B.myclass == 'DEATHKNIGHT' and C['powerbar'].showRuneCooldown) then
     for i = 1, 6 do 
         RuneFrame:UnregisterAllEvents()
         _G['RuneButtonIndividual'..i]:Hide()
@@ -123,9 +121,28 @@ if (playerClass == 'DEATHKNIGHT' and C['powerbar'].showRuneCooldown) then
     f.Rune[6]:SetPoint('CENTER', 13, 3)
 end
 
+if (B.myclass == "DRUID" and C['powerbar'].showEclipse) then
+	f.unit = "player";
+	EclipseBarFrame:SetParent(f);
+	EclipseBarFrame:ClearAllPoints();
+	EclipseBarFrame:SetPoint('CENTER', 0, 5);
+	EclipseBarFrame:Show();
+	EclipseBarFrame:SetScale(1);
+	
+end
+
+--[[if (B.myclass == 'PALADIN' and C['powerbar'].showHolypower)
+	f.unit = "player";
+	EclipseBarFrame:SetParent(f);
+	EclipseBarFrame:ClearAllPoints();
+	EclipseBarFrame:SetPoint('CENTER', 0, 10);
+	EclipseBarFrame:Show();
+	EclipseBarFrame:SetScale(1);
+end]]
+
 f.Power = CreateFrame('StatusBar', nil, UIParent)
 f.Power:SetScale(UIParent:GetScale())
-f.Power:SetSize(C['powerbar'].sizeWidth, 12)
+f.Power:SetSize(C['powerbar'].sizeWidth, 5)
 f.Power:SetPoint('CENTER', f, 0, -23)
 f.Power:SetStatusBarTexture('Interface\\TargetingFrame\\UI-StatusBar')
 f.Power:SetAlpha(0)
@@ -148,27 +165,21 @@ f.Power.Background:SetAllPoints(f.Power)
 f.Power.Background:SetTexture('Interface\\TargetingFrame\\UI-StatusBar')
 f.Power.Background:SetVertexColor(0.25, 0.25, 0.25, 1)
 
-
 f.Power.BackgroundShadow = CreateFrame('Frame', nil, f.Power)
+f.Power.BackgroundShadow:SetFrameStrata('BACKGROUND')
 f.Power.BackgroundShadow:SetPoint('TOPLEFT', -4, 4)
 f.Power.BackgroundShadow:SetPoint('BOTTOMRIGHT', 4, -4)
-f.Power.BackgroundShadow:SetBackdrop({
-    edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
-    edgeSize = 13,
-})
-f.Power.BackgroundShadow:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b)
 
 f.Power.Below = f.Power:CreateTexture(nil, 'BACKGROUND')
 f.Power.Below:SetHeight(14)
 f.Power.Below:SetWidth(14)
 f.Power.Below:SetTexture('Interface\\AddOns\\BasicUI\\BasicMedia\\textureArrowBelow')
-f.Power.Below:SetPoint('BOTTOM', f.Power, 0, -17)
 
 f.Power.Above = f.Power:CreateTexture(nil, 'BACKGROUND')
 f.Power.Above:SetHeight(14)
 f.Power.Above:SetWidth(14)
 f.Power.Above:SetTexture('Interface\\AddOns\\BasicUI\\BasicMedia\\textureArrowAbove')
-f.Power.Above:SetPoint('BOTTOM', f.Power.Below, 'TOP', 0, f.Power:GetHeight() + 6)
+f.Power.Above:SetPoint('BOTTOM', f.Power.Below, 'TOP', 0, f.Power:GetHeight() - 2)
 
 if (C['powerbar'].showCombatRegen) then
     f.mpreg = f.Power:CreateFontString(nil, 'ARTWORK')
@@ -198,7 +209,6 @@ local function GetRealMpFive()
         return ''
     end
 end
-
 
 local function SetComboColor(i)
     local comboPoints = GetComboPoints('player', 'target') or 0
@@ -263,8 +273,8 @@ local function UpdateArrow()
         f.Power.Above:SetAlpha(1)
     end
 
-    local newPosition = UnitPower('player') / UnitPowerMax('player') * f.Power:GetWidth() - 7
-    f.Power.Below:SetPoint('LEFT', f.Power, 'LEFT', newPosition, -13)
+    local newPosition = UnitPower('player') / UnitPowerMax('player') * f.Power:GetWidth()
+    f.Power.Below:SetPoint('TOP', f.Power, 'BOTTOMLEFT', newPosition, 2)
 end
 
 local function UpdateBarValue()
@@ -278,7 +288,6 @@ local function UpdateBarValue()
         f.Power.Value:SetText(min > 0 and min or '')
     end
 end
-
 
 local function UpdateBarColor()
     local _, powerType, altR, altG, altB = UnitPowerType('player')
@@ -358,7 +367,31 @@ f:SetScript('OnUpdate', function(self, elapsed)
                 f.Rune[i]:SetTextColor(SetRuneColor(i))
             end
         end
-
+		
+		--[[if (EclipseBarFrame) then
+            if (UnitHasVehicleUI('player')) then
+                if (EclipseBarFrame:IsShown()) then
+                    EclipseBarFrame:Hide()
+                end
+            else
+                if (not EclipseBarFrame:IsShown()) then
+                    EclipseBarFrame:Show()
+                end
+            end		
+		end]]
+		
+		--[[if (EclipseBarFrame) then
+            if (UnitHasVehicleUI('player')) then
+                if (EclipseBarFrame:IsShown()) then
+                    EclipseBarFrame:Hide()
+                end
+            else
+                if (not EclipseBarFrame:IsShown()) then
+                    EclipseBarFrame:Show()
+                end
+            end		
+		end]]		
+		
         if (f.extraPoints) then
             if (UnitHasVehicleUI('player')) then
                 if (f.extraPoints:IsShown()) then
@@ -366,10 +399,8 @@ f:SetScript('OnUpdate', function(self, elapsed)
                 end
             else
                 local nump
-                if (playerClass == 'WARLOCK') then
+                if (B.myclass == 'WARLOCK') then
                     nump = UnitPower('player', SPELL_POWER_SOUL_SHARDS)
-                elseif (playerClass == 'PALADIN') then
-                    nump = UnitPower('player', SPELL_POWER_HOLY_POWER)
                 end
                 
                 f.extraPoints:SetText(nump == 0 and '' or nump)
