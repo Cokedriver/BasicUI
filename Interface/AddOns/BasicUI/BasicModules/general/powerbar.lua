@@ -74,7 +74,7 @@ if (C['powerbar'].showComboPoints) then
     f.ComboPoints[5]:SetPoint('CENTER', 52, 3)
 end
 
-if (B.myclass == 'WARLOCK' and C['powerbar'].showSoulshards) then
+if (B.myclass == 'WARLOCK' and C['powerbar'].showSoulshardsor or playerClass == 'PALADIN' and C['powerbar'].showHolypower) then
     f.extraPoints = f:CreateFontString(nil, 'ARTWORK')
     
     if (C['powerbar'].extra.FontOutline) then
@@ -130,15 +130,6 @@ if (B.myclass == "DRUID" and C['powerbar'].showEclipse) then
 	EclipseBarFrame:SetScale(1);
 	
 end
-
---[[if (B.myclass == 'PALADIN' and C['powerbar'].showHolypower)
-	f.unit = "player";
-	EclipseBarFrame:SetParent(f);
-	EclipseBarFrame:ClearAllPoints();
-	EclipseBarFrame:SetPoint('CENTER', 0, 10);
-	EclipseBarFrame:Show();
-	EclipseBarFrame:SetScale(1);
-end]]
 
 f.Power = CreateFrame('StatusBar', nil, UIParent)
 f.Power:SetScale(UIParent:GetScale())
@@ -366,31 +357,7 @@ f:SetScript('OnUpdate', function(self, elapsed)
                 f.Rune[i]:SetText(CalcRuneCooldown(i))
                 f.Rune[i]:SetTextColor(SetRuneColor(i))
             end
-        end
-		
-		--[[if (EclipseBarFrame) then
-            if (UnitHasVehicleUI('player')) then
-                if (EclipseBarFrame:IsShown()) then
-                    EclipseBarFrame:Hide()
-                end
-            else
-                if (not EclipseBarFrame:IsShown()) then
-                    EclipseBarFrame:Show()
-                end
-            end		
-		end]]
-		
-		--[[if (EclipseBarFrame) then
-            if (UnitHasVehicleUI('player')) then
-                if (EclipseBarFrame:IsShown()) then
-                    EclipseBarFrame:Hide()
-                end
-            else
-                if (not EclipseBarFrame:IsShown()) then
-                    EclipseBarFrame:Show()
-                end
-            end		
-		end]]		
+        end	
 		
         if (f.extraPoints) then
             if (UnitHasVehicleUI('player')) then
@@ -401,6 +368,8 @@ f:SetScript('OnUpdate', function(self, elapsed)
                 local nump
                 if (B.myclass == 'WARLOCK') then
                     nump = UnitPower('player', SPELL_POWER_SOUL_SHARDS)
+                elseif (playerClass == 'PALADIN') then
+                    nump = UnitPower('player', SPELL_POWER_HOLY_POWER)					
                 end
                 
                 f.extraPoints:SetText(nump == 0 and '' or nump)
