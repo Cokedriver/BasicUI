@@ -7,7 +7,7 @@ f:RegisterEvent('PLAYER_ENTERING_WORLD')
 
 
 f:SetScript('OnEvent', function(self, ...)
-    if (IsAddOnLoaded('DBM-Core')) then	
+    if (C['general'].skin.DBM == true and IsAddOnLoaded('DBM-Core')) then	
 		-- Normal Bars (Credit for DBM codeing goes to Elv from ElvUI)
         hooksecurefunc(DBT, 'CreateBar', function(self)
 			for bar in self:GetBarIterator() do
@@ -230,7 +230,7 @@ f:SetScript('OnEvent', function(self, ...)
 		end)
     end
 
-    if (IsAddOnLoaded('Recount')) then
+    if (C['general'].skin.Recount == true and IsAddOnLoaded('Recount')) then
 		local rm = Recount.MainWindow
 		local bgs = CreateFrame("Frame", nil, rm);
 		bgs:SetFrameStrata("HIGH");

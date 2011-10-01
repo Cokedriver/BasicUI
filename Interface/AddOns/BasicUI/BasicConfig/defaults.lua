@@ -153,6 +153,7 @@ DB['general'] = {
 	['colors'] = true,
 	['cooldown'] = true,										-- enable bigger macros.
 	['font'] = "Fonts\\ARIALN.ttf",							-- general font for UI
+	['fontsize'] = 14,
 	['range'] = true,
 	['slash'] = true,
 	['scale'] = {
@@ -177,6 +178,10 @@ DB['general'] = {
 			['DisableBlizzardAutoComplete'] = false,
 			['UseAutoComplete'] = true,
 		},		
+	},
+	['skin'] = {
+		['DBM'] = true,
+		['Recount'] = true,
 	},	
 }
 
