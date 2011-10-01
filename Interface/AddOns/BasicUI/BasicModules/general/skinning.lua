@@ -74,7 +74,7 @@ f:SetScript('OnEvent', function(self)
     end
 
     if (IsAddOnLoaded('Recount')) then
-        if (not Recount.MainWindow) then
+        if Recount.MainWindow then
 			local bgsize = 3,
 			Recount.MainWindow:SetBackdrop({
 				edgeFile = "Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border",

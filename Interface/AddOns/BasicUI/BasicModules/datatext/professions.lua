@@ -1,4 +1,4 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+﻿local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
 
 if C['datatext'].enable ~= true then return end
 
@@ -19,7 +19,7 @@ if C['datatext'].pro and C['datatext'].pro > 0 then
 		for _, v in pairs({GetProfessions()}) do
 			if v ~= nil then
 				local name, texture, rank, maxRank = GetProfessionInfo(v)
-				Text:SetFormattedText(hexa.."Profession's"..hexb)
+				Text:SetFormattedText(hexa.."Professions"..hexb)
 			end
 		end
 		self:SetAllPoints(Text)
@@ -51,11 +51,11 @@ if C['datatext'].pro and C['datatext'].pro > 0 then
 		local prof1, prof2 = GetProfessions()
 		if btn == "LeftButton" then
 			if prof1 then
-				if (GetProfessionInfo(prof1) == 'Herbalism')then
+				if (GetProfessionInfo(prof1) == 'Herbalism' or 'Kräuterkunde')then
 						print('|cff00B4FFBasic|rUI: |cffFF0000Herbalism has no options!|r')
-				elseif(GetProfessionInfo(prof1) == 'Skinning') then
+				elseif(GetProfessionInfo(prof1) == 'Skinning' or 'Kürschnern') then
 						print('|cff00B4FFBasic|rUI: |cffFF0000Skinning has no options!|r')
-				elseif(GetProfessionInfo(prof1) == 'Mining') then
+				elseif(GetProfessionInfo(prof1) == 'Mining' or 'Bergbau') then
 						CastSpellByName("Smelting")							
 				else	
 					CastSpellByName((GetProfessionInfo(prof1)))
@@ -67,11 +67,11 @@ if C['datatext'].pro and C['datatext'].pro > 0 then
 			ToggleFrame(SpellBookFrame)		
 		elseif btn == "RightButton" then
 			if prof2 then
-				if (GetProfessionInfo(prof2) == 'Herbalism')then
+				if (GetProfessionInfo(prof2) == 'Herbalism' or 'Kräuterkunde' or 'Kräuterkunde')then
 						print('|cff00B4FFBasic|rUI: |cffFF0000Herbalism has no options!|r')
-				elseif(GetProfessionInfo(prof2) == 'Skinning') then
+				elseif(GetProfessionInfo(prof2) == 'Skinning' or 'Kürschnern' or 'Kürschnern') then
 						print('|cff00B4FFBasic|rUI: |cffFF0000Skinning has no options!|r')
-				elseif(GetProfessionInfo(prof2) == 'Mining') then
+				elseif(GetProfessionInfo(prof2) == 'Mining' or 'Bergbau' or 'Bergbau') then
 						CastSpellByName("Smelting")						
 				else	
 					CastSpellByName((GetProfessionInfo(prof2)))

@@ -6,6 +6,7 @@
 ## SavedVariables: BasicDB
 ## SavedVariablesPerCharacter: BasicDBPerCharacter
 ## RequiredDeps: BasicUI_Config
+## OptionalDeps: DBM-Core, Recount
 
 
 -- Ace Libs

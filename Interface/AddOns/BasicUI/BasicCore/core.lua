@@ -76,12 +76,12 @@ EventFrame:RegisterEvent("PLAYER_LOGIN")
 EventFrame:SetScript("OnEvent", function(self,event,...) 
 	if type(BasicDBPerCharacter) ~= "number" then
 		BasicDBPerCharacter = 1
-		ChatFrame1:AddMessage('Welcome to Azeroth '.. UnitName("Player")..". I do believe this is the first time we've met. Nice to meet you! Your using |cff00B4FFBasicUI v"..B.version..'|r.')
+		ChatFrame1:AddMessage('Welcome to Azeroth '.. UnitName("Player")..". I do believe this is the first time we've met. Nice to meet you! You're using |cff00B4FFBasicUI v"..B.version..'|r.')
 	else
 		if BasicDBPerCharacter == 1 then
-			ChatFrame1:AddMessage('Welcome to Azeroth '.. UnitName("Player")..". How nice to see you again. Your using |cff00B4FFBasicUI v"..B.version..'|r.')
+			ChatFrame1:AddMessage('Welcome to Azeroth '.. UnitName("Player")..". How nice to see you again. You're using |cff00B4FFBasicUI v"..B.version..'|r.')
 		else
-			ChatFrame1:AddMessage('Welcome to Azeroth '.. UnitName("Player")..". How nice to see you again. Your using |cff00B4FFBasicUI v"..B.version..'|r.')
+			ChatFrame1:AddMessage('Welcome to Azeroth '.. UnitName("Player")..". How nice to see you again. You're using |cff00B4FFBasicUI v"..B.version..'|r.')
 		end
 		BasicDBPerCharacter = BasicDBPerCharacter + 1
 	end
