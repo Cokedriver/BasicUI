@@ -5,84 +5,241 @@ f:RegisterEvent('VARIABLES_LOADED')
 f:RegisterEvent('ADDON_LOADED')
 f:RegisterEvent('PLAYER_ENTERING_WORLD')
 
-f:SetScript('OnEvent', function(self)
 
-        -- a example for addons like pitbull
-
-    --[[ 
-    if (IsAddOnLoaded('PitBull4')) then
-        f:SetScript('OnUpdate', function(self)
-                
-                -- works fine because beautycase will not create multiple textures/borders
-                
-            for _, pitframe in pairs({
-                PitBull4_Frames_player,
-                PitBull4_Frames_target,
-                PitBull4_Frames_targettarget,
-            }) do
-                if (pitframe:IsShown()) then
-                    pitframe:CreateBeautyBorder(11)
-                    pitframe:SetBeautyBorderPadding(2)
-                end
-            end
-        end)
-    end
-    --]]
-
-    if (IsAddOnLoaded('DBM-Core')) then
+f:SetScript('OnEvent', function(self, ...)
+    if (IsAddOnLoaded('DBM-Core')) then	
+		-- Normal Bars
         hooksecurefunc(DBT, 'CreateBar', function(self)
-            for bar in self:GetBarIterator() do
-                local frame = bar.frame
-                local tbar = _G[frame:GetName()..'Bar']
-                local spark = _G[frame:GetName()..'BarSpark']
-                local texture = _G[frame:GetName()..'BarTexture']
-                local icon1 = _G[frame:GetName()..'BarIcon1']
-                local icon2 = _G[frame:GetName()..'BarIcon2']
-                local name = _G[frame:GetName()..'BarName']
-                local timer = _G[frame:GetName()..'BarTimer']
+			for bar in self:GetBarIterator() do
+				if not bar.injected then
+						bar.ApplyStyle=function()
+						local frame = bar.frame
+						local tbar = _G[frame:GetName().."Bar"]
+						local spark = _G[frame:GetName().."BarSpark"]
+						local texture = _G[frame:GetName().."BarTexture"]
+						local icon1 = _G[frame:GetName().."BarIcon1"]
+						local icon2 = _G[frame:GetName().."BarIcon2"]
+						local name = _G[frame:GetName().."BarName"]
+						local timer = _G[frame:GetName().."BarTimer"]
+						
+						if not (icon1.overlay) then
+							icon1.overlay = CreateFrame("Frame", "$parentIcon1Overlay", tbar)
+							--icon1.overlay:CreatePanel(template, 22, 22, "BOTTOMRIGHT", tbar, "BOTTOMLEFT", -22/4, -2)
+							
+							local backdroptex = icon1.overlay:CreateTexture(nil, "BORDER")
+							backdroptex:SetTexture([=[Interface\Icons\Spell_Nature_WispSplode]=])
+							backdroptex:SetPoint("TOPLEFT", icon1.overlay, "TOPLEFT", 2, -2)
+							backdroptex:SetPoint("BOTTOMRIGHT", icon1.overlay, "BOTTOMRIGHT", -2, 2)
+							backdroptex:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+						end
+
+						if not (icon2.overlay) then
+							icon2.overlay = CreateFrame("Frame", "$parentIcon2Overlay", tbar)
+							--icon2.overlay:CreatePanel(template, 22, 22, "BOTTOMLEFT", tbar, "BOTTOMRIGHT", 22/4, -2)
+							
+							local backdroptex = icon2.overlay:CreateTexture(nil, "BORDER")
+							backdroptex:SetTexture([=[Interface\Icons\Spell_Nature_WispSplode]=])
+							backdroptex:SetPoint("TOPLEFT", icon2.overlay, "TOPLEFT", 2, -2)
+							backdroptex:SetPoint("BOTTOMRIGHT", icon2.overlay, "BOTTOMRIGHT", -2, 2)
+							backdroptex:SetTexCoord(0.08, 0.92, 0.08, 0.92)					
+						end
+
+						if bar.color then
+							tbar:SetStatusBarColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+						else
+							tbar:SetStatusBarColor(bar.owner.options.StartColorR, bar.owner.options.StartColorG, bar.owner.options.StartColorB)
+						end
+						
+						if bar.enlarged then frame:SetWidth(bar.owner.options.HugeWidth) else frame:SetWidth(bar.owner.options.Width) end
+						if bar.enlarged then tbar:SetWidth(bar.owner.options.HugeWidth) else tbar:SetWidth(bar.owner.options.Width) end
+
+						if not frame.styled then
+							frame:SetScale(1)
+							frame.SetScale=B.dummy
+							frame:SetHeight(22)
+							local border = CreateFrame("Frame", nil, frame);
+							border:SetFrameStrata("HIGH");
+							border:SetPoint("TOPLEFT", -2, 2);
+							border:SetPoint("BOTTOMRIGHT", 2, -2);
+							border:SetBackdrop({
+								edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
+								edgeSize = 13,
+							})
+							border:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)								
+							frame.styled=true
+						end
+
+						if not spark.killed then
+							spark:SetAlpha(0)
+							spark:SetTexture(nil)
+							spark.killed=true
+						end
 			
+						if not icon1.styled then
+							icon1:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+							icon1:ClearAllPoints()
+							icon1:SetPoint("TOPLEFT", icon1.overlay, 2, -2)
+							icon1:SetPoint("BOTTOMRIGHT", icon1.overlay, -2, 2)
+							icon1.styled=true
+						end
+						
+						if not icon2.styled then
+							icon2:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+							icon2:ClearAllPoints()
+							icon2:SetPoint("TOPLEFT", icon2.overlay, 2, -2)
+							icon2:SetPoint("BOTTOMRIGHT", icon2.overlay, -2, 2)
+							icon2.styled=true
+						end
 
-                texture:SetHeight(28)
+						if not texture.styled then
+							texture:SetTexture("Interface\\TargetingFrame\\UI-StatusBar")
+							texture.styled=true
+						end
+						
+						tbar:SetStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar")
+						if not tbar.styled then
+							tbar:SetPoint("TOPLEFT", frame, "TOPLEFT", 2, -2)
+							tbar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 2)
+							
+							tbar.styled=true
+						end
 
-                timer:ClearAllPoints()
-                timer:SetPoint('RIGHT', tbar, 'RIGHT', -4, 0)
-                timer:SetFont('Fonts\\ARIALN.ttf', 22)
-                timer:SetJustifyH('RIGHT')
+						if not name.styled then
+							name:ClearAllPoints()
+							name:SetPoint("LEFT", frame, "LEFT", 4, 0)
+							name:SetWidth(165)
+							name:SetHeight(8)
+							name:SetFont(C['general'].font, C['general'].fontsize)
+							name:SetJustifyH("LEFT")
+							name:SetShadowColor(0, 0, 0, 0)
+							name.SetFont = B.dummy
+							name.styled=true
+						end
+						
+						if not timer.styled then	
+							timer:ClearAllPoints()
+							timer:SetPoint("RIGHT", frame, "RIGHT", -4, 0)
+							timer:SetFont(C['general'].font, C['general'].fontsize)
+							timer:SetJustifyH("RIGHT")
+							timer:SetShadowColor(0, 0, 0, 0)
+							timer.SetFont = B.dummy
+							timer.styled=true
+						end
 
-                name:ClearAllPoints()
-                name:SetPoint('LEFT', tbar, 4, 0)
-                name:SetPoint('RIGHT', timer, 'LEFT', -4, 0)
-                name:SetFont('Fonts\\ARIALN.ttf', 15)
+						if bar.owner.options.IconLeft then icon1:Show() icon1.overlay:Show() else icon1:Hide() icon1.overlay:Hide() end
+						if bar.owner.options.IconRight then icon2:Show() icon2.overlay:Show() else icon2:Hide() icon2.overlay:Hide() end
+						tbar:SetAlpha(1)
+						frame:SetAlpha(1)
+						texture:SetAlpha(1)
+						frame:Show()
+						bar:Update(0)
+						bar.injected=true
+					end
+					bar:ApplyStyle()
+				end
 
-                tbar:SetHeight(30)
-				local size = -5,
-				tbar:SetBackdrop({
-					edgeFile = "Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border",
-					edgeSize = 15,
-					insets = {left = size, right = size, top = size, bottom = size}
-				})
-				local ccolor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[select(2,UnitClass("player"))]
-				tbar:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor, 1)					
-
-                icon1:SetTexCoord(0.07, 0.93, 0.07, 0.93)
-                icon1:SetSize(tbar:GetHeight(), tbar:GetHeight() - 1)
-
-                icon2:SetTexCoord(0.07, 0.93, 0.07, 0.93)
-                icon2:SetSize(tbar:GetHeight(), tbar:GetHeight() - 1)
-            end
+			end
         end)
+		
+		-- Boss Healthbars
+		hooksecurefunc(DBM.BossHealth,"Show",function()
+			local anchor=DBMBossHealthDropdown:GetParent()
+			if not anchor.styled then
+				local header={anchor:GetRegions()}
+					if header[1]:IsObjectType("FontString") then
+						header[1]:SetFont(C['general'].font, C['general'].fontsize)
+						header[1]:SetTextColor(1,1,1,1)
+						header[1]:SetShadowColor(0, 0, 0, 0)
+						anchor.styled=true	
+					end
+				header=nil
+			end
+			anchor=nil
+		end)
+		
+     	hooksecurefunc(DBM.BossHealth, "AddBoss", function()
+			local count = 1
+			while (_G[format("DBM_BossHealth_Bar_%d", count)]) do
+				local bar = _G[format("DBM_BossHealth_Bar_%d", count)]
+				local background = _G[bar:GetName().."BarBorder"]
+				local progress = _G[bar:GetName().."Bar"]
+				local name = _G[bar:GetName().."BarName"]
+				local timer = _G[bar:GetName().."BarTimer"]
+				local prev = _G[format("DBM_BossHealth_Bar_%d", count-1)]	
+
+				if (count == 1) then
+					local	_, anch, _ ,_, _ = bar:GetPoint()
+					bar:ClearAllPoints()
+					if DBM_SavedOptions.HealthFrameGrowUp then
+						bar:SetPoint("BOTTOM", anch, "TOP" , 0 , 12)
+					else
+						bar:SetPoint("TOP", anch, "BOTTOM" , 0, -22)
+					end
+				else
+					bar:ClearAllPoints()
+					if DBM_SavedOptions.HealthFrameGrowUp then
+						bar:SetPoint("TOPLEFT", prev, "TOPLEFT", 0, 26)
+					else
+						bar:SetPoint("TOPLEFT", prev, "TOPLEFT", 0, -26)
+					end
+				end
+
+				if not bar.styled then
+					bar:SetHeight(22)
+					background:SetNormalTexture(nil)
+					local barb = CreateFrame("Frame", nil, bar);
+					barb:SetFrameStrata("HIGH");
+					barb:SetPoint("TOPLEFT", -2, 2);
+					barb:SetPoint("BOTTOMRIGHT", 2, -2);
+					barb:SetBackdrop({
+						edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
+						edgeSize = 13,
+					})
+					barb:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)					
+					bar.styled=true
+				end	
+				
+				if not progress.styled then
+					progress:SetStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar")
+					progress:SetStatusBarColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+					progress.styled=true
+				end				
+				progress:ClearAllPoints()
+				progress:SetPoint("TOPLEFT", bar, "TOPLEFT", 2, -2)
+				progress:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", -2, 2)
+
+				if not name.styled then
+					name:ClearAllPoints()
+					name:SetPoint("LEFT", bar, "LEFT", 4, 0)
+					name:SetFont(C['general'].font, C['general'].fontsize)
+					name:SetJustifyH("LEFT")
+					name:SetShadowColor(0, 0, 0, 0)
+					name.styled=true
+				end
+				
+				if not timer.styled then
+					timer:ClearAllPoints()
+					timer:SetPoint("RIGHT", bar, "RIGHT", -4, 0)
+					timer:SetFont(C['general'].font, C['general'].fontsize)
+					timer:SetJustifyH("RIGHT")
+					timer:SetShadowColor(0, 0, 0, 0)
+					timer.styled=true
+				end
+				count = count + 1
+			end
+		end)
     end
 
     if (IsAddOnLoaded('Recount')) then
-        if Recount.MainWindow then
-			local bgsize = 3,
-			Recount.MainWindow:SetBackdrop({
-				edgeFile = "Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border",
-				tile = true, tileSize = 16, edgeSize = 18,
-				insets = {left = bgsize, right = bgsize, top = bgsize, bottom = bgsize}
-			})
-			local ccolor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[select(2,UnitClass("player"))]
-			Recount.MainWindow:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor, 1)			
-        end
+		local rm = Recount.MainWindow
+		local bgs = CreateFrame("Frame", nil, rm);
+		bgs:SetFrameStrata("HIGH");
+		bgs:SetPoint("TOPLEFT", -3, -8);
+		bgs:SetPoint("BOTTOMRIGHT", 1, 0);
+		bgs:SetBackdrop({
+			edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
+			edgeSize = 13,
+		})
+		bgs:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
     end
 end)
