@@ -24,24 +24,28 @@ f:SetScript('OnEvent', function(self, ...)
 						
 						if not (icon1.overlay) then
 							icon1.overlay = CreateFrame("Frame", "$parentIcon1Overlay", tbar)
-							--icon1.overlay:CreatePanel(template, 22, 22, "BOTTOMRIGHT", tbar, "BOTTOMLEFT", -22/4, -2)
-							
-							local backdroptex = icon1.overlay:CreateTexture(nil, "BORDER")
-							backdroptex:SetTexture([=[Interface\Icons\Spell_Nature_WispSplode]=])
-							backdroptex:SetPoint("TOPLEFT", icon1.overlay, "TOPLEFT", 2, -2)
-							backdroptex:SetPoint("BOTTOMRIGHT", icon1.overlay, "BOTTOMRIGHT", -2, 2)
-							backdroptex:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+							icon1.overlay:SetSize(26, 26)
+							icon1.overlay:SetFrameStrata("HIGH");
+							icon1.overlay:SetPoint("BOTTOMRIGHT", tbar, "BOTTOMLEFT", -22/4, -4);
+							icon1.overlay:SetBackdrop({
+								edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
+								edgeSize = 13,
+							})
+							icon1.overlay:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)								
+							icon1.overlay.styled=true
 						end
 
 						if not (icon2.overlay) then
 							icon2.overlay = CreateFrame("Frame", "$parentIcon2Overlay", tbar)
-							--icon2.overlay:CreatePanel(template, 22, 22, "BOTTOMLEFT", tbar, "BOTTOMRIGHT", 22/4, -2)
-							
-							local backdroptex = icon2.overlay:CreateTexture(nil, "BORDER")
-							backdroptex:SetTexture([=[Interface\Icons\Spell_Nature_WispSplode]=])
-							backdroptex:SetPoint("TOPLEFT", icon2.overlay, "TOPLEFT", 2, -2)
-							backdroptex:SetPoint("BOTTOMRIGHT", icon2.overlay, "BOTTOMRIGHT", -2, 2)
-							backdroptex:SetTexCoord(0.08, 0.92, 0.08, 0.92)					
+							icon2.overlay:SetSize(26, 26)
+							icon2.overlay:SetFrameStrata("HIGH");
+							icon2.overlay:SetPoint("BOTTOMLEFT", tbar, "BOTTOMRIGHT", 22/4, -4);
+							icon2.overlay:SetBackdrop({
+								edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
+								edgeSize = 13,
+							})
+							icon2.overlay:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)								
+							icon2.overlay.styled=true				
 						end
 
 						if bar.color then
