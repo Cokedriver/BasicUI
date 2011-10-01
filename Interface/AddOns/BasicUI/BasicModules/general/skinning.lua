@@ -8,7 +8,7 @@ f:RegisterEvent('PLAYER_ENTERING_WORLD')
 
 f:SetScript('OnEvent', function(self, ...)
     if (IsAddOnLoaded('DBM-Core')) then	
-		-- Normal Bars
+		-- Normal Bars (Credit for DBM codeing goes to Elv from ElvUI)
         hooksecurefunc(DBT, 'CreateBar', function(self)
 			for bar in self:GetBarIterator() do
 				if not bar.injected then
