@@ -17,7 +17,7 @@ DB['castbar'] = {
 	['enable'] = true,
 
 	["CastingBarFrame"] = {
-		['enabled'] = true,
+		['enable'] = true,
 		['textPosition'] = "CENTER",
 		['enableLag'] = true,
 		['enableTimer'] = true,
@@ -27,17 +27,17 @@ DB['castbar'] = {
 		['offSetY']	= 175,
 	},
 	["TargetFrameSpellBar"] = {
-		['enabled'] = true,
+		['enable'] = true,
 		['textPosition'] = "CENTER",
 		['enableLag'] = true,
 		['enableTimer'] = true,
-		['selfAnchor'] = "BOTTOM",
-		['relAnchor'] = "BOTTOM",
+		['selfAnchor'] = "TOP",
+		['relAnchor'] = "TOP",
 		['offSetX']	= 0,
-		['offSetY']	= 300,
+		['offSetY']	= -250,
 	},
 	["FocusFrameSpellBar"] = {
-		['enabled'] = true,
+		['enable'] = true,
 		['textPosition'] = "CENTER",
 		['enableLag'] = true,
 		['enableTimer'] = true,
@@ -47,7 +47,7 @@ DB['castbar'] = {
 		['offSetY']	= -165,
 	},
 	["MirrorTimer1"] = {
-		['enabled'] = true,
+		['enable'] = true,
 		['textPosition'] = "CENTER",
 		['enableTimer'] = true,
 		['selfAnchor'] = "TOP",
@@ -56,7 +56,7 @@ DB['castbar'] = {
 		['offSetY']	= -10,
 	},
 	["PetCastingBarFrame"] = {
-		['enabled'] = true,
+		['enable'] = true,
 		['textPosition'] = "CENTER",
 		['enableTimer'] = true,
 		['selfAnchor'] = "BOTTOM",

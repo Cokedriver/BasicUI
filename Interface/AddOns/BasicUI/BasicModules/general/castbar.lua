@@ -48,19 +48,19 @@ local function Set(a, k)
     end
 end;
 
-if C['castbar']["TargetFrameSpellBar"].enabled then
+if C['castbar']["TargetFrameSpellBar"].enable then
     function Target_Spellbar_AdjustPosition()
         Set(_G["TargetFrameSpellBar"].df, "TargetFrameSpellBar");
     end;
 end;
-if C['castbar']["FocusFrameSpellBar"].enabled then
+if C['castbar']["FocusFrameSpellBar"].enable then
     function Focus_Spellbar_AdjustPosition()
         Set(_G["FocusFrameSpellBar"].df, "FocusFrameSpellBar");
     end;
 end
 
 for k, _ in pairs(C['castbar']) do
-    if (k ~="enable" and C['castbar'][k].enabled) then
+    if (k ~="enable" and C['castbar'][k].enable) then
         local a = CreateFrame("Frame", "Castbar"..k, UIParent);
         d.w, d.h, d.x, d.y = nil, nil, nil, nil;
 

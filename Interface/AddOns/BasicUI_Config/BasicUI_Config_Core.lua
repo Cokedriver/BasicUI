@@ -123,27 +123,21 @@ function BasicUIConfig.GenerateOptionsInternal()
 						desc = L["Enables Automatically rolling greed on green items when in a instance."],
 						type = "toggle",							
 					},
-					colors = {
-						order = 3,
-						name = L["Colors"],
-						desc = L["Enables class colors for UI."],
-						type = "toggle",						
-					},
 					cooldown = {
-						order = 4,
+						order = 3,
 						name = L["Cooldown"],
 						desc = L["Enables cooldown counts on action buttons."],
 						type = "toggle",						
 					},					
 					range = {
-						order = 5,
+						order = 4,
 						name = L["Range"],
 						desc = L["Enables action buttons to turn red when target is out of range."],
 						type = "toggle",						
 					},
 					mail = {
 						type = "group",
-						order = 7,
+						order = 5,
 						name = L["Mail"],
 						desc = L["Enables Mailbox Modifications."],
 						guiInline = true,
@@ -186,7 +180,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 					},					
 					scale = {
 						type = "group",
-						order = 8,
+						order = 6,
 						name = L["Unitframe Scale"],
 						desc = L["Adjust the scale of Blizzards Unit Frames."],	
 						guiInline = true,
@@ -282,7 +276,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								name = L["Settings for the Player Castbar."],
 								disabled = function() return not db.castbar.enable end,
 							},
-							enabled = {
+							enable = {
 								order = 2,
 								name = L["Enable"],
 								desc = L["Enables Player's Castbar."],
@@ -293,7 +287,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								order = 3,
 								name = L["Text Position"],
 								desc = L["Spell Text Position."],
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.CastingBarFrame.enable end,
 								type = "select",
 								values = B.regions;
 							},
@@ -302,20 +296,20 @@ function BasicUIConfig.GenerateOptionsInternal()
 								name = L["Enable Lag"],
 								desc = L["Enables lag to show on castbar."],
 								type = "toggle",
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.CastingBarFrame.enable end,
 							},
 							enableTimer = {
 								order = 5,
 								name = L["Enable Timer"],
 								desc = L["Enables timer to show on castbar."],
 								type = "toggle",
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.CastingBarFrame.enable end,
 							},
 							selfAnchor = {
 								order = 6,
 								name = L["Self Anchor"],
 								desc = L["Self Anchor Position."],
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.CastingBarFrame.enable end,
 								type = "select",
 								values = B.regions;
 							},
@@ -323,7 +317,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								order = 7,
 								name = L["Relative Anchor"],
 								desc = L["Relative Anchor Position."],
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.CastingBarFrame.enable end,
 								type = "select",
 								values = B.regions;
 							},
@@ -333,7 +327,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Controls the X offset. (Left - Right)"],
 								type = "range",
 								min = -250, max = 250, step = 5,
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.CastingBarFrame.enable end,
 							},
 							offSetY = {
 								order = 9,
@@ -341,7 +335,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Controls the Y offset. (Up - Down)"],
 								type = "range",
 								min = -250, max = 250, step = 5,
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.CastingBarFrame.enable end,
 							},
 						},
 					},	
@@ -361,7 +355,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								name = L["Settings for the Target Castbar."],
 								disabled = function() return not db.castbar.enable end,
 							},
-							enabled = {
+							enable = {
 								order = 2,
 								name = L["Enable"],
 								desc = L["Enables Target's Castbar."],
@@ -372,7 +366,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								order = 3,
 								name = L["Text Position"],
 								desc = L["Spell Text Position."],
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.TargetFrameSpellBar.enable end,
 								type = "select",
 								values = B.regions;
 							},
@@ -381,20 +375,20 @@ function BasicUIConfig.GenerateOptionsInternal()
 								name = L["Enable Lag"],
 								desc = L["Enables lag to show on castbar."],
 								type = "toggle",
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.TargetFrameSpellBar.enable end,
 							},
 							enableTimer = {
 								order = 5,
 								name = L["Enable Timer"],
 								desc = L["Enables timer to show on castbar."],
 								type = "toggle",
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.TargetFrameSpellBar.enable end,
 							},
 							selfAnchor = {
 								order = 6,
 								name = L["Self Anchor"],
 								desc = L["Self Anchor Position."],
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.TargetFrameSpellBar.enable end,
 								type = "select",
 								values = B.regions;
 							},
@@ -402,7 +396,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								order = 7,
 								name = L["Relative Anchor"],
 								desc = L["Relative Anchor Position."],
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.TargetFrameSpellBar.enable end,
 								type = "select",
 								values = B.regions;
 							},
@@ -412,7 +406,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Controls the X offset. (Left - Right)"],
 								type = "range",
 								min = -250, max = 250, step = 5,
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.TargetFrameSpellBar.enable end,
 							},
 							offSetY = {
 								order = 9,
@@ -420,7 +414,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Controls the Y offset. (Up - Down)"],
 								type = "range",
 								min = -250, max = 250, step = 5,
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.TargetFrameSpellBar.enable end,
 							},
 						},
 					},						
@@ -440,7 +434,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								name = L["Settings for the Focus Castbar."],
 								disabled = function() return not db.castbar.enable end,
 							},
-							enabled = {
+							enable = {
 								order = 2,
 								name = L["Enable"],
 								desc = L["Enables Focus' Castbar."],
@@ -451,7 +445,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								order = 3,
 								name = L["Text Position"],
 								desc = L["Spell Text Position."],
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.FocusFrameSpellBar.enable end,
 								type = "select",
 								values = B.regions;
 							},
@@ -460,20 +454,20 @@ function BasicUIConfig.GenerateOptionsInternal()
 								name = L["Enable Lag"],
 								desc = L["Enables lag to show on castbar."],
 								type = "toggle",
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.FocusFrameSpellBar.enable end,
 							},
 							enableTimer = {
 								order = 5,
 								name = L["Enable Timer"],
 								desc = L["Enables timer to show on castbar."],
 								type = "toggle",
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.FocusFrameSpellBar.enable end,
 							},
 							selfAnchor = {
 								order = 6,
 								name = L["Self Anchor"],
 								desc = L["Self Anchor Position."],
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.FocusFrameSpellBar.enable end,
 								type = "select",
 								values = B.regions;
 							},
@@ -481,7 +475,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								order = 7,
 								name = L["Relative Anchor"],
 								desc = L["Relative Anchor Position."],
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.FocusFrameSpellBar.enable end,
 								type = "select",
 								values = B.regions;
 							},
@@ -491,7 +485,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Controls the X offset. (Left - Right)"],
 								type = "range",
 								min = -250, max = 250, step = 5,
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.FocusFrameSpellBar.enable end,
 							},
 							offSetY = {
 								order = 9,
@@ -499,7 +493,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Controls the Y offset. (Up - Down)"],
 								type = "range",
 								min = -250, max = 250, step = 5,
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.FocusFrameSpellBar.enable end,
 							},
 						},
 					},						
@@ -519,7 +513,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								name = L["Settings for Mirror Timer."],
 								disabled = function() return not db.castbar.enable end,
 							},
-							enabled = {
+							enable = {
 								order = 2,
 								name = L["Enable"],
 								desc = L["Enables Mirror Timer."],
@@ -530,7 +524,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								order = 3,
 								name = L["Text Position"],
 								desc = L["Spell Text Position."],
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.MirrorTimer1.enable end,
 								type = "select",
 								values = B.regions;
 							},
@@ -540,13 +534,13 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Enables timer to show on castbar."],
 								type = "toggle",
 								width = "full",
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.MirrorTimer1.enable end,
 							},
 							selfAnchor = {
 								order = 6,
 								name = L["Self Anchor"],
 								desc = L["Self Anchor Position."],
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.MirrorTimer1.enable end,
 								type = "select",
 								values = B.regions;
 							},
@@ -554,7 +548,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								order = 7,
 								name = L["Relative Anchor"],
 								desc = L["Relative Anchor Position."],
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.MirrorTimer1.enable end,
 								type = "select",
 								values = B.regions;
 							},
@@ -564,7 +558,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Controls the X offset. (Left - Right)"],
 								type = "range",
 								min = -250, max = 250, step = 5,
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.MirrorTimer1.enable end,
 							},
 							offSetY = {
 								order = 9,
@@ -572,7 +566,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Controls the Y offset. (Up - Down)"],
 								type = "range",
 								min = -250, max = 250, step = 5,
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.MirrorTimer1.enable end,
 							},
 						},
 					},						
@@ -592,7 +586,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								name = L["Settings for the Pet Casting Bar."],
 								disabled = function() return not db.castbar.enable end,
 							},
-							enabled = {
+							enable = {
 								order = 2,
 								name = L["Enable"],
 								desc = L["Enables Pet's Castbar."],
@@ -603,7 +597,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								order = 3,
 								name = L["Text Position"],
 								desc = L["Spell Text Position."],
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
 								type = "select",
 								values = B.regions;
 							},
@@ -613,13 +607,13 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Enables timer to show on castbar."],
 								type = "toggle",
 								width = "full",
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
 							},
 							selfAnchor = {
 								order = 6,
 								name = L["Self Anchor"],
 								desc = L["Self Anchor Position."],
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
 								type = "select",
 								values = B.regions;
 							},
@@ -627,7 +621,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								order = 7,
 								name = L["Relative Anchor"],
 								desc = L["Relative Anchor Position."],
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
 								type = "select",
 								values = B.regions;
 							},
@@ -637,7 +631,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Controls the X offset. (Left - Right)"],
 								type = "range",
 								min = -250, max = 250, step = 5,
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
 							},
 							offSetY = {
 								order = 9,
@@ -645,7 +639,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Controls the Y offset. (Up - Down)"],
 								type = "range",
 								min = -250, max = 250, step = 5,
-								disabled = function() return not db.castbar.enable end,
+								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
 							},
 						},
 					},						
@@ -1533,10 +1527,10 @@ function BasicUIConfig:SetDefaultOptions()
 			['textPosition'] = "CENTER",
 			['enableLag'] = true,
 			['enableTimer'] = true,
-			['selfAnchor'] = "BOTTOM",
-			['relAnchor'] = "BOTTOM",
+			['selfAnchor'] = "TOP",
+			['relAnchor'] = "TOP",
 			['offSetX']	= 0,
-			['offSetY']	= 300,
+			['offSetY']	= -200,
 		},
 		["FocusFrameSpellBar"] = {
 			['enabled'] = true,

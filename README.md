@@ -2,9 +2,10 @@
 
 ## A Basic UI Replacement for the World of Warcraft Interface.
 
-## Included in the UI
+## Included in the UI:
 
  - Datatext  				-- Tukui Datatext Edited
+ - Castbar					-- thekCastbar Edited
  - Tooltip 					-- nTooltip Edited.
  - Unitframe Scaling.		-- Custom Scaleing.
  - Chat 					-- nChat Edited.
@@ -18,7 +19,6 @@
  - Cooldown					-- Omnicc Edited.
  - Quest					-- ncQuest Edited.
  - Range					-- tullaRange Edited.
- - Slash Commands			-- Neav UI Slash Edited.
  
 ## Thank You...
  

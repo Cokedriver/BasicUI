@@ -10,16 +10,15 @@
 
 
 -- Ace Libs
-#@no-lib-strip@
-BasicLibs\LibStub\LibStub.lua
-BasicLibs\CallbackHandler-1.0\CallbackHandler-1.0.xml
-BasicLibs\AceAddon-3.0\AceAddon-3.0.xml
-BasicLibs\AceEvent-3.0\AceEvent-3.0.xml
-BasicLibs\AceTimer-3.0\AceTimer-3.0.xml
-BasicLibs\AceHook-3.0\AceHook-3.0.xml
-BasicLibs\LibQTip-1.0\LibQTip-1.0.xml
-BasicLibs\LibCrayon-3.0\LibCrayon-3.0.xml
-#@end-no-lib-strip@
+BasicLibs\LibStub.lua
+BasicLibs\CallbackHandler-1.0.lua
+BasicLibs\LibSharedMedia-3.0.lua
+BasicLibs\AceAddon-3.0.lua
+BasicLibs\AceEvent-3.0.lua
+BasicLibs\AceTimer-3.0.lua
+BasicLibs\AceHook-3.0.lua
+BasicLibs\LibQTip-1.0.lua
+BasicLibs\LibCrayon-3.0.lua
 
 -- Core
 BasicCore\init.lua
