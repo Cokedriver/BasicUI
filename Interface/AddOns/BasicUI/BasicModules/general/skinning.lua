@@ -236,6 +236,7 @@ f:SetScript('OnEvent', function(self, ...)
 
     if (C['general'].skin.Recount == true and IsAddOnLoaded('Recount')) then
 		local rm = Recount.MainWindow
+		rm:SetBackdrop(nil)
 		local bgs = CreateFrame("Frame", nil, rm);
 		bgs:SetFrameStrata("MEDIUM");
 		bgs:SetPoint("TOPLEFT", -3, -8);
