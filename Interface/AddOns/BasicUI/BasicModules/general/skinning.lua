@@ -25,7 +25,7 @@ f:SetScript('OnEvent', function(self, ...)
 						if not (icon1.overlay) then
 							icon1.overlay = CreateFrame("Frame", "$parentIcon1Overlay", tbar)
 							icon1.overlay:SetSize(26, 26)
-							icon1.overlay:SetFrameStrata("OVERLAY");
+							icon1.overlay:SetFrameStrata("MEDIUM");
 							icon1.overlay:SetPoint("BOTTOMRIGHT", tbar, "BOTTOMLEFT", -22/4, -4);
 							icon1.overlay:SetBackdrop({
 								edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
@@ -38,7 +38,7 @@ f:SetScript('OnEvent', function(self, ...)
 						if not (icon2.overlay) then
 							icon2.overlay = CreateFrame("Frame", "$parentIcon2Overlay", tbar)
 							icon2.overlay:SetSize(26, 26)
-							icon2.overlay:SetFrameStrata("OVERLAY");
+							icon2.overlay:SetFrameStrata("MEDIUM");
 							icon2.overlay:SetPoint("BOTTOMLEFT", tbar, "BOTTOMRIGHT", 22/4, -4);
 							icon2.overlay:SetBackdrop({
 								edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
@@ -62,7 +62,7 @@ f:SetScript('OnEvent', function(self, ...)
 							frame.SetScale=B.dummy
 							frame:SetHeight(22)
 							local border = CreateFrame("Frame", nil, frame);
-							border:SetFrameStrata("OVERLAY");
+							border:SetFrameStrata("MEDIUM");
 							border:SetPoint("TOPLEFT", -2, 2);
 							border:SetPoint("BOTTOMRIGHT", 2, -2);
 							border:SetBackdrop({
@@ -192,7 +192,7 @@ f:SetScript('OnEvent', function(self, ...)
 					bar:SetHeight(22)
 					background:SetNormalTexture(nil)
 					local barb = CreateFrame("Frame", nil, bar);
-					barb:SetFrameStrata("OVERLAY");
+					barb:SetFrameStrata("MEDIUM");
 					barb:SetPoint("TOPLEFT", -2, 2);
 					barb:SetPoint("BOTTOMRIGHT", 2, -2);
 					barb:SetBackdrop({
@@ -237,7 +237,7 @@ f:SetScript('OnEvent', function(self, ...)
     if (C['general'].skin.Recount == true and IsAddOnLoaded('Recount')) then
 		local rm = Recount.MainWindow
 		local bgs = CreateFrame("Frame", nil, rm);
-		bgs:SetFrameStrata("OVERLAY");
+		bgs:SetFrameStrata("MEDIUM");
 		bgs:SetPoint("TOPLEFT", -3, -8);
 		bgs:SetPoint("BOTTOMRIGHT", 1, 0);
 		bgs:SetBackdrop({

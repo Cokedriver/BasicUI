@@ -150,12 +150,9 @@ DB['datatext'] = {
 DB['general'] = {
 
 	['autogreed'] = true,
-	['colors'] = true,
 	['cooldown'] = true,										-- enable bigger macros.
 	['font'] = "Fonts\\ARIALN.ttf",							-- general font for UI
 	['fontsize'] = 14,
-	['range'] = true,
-	['slash'] = true,
 	['scale'] = {
 		['enable'] = true,
 		['size'] = 1.15,
@@ -182,7 +179,21 @@ DB['general'] = {
 	['skin'] = {
 		['DBM'] = true,
 		['Recount'] = true,
-	},	
+	},
+
+	['buttons'] = {
+	
+		['enable'] = true,
+		['showHotKeys'] = false,
+		['showMacronames'] = false,
+		
+		-- Button Colors
+		['color'] = {   		
+			['OutOfRange'] = { r = 0.9, g = 0, b = 0 },
+			['OutOfMana'] = { r = 0, g = 0, b = 0.9 },			
+			['NotUsable'] = { r = 0.3, g = 0.3, b = 0.3 },
+		},
+	},
 }
 
 

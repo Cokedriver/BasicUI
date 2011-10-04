@@ -129,11 +129,114 @@ function BasicUIConfig.GenerateOptionsInternal()
 						desc = L["Enables cooldown counts on action buttons."],
 						type = "toggle",						
 					},					
-					range = {
+					buttons = {
+						type = "group",
 						order = 4,
-						name = L["Range"],
-						desc = L["Enables action buttons to turn red when target is out of range."],
-						type = "toggle",						
+						name = L["Actionbar Buttons"],
+						desc = L["Actionbar Button Modifications."],
+						guiInline = true,
+						get = function(info) return db.general.buttons[ info[#info] ] end,
+						set = function(info, value) db.general.buttons[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+						args = {
+							intro = {
+								order = 1,
+								type = "description",
+								name = L["Actionbar Button Options."],
+							},					
+							enable = {
+								order = 2,
+								name = L["Enable"],
+								desc = L["Enables Actionbar Button Module"],
+								type = "toggle",								
+							},
+							showHotKeys = {
+								order = 3,
+								name = L["Hot Keys"],
+								desc = L["Enables Show/Hide of Hot Keys."],
+								type = "toggle",
+								disabled = function() return not db.general.buttons.enable end,
+							},
+							showMacronames = {
+								order = 3,
+								name = L["Macro Names"],
+								desc = L["Enables Show/Hide of Macro Names."],
+								type = "toggle",
+								disabled = function() return not db.general.buttons.enable end,
+							},
+							color = {
+								type = "group",
+								order = 5,
+								name = L["Actionbar Button Color"],
+								desc = L["Enables Actionbar Button Color Modifications."],
+								guiInline = true,
+								get = function(info) return db.general.buttons.color[ info[#info] ] end,
+								set = function(info, value) db.general.buttons.color[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+								args = {
+									intro = {
+										order = 1,
+										type = "description",
+										name = L["Color for Action Buttons."],
+									},					
+									enable = {
+										order = 2,
+										name = L["Enable"],
+										desc = L["Enables Coloring"],
+										type = "toggle",								
+									},								
+									OutOfRange = {
+										order = 4,
+										type = "color",
+										name = L["Out of Range"],
+										desc = L["Picks the Out of Range Button Fade Color."],
+										hasAlpha = false,
+										disabled = function() return not db.general.buttons.enable or not db.general.buttons.color.enable end,
+										get = function(info)
+											local rc = db.general.buttons.color[ info[#info] ]
+											return rc.r, rc.g, rc.b
+										end,
+										set = function(info, r, g, b)
+											db.general.buttons.color[ info[#info] ] = {}
+											local rc = db.general.buttons.color[ info[#info] ]
+											rc.r, rc.g, rc.b = r, g, b
+										end,					
+									},
+									OutOfMana = {
+										order = 5,
+										type = "color",
+										name = L["Out of Mana"],
+										desc = L["Picks the Out of Mana Button Fade Color."],
+										hasAlpha = false,
+										disabled = function() return not db.general.buttons.enable or not db.general.buttons.color.enable end,
+										get = function(info)
+											local mc = db.general.buttons.color[ info[#info] ]
+											return mc.r, mc.g, mc.b
+										end,
+										set = function(info, r, g, b)
+											db.general.buttons.color[ info[#info] ] = {}
+											local mc = db.general.buttons.color[ info[#info] ]
+											mc.r, mc.g, mc.b = r, g, b
+										end,					
+									},
+									NotUsable = {
+										order = 6,
+										type = "color",
+										name = L["Not Usable"],
+										desc = L["Picks the Not Usable Button Fade Color."],
+										hasAlpha = false,
+										disabled = function() return not db.general.buttons.enable or not db.general.buttons.color.enable end,
+										get = function(info)
+											local nu = db.general.buttons.color[ info[#info] ]
+											return nu.r, nu.g, nu.b
+										end,
+										set = function(info, r, g, b)
+											db.general.buttons.color[ info[#info] ] = {}
+											local nu = db.general.buttons.color[ info[#info] ]
+											nu.r, nu.g, nu.b = r, g, b
+										end,					
+									},
+								},
+							},
+						},
 					},
 					mail = {
 						type = "group",
@@ -1625,11 +1728,8 @@ function BasicUIConfig:SetDefaultOptions()
 	}
 	addon.general = {
 		['autogreed'] = true,
-		['colors'] = true,
 		['cooldown'] = true,										-- enable bigger macros.
 		['font'] = "Fonts\\ARIALN.ttf",							-- general font for UI
-		['range'] = true,
-		['slash'] = true,
 		['scale'] = {
 			['enable'] = true,
 			['size'] = 1.15,
@@ -1653,6 +1753,24 @@ function BasicUIConfig:SetDefaultOptions()
 				['UseAutoComplete'] = true,
 			},		
 		},
+		['skin'] = {
+			['DBM'] = true,
+			['Recount'] = true,
+		},
+
+		['buttons'] = {
+		
+			['enable'] = true,
+			['showHotKeys'] = false,
+			['showMacronames'] = false,
+			
+			-- Button Colors
+			['color'] = {   		
+				['OutOfRange'] = { r = 0.9, g = 0, b = 0 },
+				['OutOfMana'] = { r = 0, g = 0, b = 0.9 },			
+				['NotUsable'] = { r = 0.3, g = 0.3, b = 0.3 },
+			},
+		},		
 	}
 	addon.merchant = {
 		['enable'] = true,										-- enable merchant module.

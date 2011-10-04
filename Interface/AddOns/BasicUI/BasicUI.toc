@@ -60,7 +60,7 @@ BasicModules\general\cooldown.lua
 BasicModules\general\merchant.lua
 BasicModules\general\quest.lua
 BasicModules\general\powerbar.lua
-BasicModules\general\range.lua
+BasicModules\general\buttons.lua
 BasicModules\general\scale.lua
 BasicModules\general\skinning.lua
 BasicModules\general\mail.lua

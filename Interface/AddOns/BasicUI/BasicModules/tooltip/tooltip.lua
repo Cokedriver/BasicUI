@@ -309,13 +309,13 @@ local function GameTooltip_GetUnitPVPIcon(unit)
     
     if (UnitIsPVPFreeForAll(unit)) then
         if (C['tooltip'].showPVPIcons) then
-            return '|TInterface\\AddOns\\BasicUI\\BasicMedia\\UI-PVP-FFA:12|t'
+            return '|TInterface\\AddOns\\BasicUI\\BasicMedia\\texture\\UI-PVP-FFA:12|t'
         else
             return '|cffFF0000# |r'
         end
     elseif (factionGroup and UnitIsPVP(unit)) then
         if (C['tooltip'].showPVPIcons) then
-            return '|TInterface\\AddOns\\BasicUI\\BasicMedia\\UI-PVP-'..factionGroup..':12|t'
+            return '|TInterface\\AddOns\\BasicUI\\BasicMedia\\texture\\UI-PVP-'..factionGroup..':12|t'
         else
             return '|cff00FF00# |r'
         end

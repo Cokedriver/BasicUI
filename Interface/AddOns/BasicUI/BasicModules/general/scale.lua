@@ -40,9 +40,3 @@ for i = 1,4 do
 		boss:SetScale(C["general"].scale.size)
 	end
 end
-	
-
- -- Hide Keybindings
-function ActionButton_UpdateHotkeys (self, actionButtonType)
-    
-end
