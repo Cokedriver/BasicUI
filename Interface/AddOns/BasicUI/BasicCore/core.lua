@@ -7,6 +7,9 @@ local L = setmetatable({}, { __index = function(t,k)
 end })
 
 --Constants
+local m = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/min(2, max(.64, 768/string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)")));
+
+B.scale = function(v) return m * floor(v/m+.5) end;
 B.dummy = function() return end
 B.toc = select(4, GetBuildInfo())
 B.myname, _ = UnitName("player")

@@ -57,6 +57,7 @@ BasicModules\general\autogreed.lua
 BasicModules\general\castbar.lua
 BasicModules\general\colorz.lua
 BasicModules\general\cooldown.lua
+BasicModules\general\eclipsebar.lua
 BasicModules\general\merchant.lua
 BasicModules\general\quest.lua
 BasicModules\general\powerbar.lua

@@ -11,10 +11,6 @@ local d = {};
 local find = string.find;
 local floor = math.floor;
 
--- doing some border math (taken from tukui)
-local m = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/min(2, max(.64, 768/string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)")));
-local scale = function(v) return m * floor(v/m+.5) end;
-
 local function Set(a, k)
     a:SetFrameLevel(_G[k]:GetFrameLevel() - 1);
     if find(k, "MirrorTimer") then
@@ -22,15 +18,15 @@ local function Set(a, k)
         _G[k.."StatusBar"]:SetWidth(245);
         _G[k.."StatusBar"]:SetHeight(24);
         _G[k]:ClearAllPoints();
-        _G[k]:SetPoint("TOPLEFT", a, "TOPLEFT", scale(_G[k].d.x), -scale(_G[k].d.y));
+        _G[k]:SetPoint("TOPLEFT", a, "TOPLEFT", B.scale(_G[k].d.x), -B.scale(_G[k].d.y));
         _G[k.."StatusBar"]:ClearAllPoints();
-        _G[k.."StatusBar"]:SetPoint("TOPLEFT", a, "TOPLEFT", scale(5), -scale(_G[k].d.y));
+        _G[k.."StatusBar"]:SetPoint("TOPLEFT", a, "TOPLEFT", B.scale(5), -B.scale(_G[k].d.y));
     else
         _G[k]:SetStatusBarColor(B.ccolor.r, B.ccolor.g, B.ccolor.b);
         _G[k]:SetWidth(245);
         _G[k]:SetHeight(24);
         _G[k]:ClearAllPoints();
-        _G[k]:SetPoint("TOPLEFT", a, "TOPLEFT", scale(_G[k].d.x), -scale(_G[k].d.y))
+        _G[k]:SetPoint("TOPLEFT", a, "TOPLEFT", B.scale(_G[k].d.x), -B.scale(_G[k].d.y))
     end;
     if C['castbar'][k].enableLag then
         local d, u, l = GetNetStats();
@@ -125,7 +121,7 @@ for k, _ in pairs(C['castbar']) do
             _G[k].update = .1;
         end;
 		
-		a:SetPoint(C['castbar'][k].relAnchor,"UIParent",C['castbar'][k].selfAnchor, scale(C['castbar'][k].offSetX),scale(C['castbar'][k].offSetY))
+		a:SetPoint(C['castbar'][k].relAnchor,"UIParent",C['castbar'][k].selfAnchor, B.scale(C['castbar'][k].offSetX),B.scale(C['castbar'][k].offSetY))
             
         a:SetWidth(d.w); a:SetHeight(d.h);
         a:SetBackdropColor(.1, .1, .1, .95);
