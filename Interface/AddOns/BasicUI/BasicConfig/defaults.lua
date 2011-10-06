@@ -160,16 +160,18 @@ DB['eclipsebar'] = {
 
 	-- Size
 	size = {
-		width = 200,
-		height = 16,
+		width = 150,
+		height = 14,
+		icon = 24,
 		arrowscale = 1.4,
+		iconscale = 2,
 		arrowoffset = 4,
 		arrowvertoffset = 0,
 	},
 
 	-- Colors
 	colors = {
-		statusopacity = 0.3,			-- Status bar opacity
+		statusopacity = 0.5,			-- Status bar opacity
 		lunar = {0.13, 0.13, 0.5},		-- Lunar area
 		solar = {0.6, 0.35, 0},			-- Solar area
 		arrow = {1, 1, 1, 1},			-- Direction arrow
@@ -181,9 +183,9 @@ DB['eclipsebar'] = {
 	font = {
 		hidetext = false,				-- Show/Hide the Text display
 		name = "Fonts\\FRIZQT__.ttf",	-- Path to font. Ie "Interface\\AddOns\\MyMedia\\font.ttf".
-		size = 12,
-		tags = "MONOCHROMEOUTLINE",
-		vertoffset = 1,
+		size = 14,
+		tags = "THINOUTLINE",
+		vertoffset = 0,
 	},
 }
 
