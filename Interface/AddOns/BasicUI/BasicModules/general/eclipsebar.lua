@@ -1,6 +1,5 @@
 local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
 
-
 --[[ 
 	Original Code from nibEclipse
 	Edited by Cokderiver for BasicUI
@@ -63,45 +62,47 @@ end
 local function Eclipse_UpdateDirection()
 	BasicEclipse.direction = GetEclipseDirection()
 	if BasicEclipse.direction == "sun" then
-		BasicEclipse.Frames.Arrow:Show()
-		BasicEclipse.Frames.Arrow:ClearAllPoints()
-		BasicEclipse.Frames.Arrow:SetPoint("LEFT", BasicEclipse.Frames.Main, "LEFT", -C['eclipsebar'].size.arrowoffset, C['eclipsebar'].size.arrowvertoffset)
-		BasicEclipse.Frames.Arrow.bg:SetTexCoord(unpack(ArrowDirection.sun))
 		
 		BasicEclipse.Frames.Icon:Show()
 		BasicEclipse.Frames.Icon:ClearAllPoints()
 		BasicEclipse.Frames.Icon:SetPoint("LEFT", BasicEclipse.Frames.Main, "LEFT", -45, 0)
 		BasicEclipse.Frames.Icon.bg:SetTexCoord(unpack(IconShow.sun))
+		B.Flash(BasicEclipse.Frames.Icon, 1)
 		
 		BasicEclipse.Frames.Status:Show()
 		BasicEclipse.Frames.Status:ClearAllPoints()
 		BasicEclipse.Frames.Status:SetPoint("BOTTOMLEFT", BasicEclipse.Frames.Main, "BOTTOMLEFT", 1, 1)
 		BasicEclipse.Frames.Status:SetWidth(1)
+		BasicEclipse.Frames.Status.bg:SetTexture(unpack(C['eclipsebar'].colors.lunar))
+		BasicEclipse.Frames.Status.bg:SetAllPoints(BasicEclipse.Frames.Status)
+		
+		BasicEclipse.Frames.Below:SetPoint('TOP', BasicEclipse.Frames.Status, 'BOTTOMRIGHT', 0, 0)			
 		
 	elseif BasicEclipse.direction == "moon" then
-	
-		BasicEclipse.Frames.Arrow:Show()
-		BasicEclipse.Frames.Arrow:ClearAllPoints()
-		BasicEclipse.Frames.Arrow:SetPoint("RIGHT", BasicEclipse.Frames.Main, "RIGHT", C['eclipsebar'].size.arrowoffset, C['eclipsebar'].size.arrowvertoffset)
-		BasicEclipse.Frames.Arrow.bg:SetTexCoord(unpack(ArrowDirection.moon))
 		
 		BasicEclipse.Frames.Icon:Show()
 		BasicEclipse.Frames.Icon:ClearAllPoints()
-		BasicEclipse.Frames.Icon:SetPoint("RIGHT", BasicEclipse.Frames.Main, "RIGHT", 45, 0)
+		BasicEclipse.Frames.Icon:SetPoint("RIGHT", BasicEclipse.Frames.Main, "RIGHT", 47, 1)
 		BasicEclipse.Frames.Icon.bg:SetTexCoord(unpack(IconShow.moon))
-		
+		B.Flash(BasicEclipse.Frames.Icon, 1)
 		
 		BasicEclipse.Frames.Status:Show()
 		BasicEclipse.Frames.Status:ClearAllPoints()
 		BasicEclipse.Frames.Status:SetPoint("BOTTOMRIGHT", BasicEclipse.Frames.Main, "BOTTOMRIGHT", -1, 1)
 		BasicEclipse.Frames.Status:SetWidth(1)
+		BasicEclipse.Frames.Status.bg:SetTexture(unpack(C['eclipsebar'].colors.solar))
+		BasicEclipse.Frames.Status.bg:SetAllPoints(BasicEclipse.Frames.Status)
+		
+		BasicEclipse.Frames.Below:SetPoint('TOP', BasicEclipse.Frames.Status, 'BOTTOMLEFT', 0, 0)			
 		
 	else
 	
 		BasicEclipse.Frames.Arrow:Hide()
 		BasicEclipse.Frames.Status:Hide()
-		
+		B.StopFlash(BasicEclipse.Frames.Icon)
 	end
+
+
 end
 
 local function Eclipse_UpdateAuras(...)
@@ -116,14 +117,15 @@ end
 local function Eclipse_UpdateShown()
 	local form = GetShapeshiftFormID()
 	if form == MOONKIN_FORM or not form then
-		if ( (GetPrimaryTalentTree() == 1) and UnitExists("target") and UnitCanAttack("player", "target") and not(UnitIsDeadOrGhost("player")) and not(UnitIsDeadOrGhost("target")) and not(UnitInVehicle("player")) ) then
-			BasicEclipse.Frames.Main:Show()
+		if (InCombatLockdown()) then
+			securecall('UIFrameFadeIn', BasicEclipse.Frames.Main, 0.35, BasicEclipse.Frames.Main:GetAlpha(), 1)
 		else
-			BasicEclipse.Frames.Main:Hide()
+			securecall('UIFrameFadeOut', BasicEclipse.Frames.Main, 0.35, BasicEclipse.Frames.Main:GetAlpha(), 0)
 		end
 	else
-		BasicEclipse.Frames.Main:Hide()
+		securecall('UIFrameFadeOut', BasicEclipse.Frames.Main, 0.35, BasicEclipse.Frames.Main:GetAlpha(), 0)
 	end
+	
 end
 
 function BasicEclipse.OnUpdate()
@@ -148,6 +150,14 @@ function BasicEclipse.OnUpdate()
 		powerper = max(powerper, 0)
 		powerper = min(powerper, 1)
 		
+		if (UnitPower('player') == 0) then
+			BasicEclipse.Frames.Below:SetAlpha(0.3)
+			BasicEclipse.Frames.Above:SetAlpha(0.3)
+		else
+			BasicEclipse.Frames.Below:SetAlpha(1)
+			BasicEclipse.Frames.Above:SetAlpha(1)
+		end
+		
 		BasicEclipse.Frames.Status:SetWidth(powerper * (C['eclipsebar'].size.width - 2) + 1)
 		BasicEclipse.Frames.Text.str:SetText(tostring(abs(power)))
 		
@@ -158,20 +168,22 @@ end
 local function Eclipse_PlayerEnteringWorld()
 	Eclipse_UpdateShown()
 	Eclipse_UpdateAuras("player")
-	Eclipse_UpdateDirection()
+	Eclipse_UpdateDirection()	
 end
 
 local function EclipseEvents(self, event, ...)
 	if event == "PLAYER_ENTERING_WORLD" then
 		Eclipse_PlayerEnteringWorld()
-	elseif event == "UPDATE_SHAPESHIFT_FORM" or event == "PLAYER_TALENT_UPDATE" or 
-			event == "MASTERY_UPDATE" or event == "PLAYER_TARGET_CHANGED" or
-			event == "PLAYER_UNGHOST" or event == "PLAYER_ALIVE" or event == "PLAYER_DEAD" then
+	elseif event == "UPDATE_SHAPESHIFT_FORM" or event == "PLAYER_TALENT_UPDATE" or event == "MASTERY_UPDATE" or event == "PLAYER_UNGHOST" or event == "PLAYER_ALIVE" or event == "PLAYER_DEAD" then
 		Eclipse_UpdateShown()
 	elseif event == "UNIT_AURA" then
 		Eclipse_UpdateAuras(...)
 	elseif event == "ECLIPSE_DIRECTION_CHANGE" then
 		Eclipse_UpdateDirection()
+	elseif event == 'PLAYER_REGEN_DISABLED' then
+		securecall('UIFrameFadeIn', BasicEclipse.Frames.Main, 0.35, BasicEclipse.Frames.Main:GetAlpha(), 1)
+	elseif event == 'PLAYER_REGEN_ENABLED' then
+		securecall('UIFrameFadeOut', BasicEclipse.Frames.Main, 0.35, BasicEclipse.Frames.Main:GetAlpha(), 0)
 	end
 end
 
@@ -184,6 +196,8 @@ function BasicEclipse.SetupEvents()
 	BasicEclipse.Frames.Main:RegisterEvent("MASTERY_UPDATE")
 	BasicEclipse.Frames.Main:RegisterEvent("PLAYER_TARGET_CHANGED")
 	BasicEclipse.Frames.Main:RegisterEvent("PLAYER_UNGHOST")
+	BasicEclipse.Frames.Main:RegisterEvent("PLAYER_REGEN_DISABLED")
+	BasicEclipse.Frames.Main:RegisterEvent("PLAYER_REGEN_ENABLED")
 	BasicEclipse.Frames.Main:RegisterEvent("PLAYER_ALIVE")
 	BasicEclipse.Frames.Main:RegisterEvent("PLAYER_DEAD")
 	BasicEclipse.Frames.Main:RegisterEvent("UNIT_AURA")
@@ -220,22 +234,24 @@ function BasicEclipse.UpdateSettings()
 	-- Lunar BG
 	BasicEclipse.Frames.LunarBG:SetWidth((C['eclipsebar'].size.width / 2) - 1)
 	BasicEclipse.Frames.LunarBG:SetHeight(C['eclipsebar'].size.height - 2)
-	BasicEclipse.Frames.LunarBG:SetTexture("Interface\\AddOns\\BasicUI\\BasicMedia\\Eclipse-Lunar.tga")
+	BasicEclipse.Frames.LunarBG:SetTexture("Interface\\AddOns\\BasicUI\\BasicMedia\\Eclipse_Lunar.tga")
 	
 	-- Solar BG
 	BasicEclipse.Frames.SolarBG:SetWidth((C['eclipsebar'].size.width / 2) - 1)
 	BasicEclipse.Frames.SolarBG:SetHeight(C['eclipsebar'].size.height - 2)
-	BasicEclipse.Frames.SolarBG:SetTexture("Interface\\AddOns\\BasicUI\\BasicMedia\\Eclipse-Solar.tga")
+	BasicEclipse.Frames.SolarBG:SetTexture("Interface\\AddOns\\BasicUI\\BasicMedia\\Eclipse_Solar.tga")
 	
-	-- Arrow
-	BasicEclipse.Frames.Arrow:SetPoint("CENTER", BasicEclipse.Frames.Main, "CENTER", 0, 1)
-	BasicEclipse.Frames.Arrow:SetFrameLevel(BasicEclipse.Frames.Main:GetFrameLevel() + 2)
-	BasicEclipse.Frames.Arrow:SetWidth(C['eclipsebar'].size.height * C['eclipsebar'].size.arrowscale)
-	BasicEclipse.Frames.Arrow:SetHeight(C['eclipsebar'].size.height * C['eclipsebar'].size.arrowscale)
 	
-	BasicEclipse.Frames.Arrow.bg:SetTexture(Textures.Arrow)
-	BasicEclipse.Frames.Arrow.bg:SetVertexColor(unpack(C['eclipsebar'].colors.arrow))
-	BasicEclipse.Frames.Arrow.bg:SetAllPoints(BasicEclipse.Frames.Arrow)
+	BasicEclipse.Frames.Below = BasicEclipse.Frames.Main:CreateTexture(nil, 'BACKGROUND')
+	BasicEclipse.Frames.Below:SetHeight(14)
+	BasicEclipse.Frames.Below:SetWidth(14)
+	BasicEclipse.Frames.Below:SetTexture('Interface\\AddOns\\BasicUI\\BasicMedia\\textureArrowBelow')
+
+	BasicEclipse.Frames.Above = BasicEclipse.Frames.Main:CreateTexture(nil, 'BACKGROUND')
+	BasicEclipse.Frames.Above:SetHeight(14)
+	BasicEclipse.Frames.Above:SetWidth(14)
+	BasicEclipse.Frames.Above:SetTexture('Interface\\AddOns\\BasicUI\\BasicMedia\\textureArrowAbove')
+	BasicEclipse.Frames.Above:SetPoint('BOTTOM', BasicEclipse.Frames.Below, 'TOP', 0, BasicEclipse.Frames.Main:GetHeight() - 2)
 	
 	-- Icons (Solar - Lunar)
 	BasicEclipse.Frames.Icon:SetPoint("CENTER", BasicEclipse.Frames.Main, "CENTER", 0, 1)
@@ -251,16 +267,14 @@ function BasicEclipse.UpdateSettings()
 	BasicEclipse.Frames.Status:SetFrameLevel(BasicEclipse.Frames.Main:GetFrameLevel() + 1)
 	BasicEclipse.Frames.Status:SetWidth(1)
 	BasicEclipse.Frames.Status:SetHeight(C['eclipsebar'].size.height - 2)
-	
-	BasicEclipse.Frames.Status.bg:SetTexture(0, 0, 0, C['eclipsebar'].colors.statusopacity)	
-	BasicEclipse.Frames.Status.bg:SetAllPoints(BasicEclipse.Frames.Status)
+
 	
 	-- Text
 	local font = C['eclipsebar'].font.name
 	BasicEclipse.Frames.Text:SetPoint("CENTER", BasicEclipse.Frames.Main, "CENTER", 0, C['eclipsebar'].font.vertoffset)
 	BasicEclipse.Frames.Text:SetFrameLevel(BasicEclipse.Frames.Main:GetFrameLevel() + 2)
-	BasicEclipse.Frames.Text:SetWidth(C['eclipsebar'].size.width - 2)
-	BasicEclipse.Frames.Text:SetHeight(C['eclipsebar'].size.height - 2)
+	BasicEclipse.Frames.Text:SetWidth(24)
+	BasicEclipse.Frames.Text:SetHeight(24)
 	BasicEclipse.Frames.Text.str:SetFont(font, C['eclipsebar'].font.size, C['eclipsebar'].font.tags)
 	BasicEclipse.Frames.Text.str:SetText("0")
 	if C['eclipsebar'].font.hidetext then BasicEclipse.Frames.Text:Hide() end

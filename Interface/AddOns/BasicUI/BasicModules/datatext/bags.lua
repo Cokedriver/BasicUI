@@ -129,12 +129,18 @@ if C['datatext'].bags and C['datatext'].bags > 0 then
 				freeSlots = freeSlots + GetContainerNumFreeSlots(i)
 			end
 			Text:SetText(hexa.."Bags: "..hexb.. freeSlots.. '/' ..totalSlots)
-				if freeSlots < 10 then
+				if freeSlots < 6 then
 					Text:SetTextColor(1,0,0)
+					B.Flash(Text, .5)
+				elseif freeSlots < 10 then
+					Text:SetTextColor(1,0,0)
+					B.Flash(Text, 1)
 				elseif freeSlots > 10 then
 					Text:SetTextColor(1,1,1)
+					B.StopFlash(Text)
 				end
 			self:SetAllPoints(Text)
+			
 		end	
 		if event == "PLAYER_LOGIN" then
 			OldMoney = GetMoney()

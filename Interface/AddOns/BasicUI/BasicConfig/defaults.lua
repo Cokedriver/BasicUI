@@ -152,10 +152,10 @@ DB['eclipsebar'] = {
 
 	-- Position Settings
 	position = {
-		x = 0,					-- Horizontal offset
-		y = -230,					-- Vertical offset
-		anchor = "CENTER",		-- Position on parent. CENTER, RIGHT, LEFT, BOTTOM, BOTTOMRIGHT, BOTTOMLEFT, TOP, TOPRIGHT, TOPLEFT
-		parent = "UIParent",	-- Parent Frame
+		x = 0,								-- Horizontal offset
+		y = -230,							-- Vertical offset
+		anchor = "CENTER",					-- Position on parent. CENTER, RIGHT, LEFT, BOTTOM, BOTTOMRIGHT, BOTTOMLEFT, TOP, TOPRIGHT, TOPLEFT
+		parent = "UIParent",				-- Parent Frame
 	},
 
 	-- Size
@@ -163,26 +163,19 @@ DB['eclipsebar'] = {
 		width = 150,
 		height = 14,
 		icon = 24,
-		arrowscale = 1.4,
 		iconscale = 2,
-		arrowoffset = 4,
-		arrowvertoffset = 0,
 	},
 
 	-- Colors
 	colors = {
-		statusopacity = 0.5,			-- Status bar opacity
-		lunar = {0.13, 0.13, 0.5},		-- Lunar area
-		solar = {0.6, 0.35, 0},			-- Solar area
-		arrow = {1, 1, 1, 1},			-- Direction arrow
-		border = {0, 0, 0},				-- Normal border
-		auraborder = {1, 1, 1},			-- Border when aura is up
+		lunar = {0.13, 0.13, 0.5, 0.5},		-- Lunar area
+		solar = {0.6, 0.35, 0, 0.5},		-- Solar area
 	},
 
 	-- Font
 	font = {
-		hidetext = false,				-- Show/Hide the Text display
-		name = "Fonts\\FRIZQT__.ttf",	-- Path to font. Ie "Interface\\AddOns\\MyMedia\\font.ttf".
+		hidetext = false,					-- Show/Hide the Text display
+		name = "Fonts\\FRIZQT__.ttf",		-- Path to font. Ie "Interface\\AddOns\\MyMedia\\font.ttf".
 		size = 14,
 		tags = "THINOUTLINE",
 		vertoffset = 0,

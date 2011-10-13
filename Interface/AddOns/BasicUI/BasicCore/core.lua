@@ -116,7 +116,7 @@ function B.ShortValue(v)
 end
 
 B.SetUpAnimGroup = function(self)
-	self.anim = self:CreateAnimationGroup("Flash")
+	self.anim = self:CreateAnimationGroup("Pulse")
 	self.anim.fadein = self.anim:CreateAnimation("ALPHA", "FadeIn")
 	self.anim.fadein:SetChange(1)
 	self.anim.fadein:SetOrder(2)
@@ -128,11 +128,12 @@ end
 
 B.Flash = function(self, duration)
 	if not self.anim then
-		E.SetUpAnimGroup(self)
+		B.SetUpAnimGroup(self)
 	end
 
 	self.anim.fadein:SetDuration(duration)
 	self.anim.fadeout:SetDuration(duration)
+	self.anim:SetLooping("REPEAT")
 	self.anim:Play()
 end
 

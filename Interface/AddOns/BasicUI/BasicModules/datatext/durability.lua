@@ -44,7 +44,7 @@ if C['datatext'].dur and C['datatext'].dur > 0 then
 	local Total = 0
 	local current, max
 
-	B.SetUpAnimGroup(DurabilityDataText)
+
 	local function OnEvent(self)
 		-- local hexString = "|cff%s"
 		Total = 0
@@ -67,13 +67,13 @@ if C['datatext'].dur and C['datatext'].dur > 0 then
 				Stat:SetScript("OnUpdate", function(self, t)
 					int = int - t
 					if int < 0 then
-						B.Flash(DurabilityDataText, 0.53)
+						B.Flash(Text, .5)
 						int = 1
 					end
 				end)				
 			else
 				Stat:SetScript("OnUpdate", function() end)
-				B.StopFlash(DurabilityDataText)
+				B.StopFlash(Text)
 			end
 		else
 			Text:SetFormattedText(displayString, statusColors[1], 100)
