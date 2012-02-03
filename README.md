@@ -21,5 +21,5 @@
 
 ##Thanks goes to
  
-## Neal - NeavUI, Tuks and Programers - Tukui, Nightcracker - ncQuest and all the others.
+### Neal - NeavUI, Tuks and Programers - Tukui, Nightcracker - ncQuest and all the others.
 
