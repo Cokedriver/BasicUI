@@ -3,17 +3,15 @@
 ## A Basic UI Replacement for the World of Warcraft Interface.
 
 ## Addons Included in the UI:
-
-###Addon Name				###Version
-- _NPCScan 					4.3.0.1
-- _NPCScan.Overlay			4.3.0.1
-- Auctionlite				1.8.3
-- BasicUI					2.0
-- MikScrollingBattleText	5.6.113
-- oGlow						2.1.3
-- Recount					4.3.0b
+- _NPCScan 					v4.3.0.1
+- _NPCScan.Overlay			v4.3.0.1
+- Auctionlite				v1.8.3
+- BasicUI					v2.0
+- MikScrollingBattleText	v5.6.113
+- oGlow						v2.1.3
+- Recount					v4.3.0b
 - TomTom					v40300-1.4.4-541092e
-- WoWPro					2.2.0D
+- WoWPro					v2.2.0D
 
 
  
