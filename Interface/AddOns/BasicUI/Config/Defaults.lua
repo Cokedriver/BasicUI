@@ -73,7 +73,7 @@ DB['chat'] = {
 	['enable'] = true,
 	['disableFade'] = false,
 	['chatOutline'] = false,
-
+	['border'] = true,
 	
 	['enableBottomButton'] = true, 
 	['enableHyperlinkTooltip'] = true, 
@@ -144,44 +144,6 @@ DB['datatext'] = {
 		
 }
 
----------------------
--- EclipseBar Options
----------------------
-DB['eclipsebar'] = {
-	enable = true,
-
-	-- Position Settings
-	position = {
-		x = 0,								-- Horizontal offset
-		y = -230,							-- Vertical offset
-		anchor = "CENTER",					-- Position on parent. CENTER, RIGHT, LEFT, BOTTOM, BOTTOMRIGHT, BOTTOMLEFT, TOP, TOPRIGHT, TOPLEFT
-		parent = "UIParent",				-- Parent Frame
-	},
-
-	-- Size
-	size = {
-		width = 150,
-		height = 14,
-		icon = 24,
-		iconscale = 2,
-	},
-
-	-- Colors
-	colors = {
-		lunar = {0.13, 0.13, 0.5, 0.5},		-- Lunar area
-		solar = {0.6, 0.35, 0, 0.5},		-- Solar area
-	},
-
-	-- Font
-	font = {
-		hidetext = false,					-- Show/Hide the Text display
-		name = "Fonts\\FRIZQT__.ttf",		-- Path to font. Ie "Interface\\AddOns\\MyMedia\\font.ttf".
-		size = 14,
-		tags = "THINOUTLINE",
-		vertoffset = 0,
-	},
-}
-
 -------------------
 -- General Options
 -------------------
@@ -197,10 +159,9 @@ DB['general'] = {
 	},
 	['mail'] = {
 		['enable'] = true,
-		['gold'] = true,
-		['item'] = true,
 		['openall'] = true,
 		['BlackBook'] = {
+			['enable'] = true,
 			['AutoFill'] = true,
 			['contacts'] = {},
 			['recent'] = {},
@@ -226,7 +187,8 @@ DB['general'] = {
 		['showMacronames'] = false,
 		
 		-- Button Colors
-		['color'] = {   		
+		['color'] = { 
+			['enable'] = true,
 			['OutOfRange'] = { r = 0.9, g = 0, b = 0 },
 			['OutOfMana'] = { r = 0, g = 0, b = 0.9 },			
 			['NotUsable'] = { r = 0.3, g = 0.3, b = 0.3 },
@@ -257,7 +219,7 @@ DB['powerbar'] = {
 	['showHolypower'] = true,
 	['showComboPoints'] = true,
 	['showRuneCooldown'] = true,
-	['showEclipse'] = true,
+	['showEclipseBar'] = true,
 
 	
 	['energybar'] = true,

@@ -23,7 +23,7 @@ if C['datatext'].top == true then
 	DataPanel:SetFrameLevel(0)
 	DataPanel:SetBackdrop({
 		bgFile = "Interface\\TutorialFrame\\TutorialFrameBackground",
-		edgeFile = "Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border",							
+		edgeFile = "Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border",							
 		tile = true, tileSize = 16, edgeSize = 18,
 		insets = {left = 3, right = 3, top = 3, bottom = 3},
 	})
@@ -62,7 +62,7 @@ else
 	DataPanel:SetFrameLevel(0)
 	DataPanel:SetBackdrop({
 		bgFile = "Interface\\TutorialFrame\\TutorialFrameBackground",
-		edgeFile = "Interface\\AddOns\\BasicUI\\BasicMedia\\UI-DialogBox-Border",
+		edgeFile = "Interface\\AddOns\\BasicUI\\Media\\UI-DialogBox-Border",
 		edgeSize = 25,
 		insets = {left = 9, right = 9, top = 9, bottom = 8}
 	})

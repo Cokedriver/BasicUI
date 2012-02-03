@@ -156,13 +156,13 @@ function BasicUIConfig.GenerateOptionsInternal()
 								type = "toggle",
 								disabled = function() return not db.general.buttons.enable end,
 							},
-							showMacronames = {
+							--[[showMacronames = {
 								order = 3,
 								name = L["Macro Names"],
 								desc = L["Enables Show/Hide of Macro Names."],
 								type = "toggle",
 								disabled = function() return not db.general.buttons.enable end,
-							},
+							},]]
 							color = {
 								type = "group",
 								order = 5,
@@ -258,27 +258,99 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Enables Mail Module"],
 								type = "toggle",								
 							},						
-							gold = {
-								order = 3,
-								name = L["Gold"],
-								desc = L["Enables Gold Collect Button on Mailbox."],
-								type = "toggle",
-								disabled = function() return not db.general.mail.enable end,
-							},
-							item = {
-								order = 4,
-								name = L["Item"],
-								desc = L["Enables Item Collect Button on Mailbox"],
-								type = "toggle",
-								disabled = function() return not db.general.mail.enable end,
-							},
 							openall = {
-								order = 5,
+								order = 4,
 								name = L["Open All"],
 								desc = L["Enables Open All Collect Button on Mailbox"],
 								type = "toggle",
 								disabled = function() return not db.general.mail.enable end,
-							},							
+							},
+							BlackBook = {
+								type = "group",
+								order = 5,
+								name = L["BlackBook"],
+								desc = L["Enables Send Mail Drop Down Menu. (Barrowed from Postal) "],
+								guiInline = true,
+								get = function(info) return db.general.mail.BlackBook[ info[#info] ] end,
+								set = function(info, value) db.general.mail.BlackBook[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+								disabled = function() return not db.general.mail.enable end,
+								args = {
+									intro = {
+										order = 1,
+										type = "description",
+										name = L["Enables Send Mail Drop Down Menu. (Barrowed from Postal) "],
+									},					
+									enable = {
+										order = 2,
+										name = L["Enable"],
+										desc = L["Enables BlackBook Module"],
+										type = "toggle",								
+									},
+									AutoFill = {
+										order = 3,
+										name = L["Auto Fill"],
+										desc = L["AutoFill Names"],
+										type = "toggle",
+										disabled = function() return not db.general.mail.enable or not db.general.mail.BlackBook.enable end,
+									},
+									AutoCompleteAlts = {
+										order = 4,
+										name = L["Auto Complete Alts"],
+										desc = L["Mailing list of Alts."],
+										type = "toggle",
+										disabled = function() return not db.general.mail.enable or not db.general.mail.BlackBook.enable end,										
+									},
+									AutoCompleteRecent = {
+										order = 5,
+										name = L["Auto Complete Recent"],
+										desc = L["Mailing list of Recently Mailed People."],
+										type = "toggle",
+										disabled = function() return not db.general.mail.enable or not db.general.mail.BlackBook.enable end,
+									},
+									AutoCompleteContacts = {
+										order = 6,
+										name = L["Auto Complete Contacts"],
+										desc = L["Mailing list of Contacts."],
+										type = "toggle",
+										disabled = function() return not db.general.mail.enable or not db.general.mail.BlackBook.enable end,
+									},
+									AutoCompleteFriends = {
+										order = 7,
+										name = L["Auto Complete Friends"],
+										desc = L["Mailing list of Friends."],
+										type = "toggle",
+										disabled = function() return not db.general.mail.enable or not db.general.mail.BlackBook.enable end,
+									},
+									AutoCompleteGuild = {
+										order = 8,
+										name = L["Auto Complete Guild"],
+										desc = L["Mailing list of Guildies."],
+										type = "toggle",
+										disabled = function() return not db.general.mail.enable or not db.general.mail.BlackBook.enable end,
+									},
+									ExcludeRandoms = {
+										order = 9,
+										name = L["Exclude Randoms"],
+										desc = L["Mailing list of Random People."],
+										type = "toggle",
+										disabled = function() return not db.general.mail.enable or not db.general.mail.BlackBook.enable end,
+									},
+									DisableBlizzardAutoComplete = {
+										order = 10,
+										name = L["Disable Blizzard Auto Complete"],
+										desc = L["Disable blizzards Auto Complete when Typing."],
+										type = "toggle",
+										disabled = function() return not db.general.mail.enable or not db.general.mail.BlackBook.enable end,
+									},
+									UseAutoComplete = {
+										order = 11,
+										name = L["Use Auto Complete"],
+										desc = L["Enable Auto Complete when Typing"],
+										type = "toggle",
+										disabled = function() return not db.general.mail.enable or not db.general.mail.BlackBook.enable end,
+									},
+								},
+							},	
 						},
 					},					
 					scale = {
@@ -768,6 +840,13 @@ function BasicUIConfig.GenerateOptionsInternal()
 						desc = L["Enables Chat Module."],
 						type = "toggle",							
 					},
+					border = {
+						order = 3,
+						name = L["Border"],
+						desc = L["Disables Border around Chat Windows."],
+						type = "toggle",
+						disabled = function() return not db.chat.enable end,
+					},					
 					disableFade = {
 						order = 3,
 						name = L["Disable Fade"],
@@ -1146,9 +1225,9 @@ function BasicUIConfig.GenerateOptionsInternal()
 						type = "toggle",
 						disabled = function() return not db.powerbar.enable end,
 					},
-					showEclipse = {
+					showEclipseBar = {
 						order = 4,
-						name = L["Eclipse"],
+						name = L["Eclipsebar"],
 						desc = L["Move the Eclipsebar above Powerbar."],
 						type = "toggle",
 						disabled = function() return not db.powerbar.enable end,
@@ -1228,7 +1307,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 						type = "group",
 						order = 15,
 						name = L["Combo"],
-						desc = L["COMBO_DESC"],	
+						desc = L["Combo Points Options"],	
 						guiInline = true,
 						disabled = function() return not db.powerbar.enable end,
 						get = function(info) return db.powerbar.combo[ info[#info] ] end,
@@ -1237,7 +1316,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 							intro = {
 								order = 1,
 								type = "description",
-								name = L["COMBO_DESC"],
+								name = L["Options for Combo Points"],
 							},											
 							FontOutline = {
 								order = 2,
@@ -1725,50 +1804,6 @@ function BasicUIConfig:SetDefaultOptions()
 	
 		['threatbar'] = true,									-- Enable the threatbar over the Center Panel.
 		
-	}
-	---------------------
-	-- EclipseBar Options
-	---------------------
-	addon.eclipsebar = {
-		enable = true,
-
-		-- Position Settings
-		position = {
-			x = 0,											-- Horizontal offset
-			y = -230,										-- Vertical offset
-			anchor = "CENTER",								-- Position on parent. CENTER, RIGHT, LEFT, BOTTOM, BOTTOMRIGHT, BOTTOMLEFT, TOP, TOPRIGHT, TOPLEFT
-			parent = "UIParent",							-- Parent Frame
-		},
-
-		-- Size
-		size = {
-			width = 150,
-			height = 14,
-			icon = 24,
-			arrowscale = 1.4,
-			iconscale = 2,
-			arrowoffset = 4,
-			arrowvertoffset = 0,
-		},
-
-		-- Colors
-		colors = {
-			statusopacity = 0.5,							-- Status bar opacity
-			lunar = {0.13, 0.13, 0.5, 0.5},					-- Lunar area
-			solar = {0.6, 0.35, 0, 0.5},					-- Solar area
-			arrow = {1, 1, 1, 1},							-- Direction arrow
-			border = {0, 0, 0},								-- Normal border
-			auraborder = {1, 1, 1},							-- Border when aura is up
-		},
-
-		-- Font
-		font = {
-			hidetext = false,								-- Show/Hide the Text display
-			name = "Fonts\\FRIZQT__.ttf",					-- Path to font. Ie "Interface\\AddOns\\MyMedia\\font.ttf".
-			size = 14,
-			tags = "THINOUTLINE",
-			vertoffset = 0,
-		},
 	}	
 	addon.general = {
 		['autogreed'] = true,
@@ -1780,10 +1815,9 @@ function BasicUIConfig:SetDefaultOptions()
 		},
 		['mail'] = {
 			['enable'] = true,
-			['gold'] = true,
-			['item'] = true,
 			['openall'] = true,
 			['BlackBook'] = {
+				['enable'] = true,
 				['AutoFill'] = true,
 				['contacts'] = {},
 				['recent'] = {},
@@ -1831,7 +1865,7 @@ function BasicUIConfig:SetDefaultOptions()
 		['showHolypower'] = true,
 		['showComboPoints'] = true,
 		['showRuneCooldown'] = true,
-		['showEclipse'] = true,
+		['showEclipseBar'] = true,
 			
 		['energybar'] = true,
 		['focusbar'] =  true,

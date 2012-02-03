@@ -28,7 +28,7 @@ f:SetScript('OnEvent', function(self, ...)
 							icon1.overlay:SetFrameStrata("MEDIUM");
 							icon1.overlay:SetPoint("BOTTOMRIGHT", tbar, "BOTTOMLEFT", -22/4, -4);
 							icon1.overlay:SetBackdrop({
-								edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
+								edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
 								edgeSize = 13,
 							})
 							icon1.overlay:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)								
@@ -41,7 +41,7 @@ f:SetScript('OnEvent', function(self, ...)
 							icon2.overlay:SetFrameStrata("MEDIUM");
 							icon2.overlay:SetPoint("BOTTOMLEFT", tbar, "BOTTOMRIGHT", 22/4, -4);
 							icon2.overlay:SetBackdrop({
-								edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
+								edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
 								edgeSize = 13,
 							})
 							icon2.overlay:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)								
@@ -66,7 +66,7 @@ f:SetScript('OnEvent', function(self, ...)
 							border:SetPoint("TOPLEFT", -2, 2);
 							border:SetPoint("BOTTOMRIGHT", 2, -2);
 							border:SetBackdrop({
-								edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
+								edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
 								edgeSize = 13,
 							})
 							border:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)								
@@ -196,7 +196,7 @@ f:SetScript('OnEvent', function(self, ...)
 					barb:SetPoint("TOPLEFT", -2, 2);
 					barb:SetPoint("BOTTOMRIGHT", 2, -2);
 					barb:SetBackdrop({
-						edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
+						edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
 						edgeSize = 13,
 					})
 					barb:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)					
@@ -242,7 +242,7 @@ f:SetScript('OnEvent', function(self, ...)
 		bgs:SetPoint("TOPLEFT", -3, -8);
 		bgs:SetPoint("BOTTOMRIGHT", 1, 0);
 		bgs:SetBackdrop({
-			edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
+			edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
 			edgeSize = 13,
 		})
 		bgs:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)

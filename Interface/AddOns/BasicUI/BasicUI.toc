@@ -1,68 +1,69 @@
-## Interface: 40200
+## Interface: 40300
 ## Author: Cokedriver / Baine
-## Version: 1.2
+## Version: 2.0
 ## Title: |cff00B4FFBasic|rUI
 ## Notes: A Basic UI Replacement for the World of Warcraft Interface.
 ## SavedVariables: BasicDB
 ## SavedVariablesPerCharacter: BasicDBPerCharacter
 ## RequiredDeps: BasicUI_Config
-## OptionalDeps: DBM-Core, Recount
+## OptionalDeps: DBM-Core, Recount, Blizzard_TimeManager
 
 
 -- Ace Libs
-BasicLibs\LibStub.lua
-BasicLibs\CallbackHandler-1.0.lua
-BasicLibs\LibSharedMedia-3.0.lua
-BasicLibs\AceAddon-3.0.lua
-BasicLibs\AceEvent-3.0.lua
-BasicLibs\AceTimer-3.0.lua
-BasicLibs\AceHook-3.0.lua
-BasicLibs\LibQTip-1.0.lua
-BasicLibs\LibCrayon-3.0.lua
+Libs\LibStub.lua
+Libs\CallbackHandler-1.0.lua
+Libs\LibSharedMedia-3.0.lua
+Libs\AceAddon-3.0.lua
+Libs\AceEvent-3.0.lua
+Libs\AceTimer-3.0.lua
+Libs\AceHook-3.0.lua
+Libs\LibQTip-1.0.lua
+Libs\LibCrayon-3.0.lua
 
 -- Core
-BasicCore\init.lua
-BasicCore\core.lua
+Core\Engine.lua
+Core\Core.lua
 
 -- Config
-BasicConfig\defaults.lua
-BasicConfig\configui.lua
+Config\Defaults.lua
+Config\Config.lua
 
 -- Modules
-BasicModules\buffs\buff.lua
-BasicModules\buffs\selfbuffs.lua
-BasicModules\chat\chat.lua
-BasicModules\datatext\datapanel.lua
-BasicModules\datatext\positions.lua
-BasicModules\datatext\colors.lua
-BasicModules\datatext\coords.lua
-BasicModules\datatext\professions.lua
-BasicModules\datatext\stat1.lua
-BasicModules\datatext\stat2.lua
-BasicModules\datatext\battleground.lua
-BasicModules\datatext\durability.lua
-BasicModules\datatext\system.lua
-BasicModules\datatext\friends.lua
-BasicModules\datatext\guild.lua
-BasicModules\datatext\time.lua
-BasicModules\datatext\bags.lua
-BasicModules\datatext\dps.lua
-BasicModules\datatext\hps.lua
-BasicModules\datatext\spec.lua
-BasicModules\datatext\threatbar.lua
-BasicModules\datatext\zone.lua	
-BasicModules\datatext\calltoarms.lua
-BasicModules\datatext\recount.lua
-BasicModules\general\autogreed.lua
-BasicModules\general\castbar.lua
-BasicModules\general\colorz.lua
-BasicModules\general\cooldown.lua
-BasicModules\general\eclipsebar.lua
-BasicModules\general\merchant.lua
-BasicModules\general\quest.lua
-BasicModules\general\powerbar.lua
-BasicModules\general\buttons.lua
-BasicModules\general\scale.lua
-BasicModules\general\skinning.lua
-BasicModules\general\mail.lua
-BasicModules\tooltip\tooltip.lua
+Modules\Buffs\Buff.lua
+Modules\Buffs\Selfbuffs.lua
+Modules\Chat\Chat.lua
+Modules\Datatext\Datapanel.lua
+Modules\Datatext\Positions.lua
+Modules\Datatext\Colors.lua
+Modules\Datatext\Coords.lua
+Modules\Datatext\Professions.lua
+Modules\Datatext\Stat1.lua
+Modules\Datatext\Stat2.lua
+Modules\Datatext\Battleground.lua
+Modules\Datatext\Durability.lua
+Modules\Datatext\System.lua
+Modules\Datatext\Friends.lua
+Modules\Datatext\Guild.lua
+Modules\Datatext\Time.lua
+Modules\Datatext\Bags.lua
+Modules\Datatext\Dps.lua
+Modules\Datatext\Hps.lua
+Modules\Datatext\Spec.lua
+Modules\Datatext\Threatbar.lua
+Modules\Datatext\Zone.lua	
+Modules\Datatext\Calltoarms.lua
+Modules\Datatext\Recount.lua
+Modules\General\Autogreed.lua
+Modules\General\Castbar.lua
+Modules\General\Colorz.lua
+Modules\General\Cooldown.lua
+Modules\General\Minimap.lua
+Modules\General\Merchant.lua
+Modules\General\Quest.lua
+Modules\General\Powerbar.lua
+Modules\General\Buttons.lua
+Modules\General\Scale.lua
+Modules\General\Skinning.lua
+Modules\General\Watchframe.lua
+Modules\General\Mail.lua
+Modules\Tooltip\Tooltip.lua

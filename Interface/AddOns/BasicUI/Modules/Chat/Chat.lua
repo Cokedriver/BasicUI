@@ -132,7 +132,7 @@ ChatFrame1EditBox:SetPoint('BOTTOMLEFT', ChatFrame1, 'TOPLEFT', 2, 33)
 ChatFrame1EditBox:SetPoint('BOTTOMRIGHT', ChatFrame1, 'TOPRIGHT', 0, 33)
 ChatFrame1EditBox:SetBackdrop({
     bgFile = 'Interface\\DialogFrame\\UI-DialogBox-Background',
-    edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
+    edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
     tile = true, tileSize = 16, edgeSize = 18,
     insets = {left = 3, right = 3, top = 2, bottom = 3},
 })
@@ -593,10 +593,10 @@ local function CreateCopyButton(self)
     self.Copy:SetSize(20, 20)
     self.Copy:SetPoint('TOPRIGHT', self, -5, -5)
 
-    self.Copy:SetNormalTexture('Interface\\AddOns\\BasicUI\\BasicMedia\\textureCopyNormal')
+    self.Copy:SetNormalTexture('Interface\\AddOns\\BasicUI\\Media\\textureCopyNormal')
     self.Copy:GetNormalTexture():SetSize(20, 20)
 
-    self.Copy:SetHighlightTexture('Interface\\AddOns\\BasicUI\\BasicMedia\\textureCopyHighlight')
+    self.Copy:SetHighlightTexture('Interface\\AddOns\\BasicUI\\Media\\textureCopyHighlight')
     self.Copy:GetHighlightTexture():SetAllPoints(self.Copy:GetNormalTexture())
 
     local tab = _G[self:GetName()..'Tab']
@@ -773,20 +773,22 @@ end
 hooksecurefunc('FCF_OpenTemporaryWindow', EnableItemLinkTooltip)
 EnableItemLinkTooltip()
 
-for i = 1, NUM_CHAT_WINDOWS do
-	local cf = _G['ChatFrame'..i]
-	local bg = CreateFrame("Frame", nil, cf);
-	bg:SetFrameStrata("BACKGROUND");
-	
-	if i == 2 then
-		bg:SetPoint("TOPLEFT", -8, 32);
-	else
-		bg:SetPoint("TOPLEFT", -8, 8);
-	end	
-	bg:SetPoint("BOTTOMRIGHT", 8, -12);
-	bg:SetBackdrop({
-		edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
-		edgeSize = 18,
-	})
-	bg:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+if C["chat"].border == true then
+	for i = 1, NUM_CHAT_WINDOWS do
+		local cf = _G['ChatFrame'..i]
+		local bg = CreateFrame("Frame", nil, cf);
+		bg:SetFrameStrata("BACKGROUND");
+		
+		if i == 2 then
+			bg:SetPoint("TOPLEFT", -8, 32);
+		else
+			bg:SetPoint("TOPLEFT", -8, 8);
+		end	
+		bg:SetPoint("BOTTOMRIGHT", 8, -12);
+		bg:SetBackdrop({
+			edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
+			edgeSize = 18,
+		})
+		bg:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+	end
 end

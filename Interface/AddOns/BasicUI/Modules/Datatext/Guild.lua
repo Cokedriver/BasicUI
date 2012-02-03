@@ -341,7 +341,7 @@ function OnEnter(self)
 	-- set the look of the tooltip
 	tooltip:SetBackdrop({
 		bgFile = "Interface\\TutorialFrame\\TutorialFrameBackground",
-		edgeFile = "Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border",							
+		edgeFile = "Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border",							
 		tile = true, tileSize = 16, edgeSize = 18,
 		insets = {left = 3, right = 3, top = 3, bottom = 3},
 	})

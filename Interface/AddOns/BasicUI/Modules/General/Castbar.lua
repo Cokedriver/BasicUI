@@ -126,8 +126,8 @@ for k, _ in pairs(C['castbar']) do
         a:SetWidth(d.w); a:SetHeight(d.h);
         a:SetBackdropColor(.1, .1, .1, .95);
 		a:SetBackdrop({
-			bgFile = "Interface\\AddOns\\BasicUI\\BasicMedia\\BLACK8X8",
-			edgeFile = 'Interface\\AddOns\\BasicUI\\BasicMedia\\UI-Tooltip-Border',
+			bgFile = "Interface\\AddOns\\BasicUI\\Media\\BLACK8X8",
+			edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
 			edgeSize = 13,
 			insets = {left = 3, right = 3, top = 3, bottom = 3}
 		})

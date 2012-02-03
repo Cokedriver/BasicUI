@@ -1,4 +1,4 @@
-## Interface: 40200
+## Interface: 40300
 ## Title: |cff00B4FFBasic|rUI Config
 ## Notes: Config for BasicUI
 ## Author: Cokedrivers / Baine
@@ -6,46 +6,46 @@
 ## RequiredDeps: BasicUI
 
 
-BasicUI_Config_Libs\LibStub.lua
-BasicUI_Config_Libs\CallbackHandler-1.0.lua
-BasicUI_Config_Libs\AceAddon-3.0.lua
-BasicUI_Config_Libs\AceEvent-3.0.lua
-BasicUI_Config_Libs\AceGUI-3.0.lua
-BasicUI_Config_Libs\AceGUIContainer-BlizOptionsGroup.lua
-BasicUI_Config_Libs\AceGUIContainer-DropDownGroup.lua
-BasicUI_Config_Libs\AceGUIContainer-Frame.lua
-BasicUI_Config_Libs\AceGUIContainer-InlineGroup.lua
-BasicUI_Config_Libs\AceGUIContainer-ScrollFrame.lua
-BasicUI_Config_Libs\AceGUIContainer-SimpleGroup.lua
-BasicUI_Config_Libs\AceGUIContainer-TabGroup.lua
-BasicUI_Config_Libs\AceGUIContainer-TreeGroup.lua
-BasicUI_Config_Libs\AceGUIContainer-Window.lua
-BasicUI_Config_Libs\AceGUIWidget-Button.lua
-BasicUI_Config_Libs\AceGUIWidget-CheckBox.lua
-BasicUI_Config_Libs\AceGUIWidget-ColorPicker.lua
-BasicUI_Config_Libs\AceGUIWidget-DropDown.lua
-BasicUI_Config_Libs\AceGUIWidget-DropDown-Items.lua
-BasicUI_Config_Libs\AceGUIWidget-EditBox.lua
-BasicUI_Config_Libs\AceGUIWidget-Heading.lua
-BasicUI_Config_Libs\AceGUIWidget-Icon.lua
-BasicUI_Config_Libs\AceGUIWidget-InteractiveLabel.lua
-BasicUI_Config_Libs\AceGUIWidget-Keybinding.lua
-BasicUI_Config_Libs\AceGUIWidget-Label.lua
-BasicUI_Config_Libs\AceGUIWidget-MultiLineEditBox.lua
-BasicUI_Config_Libs\AceGUIWidget-Slider.lua
-BasicUI_Config_Libs\AceConfigRegistry-3.0.lua
-BasicUI_Config_Libs\AceConfigCmd-3.0.lua
-BasicUI_Config_Libs\AceConfigDialog-3.0.lua
-BasicUI_Config_Libs\AceConfig-3.0.lua
-BasicUI_Config_Libs\AceConsole-3.0.lua
-BasicUI_Config_Libs\AceDB-3.0.lua
-BasicUI_Config_Libs\AceDBOptions-3.0.lua
-BasicUI_Config_Libs\LibSharedMedia-3.0.lua
-BasicUI_Config_Libs\prototypes.lua
-BasicUI_Config_Libs\FontWidget.lua
-BasicUI_Config_Libs\SoundWidget.lua
-BasicUI_Config_Libs\StatusbarWidget.lua
-BasicUI_Config_Libs\BorderWidget.lua
-BasicUI_Config_Libs\BackgroundWidget.lua
+Libs\LibStub.lua
+Libs\CallbackHandler-1.0.lua
+Libs\AceAddon-3.0.lua
+Libs\AceEvent-3.0.lua
+Libs\AceGUI-3.0.lua
+Libs\AceGUIContainer-BlizOptionsGroup.lua
+Libs\AceGUIContainer-DropDownGroup.lua
+Libs\AceGUIContainer-Frame.lua
+Libs\AceGUIContainer-InlineGroup.lua
+Libs\AceGUIContainer-ScrollFrame.lua
+Libs\AceGUIContainer-SimpleGroup.lua
+Libs\AceGUIContainer-TabGroup.lua
+Libs\AceGUIContainer-TreeGroup.lua
+Libs\AceGUIContainer-Window.lua
+Libs\AceGUIWidget-Button.lua
+Libs\AceGUIWidget-CheckBox.lua
+Libs\AceGUIWidget-ColorPicker.lua
+Libs\AceGUIWidget-DropDown.lua
+Libs\AceGUIWidget-DropDown-Items.lua
+Libs\AceGUIWidget-EditBox.lua
+Libs\AceGUIWidget-Heading.lua
+Libs\AceGUIWidget-Icon.lua
+Libs\AceGUIWidget-InteractiveLabel.lua
+Libs\AceGUIWidget-Keybinding.lua
+Libs\AceGUIWidget-Label.lua
+Libs\AceGUIWidget-MultiLineEditBox.lua
+Libs\AceGUIWidget-Slider.lua
+Libs\AceConfigRegistry-3.0.lua
+Libs\AceConfigCmd-3.0.lua
+Libs\AceConfigDialog-3.0.lua
+Libs\AceConfig-3.0.lua
+Libs\AceConsole-3.0.lua
+Libs\AceDB-3.0.lua
+Libs\AceDBOptions-3.0.lua
+Libs\LibSharedMedia-3.0.lua
+Libs\prototypes.lua
+Libs\FontWidget.lua
+Libs\SoundWidget.lua
+Libs\StatusbarWidget.lua
+Libs\BorderWidget.lua
+Libs\BackgroundWidget.lua
 
-BasicUI_Config_Core.lua
+BasicUI_Config.lua
