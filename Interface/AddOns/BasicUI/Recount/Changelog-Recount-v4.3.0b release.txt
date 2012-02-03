@@ -1,0 +1,62 @@
+------------------------------------------------------------------------
+r1189 | elsia | 2011-12-05 00:29:33 +0000 (Mon, 05 Dec 2011) | 1 line
+Changed paths:
+   A /tags/v4.3.0b release (from /trunk:1188)
+
+Tagging as v4.3.0b release
+------------------------------------------------------------------------
+r1188 | elsia | 2011-12-05 00:27:21 +0000 (Mon, 05 Dec 2011) | 1 line
+Changed paths:
+   M /trunk/Tracker.lua
+
+- Alright. Finally. isOffhand field is real for CLEU. So added it for both SPELL_MISSED and SWING_MISSED events. Thanks to funkydude for providing relevant CLEU lines.
+------------------------------------------------------------------------
+r1187 | elsia | 2011-12-04 23:58:07 +0000 (Sun, 04 Dec 2011) | 1 line
+Changed paths:
+   M /trunk/Tracker.lua
+
+- Undoing changes for isOffhand field for _MISS events. It simply doesn't exist in 4.3 live.
+------------------------------------------------------------------------
+r1186 | elsia | 2011-12-04 19:34:37 +0000 (Sun, 04 Dec 2011) | 1 line
+Changed paths:
+   M /trunk/Tracker.lua
+
+- And moved TOC detection.
+------------------------------------------------------------------------
+r1185 | elsia | 2011-12-04 19:28:21 +0000 (Sun, 04 Dec 2011) | 1 line
+Changed paths:
+   M /trunk/Tracker.lua
+
+- It's SwingMiss not SpellMiss, doh. Fix.
+------------------------------------------------------------------------
+r1184 | elsia | 2011-12-04 18:41:04 +0000 (Sun, 04 Dec 2011) | 1 line
+Changed paths:
+   M /trunk/Tracker.lua
+
+- Fixed for miss events, that now insert an offhand field between miss type and miss amount. Caused nil errors.
+------------------------------------------------------------------------
+r1183 | elsia | 2011-12-02 05:37:24 +0000 (Fri, 02 Dec 2011) | 1 line
+Changed paths:
+   M /trunk/Recount.toc
+   A /trunk/locales/Recount-ptBR.lua
+
+- Adding Brazilian Portugese localization support.
+------------------------------------------------------------------------
+r1181 | elsia | 2011-11-30 01:26:11 +0000 (Wed, 30 Nov 2011) | 1 line
+Changed paths:
+   M /trunk/Recount.toc
+
+- Bump ze TOCs.
+------------------------------------------------------------------------
+r1180 | elsia | 2011-11-05 05:48:49 +0000 (Sat, 05 Nov 2011) | 1 line
+Changed paths:
+   M /trunk/GUI_Detail.lua
+
+- Another div by zero case.
+------------------------------------------------------------------------
+r1179 | elsia | 2011-11-01 14:12:37 +0000 (Tue, 01 Nov 2011) | 1 line
+Changed paths:
+   M /trunk/Tracker.lua
+
+- Fixed another div by zero error.
+------------------------------------------------------------------------

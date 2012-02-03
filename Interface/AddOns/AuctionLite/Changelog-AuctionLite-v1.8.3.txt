@@ -1,0 +1,53 @@
+------------------------------------------------------------------------
+r225 | merialkilrogg | 2011-12-01 23:09:55 +0000 (Thu, 01 Dec 2011) | 4 lines
+Changed paths:
+   A /tags/v1.8.3 (from /trunk:224)
+
+Tagging as v1.8.3
+
+Changes:
+- Updated for WoW 4.3
+------------------------------------------------------------------------
+r224 | merialkilrogg | 2011-12-01 23:06:04 +0000 (Thu, 01 Dec 2011) | 2 lines
+Changed paths:
+   M /trunk/Util.lua
+
+Remove unused clientVersion variable.
+
+------------------------------------------------------------------------
+r223 | merialkilrogg | 2011-12-01 23:03:18 +0000 (Thu, 01 Dec 2011) | 2 lines
+Changed paths:
+   M /trunk/AuctionLite.lua
+   M /trunk/AuctionLite.toc
+
+Bump version number to 1.8.3.
+
+------------------------------------------------------------------------
+r222 | merialkilrogg | 2011-12-01 23:02:24 +0000 (Thu, 01 Dec 2011) | 3 lines
+Changed paths:
+   M /trunk/AuctionLite.toc
+   M /trunk/QueryAuctions.lua
+   M /trunk/Util.lua
+
+Bump ToC to 40300 for Patch 4.3.
+A few minor style tweaks.
+
+------------------------------------------------------------------------
+r221 | cybeloras | 2011-11-07 05:39:29 +0000 (Mon, 07 Nov 2011) | 1 line
+Changed paths:
+   M /trunk/Util.lua
+
+Updated for 4.3: New arg in GetAuctionItemInfo
+------------------------------------------------------------------------
+r220 | cybeloras | 2011-11-07 05:32:39 +0000 (Mon, 07 Nov 2011) | 1 line
+Changed paths:
+   M /trunk/QueryAuctions.lua
+
+Fixed division by zero (no longer possible in 4.3)
+------------------------------------------------------------------------
+r219 | cybeloras | 2011-11-07 05:27:21 +0000 (Mon, 07 Nov 2011) | 1 line
+Changed paths:
+   M /trunk/AuctionLite.lua
+
+Fixed ADDON_LOADED calls
+------------------------------------------------------------------------
