@@ -105,22 +105,19 @@ if C['datatext'].top == true then
 	TargetFrame:ClearAllPoints() TargetFrame:SetPoint("TOPLEFT", 250, -20) TargetFrame.ClearAllPoints = top TargetFrame.SetPoint = top
 	MinimapCluster:ClearAllPoints() MinimapCluster:SetPoint('TOPRIGHT', 0, -32) MinimapCluster.ClearAllPoints = top MinimapCluster.SetPoint = top
 	BuffFrame:ClearAllPoints() BuffFrame:SetPoint('TOP', MinimapCluster, -100, 0) BuffFrame.ClearAllPoints = top BuffFrame.SetPoint = top
+	WorldStateAlwaysUpFrame:ClearAllPoints() WorldStateAlwaysUpFrame:SetPoint('TOP', 0, -32) WorldStateAlwaysUpFrame.ClearAllpoints = top WorldStateAlwaysUpFrame.Setpoint = top
 
 else
 
 	-- Move some stuff for the panel on bottom.
 
 	local bottom = function() end
-	MainMenuBar:ClearAllPoints() MainMenuBar:SetPoint("BOTTOM",DataPanel,"TOP", 0, -4) MainMenuBar.ClearAllPoints = bottom MainMenuBar.SetPoint = bottom
-	PetActionBarFrame:ClearAllPoints() PetActionBarFrame:SetPoint("BOTTOM",MainMenuBar,"TOP", 40, 47) PetActionBarFrame.ClearAllPoints = bottom PetActionBarFrame.SetPoint = bottom		
+	MainMenuBar:ClearAllPoints() MainMenuBar:SetPoint("BOTTOM", DataPanel, "TOP", 0, -4) MainMenuBar.ClearAllPoints = bottom MainMenuBar.SetPoint = bottom
+	VehicleMenuBar:ClearAllPoints() VehicleMenuBar:SetPoint("BOTTOM", DataPanel, "TOP", 0, 4) VehicleMenuBar.ClearAllPoints = bottom VehicleMenuBar.SetPoint = bottom
+	PetActionBarFrame:ClearAllPoints() PetActionBarFrame:SetPoint("BOTTOM", MainMenuBar, "TOP", 40, 47) PetActionBarFrame.ClearAllPoints = bottom PetActionBarFrame.SetPoint = bottom		
+	WorldStateAlwaysUpFrame:ClearAllPoints() WorldStateAlwaysUpFrame:SetPoint('TOP', -20, -20) WorldStateAlwaysUpFrame.ClearAllpoints = bottom WorldStateAlwaysUpFrame.Setpoint = bottom
+	BuffFrame:ClearAllPoints() BuffFrame:SetPoint('TOP', MinimapCluster, -110, -15) BuffFrame.ClearAllPoints = bottom BuffFrame.SetPoint = bottom	
 
-	function VehicleMenuBar_OnEvent(self, event, ...)
-		if ( event == "UNIT_ENTERED_VEHICLE" ) then
-			DataPanel:Hide()
-		else
-			DataPanel:Show()
-		end
-	end
 	-- Move the tooltip above the Actionbar
 	if C["tooltip"].enable == true then
 		hooksecurefunc('GameTooltip_SetDefaultAnchor', function(self)
