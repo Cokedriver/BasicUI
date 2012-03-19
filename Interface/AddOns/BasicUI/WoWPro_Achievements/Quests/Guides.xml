@@ -1,7 +1,0 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">
-	
-	<Script file="Son_of_Glop.lua"/>
-
-	<Script file="Pebble.lua"/>
-
-</Ui>
