@@ -1,5 +1,13 @@
 local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
 
+--[[
+
+	All Credit for Stat2.lua goes to Elv.
+	Tukui = http://www.tukui.org/download.php.
+	Edited by Cokedriver.
+	
+]]
+
 if C['datatext'].enable ~= true then return end
 
 if C['datatext'].stat2 and C['datatext'].stat2 > 0 then

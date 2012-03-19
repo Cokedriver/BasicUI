@@ -3,7 +3,7 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 if C['datatext'].enable ~= true then return end
 
 --[[
-	All Credit for datatext goes to Tuks.
+	All Credit for Datapanel.lua goes to Tuks.
 	Tukui = http://www.tukui.org/download.php.
 	Edited by Cokedriver.
 ]]

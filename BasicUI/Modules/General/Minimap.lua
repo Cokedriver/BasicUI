@@ -1,5 +1,13 @@
 local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
 
+--[[
+
+	All Credit for Minimap.lua goes to Neal and ballagarba.
+	Neav UI = http://www.wowinterface.com/downloads/info13981-NeavUI.html.
+	Edited by Cokedriver.
+	
+]]
+
 -- Square Minimap
 function GetMinimapShape()
     return 'SQUARE'

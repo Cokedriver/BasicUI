@@ -4,8 +4,9 @@ if C['general'].cooldown ~= true then return end
 
 --[[
 
-	All Credit for cooldown.lua goes to Neal and ballagarba.
+	All Credit for Cooldown.lua goes to Neal and ballagarba.
 	Neav UI = http://www.wowinterface.com/downloads/info13981-NeavUI.html.
+	Edited by Cokedriver
 
 --]]
 

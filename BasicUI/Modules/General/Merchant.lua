@@ -4,7 +4,7 @@ if C['merchant'].enable ~= true then return end
 
 --[[
 
-	All Create for merchant.lua goes to Neal, ballagarba, and Tuks.
+	All Credit for merchant.lua goes to Neal, ballagarba, and Tuks.
 	Neav UI = http://www.wowinterface.com/downloads/info13981-NeavUI.html.
 	Tukui = http://www.tukui.org/download.php.
 	Edited by Cokedriver.

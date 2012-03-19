@@ -4,7 +4,7 @@ if C['general'].autogreed ~= true then return end
 
 --[[
 
-	All Create for autogreed.lua goes to Neal and ballagarba.
+	All Credit for Autogreed.lua goes to Neal and ballagarba.
 	Neav UI = http://www.wowinterface.com/downloads/info13981-NeavUI.html.
 	Edited by Cokedriver.
 	

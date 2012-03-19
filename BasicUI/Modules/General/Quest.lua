@@ -4,7 +4,7 @@ if C['quest'].enable ~= true then return end
 
 --[[
 
-	All Create for quest.lua goes to nightcracker.
+	All Credit for Quest.lua goes to nightcracker.
 	ncQuest = http://www.wowinterface.com/downloads/info14972-ncQuest.html.
 	Edited by Cokedriver.
 	

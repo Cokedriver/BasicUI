@@ -1,5 +1,13 @@
 ﻿local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
 
+--[[
+
+	All Credit for Professions.lua goes to Tuks.
+	Tukui = http://www.tukui.org/download.php.
+	Edited by Cokedriver.
+	
+]]
+
 if C['datatext'].enable ~= true then return end
 
 if C['datatext'].pro and C['datatext'].pro > 0 then

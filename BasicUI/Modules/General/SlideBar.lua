@@ -1,5 +1,13 @@
 local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
 
+--[[
+
+	All Credit for SlideBar.lua goes to Nechckn, MentalPower, and Norganna.
+	Auctioneer Suite = http://www.wowinterface.com/downloads/info7879-AuctioneerSuite.html.
+	Edited by Cokedriver.
+	
+]]
+
 if C['general'].slidebar ~= true then return end
 
 local LIBRARY_VERSION_MAJOR = "SlideBar"

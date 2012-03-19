@@ -2,6 +2,13 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 
 if C['nameplates'].enable ~= true then return end
 
+--[[
+
+	All Credit for Nameplates.lua goes to Zork.
+	rDiabloPlates2 = http://www.wowinterface.com/downloads/fileinfo.php?id=20403#info
+	Edited by Cokedriver.
+	
+]]
   -----------------------------
   -- FUNCTIONS
   -----------------------------

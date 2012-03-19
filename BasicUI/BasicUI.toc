@@ -2,7 +2,6 @@
 ## Author: Cokedriver / Baine
 ## Version: 3.0
 ## Title: |cff00B4FFBasic|rUI
-## Notes: A Basic UI Replacement for the World of Warcraft Interface.
 ## SavedVariables: BasicDB
 ## SavedVariablesPerCharacter: BasicDBPerCharacter
 ## RequiredDeps: BasicUI_Config

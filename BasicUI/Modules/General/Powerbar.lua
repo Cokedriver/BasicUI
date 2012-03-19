@@ -4,7 +4,7 @@ if C['powerbar'].enable ~= true then return end
 
 --[[
 
-	All Credit for powerbar.lua goes to Neal and ballagarba.
+	All Credit for Powerbar.lua goes to Neal and ballagarba.
 	nPower = http://www.wowinterface.com/downloads/info19876-nPower.html.
 	Edited by Cokedriver.
 	

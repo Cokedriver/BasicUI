@@ -1,5 +1,13 @@
 local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
 
+--[[
+
+	All Credit for Mail.lua goes to Xruptor.
+	xanAutoMail = http://www.wowinterface.com/downloads/info18868-xanAutoMail.html.
+	Edited by Cokedriver.
+	
+]]
+
 local L = setmetatable({}, { __index = function(t,k)
     local v = tostring(k)
     rawset(t, k, v)

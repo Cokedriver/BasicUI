@@ -1,5 +1,13 @@
 local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
 
+--[[
+
+	All Credit for Buttons.lua goes to Neal and ballagarba.
+	Neav UI = http://www.wowinterface.com/downloads/info13981-NeavUI.html.
+	Edited by Cokedriver.
+	
+]]
+
 if C['general'].buttons.enable == true then 
 
 	 -- Hide Keybindings

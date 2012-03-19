@@ -6,6 +6,14 @@ local L = setmetatable({}, { __index = function(t,k)
     return v
 end })
 
+--[[
+
+	All Credit for BlackBook.lua goes to Xinhuan.
+	Postal = http://www.wowinterface.com/downloads/info11187-Postal.html.
+	Edited by Cokedriver.
+	
+]]
+
  -- Credit for BlackBook goes to Xinhuan and grennon from WoWAce.com
 if C['general'].mail.BlackBook.enable == true then
 	local BasicUIConfig = LibStub("AceAddon-3.0"):GetAddon("BasicUIConfig")

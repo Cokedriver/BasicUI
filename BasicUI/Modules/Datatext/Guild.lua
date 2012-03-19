@@ -2,6 +2,14 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 local LibQTip = LibStub('LibQTip-1.0')	-- tooltip library
 local tooltip
 
+--[[
+
+	All Credit for Guild.lua goes to Tuks.
+	Tukui = http://www.tukui.org/download.php.
+	Edited by Cokedriver.
+	
+]]
+
 if not C["datatext"].guild or C["datatext"].guild == 0 then return end
 
 -- localized references for global functions (about 50% faster)

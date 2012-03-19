@@ -4,7 +4,7 @@ if C['chat'].enable ~= true then return end
 
 --[[
 
-	All Create for autogreed.lua goes to Neal and ballagarba. 
+	All Credit for Chat.lua goes to Neal and ballagarba. 
 	nChat = http://www.wowinterface.com/downloads/info13981-NeavUI.html.
 	Edited by Cokedriver.
 	

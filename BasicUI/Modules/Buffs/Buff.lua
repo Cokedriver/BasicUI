@@ -2,16 +2,16 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 
 if C['buff'].enable ~= true then return end
 
-local f = CreateFrame("Frame");
-local match = string.match;
-
 --[[
 
-	All Create for buff.lua goes to Zergreth. 
+	All Credit for Buff.lua goes to Zergreth. 
 	Buffy = http://www.wowinterface.com/downloads/info12859-Buffy.html.
 	Edited by Cokedriver.
 	
 ]]
+
+local f = CreateFrame("Frame");
+local match = string.match;
 
 -- Custom Timers Duration
 local timerSeconds = "%ds"; -- format for seconds

@@ -4,7 +4,7 @@ if C['tooltip'].enable ~= true then return end
 
 --[[
 
-	All Create for tooltip.lua goes to Neal and ballagarba.
+	All Credit for Tooltip.lua goes to Neal and ballagarba.
 	Neav UI = http://www.wowinterface.com/downloads/info13981-NeavUI.html.
 	Edited by Cokedriver.
 	

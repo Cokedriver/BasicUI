@@ -1,5 +1,13 @@
 local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
 
+--[[
+
+	All Credit for Coords.lua goes to Tuks.
+	Tukui = http://www.tukui.org/download.php.
+	Edited by Cokedriver.
+	
+]]
+
 if C['datatext'].enable ~= true then return end
 
 if C['datatext'].coords and C['datatext'].coords > 0 then

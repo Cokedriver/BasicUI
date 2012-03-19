@@ -4,7 +4,7 @@ if C['selfbuffs'].enable ~= true then return end
 
 --[[
 
-	All Create for selfbuffs.lua goes to Tuks.
+	All Credit for Selfbuffs.lua goes to Tuks.
 	Tukui = http://www.tukui.org/download.php.
 	Edited by Cokedriver.
 	

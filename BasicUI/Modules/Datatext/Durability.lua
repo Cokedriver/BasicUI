@@ -1,6 +1,14 @@
 local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
 local Crayon = LibStub:GetLibrary("LibCrayon-3.0")
 
+--[[
+
+	All Credit for Durability.lua goes to Tuks.
+	Tukui = http://www.tukui.org/download.php.
+	Edited by Cokedriver.
+	
+]]
+
 if C['datatext'].enable ~= true then return end
 
 if C['datatext'].dur and C['datatext'].dur > 0 then

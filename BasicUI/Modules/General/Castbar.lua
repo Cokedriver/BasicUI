@@ -3,9 +3,12 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 if C['castbar'].enable ~= true then return end
 
 --[[
---  Credit for castbar.lua goes to thek with his thekCastbar
---]]
 
+	All Credit for Castbar.lua goes to thek.
+	thek: Castbar = http://www.wowinterface.com/downloads/info11334-thekCastbar.html.
+	Edited by Cokedriver.
+	
+]]
 
 local d = {};
 local find = string.find;
