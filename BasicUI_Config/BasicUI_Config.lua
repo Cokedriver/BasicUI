@@ -1009,7 +1009,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 					},
 					top = {
 						order = 6,
-						name = L["Datapanel"],
+						name = L["Datapanel Top"],
 						desc = L["If checked then panel moves to top of screen, If unchecked panel moves below MainMenuBar"],
 						type = "toggle",
 						disabled = function() return not db.datatext.enable end,						

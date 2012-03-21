@@ -19,10 +19,10 @@ local mmbg = CreateFrame("Frame", nil, mm)
 mmbg:SetPoint("TOPLEFT", -9, 9);
 mmbg:SetPoint("BOTTOMRIGHT", 9, -8);
 mmbg:SetBackdrop({
-	edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\Minimap_Border',
+	edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-DialogBox-Border',
 	edgeSize = 24,
 })
-mmbg:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+--mmbg:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 
 
 -- Move Stuff

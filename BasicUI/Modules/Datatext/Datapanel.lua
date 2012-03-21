@@ -17,17 +17,17 @@ local ccolor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[select(2,UnitClass("pl
 
 if C['datatext'].top == true then
 	DataPanel:SetPoint('TOP', UIParent, 0, 0)
-	DataPanel:SetHeight(28)
+	DataPanel:SetHeight(35)
 	DataPanel:SetWidth(B.getscreenwidth)
 	DataPanel:SetFrameStrata('LOW')
 	DataPanel:SetFrameLevel(0)
 	DataPanel:SetBackdrop({
 		bgFile = "Interface\\TutorialFrame\\TutorialFrameBackground",
-		edgeFile = "Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border",							
-		tile = true, tileSize = 16, edgeSize = 18,
+		edgeFile = "Interface\\AddOns\\BasicUI\\Media\\UI-DialogBox-Border",							
+		tile = true, tileSize = 16, edgeSize = 25,
 		insets = {left = 3, right = 3, top = 3, bottom = 3},
 	})
-	DataPanel:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b, 1)
+	--DataPanel:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b, 1)
 
 	-- Left Panel
 	PanelLeft:SetPoint('LEFT', DataPanel, 5, 0)
@@ -62,12 +62,12 @@ else
 	DataPanel:SetFrameLevel(0)
 	DataPanel:SetBackdrop({
 		bgFile = "Interface\\TutorialFrame\\TutorialFrameBackground",
-		edgeFile = "Interface\\AddOns\\BasicUI\\Media\\Minimap_Border",
+		edgeFile = "Interface\\AddOns\\BasicUI\\Media\\UI-DialogBox-Border",
 		edgeSize = 25,
 		insets = {left = 9, right = 9, top = 9, bottom = 8}
 	})
 	DataPanel:SetBackdropColor(0, 0, 0, 1)
-	DataPanel:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+	--DataPanel:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 	
 	-- Left Panel
 	PanelLeft:SetPoint('LEFT', DataPanel, 5, 0)
