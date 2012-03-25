@@ -151,8 +151,9 @@ DB['datatext'] = {
 DB['general'] = {
 
 	['autogreed'] = true,
-	['cooldown'] = true,										-- enable bigger macros.
-	['font'] = "Fonts\\ARIALN.ttf",							-- general font for UI
+	['cooldown'] = true,
+	['itemquality'] = true,
+	['font'] = "Fonts\\ARIALN.ttf",
 	['fontsize'] = 14,
 	['slidebar'] = true,		
 	['scale'] = {
@@ -177,19 +178,7 @@ DB['general'] = {
 			['DisableBlizzardAutoComplete'] = false,
 			['UseAutoComplete'] = true,
 		},		
-	},
-	--[[['nameplates'] = {
-		['enable'] = true,
-		['enableTankMode'] = true,              -- Color the nameplate threat border green, if you have no aggro
-		['colorNameWithThreat'] = true,         -- The name has the same color as the threat of the unit (better visibility)
-
-		['showFullHP'] = true,
-		['showLevel'] = true,
-		['showTargetBorder'] = false,
-		['showEliteBorder'] = true,
-		['showTotemIcon'] = true,
-		['abbrevLongNames'] = false,
-	},]]	
+	},	
 	['skin'] = {
 		['enable'] = true,
 		['DBM'] = true,

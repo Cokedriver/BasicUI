@@ -68,6 +68,7 @@ Modules\General\BlackBook.lua
 Modules\General\Buttons.lua
 Modules\General\Castbar.lua
 Modules\General\Cooldown.lua
+Modules\General\ItemQuality.lua
 Modules\General\Mail.lua
 Modules\General\Merchant.lua
 Modules\General\Minimap.lua

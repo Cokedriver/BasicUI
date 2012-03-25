@@ -34,3 +34,29 @@ Cokedriver
  
 ### Neal - NeavUI, Tuks and Programers - Tukui, Nightcracker - ncQuest and all the others.
 
+
+##Images:
+- In-Game Options Panel 
+[URL=http://imageshack.us/photo/my-images/94/ingameoptions.jpg/][IMG]http://img94.imageshack.us/img94/4425/ingameoptions.th.jpg[/IMG][/URL]
+
+
+-Deathknight
+[URL=http://imageshack.us/photo/my-images/40/deathknightlayout.jpg/][IMG]http://img40.imageshack.us/img40/2628/deathknightlayout.th.jpg[/IMG][/URL]
+
+- Druid
+[URL=http://imageshack.us/photo/my-images/829/druidlayout.jpg/][IMG]http://img829.imageshack.us/img829/5387/druidlayout.th.jpg[/IMG][/URL]
+
+- Hunter
+[URL=http://imageshack.us/photo/my-images/31/hunterlayout.jpg/][IMG]http://img31.imageshack.us/img31/2710/hunterlayout.th.jpg[/IMG][/URL]
+
+- Mage
+[URL=http://imageshack.us/photo/my-images/651/magelayout.jpg/][IMG]http://img651.imageshack.us/img651/7117/magelayout.th.jpg[/IMG][/URL]
+
+- Paladin
+[URL=http://imageshack.us/photo/my-images/812/paladinlayout.jpg/][IMG]http://img812.imageshack.us/img812/6106/paladinlayout.th.jpg[/IMG][/URL]
+
+- Rogue
+[URL=http://imageshack.us/photo/my-images/29/roguelayout.jpg/][IMG]http://img29.imageshack.us/img29/9160/roguelayout.th.jpg[/IMG][/URL]
+
+- Warlock
+[URL=http://imageshack.us/photo/my-images/27/warlocklayout.jpg/][IMG]http://img27.imageshack.us/img27/6289/warlocklayout.th.jpg[/IMG][/URL]
