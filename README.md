@@ -36,11 +36,16 @@ Cokedriver
 
 
 ##Screenshots:
-- In-Game Options Panel -- http://imageshack.us/photo/my-images/94/ingameoptions.jpg
-- Deathknight -- http://imageshack.us/photo/my-images/40/deathknightlayout.jpg
-- Druid -- http://imageshack.us/photo/my-images/829/druidlayout.jpg
-- Hunter -- http://imageshack.us/photo/my-images/31/hunterlayout.jpg
-- Mage -- http://imageshack.us/photo/my-images/651/magelayout.jpg
+- In-Game Options Panel
+<img src="http://img94.imageshack.us/img94/4425/ingameoptions.jpg" alt="Image Hosted by ImageShack.us"/><br/>
+- Deathknight
+<img src="http://img40.imageshack.us/img40/2628/deathknightlayout.jpg" alt="Image Hosted by ImageShack.us"/><br/>
+- Druid
+<img src="http://img829.imageshack.us/img829/5387/druidlayout.jpg" alt="Image Hosted by ImageShack.us"/><br/>
+- Hunter
+<img src="http://img31.imageshack.us/img31/2710/hunterlayout.jpg" alt="Image Hosted by ImageShack.us"/><br/>
+- Mage
+<img src="http://img651.imageshack.us/img651/7117/magelayout.jpg" alt="Image Hosted by ImageShack.us"/><br/>
 - Paladin
 <img src="http://img812.imageshack.us/img812/6106/paladinlayout.jpg" alt="Image Hosted by ImageShack.us"/><br/>
 - Rogue 
