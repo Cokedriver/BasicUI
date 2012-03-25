@@ -41,6 +41,9 @@ Cokedriver
 - Druid -- http://imageshack.us/photo/my-images/829/druidlayout.jpg
 - Hunter -- http://imageshack.us/photo/my-images/31/hunterlayout.jpg
 - Mage -- http://imageshack.us/photo/my-images/651/magelayout.jpg
-- Paladin -- http://imageshack.us/photo/my-images/812/paladinlayout.jpg
-- Rogue -- http://imageshack.us/photo/my-images/29/roguelayout.jpg
-- Warlock -- <img src="http://img27.imageshack.us/img27/6289/warlocklayout.jpg" alt="Image Hosted by ImageShack.us"/><br/>By <a target="_new" href="http://profile.imageshack.us/user/cokedriver">cokedriver</a> at 2012-03-25
+- Paladin
+<a href="http://imageshack.us/photo/my-images/812/paladinlayout.jpg/" target="_blank"><img src="http://img812.imageshack.us/img812/6106/paladinlayout.th.jpg" border="0"/></a>
+- Rogue 
+<a href="http://imageshack.us/photo/my-images/29/roguelayout.jpg/" target="_blank"><img src="http://img29.imageshack.us/img29/9160/roguelayout.th.jpg" border="0"/></a>
+- Warlock
+<a href="http://imageshack.us/photo/my-images/27/warlocklayout.jpg/" target="_blank"><img src="http://img27.imageshack.us/img27/6289/warlocklayout.th.jpg" border="0"/></a>
