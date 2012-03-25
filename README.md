@@ -43,4 +43,4 @@ Cokedriver
 - Mage -- http://imageshack.us/photo/my-images/651/magelayout.jpg
 - Paladin -- http://imageshack.us/photo/my-images/812/paladinlayout.jpg
 - Rogue -- http://imageshack.us/photo/my-images/29/roguelayout.jpg
-- Warlock -- http://imageshack.us/photo/my-images/27/warlocklayout.jpg
+- Warlock -- <img src="http://img27.imageshack.us/img27/6289/warlocklayout.jpg" alt="Image Hosted by ImageShack.us"/><br/>By <a target="_new" href="http://profile.imageshack.us/user/cokedriver">cokedriver</a> at 2012-03-25
