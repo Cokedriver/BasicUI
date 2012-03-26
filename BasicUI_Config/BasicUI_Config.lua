@@ -1966,7 +1966,7 @@ function BasicUIConfig:SetDefaultOptions()
 			['offSetY']	= 175,
 		},
 		["TargetFrameSpellBar"] = {
-			['enabled'] = true,
+			['enabled'] = false,
 			['textPosition'] = "CENTER",
 			['enableLag'] = true,
 			['enableTimer'] = true,

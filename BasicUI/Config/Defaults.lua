@@ -28,7 +28,7 @@ DB['castbar'] = {
 		['offSetY']	= 175,
 	},
 	["TargetFrameSpellBar"] = {
-		['enable'] = true,
+		['enable'] = false,
 		['textPosition'] = "CENTER",
 		['enableLag'] = true,
 		['enableTimer'] = true,
