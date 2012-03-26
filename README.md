@@ -34,7 +34,6 @@ Neal - NeavUI, Tuks and Programers - Tukui, Nightcracker - ncQuest and all the o
 
 
 ##Screenshots:
-
 ### In-Game Options Panel
 <img src="http://img94.imageshack.us/img94/4425/ingameoptions.jpg" alt="Image Hosted by ImageShack.us"/><br/>
 ### Deathknight
@@ -54,7 +53,6 @@ Neal - NeavUI, Tuks and Programers - Tukui, Nightcracker - ncQuest and all the o
 
 
 ## AddOns that are in screenshots but not includes with BasicUI
-
 - Recount -- get it here --> http://www.curse.com/addons/wow/recount
 - MikScrollingBattleText -- get it here --> http://www.wowinterface.com/downloads/info5153-MikScrollingBattleText.html#info
 - WoW-Pro Leveling Addon -- get it here --> http://wow-pro.com/
