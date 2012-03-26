@@ -36,25 +36,25 @@ Cokedriver
 
 
 ##Screenshots:
-#- In-Game Options Panel
+### In-Game Options Panel
 <img src="http://img94.imageshack.us/img94/4425/ingameoptions.jpg" alt="Image Hosted by ImageShack.us"/><br/>
-#- Deathknight
+### Deathknight
 <img src="http://img40.imageshack.us/img40/2628/deathknightlayout.jpg" alt="Image Hosted by ImageShack.us"/><br/>
-#- Druid
+### Druid
 <img src="http://img829.imageshack.us/img829/5387/druidlayout.jpg" alt="Image Hosted by ImageShack.us"/><br/>
-#- Hunter
+### Hunter
 <img src="http://img31.imageshack.us/img31/2710/hunterlayout.jpg" alt="Image Hosted by ImageShack.us"/><br/>
-#- Mage
+### Mage
 <img src="http://img651.imageshack.us/img651/7117/magelayout.jpg" alt="Image Hosted by ImageShack.us"/><br/>
-#- Paladin
+### Paladin
 <img src="http://img812.imageshack.us/img812/6106/paladinlayout.jpg" alt="Image Hosted by ImageShack.us"/><br/>
-#- Rogue 
+### Rogue 
 <img src="http://img29.imageshack.us/img29/9160/roguelayout.jpg" alt="Image Hosted by ImageShack.us"/><br/>
-#- Warlock
+### Warlock
 <img src="http://img27.imageshack.us/img27/6289/warlocklayout.jpg" alt="Image Hosted by ImageShack.us"/><br/>
 
 
-# AddOns that are in screenshots but not includes with BasicUI
+### AddOns that are in screenshots but not includes with BasicUI
 
 - Recount -- get it here --> http://www.curse.com/addons/wow/recount
 - MikScrollingBattleText -- get it here --> http://www.wowinterface.com/downloads/info5153-MikScrollingBattleText.html#info
