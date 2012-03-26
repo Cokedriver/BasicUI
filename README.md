@@ -27,15 +27,14 @@ Cokedriver
  
  
 ## Thank You...
- 
- - I would just like to thank all those who created the addons I used so I could combine them to make this UI.
+I would just like to thank all those who created the addons I have used to create this UI.
 
-##Thanks goes to
- 
-### Neal - NeavUI, Tuks and Programers - Tukui, Nightcracker - ncQuest and all the others.
+##Special Thanks goes to:
+Neal - NeavUI, Tuks and Programers - Tukui, Nightcracker - ncQuest and all the others.
 
 
 ##Screenshots:
+
 ### In-Game Options Panel
 <img src="http://img94.imageshack.us/img94/4425/ingameoptions.jpg" alt="Image Hosted by ImageShack.us"/><br/>
 ### Deathknight
@@ -54,7 +53,7 @@ Cokedriver
 <img src="http://img27.imageshack.us/img27/6289/warlocklayout.jpg" alt="Image Hosted by ImageShack.us"/><br/>
 
 
-### AddOns that are in screenshots but not includes with BasicUI
+## AddOns that are in screenshots but not includes with BasicUI
 
 - Recount -- get it here --> http://www.curse.com/addons/wow/recount
 - MikScrollingBattleText -- get it here --> http://www.wowinterface.com/downloads/info5153-MikScrollingBattleText.html#info
