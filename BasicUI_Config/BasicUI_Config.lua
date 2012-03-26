@@ -130,16 +130,21 @@ function BasicUIConfig.GenerateOptionsInternal()
 						desc = L["Enables cooldown counts on action buttons."],
 						type = "toggle",						
 					},
-					slidebar = {
+					itemquality = {
 						order = 4,
-						name = L["Minimap Button SlideBar"],
+						name = L["Item Quality"],
+						desc = L["Enables Item Quality Button Border."],
+						type = "toggle",						
+					},
+					slidebar = {
+						order = 5,
+						name = L["AddOn SlideBar"],
 						desc = L["Enables the Minimap AddOn Button SlideBar."],
 						type = "toggle",
-						width = "full",
 					},					
 					buttons = {
 						type = "group",
-						order = 5,
+						order = 6,
 						name = L["Actionbar Buttons"],
 						desc = L["Actionbar Button Modifications."],
 						guiInline = true,
@@ -248,7 +253,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 					},					
 					mail = {
 						type = "group",
-						order = 6,
+						order = 7,
 						name = L["Mail"],
 						desc = L["Enables Mailbox Modifications."],
 						guiInline = true,
@@ -363,7 +368,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 					},					
 					scale = {
 						type = "group",
-						order = 7,
+						order = 8,
 						name = L["Scale"],
 						desc = L["Adjust the scale of Blizzards Unit Frames."],	
 						guiInline = true,
@@ -393,7 +398,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 					},
 					skin = {
 						type = "group",
-						order = 8,
+						order = 9,
 						name = L["Skin AddOns"],
 						desc = L["Make a few AddOns match |cff00B4FFBasic|rUI."],	
 						guiInline = true,
@@ -2063,8 +2068,9 @@ function BasicUIConfig:SetDefaultOptions()
 	}	
 	addon.general = {
 		['autogreed'] = true,
-		['cooldown'] = true,								-- enable bigger macros.
-		['font'] = "Fonts\\ARIALN.ttf",						-- general font for UI
+		['cooldown'] = true,
+		['itemquality'] = true,
+		['font'] = "Fonts\\ARIALN.ttf",						
 		['fontsize'] = 14,
 		['slidebar'] = true,
 		['scale'] = {

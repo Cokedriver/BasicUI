@@ -445,9 +445,8 @@ if (B.level > 10 and C['powerbar'].showEclipseBar == true) then
 	---- Events
 	local function Eclipse_UpdateDirection()
 		BasicEclipse.direction = GetEclipseDirection()
-		
+		 
 		if BasicEclipse.direction == "sun" then
-			
 			BasicEclipse.Frames.Icon:Show()
 			BasicEclipse.Frames.Icon:ClearAllPoints()
 			BasicEclipse.Frames.Icon:SetPoint("LEFT", BasicEclipse.Frames.Main, "LEFT", -45, 0)
@@ -480,11 +479,12 @@ if (B.level > 10 and C['powerbar'].showEclipseBar == true) then
 			
 			BasicEclipse.Frames.Below:SetPoint('TOP', BasicEclipse.Frames.Status, 'BOTTOMLEFT', 0, 0)			
 			
-		elseif BasicEclipse.direction == nil then
-		
-			BasicEclipse.Frames.Arrow:Hide()
+		elseif BasicEclipse.direction == "none" then
+			
+			BasicEclipse.Frames.Icon:Hide()	
 			BasicEclipse.Frames.Status:Hide()
 			B.StopFlash(BasicEclipse.Frames.Icon)
+			
 		end
 
 

@@ -12,17 +12,17 @@ All addons that are in this UI I was given permission to use.
 - Stand Alone UI (there are integration of other addons to work with BasicUI).
 - Custom Unitframe Scaleing.
 - AutoSell all Grey items at a vendor.
-- Square Minimap with class color Border.
-- Datatext bar below actionbars.
+- Datatext bar below actionbars or can be moved to top of screen.
 - Selfbuff Reminder
-- More Detail Tooltip
-- More User Friendly Chat
+- Detail Tooltip
+- User Friendly Chat
 
 And much, much, more take a chance download BasicUi and give it a try.
 
 
 
 Thank You and Enjoy
+
 Cokedriver
  
  
