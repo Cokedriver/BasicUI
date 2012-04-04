@@ -17,6 +17,10 @@ f:RegisterEvent('PLAYER_ENTERING_WORLD')
 
 
 f:SetScript('OnEvent', function(self, ...)
+	---------------
+	-- DBM Skinning
+	---------------
+	
     if (C['general'].skin.DBM == true and IsAddOnLoaded('DBM-Core')) then	
 		-- Normal Bars (Credit for DBM codeing goes to Elv from ElvUI)
         hooksecurefunc(DBT, 'CreateBar', function(self)
@@ -155,7 +159,7 @@ f:SetScript('OnEvent', function(self, ...)
 			end
         end)
 		
-		-- Boss Healthbars
+		-- DBM Boss Healthbars
 		hooksecurefunc(DBM.BossHealth,"Show",function()
 			local anchor=DBMBossHealthDropdown:GetParent()
 			if not anchor.styled then
@@ -243,7 +247,11 @@ f:SetScript('OnEvent', function(self, ...)
 			end
 		end)
     end
-
+	
+	-------------------
+	-- Recount Skinning
+	-------------------
+	
     if (C['general'].skin.Recount == true and IsAddOnLoaded('Recount')) then
 		local rm = Recount.MainWindow
 		if C['general'].skin.RecountBackdrop == false then 

@@ -105,7 +105,7 @@ if C['datatext'].top == true then
 	PlayerFrame:ClearAllPoints() PlayerFrame:SetPoint("TOPLEFT", -19, -20) PlayerFrame.ClearAllPoints = top PlayerFrame.SetPoint = top
 	TargetFrame:ClearAllPoints() TargetFrame:SetPoint("TOPLEFT", 250, -20) TargetFrame.ClearAllPoints = top TargetFrame.SetPoint = top
 	MinimapCluster:ClearAllPoints() MinimapCluster:SetPoint('TOPRIGHT', 0, -32) MinimapCluster.ClearAllPoints = top MinimapCluster.SetPoint = top
-	BuffFrame:ClearAllPoints() BuffFrame:SetPoint('TOP', MinimapCluster, -100, 0) BuffFrame.ClearAllPoints = top BuffFrame.SetPoint = top
+	BuffFrame:ClearAllPoints() BuffFrame:SetPoint('TOP', MinimapCluster, -110, -2) BuffFrame.ClearAllPoints = top BuffFrame.SetPoint = top
 	WorldStateAlwaysUpFrame:ClearAllPoints() WorldStateAlwaysUpFrame:SetPoint('TOP', 0, -32) WorldStateAlwaysUpFrame.ClearAllpoints = top WorldStateAlwaysUpFrame.Setpoint = top
 
 else
@@ -114,7 +114,7 @@ else
 
 	local bottom = function() end
 	MainMenuBar:ClearAllPoints() MainMenuBar:SetPoint("BOTTOM", DataPanel, "TOP", 0, -3) MainMenuBar.ClearAllPoints = bottom MainMenuBar.SetPoint = bottom
-	VehicleMenuBar:ClearAllPoints() VehicleMenuBar:SetPoint("BOTTOM", DataPanel, "TOP", 0, 4) VehicleMenuBar.ClearAllPoints = bottom VehicleMenuBar.SetPoint = bottom
+	VehicleMenuBar:ClearAllPoints() VehicleMenuBar:SetPoint("BOTTOM", DataPanel, "TOP", 0, -3) VehicleMenuBar.ClearAllPoints = bottom VehicleMenuBar.SetPoint = bottom
 	PetActionBarFrame:ClearAllPoints() PetActionBarFrame:SetPoint("BOTTOM", MainMenuBar, "TOP", 40, 47) PetActionBarFrame.ClearAllPoints = bottom PetActionBarFrame.SetPoint = bottom		
 	WorldStateAlwaysUpFrame:ClearAllPoints() WorldStateAlwaysUpFrame:SetPoint('TOP', -20, -40) WorldStateAlwaysUpFrame.ClearAllpoints = bottom WorldStateAlwaysUpFrame.Setpoint = bottom
 	BuffFrame:ClearAllPoints() BuffFrame:SetPoint('TOP', MinimapCluster, -110, -15) BuffFrame.ClearAllPoints = bottom BuffFrame.SetPoint = bottom	

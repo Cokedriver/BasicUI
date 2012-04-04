@@ -82,7 +82,7 @@ if C['datatext'].calltoarms and C['datatext'].calltoarms > 0 then
 		GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(hexa..B.myname.."'s"..hexb.." Call to Arms")
-		GameTooltip:AddLine' '
+		GameTooltip:AddLine(' ')
 		
 		local allUnavailable = true
 		local numCTA = 0

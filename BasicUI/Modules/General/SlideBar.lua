@@ -177,7 +177,7 @@ end
 function lib.ApplyLayout(useLayout)
 	local vis = BasicDB.visibility or "0"
 	local wide = BasicDB.maxWidth or 12
-	local side = BasicDB.anchor or "right"
+	local side = BasicDB.anchor or "map"
 	local position = BasicDB.position or "180"
 	local active = BasicDB.enabled or "1"
 
@@ -256,7 +256,7 @@ function lib.ApplyLayout(useLayout)
 	elseif (side == "left") then
 		frame:SetPoint("TOPRIGHT", UIParent, "TOPLEFT", distance, -1*position)
 	elseif (side == "right") then
-		frame:SetPoint("TOPLEFT", UIParent, "TOPRIGHT", -1*distance, -1*position)
+		frame:SetPoint("TOPLEFT", UIParent, "TOPRIGHT", -1*distance, -1*position)		
 	end
 
 	if (useLayout) then return end
@@ -304,7 +304,7 @@ function lib.ApplyLayout(useLayout)
 		elseif (side == "bottom") then
 			button:SetPoint("TOPLEFT", frame, "TOPLEFT", row*32+5, 0-(col*32+10))
 		elseif (side == "top") then
-			button:SetPoint("TOPLEFT", frame, "TOPLEFT", row*32+5, 0-(col*32+10))
+			button:SetPoint("TOPLEFT", frame, "TOPLEFT", row*32+5, 0-(col*32+10))			
 		end
 
 		if not button:IsShown() then

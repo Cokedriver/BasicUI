@@ -25,6 +25,10 @@ B.getscreenheight = tonumber(string.match(({GetScreenResolutions()})[GetCurrentR
 B.getscreenwidth = tonumber(string.match(({GetScreenResolutions()})[GetCurrentResolution()], "(%d+)x+%d"))
 B.ccolor = RAID_CLASS_COLORS[select(2, UnitClass("player"))]
 B.regions ={['TOPLEFT'] = L['TOPLEFT'], ['TOP'] = L['TOP'], ['TOPRIGHT'] = L['TOPRIGHT'], ['LEFT'] = L['LEFT'], ['CENTER'] = L['CENTER'], ['RIGHT'] = L['RIGHT'], ['BOTTOMLEFT'] = L['BOTTOMLEFT'], ['BOTTOM'] = L['BOTTOM'], ['BOTTOMRIGHT'] = L['BOTTOMRIGHT']}
+B.border = {['Blizzard'] = L['Blizzard'], ['BasicUI'] = L['BasicUI']}
+B.mapshape = {['SQUARE'] = L['SQUARE'], ['ROUND'] = L['ROUND']}
+
+
 
 --Check Player's Role
 local RoleUpdater = CreateFrame("Frame")

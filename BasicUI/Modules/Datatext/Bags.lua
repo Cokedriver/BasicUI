@@ -110,8 +110,7 @@ if C['datatext'].bags and C['datatext'].bags > 0 then
 			if name and count then GameTooltip:AddDoubleLine(name, count, 1, 1, 1) end
 		end
 		GameTooltip:AddLine' '
-		GameTooltip:AddLine("|cffeda55fClick|r to Open Bags")
-			
+		GameTooltip:AddLine("|cffeda55fClick|r to Open Bags")			
 		GameTooltip:Show()
 		
 	end)

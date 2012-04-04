@@ -13,10 +13,10 @@ local function UpdateIQB(button, id)
 	local IQB = button.IQB
 	if(not IQB) then
 		IQB = CreateFrame("Frame", nil, button)
-	    IQB:SetPoint("TOPLEFT", -3, 3)
-		IQB:SetPoint("BOTTOMRIGHT", 3, -3)
+		IQB:SetPoint("TOPLEFT", -2, 2)
+		IQB:SetPoint("BOTTOMRIGHT", 2, -2)				
 		IQB:SetBackdrop({
-			edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
+			edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\QualityBorder',
 			edgeSize = 21,
 		})
 		button.IQB = IQB

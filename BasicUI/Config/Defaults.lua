@@ -152,7 +152,7 @@ DB['general'] = {
 
 	['autogreed'] = true,
 	['cooldown'] = true,
-	['itemquality'] = true,
+	['itemquality'] = false,
 	['font'] = "Fonts\\ARIALN.ttf",
 	['fontsize'] = 14,
 	['slidebar'] = true,		
@@ -178,7 +178,14 @@ DB['general'] = {
 			['DisableBlizzardAutoComplete'] = false,
 			['UseAutoComplete'] = true,
 		},		
-	},	
+	},
+	['minimap'] = {
+		['square'] = true,
+		['border'] = true,
+		['borderstyle'] = 'Blizzard',
+		['gameclock'] = true,
+		['mousezoom'] = true,
+	},
 	['skin'] = {
 		['enable'] = true,
 		['DBM'] = true,

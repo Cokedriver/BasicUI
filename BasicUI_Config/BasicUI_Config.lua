@@ -365,10 +365,59 @@ function BasicUIConfig.GenerateOptionsInternal()
 								},
 							},	
 						},
-					},					
-					scale = {
+					},
+					minimap = {
 						type = "group",
 						order = 8,
+						name = L["Minimap"],
+						desc = L["Enables Minimap Modifications."],
+						guiInline = true,
+						get = function(info) return db.general.minimap[ info[#info] ] end,
+						set = function(info, value) db.general.minimap[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+						args = {
+							intro = {
+								order = 1,
+								type = "description",
+								name = L["Enables Minimap Modifications."],
+							},					
+							mousezoom = {
+								order = 2,
+								name = L["Mouse Zoom"],
+								desc = L["Enables Center Mouse Button to control the Zoom-In and Zoom-Out function."],
+								type = "toggle",								
+							},
+							gameclock = {
+								order = 3,
+								name = L["Clock Frame"],
+								desc = L["Enable the Clock Frame on Minimap."],
+								type = "toggle",								
+							},
+							square = {
+								order = 4,
+								name = L["Square Minimap"],
+								desc = L["Enables a Square Minimap.  |cffFF0000WARNING... To switch from a SQUARE to a ROUND Minimap you need to log out then log back in.|r"],
+								type = "toggle",								
+							},							
+							border = {
+								order = 5,
+								name = L["Minimap Border"],
+								desc = L["Enables Minimap Border."],
+								disabled = function() return not db.general.minimap.square end,
+								type = "toggle",								
+							},							
+							borderstyle = {
+								order = 6,
+								name = L["Minimap Border Style"],
+								desc = L["Style of Border for Sqaure Minimap."],
+								disabled = function() return not db.general.minimap.square or not db.general.minimap.border end,
+								type = "select",
+								values = B.border;
+							},							
+						},
+					},
+					scale = {
+						type = "group",
+						order = 9,
 						name = L["Scale"],
 						desc = L["Adjust the scale of Blizzards Unit Frames."],	
 						guiInline = true,
@@ -398,7 +447,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 					},
 					skin = {
 						type = "group",
-						order = 9,
+						order = 10,
 						name = L["Skin AddOns"],
 						desc = L["Make a few AddOns match |cff00B4FFBasic|rUI."],	
 						guiInline = true,
@@ -2069,7 +2118,7 @@ function BasicUIConfig:SetDefaultOptions()
 	addon.general = {
 		['autogreed'] = true,
 		['cooldown'] = true,
-		['itemquality'] = true,
+		['itemquality'] = false,
 		['font'] = "Fonts\\ARIALN.ttf",						
 		['fontsize'] = 14,
 		['slidebar'] = true,
@@ -2094,6 +2143,13 @@ function BasicUIConfig:SetDefaultOptions()
 				['DisableBlizzardAutoComplete'] = false,
 				['UseAutoComplete'] = true,
 			},		
+		},
+		['minimap'] = {
+			['enable'] = true,
+			['square'] = true,
+			['border'] = 'Blizzard',			-- Options here are 'Blizzard' or 'BasicUI' or 'NeavUI'
+			['GTF'] = true,
+			['mousezoom'] = true,
 		},		
 		['skin'] = {
 			['enable'] = true,
