@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------
--- This Module loads new user settings if BasicUI_ConfigUI is loaded
+-- This Module loads new user settings if BasicUI_Config is loaded
 ----------------------------------------------------------------------------
 local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
 
@@ -15,7 +15,7 @@ if IsAddOnLoaded("BasicUI_Config") then
 	local BasicUIConfig = LibStub("AceAddon-3.0"):GetAddon("BasicUIConfig")
 	BasicUIConfig:Load()
 
-	--Load settings from bdcUIConfig database
+	--Load settings from BasicUIConfig database
 	for group, options in pairs(BasicUIConfig.db.profile) do
 		if C[group] then
 			for option, value in pairs(options) do
