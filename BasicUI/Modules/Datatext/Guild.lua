@@ -111,7 +111,7 @@ Stat:SetFrameStrata("MEDIUM")
 Stat:SetFrameLevel(3)
 
 local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-Text:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
+Text:SetFont(C['media'].font, C['datatext'].fontsize,'THINOUTLINE')
 B.PP(C['datatext'].guild, Text)
 Stat:SetAllPoints(Text)
 
@@ -345,14 +345,6 @@ function OnEnter(self)
 	tooltip:SetCell(line, 1, "|cffeda55fAlt-Click|r a line to invite.    |cffeda55fClick|r a Header to sort it.", "LEFT", 0)
 
 	tooltip:UpdateScrolling()
-	
-	-- set the look of the tooltip
-	tooltip:SetBackdrop({
-		bgFile = "Interface\\TutorialFrame\\TutorialFrameBackground",
-		edgeFile = "Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border",							
-		tile = true, tileSize = 16, edgeSize = 18,
-		insets = {left = 3, right = 3, top = 3, bottom = 3},
-	})
 	tooltip:Show()
 end
 

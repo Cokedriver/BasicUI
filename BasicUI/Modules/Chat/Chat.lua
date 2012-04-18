@@ -55,7 +55,7 @@ _G.CHAT_WHISPER_GET = '[from] %s:\32'
 _G.CHAT_WHISPER_INFORM_GET = '[to] %s:\32'
 
 _G.CHAT_BN_WHISPER_GET = '[from] %s:\32'
-_G.CHAT_BN_WHISPER_INFORM_GET = '[to] %s:\32'
+_G.CHAT_BN_WHISPER_GET = '[to] %s:\32'
 
 
 _G.CHAT_FLAG_AFK = '[AFK] '
@@ -128,11 +128,12 @@ end
 
 ChatFrame1EditBox:SetAltArrowKeyMode(false)
 ChatFrame1EditBox:ClearAllPoints()
+ChatFrame1EditBox:SetFont(C['media'].font, C['media'].fontMedium)
 ChatFrame1EditBox:SetPoint('BOTTOMLEFT', ChatFrame1, 'TOPLEFT', 2, 33)
 ChatFrame1EditBox:SetPoint('BOTTOMRIGHT', ChatFrame1, 'TOPRIGHT', 0, 33)
 ChatFrame1EditBox:SetBackdrop({
-    bgFile = 'Interface\\DialogFrame\\UI-DialogBox-Background',
-    edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
+    bgFile = C['chat'].editboxbackground,
+    edgeFile = C['chat'].editboxborder,
     tile = true, tileSize = 16, edgeSize = 18,
     insets = {left = 3, right = 3, top = 2, bottom = 3},
 })
@@ -247,19 +248,19 @@ function SkinTab(self)
     tabText:SetJustifyH('CENTER')
     tabText:SetWidth(60)
     if (C['chat'].tab.fontOutline) then
-        tabText:SetFont('Fonts\\ARIALN.ttf', C['chat'].tab.fontSize, 'THINOUTLINE')
+        tabText:SetFont(C['media'].font, C['media'].fontLarge, 'THINOUTLINE')
         tabText:SetShadowOffset(0, 0)
     else
-        tabText:SetFont('Fonts\\ARIALN.ttf', C['chat'].tab.fontSize)
+        tabText:SetFont(C['media'].font, C['media'].fontLarge)
         tabText:SetShadowOffset(1, -1)
     end
 
     local a1, a2, a3, a4, a5 = tabText:GetPoint()
     tabText:SetPoint(a1, a2, a3, a4, 1)
 
-    local s1, s2, s3 = unpack(C['chat'].tab.specialColor)
-    local e1, e2, e3 = unpack(C['chat'].tab.selectedColor)
-    local n1, n2, n3 = unpack(C['chat'].tab.normalColor)
+    local s1, s2, s3 = C['chat'].tab.specialColor.r, C['chat'].tab.specialColor.g, C['chat'].tab.specialColor.b 
+    local e1, e2, e3 = C['chat'].tab.selectedColor.r, C['chat'].tab.selectedColor.g, C['chat'].tab.selectedColor.b
+    local n1, n2, n3 = C['chat'].tab.normalColor.r, C['chat'].tab.normalColor.g, C['chat'].tab.normalColor.b
 
     local tabGlow = _G[self..'TabGlow']
     hooksecurefunc(tabGlow, 'Show', function()
@@ -329,7 +330,7 @@ local function ModChat(self)
     SkinTab(self)
 
     local font, fontsize, fontflags = chat:GetFont()
-    chat:SetFont(font, fontsize, C['chat'].chatOutline and 'THINOUTLINE' or fontflags)
+    chat:SetFont(C["media"].font, fontsize, C['chat'].chatOutline and 'THINOUTLINE' or fontflags)
     chat:SetClampedToScreen(false)
 
     chat:SetClampRectInsets(0, 0, 0, 0)
@@ -449,7 +450,7 @@ f:SetScript('OnEvent', function(_, event)
     end
 
     if (event == 'CHAT_MSG_WHISPER' or event == 'CHAT_MSG_BN_WHISPER') then
-        PlaySoundFile('Sound\\Spells\\Simongame_visual_gametick.wav')
+        PlaySoundFile(C['chat'].sound)
     end
 end)
 
@@ -523,8 +524,8 @@ f:SetPoint('BOTTOMLEFT', ChatFrame1EditBox, 'TOPLEFT', 3, 10)
 f:SetPoint('BOTTOMRIGHT', ChatFrame1EditBox, 'TOPRIGHT', -3, 10)
 f:SetFrameStrata('DIALOG')
 f:SetBackdrop({
-    bgFile = 'Interface\\DialogFrame\\UI-DialogBox-Background',
-    edgeFile = 'Interface\\Tooltips\\UI-Tooltip-Border',
+    bgFile = C['chat'].background,
+    edgeFile = C['chat'].border,
     tile = true, tileSize = 16, edgeSize = 18,
     insets = {left = 3, right = 3, top = 3, bottom = 3
 }})
@@ -532,7 +533,7 @@ f:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 f:Hide()
 
 f.t = f:CreateFontString(nil, 'OVERLAY')
-f.t:SetFont('Fonts\\ARIALN.ttf', 18)
+f.t:SetFont(C['media'].font, C['media'].fontHuge)
 f.t:SetPoint('TOPLEFT', f, 8, -8)
 f.t:SetTextColor(1, 1, 0)
 f.t:SetShadowOffset(1, -1)
@@ -593,10 +594,10 @@ local function CreateCopyButton(self)
     self.Copy:SetSize(20, 20)
     self.Copy:SetPoint('TOPRIGHT', self, -5, -5)
 
-    self.Copy:SetNormalTexture('Interface\\AddOns\\BasicUI\\Media\\textureCopyNormal')
+    self.Copy:SetNormalTexture([[Interface\AddOns\BasicUI\Media\Textures\textureCopyNormal]])
     self.Copy:GetNormalTexture():SetSize(20, 20)
 
-    self.Copy:SetHighlightTexture('Interface\\AddOns\\BasicUI\\Media\\textureCopyHighlight')
+    self.Copy:SetHighlightTexture([[Interface\AddOns\BasicUI\Media\Textures\textureCopyHighlight]])
     self.Copy:GetHighlightTexture():SetAllPoints(self.Copy:GetNormalTexture())
 
     local tab = _G[self:GetName()..'Tab']
@@ -773,7 +774,7 @@ end
 hooksecurefunc('FCF_OpenTemporaryWindow', EnableItemLinkTooltip)
 EnableItemLinkTooltip()
 
-if C["chat"].border == true then
+if C["chat"].windowborder == true then
 	for i = 1, NUM_CHAT_WINDOWS do
 		local cf = _G['ChatFrame'..i]
 		local bg = CreateFrame("Frame", nil, cf);
@@ -786,7 +787,7 @@ if C["chat"].border == true then
 		end	
 		bg:SetPoint("BOTTOMRIGHT", 8, -12);
 		bg:SetBackdrop({
-			edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
+			edgeFile = C['chat'].border,
 			edgeSize = 18,
 		})
 		bg:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)

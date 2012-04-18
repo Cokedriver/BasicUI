@@ -49,7 +49,7 @@ Stat:SetFrameStrata("MEDIUM")
 Stat:SetFrameLevel(3)
 
 local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-Text:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
+Text:SetFont(C['media'].font, C['datatext'].fontsize,'THINOUTLINE')
 B.PP(C["datatext"].friends, Text)
 
 -------------------------------------------------------------------------------
@@ -473,13 +473,6 @@ function FriendEnter(self)
 	tooltip:UpdateScrolling()
 	
 	-- set the look of the tooltip
-
-	tooltip:SetBackdrop({
-		bgFile = "Interface\\TutorialFrame\\TutorialFrameBackground",
-		edgeFile = "Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border",							
-		tile = true, tileSize = 16, edgeSize = 18,
-		insets = {left = 3, right = 3, top = 3, bottom = 3},
-	})
 	tooltip:Show()	
 end
 

@@ -22,12 +22,15 @@ if C['datatext'].top == true then
 	DataPanel:SetFrameStrata('LOW')
 	DataPanel:SetFrameLevel(0)
 	DataPanel:SetBackdrop({
-		bgFile = "Interface\\TutorialFrame\\TutorialFrameBackground",
-		edgeFile = "Interface\\AddOns\\BasicUI\\Media\\UI-DialogBox-Border",							
+		bgFile = C['datatext'].background,
+		edgeFile = C['datatext'].border,							
 		tile = true, tileSize = 16, edgeSize = 25,
 		insets = {left = 3, right = 3, top = 3, bottom = 3},
 	})
-	--DataPanel:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b, 1)
+	DataPanel:SetBackdropColor(0, 0, 0, 1)
+	if C['datatext'].border == "BasicUI" or "Neav" then
+		--DataPanel:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b, 1)
+	end
 
 	-- Left Panel
 	PanelLeft:SetPoint('LEFT', DataPanel, 5, 0)
@@ -61,13 +64,15 @@ else
 	DataPanel:SetFrameStrata('LOW')
 	DataPanel:SetFrameLevel(0)
 	DataPanel:SetBackdrop({
-		bgFile = "Interface\\TutorialFrame\\TutorialFrameBackground",
-		edgeFile = "Interface\\AddOns\\BasicUI\\Media\\UI-DialogBox-Border",
+		bgFile = C['datatext'].background,
+		edgeFile = C['datatext'].border,
 		edgeSize = 25,
 		insets = {left = 9, right = 9, top = 9, bottom = 8}
 	})
 	DataPanel:SetBackdropColor(0, 0, 0, 1)
-	--DataPanel:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+	if C['datatext'].border == "BasicUI" or "Neav" then
+		--DataPanel:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b, 1)
+	end
 	
 	-- Left Panel
 	PanelLeft:SetPoint('LEFT', DataPanel, 5, 0)

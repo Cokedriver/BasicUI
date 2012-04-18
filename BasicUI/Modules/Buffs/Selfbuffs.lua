@@ -113,7 +113,7 @@ if (buffs and buffs[1]) then
 			end
 			self:Show()
 			if C['selfbuffs'].sound == true and sound == true then
-				PlaySoundFile("Interface\\AddOns\\BasicUI\\Media\\Warning.mp3")
+				PlaySoundFile(C['selfbuffs'].sound)
 				sound = false
 			end
 		else
@@ -127,7 +127,7 @@ if (buffs and buffs[1]) then
     frame:SetSize(50, 50)
 	local bgsize = 3,
 	frame:SetBackdrop({
-		edgeFile = "Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border",
+		edgeFile = C['selfbuffs'].border,
 		tile = true, tileSize = 16, edgeSize = 18,
 		insets = {left = bgsize, right = bgsize, top = bgsize, bottom = bgsize}
 	})
@@ -214,8 +214,8 @@ if (enchants and enchants[1]) then
 				end
 			end
 			self:Show()
-			if C['selfbuffs'].sound == true and sound == true then
-				PlaySoundFile("Interface\\AddOns\\BasicUI\\Media\\Warning.mp3")
+			if C['selfbuffs'].playsound == true and sound == true then
+				PlaySoundFile(C['selfbuffs'].sound)
 				sound = false
 			end
 		else
@@ -229,7 +229,7 @@ if (enchants and enchants[1]) then
     frame:SetSize(50, 50)
 	local bgsize = 3,
 	frame:SetBackdrop({
-		edgeFile = "Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border",
+		edgeFile = C['selfbuffs'].border,
 		tile = true, tileSize = 16, edgeSize = 18,
 		insets = {left = bgsize, right = bgsize, top = bgsize, bottom = bgsize}
 	})

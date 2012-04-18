@@ -192,46 +192,6 @@ SlashCmdList["FRAME"] = function(arg)
 end
 
 
--- Font Setup
-for _, font in pairs({
-    GameFontHighlight,
-
-    GameFontDisable,
-
-    GameFontHighlightExtraSmall,
-    GameFontHighlightMedium,
-
-    GameFontNormal,
-    GameFontNormalSmall,
-
-    --TextStatusBarText,
-
-    GameFontDisableSmall,
-    GameFontHighlightSmall,
-	
-	GameTooltipText,
-}) do
-    font:SetFont('Fonts\\ARIALN.ttf', 14)
-    font:SetShadowOffset(2, -1)
-end
- 
-TextStatusBarText:SetFont('Fonts\\ARIALN.ttf', 11, 'outline')
-GameTooltipHeaderText:SetFont('Fonts\\ARIALN.ttf', 16)
-
-for _, font in pairs({
-    AchievementPointsFont,
-    AchievementPointsFontSmall,
-    AchievementDescriptionFont,
-    AchievementCriteriaFont,
-    AchievementDateFont,
-	
-}) do
-    font:SetFont('Fonts\\ARIALN.ttf', 12)
-end
-
-GameFontNormalHuge:SetFont('Fonts\\ARIALN.ttf', 20, 'OUTLINE')
-GameFontNormalHuge:SetShadowOffset(0, 0)
-
 -- Error Message Ignore List
 UIErrorsFrame:UnregisterEvent('UI_ERROR_MESSAGE')
 UIErrorsFrame:SetTimeVisible(1)

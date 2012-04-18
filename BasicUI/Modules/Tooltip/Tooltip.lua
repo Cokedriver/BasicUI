@@ -28,14 +28,14 @@ local GetQuestDifficultyColor = GetQuestDifficultyColor
 
     -- font settings
     
-GameTooltipHeaderText:SetFont(C['general'].font, 17)
-GameTooltipText:SetFont(C['general'].font, 15)
-GameTooltipTextSmall:SetFont(C['general'].font, 15)
+GameTooltipHeaderText:SetFont(C['media'].font, 17)
+GameTooltipText:SetFont(C['media'].font, 15)
+GameTooltipTextSmall:SetFont(C['media'].font, 15)
     
     -- healthbar settings
     
 GameTooltipStatusBar:SetHeight(6)
-GameTooltipStatusBar:SetBackdrop({bgFile = 'Interface\\Buttons\\WHITE8x8'})
+GameTooltipStatusBar:SetBackdrop({bgFile = C['tooltip'].statusbar})
     
     -- load texture paths locally
 
@@ -43,21 +43,21 @@ local function ApplyTooltipStyle(self)
     local bgsize, bsize
 
     if (self == ConsolidatedBuffsTooltip) then
-        bgsize = 3
-		esize = 15
+        bgsize = 4
+		esize = 20
     elseif (self == FriendsTooltip) then
         FriendsTooltip:SetScale(1.1)        
-        bgsize = 3
-		esize = 15
+        bgsize = 4
+		esize = 20
     else
-        bgsize = 3
-		esize = 18
+        bgsize = 4
+		esize = 20
     end
     
     self:SetBackdrop({
-        bgFile = 'Interface\\Buttons\\WHITE8x8',
-		edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
-		tile = true, tileSize = 16, edgeSize = esize,
+        bgFile = C['tooltip'].background,
+		edgeFile = C['tooltip'].border,
+		edgeSize = esize,
         insets = {left = bgsize, right = bgsize, top = bgsize, bottom = bgsize}
     })
     
@@ -211,12 +211,6 @@ local function GameTooltip_UnitType(unit)
     end
 end
 
-    -- tooltip position
---[[    
-hooksecurefunc('GameTooltip_SetDefaultAnchor', function(self)
-	self:SetPoint(unpack(C['tooltip'].position))
-end)]]
-
     -- set all to the defaults if tooltip hides
     
 GameTooltip:HookScript('OnTooltipCleared', function(self)
@@ -309,13 +303,13 @@ local function GameTooltip_GetUnitPVPIcon(unit)
     
     if (UnitIsPVPFreeForAll(unit)) then
         if (C['tooltip'].showPVPIcons) then
-            return '|TInterface\\AddOns\\BasicUI\\Media\\texture\\UI-PVP-FFA:12|t'
+            return '|TInterface\\AddOns\\BasicUI\\Media\\Textures\\UI-PVP-FFA:12|t'
         else
             return '|cffFF0000# |r'
         end
     elseif (factionGroup and UnitIsPVP(unit)) then
         if (C['tooltip'].showPVPIcons) then
-            return '|TInterface\\AddOns\\BasicUI\\Media\\texture\\UI-PVP-'..factionGroup..':12|t'
+            return '|TInterface\\AddOns\\BasicUI\\Media\\Textures\\UI-PVP-'..factionGroup..':12|t'
         else
             return '|cff00FF00# |r'
         end
@@ -511,10 +505,10 @@ GameTooltip:HookScript('OnTooltipSetUnit', function(self, ...)
                         end
                         
                         if (C['tooltip'].healthbar.showOutline) then
-                            self.text:SetFont(C['general'].font, C['tooltip'].healthbar.fontSize, 'THINOUTLINE')
+                            self.text:SetFont(C['media'].font, C['tooltip'].healthbar.fontSize, 'THINOUTLINE')
                             self.text:SetShadowOffset(0, 0)
                         else
-                            self.text:SetFont(C['general'].font, C['tooltip'].healthbar.fontSize)
+                            self.text:SetFont(C['media'].font, C['tooltip'].healthbar.fontSize)
                             self.text:SetShadowOffset(1, -1)
                         end
                         

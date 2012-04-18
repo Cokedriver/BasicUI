@@ -43,5 +43,5 @@ end)
 watchHead:SetScript('OnLeave', function() GameTooltip:Hide() end)
 
 local watchHeadTitle = _G['WatchFrameTitle']
-watchHeadTitle:SetFont(C['general'].font, 15)
+watchHeadTitle:SetFont(C['media'].font, 15)
 watchHeadTitle:SetTextColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)

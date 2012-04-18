@@ -1,6 +1,6 @@
 local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
 
-if C['general'].itemquality ~= true then return end
+if C['itemquality'].enable ~= true then return end
 
 -- IQB = Item Quality Border
 
@@ -16,7 +16,7 @@ local function UpdateIQB(button, id)
 		IQB:SetPoint("TOPLEFT", -2, 2)
 		IQB:SetPoint("BOTTOMRIGHT", 2, -2)				
 		IQB:SetBackdrop({
-			edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\QualityBorder',
+			edgeFile = C['itemquality'].border,
 			edgeSize = 21,
 		})
 		button.IQB = IQB

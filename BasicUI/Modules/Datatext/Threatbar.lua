@@ -23,7 +23,7 @@ if C['datatext'].threatbar == true then
 	ThreatBar:SetPoint("BOTTOMRIGHT", PanelCenter, -2, 2)
 	ThreatBar:SetFrameLevel(1)
 
-	ThreatBar.text = B.SetFontString(ThreatBar, C['general'].font, 18)
+	ThreatBar.text = B.SetFontString(ThreatBar, C['media'].font, 18)
 	ThreatBar.text:SetPoint("CENTER", ThreatBar, 0, 0)
 		 
 

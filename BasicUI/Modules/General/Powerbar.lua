@@ -55,10 +55,10 @@ if (C['powerbar'].showComboPoints) then
         f.ComboPoints[i] = f:CreateFontString(nil, 'ARTWORK')
         
         if (C['powerbar'].combo.FontOutline) then
-            f.ComboPoints[i]:SetFont(C['general'].font, C['powerbar'].combo.FontSize, 'THINOUTLINE')
+            f.ComboPoints[i]:SetFont(C['media'].font, C['powerbar'].combo.FontSize, 'THINOUTLINE')
             f.ComboPoints[i]:SetShadowOffset(0, 0)
         else
-            f.ComboPoints[i]:SetFont(C['general'].font, C['powerbar'].combo.FontSize)
+            f.ComboPoints[i]:SetFont(C['media'].font, C['powerbar'].combo.FontSize)
             f.ComboPoints[i]:SetShadowOffset(1, -1)
         end
         
@@ -78,10 +78,10 @@ if (B.myclass == 'WARLOCK' and C['powerbar'].showSoulshardsor or playerClass == 
     f.extraPoints = f:CreateFontString(nil, 'ARTWORK')
     
     if (C['powerbar'].extra.FontOutline) then
-        f.extraPoints:SetFont(C['general'].font, C['powerbar'].extra.FontSize, 'THINOUTLINE')
+        f.extraPoints:SetFont(C['media'].font, C['powerbar'].extra.FontSize, 'THINOUTLINE')
         f.extraPoints:SetShadowOffset(0, 0)
     else
-        f.extraPoints:SetFont(C['general'].font, C['powerbar'].extra.FontSize)
+        f.extraPoints:SetFont(C['media'].font, C['powerbar'].extra.FontSize)
         f.extraPoints:SetShadowOffset(1, -1)
     end
 
@@ -101,10 +101,10 @@ if (B.myclass == 'DEATHKNIGHT' and C['powerbar'].showRuneCooldown) then
         f.Rune[i] = f:CreateFontString(nil, 'ARTWORK')
 
         if (C['powerbar'].rune.FontOutline) then
-            f.Rune[i]:SetFont(C['general'].font, C['powerbar'].rune.FontSize, 'THINOUTLINE')
+            f.Rune[i]:SetFont(C['media'].font, C['powerbar'].rune.FontSize, 'THINOUTLINE')
             f.Rune[i]:SetShadowOffset(0, 0)
         else
-            f.Rune[i]:SetFont(C['general'].font, C['powerbar'].rune.FontSize)
+            f.Rune[i]:SetFont(C['media'].font, C['powerbar'].rune.FontSize)
             f.Rune[i]:SetShadowOffset(1, -1)
         end
 
@@ -135,16 +135,16 @@ f.Power = CreateFrame('StatusBar', nil, UIParent)
 f.Power:SetScale(UIParent:GetScale())
 f.Power:SetSize(C['powerbar'].sizeWidth, 5)
 f.Power:SetPoint('CENTER', f, 0, -23)
-f.Power:SetStatusBarTexture('Interface\\TargetingFrame\\UI-StatusBar')
+f.Power:SetStatusBarTexture(C['powerbar'].statusbar)
 f.Power:SetAlpha(0)
 
 f.Power.Value = f.Power:CreateFontString(nil, 'ARTWORK')
 
 if (C['powerbar'].value.FontOutline) then
-    f.Power.Value:SetFont(C['general'].font, C['powerbar'].value.FontSize, 'THINOUTLINE')
+    f.Power.Value:SetFont(C['media'].font, C['powerbar'].value.FontSize, 'THINOUTLINE')
     f.Power.Value:SetShadowOffset(0, 0)
 else
-    f.Power.Value:SetFont(C['general'].font, C['powerbar'].value.FontSize)
+    f.Power.Value:SetFont(C['media'].font, C['powerbar'].value.FontSize)
     f.Power.Value:SetShadowOffset(1, -1)
 end
 
@@ -153,7 +153,7 @@ f.Power.Value:SetVertexColor(1, 1, 1)
 
 f.Power.Background = f.Power:CreateTexture(nil, 'BACKGROUND')
 f.Power.Background:SetAllPoints(f.Power)
-f.Power.Background:SetTexture('Interface\\TargetingFrame\\UI-StatusBar')
+f.Power.Background:SetTexture(C['powerbar'].statusbar)
 f.Power.Background:SetVertexColor(0.25, 0.25, 0.25, 1)
 
 f.Power.BackgroundShadow = CreateFrame('Frame', nil, f.Power)
@@ -164,17 +164,17 @@ f.Power.BackgroundShadow:SetPoint('BOTTOMRIGHT', 4, -4)
 f.Power.Below = f.Power:CreateTexture(nil, 'BACKGROUND')
 f.Power.Below:SetHeight(14)
 f.Power.Below:SetWidth(14)
-f.Power.Below:SetTexture('Interface\\AddOns\\BasicUI\\Media\\textureArrowBelow')
+f.Power.Below:SetTexture('Interface\\AddOns\\BasicUI\\Media\\Textures\\textureArrowBelow')
 
 f.Power.Above = f.Power:CreateTexture(nil, 'BACKGROUND')
 f.Power.Above:SetHeight(14)
 f.Power.Above:SetWidth(14)
-f.Power.Above:SetTexture('Interface\\AddOns\\BasicUI\\Media\\textureArrowAbove')
+f.Power.Above:SetTexture('Interface\\AddOns\\BasicUI\\Media\\Textures\\textureArrowAbove')
 f.Power.Above:SetPoint('BOTTOM', f.Power.Below, 'TOP', 0, f.Power:GetHeight() - 2)
 
 if (C['powerbar'].showCombatRegen) then
     f.mpreg = f.Power:CreateFontString(nil, 'ARTWORK')
-    f.mpreg:SetFont(C['general'].font, 12, 'THINOUTLINE')
+    f.mpreg:SetFont(C['media'].font, C['media'].fontSmall, 'THINOUTLINE')
     f.mpreg:SetShadowOffset(0, 0)
     f.mpreg:SetPoint('TOP', f.Power.Below, 'BOTTOM', 0, 4)
     f.mpreg:SetParent(f.Power)
@@ -610,7 +610,7 @@ if (B.level > 10 and C['powerbar'].showEclipseBar == true) then
 		EclipseBorder:SetPoint("TOPLEFT", -3, 3);
 		EclipseBorder:SetPoint("BOTTOMRIGHT", 3, -3);
 		EclipseBorder:SetBackdrop({
-			edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
+			edgeFile = C['powerbar'].border,
 			edgeSize = 15,
 		})
 		EclipseBorder:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
@@ -619,23 +619,23 @@ if (B.level > 10 and C['powerbar'].showEclipseBar == true) then
 		-- Lunar BG
 		BasicEclipse.Frames.LunarBG:SetWidth((150 / 2) - 1)
 		BasicEclipse.Frames.LunarBG:SetHeight(14 - 2)
-		BasicEclipse.Frames.LunarBG:SetTexture("Interface\\AddOns\\BasicUI\\Media\\Eclipse_Lunar.tga")
+		BasicEclipse.Frames.LunarBG:SetTexture("Interface\\AddOns\\BasicUI\\Media\\Textures\\Eclipse_Lunar.tga")
 		
 		-- Solar BG
 		BasicEclipse.Frames.SolarBG:SetWidth((150 / 2) - 1)
 		BasicEclipse.Frames.SolarBG:SetHeight(14 - 2)
-		BasicEclipse.Frames.SolarBG:SetTexture("Interface\\AddOns\\BasicUI\\Media\\Eclipse_Solar.tga")
+		BasicEclipse.Frames.SolarBG:SetTexture("Interface\\AddOns\\BasicUI\\Media\\Textures\\Eclipse_Solar.tga")
 		
 		
 		BasicEclipse.Frames.Below = BasicEclipse.Frames.Main:CreateTexture(nil, 'BACKGROUND')
 		BasicEclipse.Frames.Below:SetHeight(14)
 		BasicEclipse.Frames.Below:SetWidth(14)
-		BasicEclipse.Frames.Below:SetTexture('Interface\\AddOns\\BasicUI\\Media\\textureArrowBelow')
+		BasicEclipse.Frames.Below:SetTexture('Interface\\AddOns\\BasicUI\\Media\\Textures\\textureArrowBelow')
 
 		BasicEclipse.Frames.Above = BasicEclipse.Frames.Main:CreateTexture(nil, 'BACKGROUND')
 		BasicEclipse.Frames.Above:SetHeight(14)
 		BasicEclipse.Frames.Above:SetWidth(14)
-		BasicEclipse.Frames.Above:SetTexture('Interface\\AddOns\\BasicUI\\Media\\textureArrowAbove')
+		BasicEclipse.Frames.Above:SetTexture('Interface\\AddOns\\BasicUI\\Media\\Textures\\textureArrowAbove')
 		BasicEclipse.Frames.Above:SetPoint('BOTTOM', BasicEclipse.Frames.Below, 'TOP', 0, BasicEclipse.Frames.Main:GetHeight() - 2)
 		
 		-- Icons (Solar - Lunar)
@@ -659,7 +659,7 @@ if (B.level > 10 and C['powerbar'].showEclipseBar == true) then
 		BasicEclipse.Frames.Text:SetFrameLevel(BasicEclipse.Frames.Main:GetFrameLevel() + 2)
 		BasicEclipse.Frames.Text:SetWidth(24)
 		BasicEclipse.Frames.Text:SetHeight(24)
-		BasicEclipse.Frames.Text.str:SetFont(C['general'].font, C['general'].fontsize, 'THINOUTLINE')
+		BasicEclipse.Frames.Text.str:SetFont(C['media'].font, C['media'].fontMedium, 'THINOUTLINE')
 		BasicEclipse.Frames.Text.str:SetText("0")
 	end
 

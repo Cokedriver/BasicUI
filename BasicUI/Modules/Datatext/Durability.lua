@@ -44,7 +44,7 @@ if C['datatext'].dur and C['datatext'].dur > 0 then
 	local fader = CreateFrame("Frame", "DurabilityDataText", DataPanel)
 
 	local Text  = DurabilityDataText:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
+	Text:SetFont(C['media'].font, C['datatext'].fontsize,'THINOUTLINE')
 	B.PP(C["datatext"].dur, Text)
 	fader:SetFrameLevel(fader:GetParent():GetFrameLevel())
 	fader:SetFrameStrata(fader:GetParent():GetFrameStrata())

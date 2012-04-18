@@ -13,7 +13,7 @@ if C['general'].cooldown ~= true then return end
 OmniCC = true                               -- hack to work around detection from other addons for OmniCC
 
 local FONT_COLOR = {1, 1, 1}
-local FONT_FACE, FONT_SIZE = 'Fonts\\ARIALN.ttf', 18 
+local FONT_FACE, FONT_SIZE = C['media'].font, C['media'].fontLarge 
 
 local MIN_DURATION = 2.5                    -- the minimum duration to show cooldown text for
 local DECIMAL_THRESHOLD = 2                 -- threshold in seconds to start showing decimals

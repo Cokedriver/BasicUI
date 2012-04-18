@@ -19,7 +19,7 @@ if C['datatext'].stat2 and C['datatext'].stat2 > 0 then
 	Stat:EnableMouse(true)
 
 	local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
+	Text:SetFont(C['media'].font, C['datatext'].fontsize,'THINOUTLINE')
 	B.PP(C['datatext'].stat2, Text)
 
 	local _G = getfenv(0)

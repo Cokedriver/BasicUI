@@ -8,7 +8,7 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 	
 ]]
 
-if C['general'].skin.enable ~= true then return end
+if C['skin'].enable ~= true then return end
 
 local f = CreateFrame('Frame')
 f:RegisterEvent('VARIABLES_LOADED')
@@ -21,7 +21,7 @@ f:SetScript('OnEvent', function(self, ...)
 	-- DBM Skinning
 	---------------
 	
-    if (C['general'].skin.DBM == true and IsAddOnLoaded('DBM-Core')) then	
+    if (C['skin'].DBM == true and IsAddOnLoaded('DBM-Core')) then	
 		-- Normal Bars (Credit for DBM codeing goes to Elv from ElvUI)
         hooksecurefunc(DBT, 'CreateBar', function(self)
 			for bar in self:GetBarIterator() do
@@ -42,7 +42,7 @@ f:SetScript('OnEvent', function(self, ...)
 							icon1.overlay:SetFrameStrata("MEDIUM");
 							icon1.overlay:SetPoint("BOTTOMRIGHT", tbar, "BOTTOMLEFT", -22/4, -4);
 							icon1.overlay:SetBackdrop({
-								edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
+								edgeFile = C['skin'].border,
 								edgeSize = 13,
 							})
 							icon1.overlay:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)								
@@ -55,7 +55,7 @@ f:SetScript('OnEvent', function(self, ...)
 							icon2.overlay:SetFrameStrata("MEDIUM");
 							icon2.overlay:SetPoint("BOTTOMLEFT", tbar, "BOTTOMRIGHT", 22/4, -4);
 							icon2.overlay:SetBackdrop({
-								edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
+								edgeFile = C['skin'].border,
 								edgeSize = 13,
 							})
 							icon2.overlay:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)								
@@ -80,7 +80,7 @@ f:SetScript('OnEvent', function(self, ...)
 							border:SetPoint("TOPLEFT", -2, 2);
 							border:SetPoint("BOTTOMRIGHT", 2, -2);
 							border:SetBackdrop({
-								edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
+								edgeFile = C['skin'].border,
 								edgeSize = 13,
 							})
 							border:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)								
@@ -110,11 +110,11 @@ f:SetScript('OnEvent', function(self, ...)
 						end
 
 						if not texture.styled then
-							texture:SetTexture("Interface\\TargetingFrame\\UI-StatusBar")
+							texture:SetTexture(C['skin'].statusbar)
 							texture.styled=true
 						end
 						
-						tbar:SetStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar")
+						tbar:SetStatusBarTexture(C['skin'].statusbar)
 						if not tbar.styled then
 							tbar:SetPoint("TOPLEFT", frame, "TOPLEFT", 2, -2)
 							tbar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 2)
@@ -127,7 +127,7 @@ f:SetScript('OnEvent', function(self, ...)
 							name:SetPoint("LEFT", frame, "LEFT", 4, 0)
 							name:SetWidth(165)
 							name:SetHeight(8)
-							name:SetFont(C['general'].font, C['general'].fontsize)
+							name:SetFont(C['media'].font, C['media'].fontMedium)
 							name:SetJustifyH("LEFT")
 							name:SetShadowColor(0, 0, 0, 0)
 							name.SetFont = B.dummy
@@ -137,7 +137,7 @@ f:SetScript('OnEvent', function(self, ...)
 						if not timer.styled then	
 							timer:ClearAllPoints()
 							timer:SetPoint("RIGHT", frame, "RIGHT", -4, 0)
-							timer:SetFont(C['general'].font, C['general'].fontsize)
+							timer:SetFont(C['media'].font, C['media'].fontMedium)
 							timer:SetJustifyH("RIGHT")
 							timer:SetShadowColor(0, 0, 0, 0)
 							timer.SetFont = B.dummy
@@ -165,7 +165,7 @@ f:SetScript('OnEvent', function(self, ...)
 			if not anchor.styled then
 				local header={anchor:GetRegions()}
 					if header[1]:IsObjectType("FontString") then
-						header[1]:SetFont(C['general'].font, C['general'].fontsize)
+						header[1]:SetFont(C['media'].font, C['media'].fontMedium)
 						header[1]:SetTextColor(1,1,1,1)
 						header[1]:SetShadowColor(0, 0, 0, 0)
 						anchor.styled=true	
@@ -210,7 +210,7 @@ f:SetScript('OnEvent', function(self, ...)
 					barb:SetPoint("TOPLEFT", -2, 2);
 					barb:SetPoint("BOTTOMRIGHT", 2, -2);
 					barb:SetBackdrop({
-						edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
+						edgeFile = C['skin'].border,
 						edgeSize = 13,
 					})
 					barb:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)					
@@ -218,7 +218,7 @@ f:SetScript('OnEvent', function(self, ...)
 				end	
 				
 				if not progress.styled then
-					progress:SetStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar")
+					progress:SetStatusBarTexture(C['skin'].statusbar)
 					progress:SetStatusBarColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 					progress.styled=true
 				end				
@@ -229,7 +229,7 @@ f:SetScript('OnEvent', function(self, ...)
 				if not name.styled then
 					name:ClearAllPoints()
 					name:SetPoint("LEFT", bar, "LEFT", 4, 0)
-					name:SetFont(C['general'].font, C['general'].fontsize)
+					name:SetFont(C['media'].font, C['media'].fontMedium)
 					name:SetJustifyH("LEFT")
 					name:SetShadowColor(0, 0, 0, 0)
 					name.styled=true
@@ -238,7 +238,7 @@ f:SetScript('OnEvent', function(self, ...)
 				if not timer.styled then
 					timer:ClearAllPoints()
 					timer:SetPoint("RIGHT", bar, "RIGHT", -4, 0)
-					timer:SetFont(C['general'].font, C['general'].fontsize)
+					timer:SetFont(C['media'].font, C['media'].fontMedium)
 					timer:SetJustifyH("RIGHT")
 					timer:SetShadowColor(0, 0, 0, 0)
 					timer.styled=true
@@ -252,9 +252,9 @@ f:SetScript('OnEvent', function(self, ...)
 	-- Recount Skinning
 	-------------------
 	
-    if (C['general'].skin.Recount == true and IsAddOnLoaded('Recount')) then
+    if (C['skin'].Recount == true and IsAddOnLoaded('Recount')) then
 		local rm = Recount.MainWindow
-		if C['general'].skin.RecountBackdrop == false then 
+		if C['skin'].RecountBackdrop == false then 
 			rm:SetBackdrop(nil)
 		end
 		local bgs = CreateFrame("Frame", nil, rm);
@@ -262,7 +262,7 @@ f:SetScript('OnEvent', function(self, ...)
 		bgs:SetPoint("TOPLEFT", -3, -8);
 		bgs:SetPoint("BOTTOMRIGHT", 1, 0);
 		bgs:SetBackdrop({
-			edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
+			edgeFile = C['skin'].border,
 			edgeSize = 13,
 		})
 		bgs:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)

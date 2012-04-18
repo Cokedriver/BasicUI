@@ -70,17 +70,17 @@ if C['datatext'].battleground == true then
 	Stat:EnableMouse(true)
 
 	local Text1  = BattleGroundPanel:CreateFontString(nil, 'OVERLAY')
-	Text1:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
+	Text1:SetFont(C['media'].font, C['datatext'].fontsize,'THINOUTLINE')
 	Text1:SetPoint('LEFT', BattleGroundPanel, 30, 0)
 	Text1:SetHeight(DataPanel:GetHeight())
 
 	local Text2  = BattleGroundPanel:CreateFontString(nil, 'OVERLAY')
-	Text2:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
+	Text2:SetFont(C['media'].font, C['datatext'].fontsize,'THINOUTLINE')
 	Text2:SetPoint('CENTER', BattleGroundPanel, 0, 0)
 	Text2:SetHeight(DataPanel:GetHeight())
 
 	local Text3  = BattleGroundPanel:CreateFontString(nil, 'OVERLAY')
-	Text3:SetFont(C['general'].font, C['datatext'].fontsize,'THINOUTLINE')
+	Text3:SetFont(C['media'].font, C['datatext'].fontsize,'THINOUTLINE')
 	Text3:SetPoint('RIGHT', BattleGroundPanel, -30, 0)
 	Text3:SetHeight(DataPanel:GetHeight())
 

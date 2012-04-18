@@ -5,32 +5,43 @@
 ## SavedVariables: BasicDB
 ## SavedVariablesPerCharacter: BasicDBPerCharacter
 ## RequiredDeps: BasicUI_Config
-## OptionalDeps: DBM-Core, Recount, Blizzard_TimeManager
+## OptionalDeps: SharedMedia, SharedMediaAdditionalFonts, DBM-Core, Recount, Blizzard_TimeManager
 
 
 -- Ace Libs
-Libs\LibStub.lua
-Libs\CallbackHandler-1.0.lua
-Libs\LibSharedMedia-3.0.lua
-Libs\AceAddon-3.0.lua
-Libs\AceEvent-3.0.lua
-Libs\AceTimer-3.0.lua
-Libs\AceHook-3.0.lua
-Libs\LibQTip-1.0.lua
-Libs\LibCrayon-3.0.lua
-Libs\LibDataBroker-1.1.lua
-Libs\LibRevision.lua
+Libs\Libs.xml
 
+Media\LSM.lua
 
 -- Core
 Core\Engine.lua
 Core\Core.lua
+Core\Defaults.lua
+Core\Config.lua
 
--- Config
-Config\Defaults.lua
-Config\Config.lua
+-- Media
+Media\LSMLaunch.lua
 
 -- Modules
+
+-- General
+Modules\General\Font.lua
+Modules\General\Autogreed.lua
+Modules\General\BlackBook.lua
+Modules\General\Buttons.lua
+Modules\General\Castbar.lua
+Modules\General\Cooldown.lua
+Modules\General\ItemQuality.lua
+Modules\General\Mail.lua
+Modules\General\Merchant.lua
+Modules\General\Minimap.lua
+Modules\General\Nameplates.lua
+Modules\General\Powerbar.lua
+Modules\General\Quest.lua
+Modules\General\Scale.lua
+Modules\General\SlideBar.lua
+Modules\General\Skinning.lua
+Modules\General\Watchframe.lua
 
 --Buffs
 Modules\Buffs\Buff.lua
@@ -62,23 +73,6 @@ Modules\Datatext\Zone.lua
 Modules\Datatext\Calltoarms.lua
 Modules\Datatext\Recount.lua
 
--- General
-Modules\General\Autogreed.lua
-Modules\General\BlackBook.lua
-Modules\General\Buttons.lua
-Modules\General\Castbar.lua
-Modules\General\Cooldown.lua
-Modules\General\ItemQuality.lua
-Modules\General\Mail.lua
-Modules\General\Merchant.lua
-Modules\General\Minimap.lua
-Modules\General\Nameplates.lua
-Modules\General\Powerbar.lua
-Modules\General\Quest.lua
-Modules\General\Scale.lua
-Modules\General\SlideBar.lua
-Modules\General\Skinning.lua
-Modules\General\Watchframe.lua
 
 
 -- Tooltip

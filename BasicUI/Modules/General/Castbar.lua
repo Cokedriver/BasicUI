@@ -18,7 +18,7 @@ local function Set(a, k)
     a:SetFrameLevel(_G[k]:GetFrameLevel() - 1);
     if find(k, "MirrorTimer") then
         _G[k.."StatusBar"]:SetStatusBarColor(B.ccolor.r, B.ccolor.g, B.ccolor.b);
-        _G[k.."StatusBar"]:SetWidth(245);
+        _G[k.."StatusBar"]:SetWidth(240);
         _G[k.."StatusBar"]:SetHeight(24);
         _G[k]:ClearAllPoints();
         _G[k]:SetPoint("TOPLEFT", a, "TOPLEFT", B.scale(_G[k].d.x), -B.scale(_G[k].d.y));
@@ -26,7 +26,7 @@ local function Set(a, k)
         _G[k.."StatusBar"]:SetPoint("TOPLEFT", a, "TOPLEFT", B.scale(5), -B.scale(_G[k].d.y));
     else
         _G[k]:SetStatusBarColor(B.ccolor.r, B.ccolor.g, B.ccolor.b);
-        _G[k]:SetWidth(245);
+        _G[k]:SetWidth(240);
         _G[k]:SetHeight(24);
         _G[k]:ClearAllPoints();
         _G[k]:SetPoint("TOPLEFT", a, "TOPLEFT", B.scale(_G[k].d.x), -B.scale(_G[k].d.y))
@@ -66,22 +66,22 @@ for k, _ in pairs(C['castbar']) do
         _G[k.."Border"]:SetTexture("");
         _G[k.."Text"]:ClearAllPoints("");
         _G[k.."Text"]:SetPoint(C['castbar'][k].textPosition);
-        _G[k.."Text"]:SetFont("Fonts\\FRIZQT__.TTF", 14, "");
+        _G[k.."Text"]:SetFont(C['media'].font, C['media'].fontMedium, "");
 
         if find(k, "MirrorTimer") then
-            d.w = 245 + (5 * 2);
+            d.w = 240 + (5 * 2);
             d.h = 24 + (5 * 2);
             d.x = 5;
             d.y = 5;
             
-            _G[k.."StatusBar"]:SetStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar");
+            _G[k.."StatusBar"]:SetStatusBarTexture(C['castbar'].statusbar);
         else
-            d.w = 245 + 24 + (5 * 2) + 5;
+            d.w = 240 + 24 + (5 * 2) + 5;
             d.h = 24 + (5 * 2);
             d.x = 24 + 5 + 5;
             d.y = 5;
 
-            _G[k]:SetStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar");
+            _G[k]:SetStatusBarTexture(C['castbar'].statusbar);
             _G[k.."Flash"].Show = _G[k.."Flash"].Hide;
             _G[k.."Spark"].Show = _G[k.."Spark"].Hide;
             
@@ -92,9 +92,9 @@ for k, _ in pairs(C['castbar']) do
             if _G[k.."Icon"] then
                 _G[k.."Icon"]:Show();
                 _G[k.."Icon"]:ClearAllPoints();
-                _G[k.."Icon"]:SetPoint("RIGHT", _G[k], "LEFT", -3, 0);
-                _G[k.."Icon"]:SetWidth(24 - 1);
-                _G[k.."Icon"]:SetHeight(24 - 1);
+                _G[k.."Icon"]:SetPoint("LEFT", _G[k], -27, 0);
+                _G[k.."Icon"]:SetWidth(23);
+                _G[k.."Icon"]:SetHeight(23);
                 _G[k.."Icon"]:SetTexCoord(.08, .92, .08, .92);
             end;
             
@@ -119,7 +119,7 @@ for k, _ in pairs(C['castbar']) do
              
         if C['castbar'][k].enableTimer then
             _G[k].timer = _G[k]:CreateFontString(nil);
-            _G[k].timer:SetFont("Fonts\\FRIZQT__.TTF", 14, "");
+            _G[k].timer:SetFont(C['media'].font, C['media'].fontMedium, "");
             _G[k].timer:SetPoint("RIGHT", _G[k], "RIGHT", -5, 0);
             _G[k].update = .1;
         end;
@@ -129,8 +129,8 @@ for k, _ in pairs(C['castbar']) do
         a:SetWidth(d.w); a:SetHeight(d.h);
         a:SetBackdropColor(.1, .1, .1, .95);
 		a:SetBackdrop({
-			bgFile = "Interface\\AddOns\\BasicUI\\Media\\BLACK8X8",
-			edgeFile = 'Interface\\AddOns\\BasicUI\\Media\\UI-Tooltip-Border',
+			bgFile = C['castbar'].background,
+			edgeFile = C['castbar'].border,
 			edgeSize = 13,
 			insets = {left = 3, right = 3, top = 3, bottom = 3}
 		})
@@ -142,7 +142,7 @@ for k, _ in pairs(C['castbar']) do
         a:SetScript("OnDragStart", function(self) self:StartMoving() end);
         a:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end);
         a.name = a:CreateFontString(nil, "OVERLAY");
-        a.name:SetFont("Fonts\\FRIZQT__.TTF", 14, "");
+        a.name:SetFont(C['media'].font, C['media'].fontLarge, "");
         a.name:SetPoint("CENTER", a);
         _G[k].d = d; _G[k].df = a; _G[k].name = a.name; _G[k].l = true;
        
