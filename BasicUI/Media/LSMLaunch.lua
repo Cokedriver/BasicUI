@@ -47,9 +47,9 @@ C["powerbar"].statusbar = LSM:Fetch("statusbar", C["powerbar"].statusbar)
 -- Selfbuff Media
 C["selfbuffs"].border = LSM:Fetch("border", C["selfbuffs"].border)
 C["selfbuffs"].background = LSM:Fetch("background", C["selfbuffs"].background)
-C["selfbuffs"].sound = LSM:Fetch("sound", C["chat"].sound)
+C["selfbuffs"].sound = LSM:Fetch("sound", C["selfbuffs"].sound)
 
 -- Tooltip Media
 C["tooltip"].border = LSM:Fetch("border", C["tooltip"].border)
 C["tooltip"].background = LSM:Fetch("background", C["tooltip"].background)
-C["tooltip"].statusbar = LSM:Fetch("statusbar", C["nameplates"].statusbar)
+C["tooltip"].statusbar = LSM:Fetch("statusbar", C["tooltip"].statusbar)

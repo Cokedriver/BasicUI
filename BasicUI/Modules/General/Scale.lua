@@ -39,11 +39,3 @@ for i = 1,4 do
 		boss:SetScale(C["general"].scale.bossFrame)
 	end
 end
-
-
---[[local function a() end 
-for i=1, 4 do 
-	local f = _G["Boss"..i.."TargetFrame"] 
-	f:SetScript("OnShow", f.Hide) 
-	f.SetScript = a f:Hide() 
-end]]

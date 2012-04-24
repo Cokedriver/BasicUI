@@ -40,8 +40,8 @@ end
 
 
 function BasicUIConfig:OnInitialize()	
-	BasicUIConfig:RegisterChatCommand("bc", "ShowConfig")
-	BasicUIConfig:RegisterChatCommand("BasicUI", "ShowConfig")
+	BasicUIConfig:RegisterChatCommand("ui", "ShowConfig")
+	BasicUIConfig:RegisterChatCommand("basicui", "ShowConfig")
 	
 	self.OnInitialize = nil
 end
@@ -109,6 +109,42 @@ function BasicUIConfig.GenerateOptionsInternal()
 		type = "group",
 		childGroups = "tree",
 		args = {
+			Header = {
+				order = 1,
+				type = "header",
+				name = L["Welcome to |cff00B4FFBasic|rUI Config Area!"],			
+				width = "full",		
+			},
+			Text = {
+				order = 2,
+				type = "header",
+				name = L["When changes are made a Reload of the UI is needed."],			
+				width = "full",		
+			},
+			sep1 = {
+				type = "description",
+				name = " ",
+				order = 3,
+			},			
+			Text2 = {
+				order = 4,
+				type = "description",
+				name = L["Special Thanks for |cff00B4FFBasic|rUI goes out to: Neav, Tuks, Elv, Baine, Treeston, and many more."],			
+				width = "full",
+				fontSize = "large",
+			},
+			Text3 = {
+				order = 5,
+				type = "description",
+				name = L["Thank you all for your AddOns, coding help, and support in creating |cff00B4FFBasic|rUI."],			
+				width = "full",
+				fontSize = "large",				
+			},
+			sep2 = {
+				type = "description",
+				name = " ",
+				order = 6,
+			},				
 			media = {				
 				name = L["|cff00B4FFMedia|r"],
 				desc = L["Media Module for |cff00B4FFBasic|rUI."],
@@ -127,38 +163,45 @@ function BasicUIConfig.GenerateOptionsInternal()
 						dialogControl = 'LSM30_Font', --Select your widget here						
 						values = AceGUIWidgetLSMlists.font,	
 					},
+					fontSize = {						
+						name = L["Game Font Size"],
+						desc = L["Controls the Size of the Game Font"],
+						order = 2,
+						type = "range",
+						min = 0, max = 30, step = 1,
+					},					
 					fontxSmall = {						
 						name = L["Font Extra Small"],
 						desc = L["Controls the Size of the Extra Small Font"],
-						order = 2,
+						order = 3,
 						type = "range",
 						min = 0, max = 30, step = 1,
 					},
 					fontSmall = {						
 						name = L["Font Small"],
 						desc = L["Controls the Size of the Small Font"],
-						order = 3,
+						order = 4,
 						type = "range",
 						min = 0, max = 30, step = 1,
 					},
 					fontMedium = {
 						name = L["Font Medium"],
 						desc = L["Controls the Size of Medium Font"],
-						order = 4,
+						order = 5,
 						type = "range",						
 						min = 0, max = 30, step = 1,
 					},
 					fontLarge = {
 						name = L["Font Large"],
 						desc = L["Controls the Size of the Large Font"],
-						order = 5,
+						order = 6,
 						type = "range",						
 						min = 0, max = 30, step = 1,
 					},
 					fontHuge = {
 						name = L["Font Huge"],
 						desc = L["Controls the Size of the Huge Font"],
-						order = 6,
+						order = 7,
 						type = "range",						
 						min = 0, max = 30, step = 1,
 					},				
@@ -2143,19 +2186,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 						},
 					},					
 				},
-			},
-			Header = {
-				order = 1,
-				type = "header",
-				name = L["Welcome to |cff00B4FFBasic|rUI Config Area!"],			
-				width = "full",		
-			},
-			Text = {
-				order = 2,
-				type = "header",
-				name = L["When changes are made a Reload of the UI is needed."],			
-				width = "full",		
-			},			
+			},		
 		},
 	}
 end
@@ -2165,6 +2196,7 @@ function BasicUIConfig:SetDefaultOptions()
 	local addon = self.db.profile;
 	addon.media = {
 		["font"] = "BasicUI",
+		['fontSize'] = 14,
 		['fontxSmall'] = 10,
 		["fontSmall"] = 12,
 		['fontMedium'] = 14,
@@ -2245,7 +2277,7 @@ function BasicUIConfig:SetDefaultOptions()
 	addon.castbar = {
 		["enable"] = true,
 		['border'] = "BasicUI",
-		['background'] = "Blizzard Dialog Background",
+		['background'] = "Black",
 		['statusbar'] = "Blizzard",
 		
 
@@ -2468,17 +2500,17 @@ function BasicUIConfig:SetDefaultOptions()
 		["RecountBackdrop"] = true,
 	}	
 	addon.tooltip = {											
-		["enable"] = true,								
+		["enable"] = true,
 
-		["disableFade"] = false,                     		
+		["disableFade"] = false,
 		['border'] = "BasicUI",
-		['background'] = "Blizzard Dialog Background",
+		['background'] = "Black",
 		['statusbar'] = "Blizzard",
 		["reactionBorderColor"] = true,
 		["itemqualityBorderColor"] = true,
 		
 		["showPlayerTitles"] = true,
-		["showPVPIcons"] = false,                        	
+		["showPVPIcons"] = false, 
 		["abbrevRealmNames"] = false, 
 		["showMouseoverTarget"] = true,
 		
@@ -2487,7 +2519,7 @@ function BasicUIConfig:SetDefaultOptions()
 		["healthbar"] = {
 			["showHealthValue"] = true,
 			["showOutline"] = false,
-			["textPos"] = "CENTER",                   
+			["textPos"] = "CENTER",
 			["reactionColoring"] = false,
 			["customColorapply"] = false, 
 			["custom"] = {

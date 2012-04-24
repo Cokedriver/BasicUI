@@ -8,23 +8,23 @@
 ## OptionalDeps: SharedMedia, SharedMediaAdditionalFonts, DBM-Core, Recount, Blizzard_TimeManager
 
 
--- Ace Libs
-Libs\Libs.xml
 
+<!-- Libs --!>
+Libs\Libs.xml
 Media\LSM.lua
 
--- Core
+<!-- Core --!>
 Core\Engine.lua
 Core\Core.lua
 Core\Defaults.lua
 Core\Config.lua
 
--- Media
+<!-- Media --!>
 Media\LSMLaunch.lua
 
--- Modules
+<!--------- MODULES ----------!>
 
--- General
+<!-- General --!>
 Modules\General\Font.lua
 Modules\General\Autogreed.lua
 Modules\General\BlackBook.lua
@@ -43,14 +43,14 @@ Modules\General\SlideBar.lua
 Modules\General\Skinning.lua
 Modules\General\Watchframe.lua
 
---Buffs
+<!-- Buffs --!>
 Modules\Buffs\Buff.lua
 Modules\Buffs\Selfbuffs.lua
 
--- Chat
+<!-- Chat --!>
 Modules\Chat\Chat.lua
 
--- Datatext
+<!-- Datatext --!>
 Modules\Datatext\Datapanel.lua
 Modules\Datatext\Positions.lua
 Modules\Datatext\Colors.lua
@@ -73,7 +73,5 @@ Modules\Datatext\Zone.lua
 Modules\Datatext\Calltoarms.lua
 Modules\Datatext\Recount.lua
 
-
-
--- Tooltip
+<!-- Tooltip --!>
 Modules\Tooltip\Tooltip.lua

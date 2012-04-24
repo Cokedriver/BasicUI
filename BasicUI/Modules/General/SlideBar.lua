@@ -1,14 +1,35 @@
 local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
 
---[[
-
-	All Credit for SlideBar.lua goes to Nechckn, MentalPower, and Norganna.
-	Auctioneer Suite = http://www.wowinterface.com/downloads/info7879-AuctioneerSuite.html.
-	Edited by Cokedriver.
-	
-]]
-
 if C['general'].slidebar ~= true then return end
+
+--[[
+	Slidebar AddOn for World of Warcraft (tm)
+	Version: 5.13.5258 (BoldBandicoot)
+	Revision: $Id: SlideMain.lua 312 2011-06-14 07:33:25Z brykrys $
+	URL: http://auctioneeraddon.com/dl/
+
+	License:
+		This program is free software; you can redistribute it and/or
+		modify it under the terms of the GNU General Public License
+		as published by the Free Software Foundation; either version 2
+		of the License, or (at your option) any later version.
+
+		This program is distributed in the hope that it will be useful,
+		but WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+		GNU General Public License for more details.
+
+		You should have received a copy of the GNU General Public License
+		along with this program(see GPL.txt); if not, write to the Free Software
+		Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+	Note:
+		This AddOn's source code is specifically designed to work with
+		World of Warcraft's interpreted AddOn system.
+		You have an implicit license to use this AddOn with these facilities
+		since that is its designated purpose as per:
+		http://www.fsf.org/licensing/licenses/gpl-faq.html#InterpreterIncompat
+]]
 
 local LIBRARY_VERSION_MAJOR = "SlideBar"
 local LIBRARY_VERSION_MINOR = 10
@@ -177,7 +198,7 @@ end
 function lib.ApplyLayout(useLayout)
 	local vis = BasicDB.visibility or "0"
 	local wide = BasicDB.maxWidth or 12
-	local side = BasicDB.anchor or "map"
+	local side = BasicDB.anchor or "right"
 	local position = BasicDB.position or "180"
 	local active = BasicDB.enabled or "1"
 
@@ -256,7 +277,7 @@ function lib.ApplyLayout(useLayout)
 	elseif (side == "left") then
 		frame:SetPoint("TOPRIGHT", UIParent, "TOPLEFT", distance, -1*position)
 	elseif (side == "right") then
-		frame:SetPoint("TOPLEFT", UIParent, "TOPRIGHT", -1*distance, -1*position)		
+		frame:SetPoint("TOPLEFT", UIParent, "TOPRIGHT", -1*distance, -1*position)
 	end
 
 	if (useLayout) then return end
@@ -304,7 +325,7 @@ function lib.ApplyLayout(useLayout)
 		elseif (side == "bottom") then
 			button:SetPoint("TOPLEFT", frame, "TOPLEFT", row*32+5, 0-(col*32+10))
 		elseif (side == "top") then
-			button:SetPoint("TOPLEFT", frame, "TOPLEFT", row*32+5, 0-(col*32+10))			
+			button:SetPoint("TOPLEFT", frame, "TOPLEFT", row*32+5, 0-(col*32+10))
 		end
 
 		if not button:IsShown() then
@@ -327,12 +348,12 @@ else
 	frame:SetFrameStrata("TOOLTIP")
 	frame:SetHitRectInsets(-3, -3, -3, -3)
 	frame:SetBackdrop({
-		bgFile = "Interface/Tooltips/UI-Tooltip-Background",
-		edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+		bgFile = C['tooltip'].background,
+		edgeFile = C['tooltip'].border,
 		tile = true, tileSize = 32, edgeSize = 16,
 		insets = { left = 4, right = 4, top = 4, bottom = 4 }
 	})
-	frame:SetBackdropColor(0,0,0, 0.5)
+	frame:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 	frame:EnableMouse(true)
 	frame:SetScript("OnEnter", function(...) private.PopOut(...) end)
 	frame:SetScript("OnLeave", function(...) private.PopBack(...) end)
@@ -362,8 +383,8 @@ else
 
 	SLASH_NSIDEBAR1 = "/sbar"
 	SLASH_NSIDEBAR2 = "/slidebar"
-	SLASH_NSIDEBAR3 = "/sb"
-	SlashCmdList["SIDEBAR"] = function(msg)
+	SLASH_NSIDEBAR3 = "/nsb"
+	SlashCmdList["NSIDEBAR"] = function(msg)
 		private.CommandHandler(msg)
 	end
 
@@ -434,12 +455,12 @@ if not lib.tooltip then
 		end
 	end)
 	lib.tooltip:SetBackdrop({
-		bgFile = "Interface/Tooltips/UI-Tooltip-Background",
-		edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+		bgFile = C['tooltip'].background,
+		edgeFile = C['tooltip'].border,
 		tile = true, tileSize = 32, edgeSize = 16,
 		insets = { left = 4, right = 4, top = 4, bottom = 4 }
 	})
-	lib.tooltip:SetBackdropColor(0,0,0.3, 1)
+	lib.tooltip:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 	--lib.tooltip:SetClampedToScreen(true)
 	--no easy way to make our old and LDB tooltips play togather so created a new function
 	function lib:SetTipLDB(frame, ...)
@@ -628,14 +649,14 @@ function private.CommandHandler(msg)
 	if (not msg or msg == "") then msg = "help" end
 	local a, b, c = strsplit(" ", msg:lower())
 	if (a == "help") then
-		DEFAULT_CHAT_FRAME:AddMessage("/sb top | left | bottom | right  |cff1020ff Set the anchor for the sidebar |r")
-		DEFAULT_CHAT_FRAME:AddMessage("/sb config  |cff1020ff Display the GUI to show or hide buttons|r")
-		DEFAULT_CHAT_FRAME:AddMessage("/sb <n>  |cff1020ff Set the position for the sidebar |r")
-		DEFAULT_CHAT_FRAME:AddMessage("/sb fadeout | nofade  |cff1020ff Set whether the sidebar fades or not |r")
-		DEFAULT_CHAT_FRAME:AddMessage("/sb size <n>  |cff1020ff Set the number of icons before the bar wraps |r")
-		DEFAULT_CHAT_FRAME:AddMessage("/sb lock | unlock  |cff1020ff enab |r")
-		DEFAULT_CHAT_FRAME:AddMessage("/sb reset  |cff1020ff Reset the bar to factory defaults |r")
-		DEFAULT_CHAT_FRAME:AddMessage("/sb off | on | toggle  |cff1020ff Disable/Enable/Toggle bar's visibility |r")
+		DEFAULT_CHAT_FRAME:AddMessage("/nsb top | left | bottom | right  |cff1020ff Set the anchor for the sidebar |r")
+		DEFAULT_CHAT_FRAME:AddMessage("/nsb config  |cff1020ff Display the GUI to show or hide buttons|r")
+		DEFAULT_CHAT_FRAME:AddMessage("/nsb <n>  |cff1020ff Set the position for the sidebar |r")
+		DEFAULT_CHAT_FRAME:AddMessage("/nsb fadeout | nofade  |cff1020ff Set whether the sidebar fades or not |r")
+		DEFAULT_CHAT_FRAME:AddMessage("/nsb size <n>  |cff1020ff Set the number of icons before the bar wraps |r")
+		DEFAULT_CHAT_FRAME:AddMessage("/nsb lock | unlock  |cff1020ff enab |r")
+		DEFAULT_CHAT_FRAME:AddMessage("/nsb reset  |cff1020ff Reset the bar to factory defaults |r")
+		DEFAULT_CHAT_FRAME:AddMessage("/nsb off | on | toggle  |cff1020ff Disable/Enable/Toggle bar's visibility |r")
 		return
 	end
 
@@ -758,7 +779,7 @@ function private.GUI()
 	frame.config:SetToplevel(true)
 	frame.config:Hide()
 
-	frame.config.name = "SlideBar"
+	frame.config.name = "|cff00B4FFBasic|rUI SlideBar"
 	--add to Blizzards addon configuration menu
 	InterfaceOptions_AddCategory(frame.config)
 
@@ -767,8 +788,8 @@ function private.GUI()
 	frame.config.help:SetPoint("TOPLEFT", frame.config,"LEFT" , 15, 150)
 	frame.config.help:SetPoint("BOTTOMRIGHT", frame.config,"BOTTOMRIGHT" , -15, 0)
 
-	frame.config.enableCheck = CreateFrame("CheckButton", "SlideBarenableCheck", frame.config, "InterfaceOptionsCheckButtonTemplate")
-	SlideBarenableCheckText:SetText("Enable SlideBar")
+	frame.config.enableCheck = CreateFrame("CheckButton", "nSlideBarenableCheck", frame.config, "InterfaceOptionsCheckButtonTemplate")
+	nSlideBarenableCheckText:SetText("Enable SlideBar")
 	frame.config.enableCheck:SetPoint("LEFT", frame.config, "LEFT", 10, -80)
 	frame.config.enableCheck:SetChecked(BasicDB.enabled or "1")
 	function frame.config.enableCheck.setFunc(state)
@@ -776,7 +797,7 @@ function private.GUI()
 		lib.ApplyLayout()
 	end
 
-	frame.config.searchBox = CreateFrame("EditBox", "SlideBarLengthEditBox", frame.config, "InputBoxTemplate") --has to have a name or the template bugs
+	frame.config.searchBox = CreateFrame("EditBox", "nSlideBarLengthEditBox", frame.config, "InputBoxTemplate") --has to have a name or the template bugs
 	frame.config.searchBox:SetMaxLetters(2)
 	frame.config.searchBox:SetNumeric(true)
 	local wide = BasicDB.maxWidth or 12
@@ -797,8 +818,8 @@ function private.GUI()
 	frame.config.searchBox.help:SetPoint("LEFT", frame.config.searchBox, "RIGHT", 5, 0)
 	frame.config.searchBox.help:SetText("Number of buttons before a new row is started.")
 
-	frame.config.lockCheck = CreateFrame("CheckButton", "SlideBarlockCheck", frame.config, "InterfaceOptionsCheckButtonTemplate")
-	SlideBarlockCheckText:SetText("Lock the Bar's location")
+	frame.config.lockCheck = CreateFrame("CheckButton", "nSlideBarlockCheck", frame.config, "InterfaceOptionsCheckButtonTemplate")
+	nSlideBarlockCheckText:SetText("Lock the Bar's location")
 	frame.config.lockCheck:SetPoint("TOP", frame.config.searchBox, "BOTTOM", 0, -10)
 	function frame.config.lockCheck.setFunc(state)
 		BasicDB.locked = state
@@ -807,8 +828,8 @@ function private.GUI()
 	frame.config.lockCheck:SetChecked(BasicDB.locked)
 
 
-	frame.config.fadeCheck = CreateFrame("CheckButton", "SlideBarfadeCheck", frame.config, "InterfaceOptionsCheckButtonTemplate")
-	SlideBarfadeCheckText:SetText("Fade the slidebar when not in use.")
+	frame.config.fadeCheck = CreateFrame("CheckButton", "nSlideBarfadeCheck", frame.config, "InterfaceOptionsCheckButtonTemplate")
+	nSlideBarfadeCheckText:SetText("Fade the slidebar when not in use.")
 	frame.config.fadeCheck:SetPoint("TOP",frame.config.lockCheck, "BOTTOM")
 	function frame.config.fadeCheck.setFunc(state)
 		BasicDB.visibility = state

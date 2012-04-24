@@ -408,27 +408,30 @@ for _, texture in pairs({
 end
 
 -- Minimap Clock
+TimeManagerClockTicker:SetFont(C['media'].font, C['media'].fontLarge, 'OUTLINE')
+TimeManagerClockTicker:SetShadowOffset(0, 0)
+TimeManagerClockTicker:SetTextColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+TimeManagerClockTicker:SetPoint('TOPRIGHT', TimeManagerClockButton, 0, 0)
+
+TimeManagerClockButton:GetRegions():Hide()
+TimeManagerClockButton:ClearAllPoints()
+TimeManagerClockButton:SetWidth(40)
+TimeManagerClockButton:SetHeight(18)
+TimeManagerClockButton:SetPoint('BOTTOM', Minimap, 0, 2)
+
+TimeManagerAlarmFiredTexture:SetTexture(nil)
+
+hooksecurefunc(TimeManagerAlarmFiredTexture, 'Show', function()
+	TimeManagerClockTicker:SetTextColor(1, 0, 1)
+end)
+
+hooksecurefunc(TimeManagerAlarmFiredTexture, 'Hide', function()
+	TimeManagerClockTicker:SetTextColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+end)
 
 if C['minimap'].gameclock == true then
-
-	TimeManagerClockTicker:SetFont(C['media'].font, C['media'].fontLarge, 'OUTLINE')
-	TimeManagerClockTicker:SetShadowOffset(0, 0)
-	TimeManagerClockTicker:SetTextColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
-	TimeManagerClockTicker:SetPoint('TOPRIGHT', TimeManagerClockButton, 0, 0)
-
-	TimeManagerClockButton:GetRegions():Hide()
-	TimeManagerClockButton:ClearAllPoints()
-	TimeManagerClockButton:SetWidth(40)
-	TimeManagerClockButton:SetHeight(18)
-	TimeManagerClockButton:SetPoint('BOTTOM', Minimap, 0, 2)
-
-	TimeManagerAlarmFiredTexture:SetTexture(nil)
-
-	hooksecurefunc(TimeManagerAlarmFiredTexture, 'Show', function()
-		TimeManagerClockTicker:SetTextColor(1, 0, 1)
-	end)
-
-	hooksecurefunc(TimeManagerAlarmFiredTexture, 'Hide', function()
-		TimeManagerClockTicker:SetTextColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
-	end)
+	TimeManagerClockButton:Show()
+else
+	TimeManagerClockButton:Hide()
 end
+	

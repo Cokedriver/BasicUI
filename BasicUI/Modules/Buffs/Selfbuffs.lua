@@ -112,7 +112,7 @@ if (buffs and buffs[1]) then
 				end
 			end
 			self:Show()
-			if C['selfbuffs'].sound == true and sound == true then
+			if C['selfbuffs'].playsound == true and sound == true then
 				PlaySoundFile(C['selfbuffs'].sound)
 				sound = false
 			end

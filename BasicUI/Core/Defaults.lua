@@ -8,11 +8,12 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 -----------------
 DB["media"] = {
 	["font"] = "BasicUI",
-	['fontxSmall'] = 10,
+	["fontSize"] = 14,
+	["fontxSmall"] = 10,
 	["fontSmall"] = 12,
-	['fontMedium'] = 14,
-	['fontLarge'] = 16,
-	['fontHuge'] = 20,
+	["fontMedium"] = 14,
+	["fontLarge"] = 16,
+	["fontHuge"] = 20,
 }
 
 -------------------
@@ -72,24 +73,24 @@ DB["general"] = {
 -- Buff Options
 ----------------
 DB["buff"] = {
-	['enable'] = true,
-	['border'] = "BasicUI",
-	['background'] = "Black",
-    ['buffSize'] = 36,
-    ['buffScale'] = 1,
+	["enable"] = true,
+	["border"] = "BasicUI",
+	["background"] = "Black",
+    ["buffSize"] = 36,
+    ["buffScale"] = 1,
 
-    ['buffFontSize'] = 14,
-    ['buffCountSize'] = 16,
+    ["buffFontSize"] = 14,
+    ["buffCountSize"] = 16,
 
-    ['debuffSize'] = 36,
-    ['debuffScale'] = 1,
+    ["debuffSize"] = 36,
+    ["debuffScale"] = 1,
 
-    ['debuffFontSize'] = 14,
-    ['debuffCountSize'] = 16,
+    ["debuffFontSize"] = 14,
+    ["debuffCountSize"] = 16,
 
-    ['paddingX'] = 10,
-    ['paddingY'] = 10,
-    ['buffPerRow'] = 6,
+    ["paddingX"] = 10,
+    ["paddingY"] = 10,
+    ["buffPerRow"] = 6,
 }	
 
 ------------------
@@ -98,9 +99,9 @@ DB["buff"] = {
 DB["castbar"] = {
 	
 	["enable"] = true,
-	['border'] = "BasicUI",
-	['background'] = "Blizzard Dialog Background",
-	['statusbar'] = "Blizzard",
+	["border"] = "BasicUI",
+	["background"] = "Black",
+	["statusbar"] = "Blizzard",
 	
 
 	["CastingBarFrame"] = {
@@ -161,14 +162,14 @@ DB["chat"] = {
 	["disableFade"] = false,
 	["chatOutline"] = false,
 	["windowborder"] = true,
-	['enableborder'] = true,
+	["enableborder"] = true,
 	
 	-- Chat Media
-	['border'] = "BasicUI",
-	['background'] = "Blizzard Dialog Background",
-	['editboxborder'] = "BasicUI",
-	['editboxbackground'] = "Blizzard Dialog Background",
-	['sound'] = "Whisper",
+	["border"] = "BasicUI",
+	["background"] = "Blizzard Dialog Background",
+	["editboxborder"] = "BasicUI",
+	["editboxbackground"] = "Blizzard Dialog Background",
+	["sound"] = "Whisper",
 	
 	["enableBottomButton"] = true, 
 	["enableHyperlinkTooltip"] = true, 
@@ -191,8 +192,8 @@ DB["datatext"] = {
 	["enable"] = true,
 
 	-- Datapanel Media
-	['border'] = "Blizzard Dialog",
-	['background'] = "Blizzard Dialog Background",
+	["border"] = "Blizzard Dialog",
+	["background"] = "Blizzard Dialog Background",
 	
 	["top"] = false,										-- if = true then panel on top of screen, if = false panel below mainmenubar
 	["fontsize"] = 15,                                  	-- font size for panels.
@@ -245,8 +246,8 @@ DB["datatext"] = {
 -- Item Quality Options
 ------------------------
 DB["itemquality"] = {
-	['enable'] = false,
-	['border'] = "Item Quality",
+	["enable"] = false,
+	["border"] = "Item Quality",
 }
 
 --------------------
@@ -265,37 +266,37 @@ DB["merchant"] = {
 --------------------
 
 DB["minimap"] = {
-	['enable'] = true,
-	['border'] = "BasicUI",
-	['gameclock'] = true,
-	['farm'] = false,
-	['farmscale'] = 3,
-	['zoneText'] = true,
-	['instanceDifficulty'] = false,
+	["enable"] = true,
+	["border"] = "BasicUI",
+	["gameclock"] = true,
+	["farm"] = false,
+	["farmscale"] = 3,
+	["zoneText"] = true,
+	["instanceDifficulty"] = false,
 }
 ---------------------
 -- Nameplates Options
 ---------------------
 
 DB["nameplates"] = {
-	['enable'] = true,
-    ['enableTankMode'] = true,              -- Color the nameplate threat border green, if you have no aggro
-    ['colorNameWithThreat'] = true,         -- The name has the same color as the threat of the unit (better visibility)
+	["enable"] = true,
+    ["enableTankMode"] = true,              -- Color the nameplate threat border green, if you have no aggro
+    ["colorNameWithThreat"] = true,         -- The name has the same color as the threat of the unit (better visibility)
 
-    ['showFullHP'] = true,
-    ['showLevel'] = true,
-    ['showTargetBorder'] = true,
-    ['showEliteBorder'] = true,
-    ['showTotemIcon'] = true,
-    ['abbrevLongNames'] = true,
+    ["showFullHP"] = true,
+    ["showLevel"] = true,
+    ["showTargetBorder"] = true,
+    ["showEliteBorder"] = true,
+    ["showTotemIcon"] = true,
+    ["abbrevLongNames"] = true,
 }
 --------------------
 -- Powerbar Options 
 --------------------
 DB["powerbar"] = {
 	["enable"] = true,
-	['border'] = "BasicUI",
-	['statusbar'] = "Blizzard",
+	["border"] = "BasicUI",
+	["statusbar"] = "Blizzard",
 	["sizeWidth"] = 200,
 		
 	["showCombatRegen"] = true, 
@@ -352,9 +353,9 @@ DB["quest"] = {
 DB["selfbuffs"] = {
 
 	["enable"] = true,									-- enable selbuffs module.
-	['border'] = "BasicUI",
+	["border"] = "BasicUI",
 	["playsound"] = true,								-- sound warning
-	['sound'] = "Warning",
+	["sound"] = "Warning",
 	
 }
 
@@ -364,8 +365,8 @@ DB["selfbuffs"] = {
 -------------------------
 DB["skin"] = {
 	["enable"] = true,
-	['border'] = "BasicUI",
-	['statusbar'] = "Blizzard",
+	["border"] = "BasicUI",
+	["statusbar"] = "Blizzard",
 	["DBM"] = true,
 	["Recount"] = true,
 	["RecountBackdrop"] = true,
@@ -377,9 +378,9 @@ DB["tooltip"] = {
 	["enable"] = true,									-- Move the tooltip up so its not overlapping the MainMenubar
 
 	["disableFade"] = false,                     		-- Can cause errors or a buggy tooltip!
-	['border'] = "BasicUI",
-	['background'] = "Black",
-	['statusbar'] = "Blizzard",
+	["border"] = "BasicUI",
+	["background"] = "Black",
+	["statusbar"] = "Blizzard",
 	["reactionBorderColor"] = true,
 	["itemqualityBorderColor"] = true,
 	
