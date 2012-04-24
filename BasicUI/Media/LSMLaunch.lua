@@ -32,9 +32,6 @@ C["chat"].sound = LSM:Fetch("sound", C["chat"].sound)
 C["datatext"].border = LSM:Fetch("border", C["datatext"].border)
 C["datatext"].background = LSM:Fetch("background", C["datatext"].background)
 
--- Item Quality Media
-C["itemquality"].border = LSM:Fetch("border", C["itemquality"].border)
-
 -- Nameplates Media
 C["nameplates"].border = LSM:Fetch("border", C["nameplates"].border)
 C["nameplates"].background = LSM:Fetch("background", C["nameplates"].background)

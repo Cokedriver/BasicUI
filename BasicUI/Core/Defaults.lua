@@ -242,14 +242,6 @@ DB["datatext"] = {
 
 }
 
-------------------------
--- Item Quality Options
-------------------------
-DB["itemquality"] = {
-	["enable"] = false,
-	["border"] = "Item Quality",
-}
-
 --------------------
 -- Merchant Options
 --------------------

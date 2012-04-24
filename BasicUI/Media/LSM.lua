@@ -11,7 +11,6 @@ LSM:Register("background", "Black", 			[[Interface\Addons\BasicUI\Media\Textures
 --  BORDERS
 -- ---------
 LSM:Register("border", "BasicUI", 				[[Interface\Addons\BasicUI\Media\Border\BasicUI.blp]])
-LSM:Register("border", "Item Quality", 			[[Interface\Addons\BasicUI\Media\Border\ItemQuality.blp]])
 LSM:Register("border", "Neav UI", 				[[Interface\Addons\BasicUI\Media\Border\Neav.blp]])
 LSM:Register("border", "Roth Square", 			[[Interface\Addons\BasicUI\Media\Border\Roth.blp]])
 LSM:Register("border", "Seerah Scalloped", 		[[Interface\Addons\BasicUI\Media\Border\SeerahScalloped.blp]])
