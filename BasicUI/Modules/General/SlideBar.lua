@@ -353,7 +353,11 @@ else
 		tile = true, tileSize = 32, edgeSize = 16,
 		insets = { left = 4, right = 4, top = 4, bottom = 4 }
 	})
-	frame:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+	if C['general'].classcolor ~= true then
+		frame:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+	else
+		frame:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+	end
 	frame:EnableMouse(true)
 	frame:SetScript("OnEnter", function(...) private.PopOut(...) end)
 	frame:SetScript("OnLeave", function(...) private.PopBack(...) end)
@@ -460,7 +464,11 @@ if not lib.tooltip then
 		tile = true, tileSize = 32, edgeSize = 16,
 		insets = { left = 4, right = 4, top = 4, bottom = 4 }
 	})
-	lib.tooltip:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+	if C['general'].classcolor ~= true then
+		lib.tooltip:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+	else
+		lib.tooltip:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+	end
 	--lib.tooltip:SetClampedToScreen(true)
 	--no easy way to make our old and LDB tooltips play togather so created a new function
 	function lib:SetTipLDB(frame, ...)
@@ -649,14 +657,14 @@ function private.CommandHandler(msg)
 	if (not msg or msg == "") then msg = "help" end
 	local a, b, c = strsplit(" ", msg:lower())
 	if (a == "help") then
-		DEFAULT_CHAT_FRAME:AddMessage("/nsb top | left | bottom | right  |cff1020ff Set the anchor for the sidebar |r")
-		DEFAULT_CHAT_FRAME:AddMessage("/nsb config  |cff1020ff Display the GUI to show or hide buttons|r")
-		DEFAULT_CHAT_FRAME:AddMessage("/nsb <n>  |cff1020ff Set the position for the sidebar |r")
-		DEFAULT_CHAT_FRAME:AddMessage("/nsb fadeout | nofade  |cff1020ff Set whether the sidebar fades or not |r")
-		DEFAULT_CHAT_FRAME:AddMessage("/nsb size <n>  |cff1020ff Set the number of icons before the bar wraps |r")
-		DEFAULT_CHAT_FRAME:AddMessage("/nsb lock | unlock  |cff1020ff enab |r")
-		DEFAULT_CHAT_FRAME:AddMessage("/nsb reset  |cff1020ff Reset the bar to factory defaults |r")
-		DEFAULT_CHAT_FRAME:AddMessage("/nsb off | on | toggle  |cff1020ff Disable/Enable/Toggle bar's visibility |r")
+		DEFAULT_CHAT_FRAME:AddMessage("/sb top | left | bottom | right  |cff1020ff Set the anchor for the sidebar |r")
+		DEFAULT_CHAT_FRAME:AddMessage("/sb config  |cff1020ff Display the GUI to show or hide buttons|r")
+		DEFAULT_CHAT_FRAME:AddMessage("/sb <n>  |cff1020ff Set the position for the sidebar |r")
+		DEFAULT_CHAT_FRAME:AddMessage("/sb fadeout | nofade  |cff1020ff Set whether the sidebar fades or not |r")
+		DEFAULT_CHAT_FRAME:AddMessage("/sb size <n>  |cff1020ff Set the number of icons before the bar wraps |r")
+		DEFAULT_CHAT_FRAME:AddMessage("/sb lock | unlock  |cff1020ff enab |r")
+		DEFAULT_CHAT_FRAME:AddMessage("/sb reset  |cff1020ff Reset the bar to factory defaults |r")
+		DEFAULT_CHAT_FRAME:AddMessage("/sb off | on | toggle  |cff1020ff Disable/Enable/Toggle bar's visibility |r")
 		return
 	end
 

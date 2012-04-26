@@ -13,7 +13,6 @@ local PanelLeft = CreateFrame('Frame', 'PanelLeft', UIParent)
 local PanelCenter = CreateFrame('Frame', 'PanelCenter', UIParent)
 local PanelRight = CreateFrame('Frame', 'PanelRight', UIParent)
 local BattleGroundPanel = CreateFrame('Frame', 'BattleGroundPanel', UIParent)
-local ccolor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[select(2,UnitClass("player"))]
 
 if C['datatext'].top == true then
 	DataPanel:SetPoint('TOP', UIParent, 0, 0)
@@ -24,13 +23,17 @@ if C['datatext'].top == true then
 	DataPanel:SetBackdrop({
 		bgFile = C['datatext'].background,
 		edgeFile = C['datatext'].border,							
-		tile = true, tileSize = 16, edgeSize = 25,
+		edgeSize = 25,
 		insets = {left = 3, right = 3, top = 3, bottom = 3},
 	})
 	DataPanel:SetBackdropColor(0, 0, 0, 1)
-	if C['datatext'].border == "BasicUI" or "Neav" then
-		--DataPanel:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b, 1)
+
+	if C['general'].classcolor ~= true then
+		DataPanel:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b,1)
+	else
+		DataPanel:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b, 1)
 	end
+
 
 	-- Left Panel
 	PanelLeft:SetPoint('LEFT', DataPanel, 5, 0)
@@ -67,12 +70,16 @@ else
 		bgFile = C['datatext'].background,
 		edgeFile = C['datatext'].border,
 		edgeSize = 25,
-		insets = {left = 9, right = 9, top = 9, bottom = 8}
+		insets = {left = 5, right = 5, top = 5, bottom = 5}
 	})
 	DataPanel:SetBackdropColor(0, 0, 0, 1)
-	if C['datatext'].border == "BasicUI" or "Neav" then
-		--DataPanel:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b, 1)
+
+	if C['general'].classcolor ~= true then
+		DataPanel:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b,1)
+	else
+		DataPanel:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b, 1)
 	end
+
 	
 	-- Left Panel
 	PanelLeft:SetPoint('LEFT', DataPanel, 5, 0)

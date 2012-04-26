@@ -45,7 +45,11 @@ f:SetScript('OnEvent', function(self, ...)
 								edgeFile = C['skin'].border,
 								edgeSize = 13,
 							})
-							icon1.overlay:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)								
+							if C['general'].classcolor ~= true then
+								icon1.overlay:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+							else
+								icon1.overlay:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+							end
 							icon1.overlay.styled=true
 						end
 
@@ -58,7 +62,11 @@ f:SetScript('OnEvent', function(self, ...)
 								edgeFile = C['skin'].border,
 								edgeSize = 13,
 							})
-							icon2.overlay:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)								
+							if C['general'].classcolor ~= true then
+								icon2.overlay:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+							else
+								icon2.overlay:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+							end
 							icon2.overlay.styled=true				
 						end
 
@@ -83,7 +91,11 @@ f:SetScript('OnEvent', function(self, ...)
 								edgeFile = C['skin'].border,
 								edgeSize = 13,
 							})
-							border:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)								
+							if C['general'].classcolor ~= true then
+								border:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+							else
+								border:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+							end
 							frame.styled=true
 						end
 
@@ -213,7 +225,11 @@ f:SetScript('OnEvent', function(self, ...)
 						edgeFile = C['skin'].border,
 						edgeSize = 13,
 					})
-					barb:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)					
+					if C['general'].classcolor ~= true then
+						barb:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+					else
+						barb:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+					end
 					bar.styled=true
 				end	
 				
@@ -265,6 +281,10 @@ f:SetScript('OnEvent', function(self, ...)
 			edgeFile = C['skin'].border,
 			edgeSize = 13,
 		})
-		bgs:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+		if C['general'].classcolor ~= true then
+			bgs:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+		else
+			bgs:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+		end
     end
 end)

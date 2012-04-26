@@ -30,6 +30,8 @@ B.mapshape = {['SQUARE'] = L['SQUARE'], ['ROUND'] = L['ROUND']}
 
 
 
+
+
 --Check Player's Role
 local RoleUpdater = CreateFrame("Frame")
 local function CheckRole(self, event, unit)

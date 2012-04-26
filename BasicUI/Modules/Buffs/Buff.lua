@@ -46,7 +46,7 @@ end)
 
 -- TemporaryEnchantFrame ...
 TempEnchant1:ClearAllPoints()
-TempEnchant1:SetPoint('TOPRIGHT', Minimap, 'TOPLEFT', -15, 0)
+TempEnchant1:SetPoint('TOPRIGHT', Minimap, 'TOPLEFT', -25, 0)
 -- TempEnchant1.SetPoint = function() end
 
 TempEnchant2:ClearAllPoints()
@@ -187,7 +187,7 @@ for i = 1, NUM_TEMP_ENCHANT_FRAMES do
 
     local duration = _G['TempEnchant'..i..'Duration']
     duration:ClearAllPoints()
-    duration:SetPoint('BOTTOM', button, 'BOTTOM', 0, -2)
+    duration:SetPoint('BOTTOM', button, 'BOTTOM', 1, 2)
     duration:SetFont(C['media'].font, C['buff'].buffFontSize, 'THINOUTLINE')
     duration:SetShadowOffset(0, 0)
     duration:SetDrawLayer('OVERLAY')
@@ -219,7 +219,7 @@ hooksecurefunc('AuraButton_Update', function(self, index)
         local duration = _G[self..index..'Duration']
         if (duration) then
             duration:ClearAllPoints()
-            duration:SetPoint('BOTTOM', button, 'BOTTOM', 0, 2)
+            duration:SetPoint('BOTTOM', button, 'BOTTOM', 1, 2)
             if (self:match('Debuff')) then
                 duration:SetFont(C['media'].font, C['buff'].debuffFontSize, 'THINOUTLINE')
             else
@@ -270,7 +270,11 @@ hooksecurefunc('AuraButton_Update', function(self, index)
 					edgeFile = C['buff'].border,
 					edgeSize = 20,
 				})
-				buttonbg:SetBackdropBorderColor( B.ccolor.r, B.ccolor.g, B.ccolor.b)
+				if C['general'].classcolor ~= true then
+					buttonbg:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+				else
+					buttonbg:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+				end
 				buttonbg:SetFrameStrata('MEDIUM')				
             end
         end

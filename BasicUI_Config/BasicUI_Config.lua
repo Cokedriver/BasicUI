@@ -226,17 +226,126 @@ function BasicUIConfig.GenerateOptionsInternal()
 						desc = L["Enables cooldown counts on action buttons."],	
 						order = 2,
 						type = "toggle",						
+					},					
+					classcolor = {
+						order = 3,
+						type = "toggle",
+						name = L["Class Color"],
+						desc = L["Use your classcolor for border and some text color."],						
+					},
+					color = {
+						name = L["UI Border Color"],
+						desc = L["Picks the UI Border Color if Class Color is not used."],
+						order = 3,
+						disabled = function() return db.general.classcolor end,
+						type = "color",										
+						get = function(info)
+							local rc = db.general[ info[#info] ]
+							return rc.r, rc.g, rc.b
+						end,
+						set = function(info, r, g, b)
+							db.general[ info[#info] ] = {}
+							local rc = db.general[ info[#info] ]
+							rc.r, rc.g, rc.b = r, g, b
+							StaticPopup_Show("CFG_RELOAD")
+						end,										
+					},
+					facepaint = {						
+						name = L["FacePaint by Aprikot"],
+						desc = L["Color's Blizzards default Grey's."],
+						order = 5,
+						type = "group",						
+						guiInline = true,
+						get = function(info) return db.general.facepaint[ info[#info] ] end,
+						set = function(info, value) db.general.facepaint[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+						args = {					
+							enable = {
+								name = L["Enable"],
+								desc = L["Enables FacePaint Module"],
+								order = 1,
+								type = "toggle",								
+							},
+							custom = {						
+								name = L["FacePaint by Aprikot"],
+								desc = L["Color's Blizzards default Grey's."],
+								order = 5,
+								type = "group",						
+								guiInline = true,
+								get = function(info) return db.general.facepaint.custom[ info[#info] ] end,
+								set = function(info, value) db.general.facepaint.custom[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+								args = {							
+									gradient = {
+										name = L["Gradient"],
+										--desc = L["If Checked Hot Keys will Show."],
+										order = 2,
+										disabled = function() return not db.general.facepaint.enable end,
+										type = "toggle",
+										width = "full",
+									},
+									topcolor = {
+										name = L["Top Color"],
+										--desc = L["Picks the UI Border Color if Class Color is not used."],
+										order = 3,
+										disabled = function() return not db.general.facepaint.enable end,
+										type = "color",										
+										get = function(info)
+											local rc = db.general.facepaint.custom[ info[#info] ]
+											return rc.r, rc.g, rc.b
+										end,
+										set = function(info, r, g, b)
+											db.general.facepaint.custom[ info[#info] ] = {}
+											local rc = db.general.facepaint.custom[ info[#info] ]
+											rc.r, rc.g, rc.b = r, g, b
+											StaticPopup_Show("CFG_RELOAD")
+										end,										
+									},
+									topalpha = {
+										order = 4,
+										name = L["Top Alpha"],
+										--desc = L["Controls the scaling of Blizzard's Player Frame"],
+										type = "range",
+										min = 0, max = 1, step = 0.1,
+										disabled = function() return not db.general.facepaint.enable end,
+									},							
+									bottomcolor = {
+										name = L["Bottom Color"],
+										--desc = L["Picks the UI Border Color if Class Color is not used."],
+										order = 5,
+										disabled = function() return not db.general.facepaint.enable or not db.general.facepaint.custom.gradient end,
+										type = "color",										
+										get = function(info)
+											local rc = db.general.facepaint.custom[ info[#info] ]
+											return rc.r, rc.g, rc.b
+										end,
+										set = function(info, r, g, b)
+											db.general.facepaint.custom[ info[#info] ] = {}
+											local rc = db.general.facepaint.custom[ info[#info] ]
+											rc.r, rc.g, rc.b = r, g, b
+											StaticPopup_Show("CFG_RELOAD")
+										end,										
+									},
+									bottomalpha = {
+										order = 6,
+										name = L["Bottom Alpha"],
+										--desc = L["Controls the scaling of Blizzard's Player Frame"],
+										type = "range",
+										min = 0, max = 1, step = 0.1,
+										disabled = function() return not db.general.facepaint.enable or not db.general.facepaint.custom.gradient end,
+									},
+								},
+							},
+						},
 					},
 					slidebar = {
 						name = L["AddOn SlideBar"],
 						desc = L["Enables the Minimap AddOn Button SlideBar."],	
-						order = 3,
+						order = 4,
 						type = "toggle",						
 					},
 					buttons = {						
 						name = L["Actionbar Buttons"],
 						desc = L["Actionbar Button Modifications."],
-						order = 4,
+						order = 5,
 						type = "group",						
 						guiInline = true,
 						get = function(info) return db.general.buttons[ info[#info] ] end,
@@ -248,6 +357,13 @@ function BasicUIConfig.GenerateOptionsInternal()
 								order = 1,
 								type = "toggle",								
 							},
+							auraborder = {
+								name = L["Aura Border"],
+								desc = L["Make & Color Aura Borders."],
+								order = 2,
+								disabled = function() return not db.general.buttons.enable end,
+								type = "toggle",																
+							},							
 							showHotKeys = {
 								name = L["Show Hot Keys"],
 								desc = L["If Checked Hot Keys will Show."],
@@ -436,7 +552,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 					},
 					scale = {
 						type = "group",
-						order = 8,
+						order = 7,
 						name = L["Scale"],
 						desc = L["Adjust the scale of Blizzards Unit Frames."],	
 						guiInline = true,
@@ -1033,7 +1149,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 						desc = L["Enables Chat Module."],
 						type = "toggle",							
 					},
-					enableborder = {
+					windowborder = {
 						order = 3,
 						name = L["Window Border"],
 						desc = L["Enables Chat Window Border."],
@@ -1302,16 +1418,9 @@ function BasicUIConfig.GenerateOptionsInternal()
 						get = function(info) return db.datatext.colors[ info[#info] ] end,
 						set = function(info, value) db.datatext.colors[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,							
 						disabled = function() return not db.datatext.enable end,						
-						args = {						
-							classcolor = {
-								order = 1,
-								type = "toggle",
-								name = L["Class Color"],
-								desc = L["Color the datatext values based on your class"],
-								disabled = function() return not db.datatext.enable end,						
-							},							
+						args = {												
 							color = {
-								order = 2,
+								order = 1,
 								type = "color",
 								name = L["Custom Color"],
 								desc = L["Picks a Custom Color for the datatext values."],
@@ -2178,6 +2287,8 @@ function BasicUIConfig:SetDefaultOptions()
 		['fontHuge'] = 20,
 	}
 	addon.general = {
+		["color"] = { r = 1, g = 1, b = 1},
+		["classcolor"] = true,	
 		["autogreed"] = true,
 		["cooldown"] = true,
 		["slidebar"] = true,		
@@ -2190,10 +2301,6 @@ function BasicUIConfig:SetDefaultOptions()
 			["partypetFrame"] = 1.15,
 			["arenaFrame"] = 1.15,
 			["bossFrame"] = 1.15,
-		},
-		["itemquality"] = {
-			['enable'] = false,
-			['border'] = "Item Quality",
 		},	
 		["mail"] = {
 			["enable"] = true,
@@ -2219,7 +2326,7 @@ function BasicUIConfig:SetDefaultOptions()
 			["enable"] = true,
 			["showHotKeys"] = false,
 			["showMacronames"] = false,
-			
+			["auraborder"] = false,
 			-- Button Colors
 			["color"] = { 
 				["enable"] = true,
@@ -2227,11 +2334,21 @@ function BasicUIConfig:SetDefaultOptions()
 				["OutOfMana"] = { r = 0, g = 0, b = 0.9 },			
 				["NotUsable"] = { r = 0.3, g = 0.3, b = 0.3 },
 			},
+		["facepaint"] = {
+			["enable"] = true,
+			["custom"] = {
+				["gradient"] = false, -- false applies one solid color (class color if class = true, topcolor if not)
+				["topcolor"] = { r = 0.9, g = 0.9, b = 0.9 }, -- top gradient color (rgb)
+				["bottomcolor"] = {	r = 0.1, g = 0.1, b = 0.1 }, -- bottom gradient color (rgb)
+				["topalpha"] = 1,	-- top gradient alpha (global if gradient = false)
+				["bottomalpha"] = 1,	-- bottom gradient alpha (not used if gradient = false)
+			},
+		},
 		},	
 	}	
 	addon.buff = {
 		['enable'] = true,
-		['border'] = "BasicUI",
+		['border'] = "Blizzard Dialog",
 		['buffSize'] = 36,
 		['buffScale'] = 1,
 
@@ -2250,7 +2367,7 @@ function BasicUIConfig:SetDefaultOptions()
 	}
 	addon.castbar = {
 		["enable"] = true,
-		['border'] = "BasicUI",
+		['border'] = "Blizzard Dialog",
 		['background'] = "Black",
 		['statusbar'] = "Blizzard",
 		
@@ -2312,9 +2429,9 @@ function BasicUIConfig:SetDefaultOptions()
 		['enableborder'] = true,
 		
 		-- Chat Media
-		['border'] = "BasicUI",
+		['border'] = "Blizzard Dialog",
 		['background'] = "Blizzard Dialog Background",
-		['editboxborder'] = "BasicUI",
+		['editboxborder'] = "Blizzard Dialog",
 		['editboxbackground'] = "Blizzard Dialog Background",
 		['sound'] = "Whisper",
 		
@@ -2382,10 +2499,6 @@ function BasicUIConfig:SetDefaultOptions()
 			
 		["threatbar"] = true,									
 	}
-	addon.itemquality = {
-		['enable'] = false,
-		['border'] = "Item Quality",
-	}	
 	addon.merchant = {
 		['enable'] = true,										
 		['sellMisc'] = true, 									
@@ -2394,7 +2507,7 @@ function BasicUIConfig:SetDefaultOptions()
 	}
 	addon.minimap = {
 		['enable'] = true,
-		['border'] = "BasicUI",
+		['border'] = "Blizzard Dialog",
 		['gameclock'] = true,
 		['farm'] = false,
 		['farmscale'] = 3,
@@ -2415,7 +2528,7 @@ function BasicUIConfig:SetDefaultOptions()
 	}	
 	addon.powerbar = {
 		["enable"] = true,
-		['border'] = "BasicUI",
+		['border'] = "Blizzard Dialog",
 		['statusbar'] = "Blizzard",
 		["sizeWidth"] = 200,
 			
@@ -2461,13 +2574,13 @@ function BasicUIConfig:SetDefaultOptions()
 	}
 	addon.selfbuffs = {
 		["enable"] = true,								
-		['border'] = "BasicUI",
+		['border'] = "Blizzard Dialog",
 		["playsound"] = true,								
 		['sound'] = "Warning",								
 	}
 	addon.skin = {
 		["enable"] = true,
-		['border'] = "BasicUI",
+		['border'] = "Blizzard Dialog",
 		['statusbar'] = "Blizzard",
 		["DBM"] = true,
 		["Recount"] = true,
@@ -2477,7 +2590,7 @@ function BasicUIConfig:SetDefaultOptions()
 		["enable"] = true,
 
 		["disableFade"] = false,
-		['border'] = "BasicUI",
+		['border'] = "Blizzard Dialog",
 		['background'] = "Black",
 		['statusbar'] = "Blizzard",
 		["reactionBorderColor"] = true,

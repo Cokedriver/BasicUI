@@ -134,7 +134,11 @@ for k, _ in pairs(C['castbar']) do
 			edgeSize = 13,
 			insets = {left = 3, right = 3, top = 3, bottom = 3}
 		})
-		a:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+		if C['general'].classcolor ~= true then
+			a:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+		else
+			a:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+		end
         a:SetParent(_G[k]);
         a:SetMovable(true);
         a:EnableMouse(false);

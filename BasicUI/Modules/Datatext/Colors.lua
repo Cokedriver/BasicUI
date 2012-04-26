@@ -13,14 +13,12 @@ if C['datatext'].enable ~= true then return end
 ---------------------------------------------------
 -- Color system for DataText Created by Hydra 
 ---------------------------------------------------
-if C["datatext"].colors.classcolor ~= true then
-	local r, g, b = C["datatext"].colors.color.r, C["datatext"].colors.color.g, C["datatext"].colors.color.b
+if C["general"].classcolor ~= true then
+	local r, g, b = C["general"].color.r, C["general"].color.g, C["general"].color.b
 	hexa = ("|cff%.2x%.2x%.2x"):format(r * 255, g * 255, b * 255)
 	hexb = "|r"
 else
-	local color = RAID_CLASS_COLORS[B.myclass]
-	hexa = ("|cff%.2x%.2x%.2x"):format(color.r * 255, color.g * 255, color.b * 255)
-	C["datatext"].colors.color = {color.r, color.g, color.b}
+	hexa = ("|cff%.2x%.2x%.2x"):format(B.ccolor.r * 255, B.ccolor.g * 255, B.ccolor.b * 255)
 	hexb = "|r"
 end
 

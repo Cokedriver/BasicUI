@@ -790,6 +790,10 @@ if C["chat"].windowborder == true then
 			edgeFile = C['chat'].border,
 			edgeSize = 18,
 		})
-		bg:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+		if C['general'].classcolor ~= true then	
+			bg:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+		else
+			bg:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+		end
 	end
 end

@@ -1,6 +1,6 @@
 ## Interface: 40300
 ## Author: Cokedriver / Baine
-## Version: 3.2
+## Version: 3.3
 ## Title: |cff00B4FFBasic|rUI
 ## SavedVariables: BasicDB
 ## SavedVariablesPerCharacter: BasicDBPerCharacter
@@ -31,6 +31,7 @@ Modules\General\BlackBook.lua
 Modules\General\Buttons.lua
 Modules\General\Castbar.lua
 Modules\General\Cooldown.lua
+Modules\General\FacePaint.lua
 Modules\General\Mail.lua
 Modules\General\Merchant.lua
 Modules\General\Minimap.lua

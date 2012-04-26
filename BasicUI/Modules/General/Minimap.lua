@@ -38,7 +38,11 @@ Minimapbg:SetBackdrop({
 	edgeFile = C['minimap'].border,
 	edgeSize = 20,
 })
-Minimapbg:SetBackdropBorderColor( B.ccolor.r, B.ccolor.g, B.ccolor.b)
+if C['general'].classcolor ~= true then
+	Minimapbg:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+else
+	Minimapbg:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+end
 Minimap:SetMaskTexture('Interface\\ChatFrame\\ChatFrameBackground')
 
     -- A 'new' mail notification
@@ -77,7 +81,7 @@ end)
 
 MiniMapLFGFrame.Text = MiniMapLFGFrame:CreateFontString(nil, 'OVERLAY')
 MiniMapLFGFrame.Text:SetFont(C['media'].font, C['media'].fontLarge, 'OUTLINE')
-MiniMapLFGFrame.Text:SetPoint('TOP', MiniMapLFGFrame)
+MiniMapLFGFrame.Text:SetPoint('TOPLEFT', MiniMapLFGFrame)
 MiniMapLFGFrame.Text:SetTextColor(1, 0.4, 0)
 MiniMapLFGFrame.Text:SetText('LFG')
 

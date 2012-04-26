@@ -131,8 +131,11 @@ if (buffs and buffs[1]) then
 		tile = true, tileSize = 16, edgeSize = 18,
 		insets = {left = bgsize, right = bgsize, top = bgsize, bottom = bgsize}
 	})
-	
-    frame:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b)	
+	if C['general'].classcolor ~= true then
+		frame:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+	else
+		frame:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+	end	
 	frame:Hide()
 	
 	frame.icon = frame:CreateTexture(nil, 'BACKGROUND')
@@ -233,7 +236,11 @@ if (enchants and enchants[1]) then
 		tile = true, tileSize = 16, edgeSize = 18,
 		insets = {left = bgsize, right = bgsize, top = bgsize, bottom = bgsize}
 	})
-    frame:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b)
+	if C['general'].classcolor ~= true then
+		frame:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+	else
+		frame:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+	end
 	frame:Hide()
 	
 	frame.icon = frame:CreateTexture(nil, 'BACKGROUND')

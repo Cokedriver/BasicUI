@@ -20,20 +20,35 @@ DB["media"] = {
 -- General Options
 -------------------
 DB["general"] = {
-
+	["color"] = { r = 1, g = 1, b = 1},
+	["classcolor"] = true,
 	["autogreed"] = true,
 	["cooldown"] = true,
-	["slidebar"] = true,		
-	["scale"] = {
+	["slidebar"] = true,
+	["buttons"] = {	
 		["enable"] = true,
-		["playerFrame"] = 1.15,
-		["targetFrame"] = 1.15,
-		["focusFrame"] = 1.15,
-		["partyFrame"] = 1.15,
-		["partypetFrame"] = 1.15,
-		["arenaFrame"] = 1.15,
-		["bossFrame"] = 1.15,
+		["showHotKeys"] = false,
+		["showMacronames"] = false,
+		["auraborder"] = false,
+		
+		-- Button Colors
+		["color"] = { 
+			["enable"] = true,
+			["OutOfRange"] = { r = 0.9, g = 0, b = 0 },
+			["OutOfMana"] = { r = 0, g = 0, b = 0.9 },			
+			["NotUsable"] = { r = 0.3, g = 0.3, b = 0.3 },
+		},
 	},
+	["facepaint"] = {
+		["enable"] = true,
+		["custom"] = {
+			["gradient"] = false, -- false applies one solid color (class color if class = true, topcolor if not)
+			["topcolor"] = { r = 0.9, g = 0.9, b = 0.9 }, -- top gradient color (rgb)
+			["bottomcolor"] = {	r = 0.1, g = 0.1, b = 0.1 }, -- bottom gradient color (rgb)
+			["topalpha"] = 1,	-- top gradient alpha (global if gradient = false)
+			["bottomalpha"] = 1,	-- bottom gradient alpha (not used if gradient = false)
+		},
+	},	
 	["mail"] = {
 		["enable"] = true,
 		["openall"] = true,
@@ -52,21 +67,19 @@ DB["general"] = {
 			["DisableBlizzardAutoComplete"] = false,
 			["UseAutoComplete"] = true,
 		},		
-	},
-	["buttons"] = {
-	
+	},	
+	["scale"] = {
 		["enable"] = true,
-		["showHotKeys"] = false,
-		["showMacronames"] = false,
-		
-		-- Button Colors
-		["color"] = { 
-			["enable"] = true,
-			["OutOfRange"] = { r = 0.9, g = 0, b = 0 },
-			["OutOfMana"] = { r = 0, g = 0, b = 0.9 },			
-			["NotUsable"] = { r = 0.3, g = 0.3, b = 0.3 },
-		},
+		["playerFrame"] = 1.15,
+		["targetFrame"] = 1.15,
+		["focusFrame"] = 1.15,
+		["partyFrame"] = 1.15,
+		["partypetFrame"] = 1.15,
+		["arenaFrame"] = 1.15,
+		["bossFrame"] = 1.15,
 	},
+
+
 }
 
 ---------------
@@ -74,7 +87,7 @@ DB["general"] = {
 ----------------
 DB["buff"] = {
 	["enable"] = true,
-	["border"] = "BasicUI",
+	["border"] = "Blizzard Dialog",
 	["background"] = "Black",
     ["buffSize"] = 36,
     ["buffScale"] = 1,
@@ -99,7 +112,7 @@ DB["buff"] = {
 DB["castbar"] = {
 	
 	["enable"] = true,
-	["border"] = "BasicUI",
+	["border"] = "Blizzard Dialog",
 	["background"] = "Black",
 	["statusbar"] = "Blizzard",
 	
@@ -165,9 +178,9 @@ DB["chat"] = {
 	["enableborder"] = true,
 	
 	-- Chat Media
-	["border"] = "BasicUI",
+	["border"] = "Blizzard Dialog",
 	["background"] = "Blizzard Dialog Background",
-	["editboxborder"] = "BasicUI",
+	["editboxborder"] = "Blizzard Dialog",
 	["editboxbackground"] = "Blizzard Dialog Background",
 	["sound"] = "Whisper",
 	
@@ -217,7 +230,6 @@ DB["datatext"] = {
 	
 	-- Color Datatext
 	["colors"] = {
-		["classcolor"] = true,               			    -- classcolored datatexts
 		["color"] = { r = 0, g = 0, b = 1},                 -- datatext color if classcolor = false 
 	},
 	
@@ -282,6 +294,20 @@ DB["nameplates"] = {
     ["showTotemIcon"] = true,
     ["abbrevLongNames"] = true,
 }
+
+--------------------
+-- Portalz Options
+--------------------
+DB["portalz"] = {
+	["showall"] = true,
+	["useitems"] = true,
+	["locked"] = true,
+	["pattern"] = "arc",
+	["scale"] = 1,
+	["sticky"] = true,
+	["announce"] = true,
+}
+
 --------------------
 -- Powerbar Options 
 --------------------
