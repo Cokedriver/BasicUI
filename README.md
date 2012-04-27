@@ -52,9 +52,9 @@ Neal - NeavUI, Tuks and Programers - Tukui, Nightcracker - ncQuest and all the o
 
 
 ## AddOns that are in screenshots but not includes with BasicUI
-- Recount -- get it here --> http://www.curse.com/addons/wow/recount
-- MikScrollingBattleText -- get it here --> http://www.wowinterface.com/downloads/info5153-MikScrollingBattleText.html#info
-- WoW-Pro Leveling Addon -- get it here --> http://wow-pro.com/
-- _NPCScan -- get it here --> http://www.wowinterface.com/downloads/info12995-_NPCScan.html#info
-- _NPCScan.Overlay -- get it here --> http://www.wowinterface.com/downloads/info14686.html#info
-- TomTom -- get it here --> http://www.wowinterface.com/downloads/info7032-TomTom.html
+- [Recount](http://www.curse.com/addons/wow/recount)
+- [MikScrollingBattleText](http://www.wowinterface.com/downloads/info5153-MikScrollingBattleText.html#info)
+- [WoW-Pro Leveling Addon](http://wow-pro.com/)
+- [_NPCScan](http://www.wowinterface.com/downloads/info12995-_NPCScan.html#info)
+- [_NPCScan.Overlay](http://www.wowinterface.com/downloads/info14686.html#info)
+- [TomTom](http://www.wowinterface.com/downloads/info7032-TomTom.html)
