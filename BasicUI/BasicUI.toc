@@ -1,5 +1,5 @@
 ## Interface: 40300
-## Author: Cokedriver / Baine
+## Author: Cokedriver
 ## Version: 3.3
 ## Title: |cff00B4FFBasic|rUI
 ## SavedVariables: BasicDB
