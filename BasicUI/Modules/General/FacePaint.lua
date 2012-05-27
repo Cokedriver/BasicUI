@@ -10,10 +10,12 @@ if C['general'].facepaint.enable ~= true then return end
 if not IsAddOnLoaded("Blizzard_TimeManager") then
 	LoadAddOn("Blizzard_TimeManager")
 end
+
 	
 --	Objects to paint
 --------------------
-local objects = {
+local objects = {		
+
 		-- Rune Bar
 		RuneButtonIndividual1:GetRegions(),
 		RuneButtonIndividual1Border:GetRegions(),	
@@ -38,16 +40,16 @@ local objects = {
 		select(2, PlayerFrameAlternateManaBar:GetRegions()),
 		
 		-- Party Frame
-		PartyMemberFrame1Texture,
-		PartyMemberFrame2Texture,
-		PartyMemberFrame3Texture,
-		PartyMemberFrame4Texture,
+		--PartyMemberFrame1Texture,
+		--PartyMemberFrame2Texture,
+		--PartyMemberFrame3Texture,
+		--PartyMemberFrame4Texture,
 		
 		-- Party Pet Frames
-		PartyMemberFrame1PetFrameTexture,
-		PartyMemberFrame2PetFrameTexture,
-		PartyMemberFrame3PetFrameTexture,
-		PartyMemberFrame4PetFrameTexture,
+		--PartyMemberFrame1PetFrameTexture,
+		--PartyMemberFrame2PetFrameTexture,
+		--PartyMemberFrame3PetFrameTexture,
+		--PartyMemberFrame4PetFrameTexture,
 		
 		-- Raid Frame
 		CompactRaidFrameContainerBorderFrameBorderBottom,
@@ -89,25 +91,25 @@ local objects = {
 		select(6, GameTimeFrame:GetRegions()),
 		
 		-- Action bars
-		ReputationWatchBarTexture0,
-		ReputationWatchBarTexture1,
-		ReputationWatchBarTexture2,
-		ReputationWatchBarTexture3,
-		ReputationXPBarTexture0,
-		ReputationXPBarTexture1,
-		ReputationXPBarTexture2,
-		ReputationXPBarTexture3,
-		MainMenuBarTexture0,
-		MainMenuBarTexture1,
-		MainMenuBarTexture2,
-		MainMenuBarTexture3,
-		MainMenuMaxLevelBar0,
-		MainMenuMaxLevelBar1,
-		MainMenuMaxLevelBar2,
-		MainMenuMaxLevelBar3,
-		MainMenuXPBarTextureRightCap,
-		MainMenuXPBarTextureMid,
-		MainMenuXPBarTextureLeftCap,
+		--ReputationWatchBarTexture0,
+		--ReputationWatchBarTexture1,
+		--ReputationWatchBarTexture2,
+		--ReputationWatchBarTexture3,
+		--ReputationXPBarTexture0,
+		--ReputationXPBarTexture1,
+		--ReputationXPBarTexture2,
+		--ReputationXPBarTexture3,
+		--MainMenuBarTexture0,
+		--MainMenuBarTexture1,
+		--MainMenuBarTexture2,
+		--MainMenuBarTexture3,
+		--MainMenuMaxLevelBar0,
+		--MainMenuMaxLevelBar1,
+		--MainMenuMaxLevelBar2,
+		--MainMenuMaxLevelBar3,
+		--MainMenuXPBarTextureRightCap,
+		--MainMenuXPBarTextureMid,
+		--MainMenuXPBarTextureLeftCap,
 		ActionBarUpButton:GetRegions(),
 		ActionBarDownButton:GetRegions(),
 		BonusActionBarFrame:GetRegions(),	
@@ -145,11 +147,11 @@ local objects = {
 		ChatFrame2ButtonFrameDownButton:GetRegions(),
 		select(2, ChatFrame2ButtonFrameBottomButton:GetRegions()),
 		
-		-- Chat edit box
+		--[[Chat edit box
 		select(6, ChatFrame1EditBox:GetRegions()),
 		select(7, ChatFrame1EditBox:GetRegions()),
 		select(8, ChatFrame1EditBox:GetRegions()),
-		select(5, ChatFrame1EditBox:GetRegions()),
+		select(5, ChatFrame1EditBox:GetRegions()),]]
 		
 		-- Micro menu buttons
 		select(2, SpellbookMicroButton:GetRegions()),
@@ -188,12 +190,13 @@ local paint = function(object)
 		end
 end
 
---[[for i = 0, 5 do
+for i = 0, 20 do
 	for _, object in pairs({
 	 
 		-- Actionbars
 		_G['MainMenuMaxLevelBar'..i],
 		_G['MainMenuXPBar'..i],
+		_G['MainMenuXPBarDiv'..i],
 		_G['ReputationWatchBarTexture'..i],
 		_G['ReputationXPBarTexture'..i],
 		_G['MainMenuBarTexture'..i],
@@ -212,7 +215,7 @@ end
 			end
 		end
 	end
-end]]
+end
 
 --	Execute!
 ------------

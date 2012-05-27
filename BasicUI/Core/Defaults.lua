@@ -78,8 +78,6 @@ DB["general"] = {
 		["arenaFrame"] = 1.15,
 		["bossFrame"] = 1.15,
 	},
-
-
 }
 
 ---------------
@@ -109,8 +107,7 @@ DB["buff"] = {
 ------------------
 --Castbar Options
 ------------------
-DB["castbar"] = {
-	
+DB["castbar"] = {	
 	["enable"] = true,
 	["border"] = "Blizzard Dialog",
 	["background"] = "Black",
@@ -200,8 +197,7 @@ DB["chat"] = {
 ---------------------
 -- Datatext Options
 ---------------------
-DB["datatext"] = {
-	
+DB["datatext"] = {	
 	["enable"] = true,
 
 	-- Datapanel Media
@@ -251,7 +247,6 @@ DB["datatext"] = {
 	},
 		
 	["threatbar"] = true,									-- Enable the threatbar over the Center Panel.
-
 }
 
 --------------------
@@ -268,7 +263,6 @@ DB["merchant"] = {
 --------------------
 -- Minimap Options
 --------------------
-
 DB["minimap"] = {
 	["enable"] = true,
 	["border"] = "BasicUI",
@@ -278,10 +272,10 @@ DB["minimap"] = {
 	["zoneText"] = true,
 	["instanceDifficulty"] = false,
 }
+
 ---------------------
 -- Nameplates Options
 ---------------------
-
 DB["nameplates"] = {
 	["enable"] = true,
     ["enableTankMode"] = true,              -- Color the nameplate threat border green, if you have no aggro
@@ -293,19 +287,6 @@ DB["nameplates"] = {
     ["showEliteBorder"] = true,
     ["showTotemIcon"] = true,
     ["abbrevLongNames"] = true,
-}
-
---------------------
--- Portalz Options
---------------------
-DB["portalz"] = {
-	["showall"] = true,
-	["useitems"] = true,
-	["locked"] = true,
-	["pattern"] = "arc",
-	["scale"] = 1,
-	["sticky"] = true,
-	["announce"] = true,
 }
 
 --------------------
@@ -352,31 +333,25 @@ DB["powerbar"] = {
 		["FontOutline"] = true,
 		["FontSize"] = 15,
 	},	
-
 }	
 	
 -----------------
 -- Quest Options
 -----------------
 DB["quest"] = {
-
 	["enable"] = true,									-- enable quest module.
-	["autocomplete"] = false,							-- enable the autoaccept quest and autocomplete quest if no reward.
-	
+	["autocomplete"] = false,							-- enable the autoaccept quest and autocomplete quest if no reward.	
 }
 
 -------------------------
 -- Reminder Buff Options
 -------------------------
 DB["selfbuffs"] = {
-
 	["enable"] = true,									-- enable selbuffs module.
 	["border"] = "BasicUI",
 	["playsound"] = true,								-- sound warning
-	["sound"] = "Warning",
-	
+	["sound"] = "Warning",	
 }
-
 
 -------------------------
 -- Skinning Options
@@ -389,6 +364,7 @@ DB["skin"] = {
 	["Recount"] = true,
 	["RecountBackdrop"] = true,
 }
+
 -------------------
 -- Tooltip Options
 -------------------

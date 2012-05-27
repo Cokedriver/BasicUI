@@ -236,8 +236,12 @@ local AWAY_ICON		= "|TInterface\\FriendsFrame\\StatusIcon-Away:18|t"
 local BUSY_ICON		= "|TInterface\\FriendsFrame\\StatusIcon-DnD:18|t"
 local MINIMIZE		= "|TInterface\\BUTTONS\\UI-PlusButton-Up:0|t"
 local BROADCAST_ICON = "|TInterface\\FriendsFrame\\BroadcastIcon:0|t"
+local WOW_ICON = "|TInterface\\FriendsFrame\\Battlenet-WoWicon:18|t"
+local S2_ICON = "|TInterface\\FriendsFrame\\Battlenet-Sc2icon:18|t"
+local D3_ICON = "|TInterface\\FriendsFrame\\Battlenet-D3icon:18|t"
 local HORDE_FACTION = "|TInterface\\BattlefieldFrame\\Battleground-Horde:18|t"
 local ALLIANCE_FACTION = "|TInterface\\BattlefieldFrame\\Battleground-Alliance:18|t"
+
 
 
 local function ColoredLevel(level)
@@ -336,6 +340,14 @@ function FriendEnter(self)
 					if isDND then
 						status = BUSY_ICON
 					end
+					
+					if client == "WoW" then
+						status = WOW_ICON
+					elseif client == "S2" then
+						status = S2_ICON
+					elseif client == "D3" then
+						status = D3_ICON
+					end						
 
 					if note and note ~= "" then note = "|cffff8800{"..note.."}|r" end
 					
@@ -392,6 +404,8 @@ function FriendEnter(self)
 					line = tooltip:SetCell(line, 5, player["GAMETEXT"])
 					if player["CLIENT"] == "S2" then
 						line = tooltip:SetCell(line, 6, "|cff82c5ffStarCraft 2|r")
+					elseif player["CLIENT"] == "D3" then
+						line = tooltip:SetCell(line, 6, "|cff82c5ffDiable 3|r")						
 					end
 				end
 				

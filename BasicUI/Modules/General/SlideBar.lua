@@ -726,7 +726,7 @@ function private.CommandHandler(msg)
 		save = true
 	end
 	if (a == "config") then
-		InterfaceOptionsFrame_OpenToCategory(frame.config)
+		InterfaceOptionsFrame_OpenToCategory(slidebar)
 	end
 	if (save) then
 		lib.ApplyLayout()
@@ -779,42 +779,44 @@ end
 
 --[[Use Blizzards config frame. We do not use the Configator lib]]
 function private.GUI()
-	if frame.config then return end
+	if slidebar then return end
 
-	frame.config = CreateFrame("Frame", nil, UIParent)
-	frame.config:SetWidth(420)
-	frame.config:SetHeight(400)
-	frame.config:SetToplevel(true)
-	frame.config:Hide()
+	slidebar = CreateFrame("Frame", nil, UIParent)
+	slidebar:SetWidth(420)
+	slidebar:SetHeight(400)
+	slidebar:SetToplevel(true)
+	slidebar:Hide()
 
-	frame.config.name = "|cff00B4FFBasic|rUI SlideBar"
+	slidebar.name = "|cffffd200Slidebar|r"
+	slidebar.parent = "|cff00B4FFBasic|rUI";
+
 	--add to Blizzards addon configuration menu
-	InterfaceOptions_AddCategory(frame.config)
+	InterfaceOptions_AddCategory(slidebar)
 
-	frame.config.help = frame.config:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
-	frame.config.help:SetText("Click on a button above to Show or Hide it from the Slidebar addon")
-	frame.config.help:SetPoint("TOPLEFT", frame.config,"LEFT" , 15, 150)
-	frame.config.help:SetPoint("BOTTOMRIGHT", frame.config,"BOTTOMRIGHT" , -15, 0)
+	slidebar.help = slidebar:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
+	slidebar.help:SetText("Click on a button below to Show or Hide it from the Slidebar.")
+	slidebar.help:SetPoint("TOPLEFT", slidebar, 20, -30)
+	--slidebar.help:SetPoint("BOTTOMRIGHT", slidebar,"BOTTOMRIGHT" , -15, 0)
 
-	frame.config.enableCheck = CreateFrame("CheckButton", "nSlideBarenableCheck", frame.config, "InterfaceOptionsCheckButtonTemplate")
+	slidebar.enableCheck = CreateFrame("CheckButton", "nSlideBarenableCheck", slidebar, "InterfaceOptionsCheckButtonTemplate")
 	nSlideBarenableCheckText:SetText("Enable SlideBar")
-	frame.config.enableCheck:SetPoint("LEFT", frame.config, "LEFT", 10, -80)
-	frame.config.enableCheck:SetChecked(BasicDB.enabled or "1")
-	function frame.config.enableCheck.setFunc(state)
+	slidebar.enableCheck:SetPoint("LEFT", slidebar, "LEFT", 20, -80)
+	slidebar.enableCheck:SetChecked(BasicDB.enabled or "1")
+	function slidebar.enableCheck.setFunc(state)
 		BasicDB.enabled = state
 		lib.ApplyLayout()
 	end
 
-	frame.config.searchBox = CreateFrame("EditBox", "nSlideBarLengthEditBox", frame.config, "InputBoxTemplate") --has to have a name or the template bugs
-	frame.config.searchBox:SetMaxLetters(2)
-	frame.config.searchBox:SetNumeric(true)
+	slidebar.searchBox = CreateFrame("EditBox", "nSlideBarLengthEditBox", slidebar, "InputBoxTemplate") --has to have a name or the template bugs
+	slidebar.searchBox:SetMaxLetters(2)
+	slidebar.searchBox:SetNumeric(true)
 	local wide = BasicDB.maxWidth or 12
-	frame.config.searchBox:SetNumber(wide)
-	frame.config.searchBox:SetAutoFocus(false)
-	frame.config.searchBox:SetPoint("TOP", frame.config.enableCheck, "BOTTOM", 40,-10)
-	frame.config.searchBox:SetWidth(22)
-	frame.config.searchBox:SetHeight(15)
-	frame.config.searchBox:SetScript("OnEnterPressed", function(self)
+	slidebar.searchBox:SetNumber(wide)
+	slidebar.searchBox:SetAutoFocus(false)
+	slidebar.searchBox:SetPoint("TOP", slidebar.enableCheck, "BOTTOM", 40, -10)
+	slidebar.searchBox:SetWidth(22)
+	slidebar.searchBox:SetHeight(15)
+	slidebar.searchBox:SetScript("OnEnterPressed", function(self)
 									EditBox_ClearFocus(self)
 									local wide = self:GetNumber()
 									if (wide < 1) then wide = 1 end
@@ -822,44 +824,44 @@ function private.GUI()
 									lib.ApplyLayout()
 									lib.FlashOpen(5)
 							end)
-	frame.config.searchBox.help = frame.config:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-	frame.config.searchBox.help:SetPoint("LEFT", frame.config.searchBox, "RIGHT", 5, 0)
-	frame.config.searchBox.help:SetText("Number of buttons before a new row is started.")
+	slidebar.searchBox.help = slidebar:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+	slidebar.searchBox.help:SetPoint("LEFT", slidebar.searchBox, "RIGHT", 5, 0)
+	slidebar.searchBox.help:SetText("Number of buttons before a new row is started.")
 
-	frame.config.lockCheck = CreateFrame("CheckButton", "nSlideBarlockCheck", frame.config, "InterfaceOptionsCheckButtonTemplate")
+	slidebar.lockCheck = CreateFrame("CheckButton", "nSlideBarlockCheck", slidebar, "InterfaceOptionsCheckButtonTemplate")
 	nSlideBarlockCheckText:SetText("Lock the Bar's location")
-	frame.config.lockCheck:SetPoint("TOP", frame.config.searchBox, "BOTTOM", 0, -10)
-	function frame.config.lockCheck.setFunc(state)
+	slidebar.lockCheck:SetPoint("TOP", slidebar.searchBox, "BOTTOM", 0, -10)
+	function slidebar.lockCheck.setFunc(state)
 		BasicDB.locked = state
 		lib.ApplyLayout()
 	end
-	frame.config.lockCheck:SetChecked(BasicDB.locked)
+	slidebar.lockCheck:SetChecked(BasicDB.locked)
 
 
-	frame.config.fadeCheck = CreateFrame("CheckButton", "nSlideBarfadeCheck", frame.config, "InterfaceOptionsCheckButtonTemplate")
+	slidebar.fadeCheck = CreateFrame("CheckButton", "nSlideBarfadeCheck", slidebar, "InterfaceOptionsCheckButtonTemplate")
 	nSlideBarfadeCheckText:SetText("Fade the slidebar when not in use.")
-	frame.config.fadeCheck:SetPoint("TOP",frame.config.lockCheck, "BOTTOM")
-	function frame.config.fadeCheck.setFunc(state)
+	slidebar.fadeCheck:SetPoint("TOP",slidebar.lockCheck, "BOTTOM")
+	function slidebar.fadeCheck.setFunc(state)
 		BasicDB.visibility = state
 		lib.ApplyLayout()
 	end
-	frame.config.fadeCheck:SetChecked(BasicDB.visibility)
+	slidebar.fadeCheck:SetChecked(BasicDB.visibility)
 
-	frame.config.reset = CreateFrame("Button", nil, frame.config, "OptionsButtonTemplate")
-	frame.config.reset:SetWidth(160)
-	frame.config.reset:SetPoint("TOPLEFT",frame.config.fadeCheck, "BOTTOM", -50,-5)
-	frame.config.reset:SetText("RESET ALL SETTINGS")
-	frame.config.reset:SetScript("OnClick", function()
-						      BasicDB = {}
-						      lib.ApplyLayout()
-						end)
+	slidebar.reset = CreateFrame("Button", nil, slidebar, "OptionsButtonTemplate")
+	slidebar.reset:SetWidth(160)
+	slidebar.reset:SetPoint("BOTTOMRIGHT", slidebar, -20, 20)
+	slidebar.reset:SetText("RESET ALL SETTINGS")
+	slidebar.reset:SetScript("OnClick", function()
+		BasicDB = {}
+		lib.ApplyLayout()
+	end)
+	slidebar.reset:SetScale(1)
 
 
-
-	frame.config.buttons = {}
+	slidebar.buttons = {}
 	function private.createIconGUI()
-		local pos = #frame.config.buttons + 1
-		local button = CreateFrame("Button", nil, frame.config, "PopupButtonTemplate")
+		local pos = #slidebar.buttons + 1
+		local button = CreateFrame("Button", nil, slidebar, "PopupButtonTemplate")
 		button:SetScript("OnClick", function(self)
 						lib.FlashOpen(5)
 						if self:GetNormalTexture():IsDesaturated() then
@@ -873,18 +875,18 @@ function private.GUI()
 						end
 					end)
 		button.pos = pos
-		button:SetScale(.8)
+		button:SetScale(1)
 
 		--should we use a X texture
 		button.tex = button:CreateTexture()
-		button.tex:SetTexture("Interface\\WorldMap\\X_Mark_64")
-		button.tex:SetPoint("TOPLEFT", button, "TOPLEFT",-5,5)
-		button.tex:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -20, 10)
-		button.tex:SetTexCoord(0,0.5,0.5,1)
+		button.tex:SetTexture("Interface\\TargetingFrame\\UI-RaidTargetingIcons")
+		button.tex:SetPoint("TOPLEFT", button, "TOPLEFT", 1, -1)
+		button.tex:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -1, 1)
+		button.tex:SetTexCoord(0.5, 0.75, 0.25, 0.5 )
 		button.tex:SetDrawLayer("OVERLAY")
 		button.tex:Hide()
 
-		frame.config.buttons[pos] = button
+		slidebar.buttons[pos] = button
 		return button
 	end
 	--Was gonna make this dynamic depending on how user resized window. Decided on static for now
@@ -893,13 +895,13 @@ function private.GUI()
 			private.createIconGUI()
 		end
 
-		local width = frame.config:GetWidth()
-		local height = frame.config:GetHeight()
+		local width = slidebar:GetWidth()
+		local height = slidebar:GetHeight()
 		local spacer = 5
 		local row = 0
 		local column = 0
 		local total = 0
-		local button = frame.config.buttons
+		local button = slidebar.buttons
 
 		--create 50 slots for our button icons
 		for pos = 1, #button do
@@ -911,7 +913,7 @@ function private.GUI()
 			--button[pos]:ClearAllPoints()
 
 			if column == 0 then
-				button[pos]:SetPoint("TOPLEFT", frame.config, "TOPLEFT",  column+20, -row - 20)
+				button[pos]:SetPoint("TOPLEFT", slidebar, "TOPLEFT",  column + 20, -row - 80)
 			else
 				button[pos]:SetPoint("TOPLEFT", button[pos-1], "TOPLEFT",  45 + spacer, 0)
 			end
@@ -924,14 +926,14 @@ function private.GUI()
 
 	--apply GUI layout to match slidebars button order
 	--Blizzards frame calls this when options are opened
-	function frame.config.refresh()
+	function slidebar.refresh()
 		local layout = {}
 		for id, button in pairs(frame.buttons) do
 			table.insert(layout, button)
 		end
 		table.sort(layout, private.buttonSort)
 
-		local GUI = frame.config.buttons
+		local GUI = slidebar.buttons
 		for pos = 1, #GUI do
 			local button = layout[pos]
 			if button then
@@ -974,13 +976,13 @@ end
 --[[not used atm. Will allow buttons to me dragged when we add user ordering to the button layout
 function  private.dragButton(event, self)
 	if event == "start" then
-		frame.config.start = self
+		slidebar.start = self
 	else
 		--switch textures
-		local tex1 = frame.config.start:GetNormalTexture():GetTexture() --gets texture ref then texture path  :GetNormalTexture():GetTexture()
+		local tex1 = slidebar.start:GetNormalTexture():GetTexture() --gets texture ref then texture path  :GetNormalTexture():GetTexture()
 		local tex2 = self:GetNormalTexture():GetTexture()
 
 		self:SetNormalTexture(tex1)
-		frame.config.start:SetNormalTexture(tex2)
+		slidebar.start:SetNormalTexture(tex2)
 	end
 end]]
