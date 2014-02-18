@@ -1,4 +1,5 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C, DB = unpack(select(2, ...)) -- Import:  F - function; C - config; DB - Database
+
 
 --[[
 

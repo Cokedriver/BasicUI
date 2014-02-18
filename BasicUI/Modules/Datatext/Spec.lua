@@ -24,28 +24,18 @@ if C['datatext'].spec and C['datatext'].spec > 0 then
 	local talent = {}
 	local active
 	local talentString = string.join('', '|cffFFFFFF%s|r ')
-	local talentStringTip = string.join('', '|cffFFFFFF%s:|r ', '%d|r/',  '%d|r/',  '%d|r')
+	local talentStringTip = string.join('', '|cffFFFFFF%s:|r ')
 	local activeString = string.join('', '|cff00FF00' , ACTIVE_PETS, '|r')
 	local inactiveString = string.join('', '|cffFF0000', FACTION_INACTIVE, '|r')
 
 
-
-	local function LoadTalentTrees()
-		for i = 1, GetNumTalentGroups(false, false) do
-			talent[i] = {} -- init talent group table
-			for j = 1, GetNumTalentTabs(false, false) do
-				talent[i][j] = select(5, GetTalentTabInfo(j, false, false, i))
-			end
-		end
-	end
-
 	local int = 1
 	local function Update(self, t)
 		int = int - t
-		if int > 0 or not GetPrimaryTalentTree() then return end
+		if int > 0 or not GetSpecialization () then return end
 
-		active = GetActiveTalentGroup(false, false)
-		Text:SetFormattedText(talentString, hexa..select(2, GetTalentTabInfo(GetPrimaryTalentTree(false, false, active)))..hexb)
+		active = GetActiveSpecGroup(false, false)
+		Text:SetFormattedText(talentString, hexa..select(2, GetSpecializationInfo (GetSpecialization (false, false, active)))..hexb)
 		int = 1
 
 		-- disable script	
@@ -62,9 +52,9 @@ if C['datatext'].spec and C['datatext'].spec > 0 then
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(hexa..B.myname.."'s"..hexb.." Spec")
 		GameTooltip:AddLine' '		
-		for i = 1, GetNumTalentGroups() do
-			if GetPrimaryTalentTree(false, false, i) then
-				GameTooltip:AddLine(string.join(' ', string.format(talentStringTip, select(2, GetTalentTabInfo(GetPrimaryTalentTree(false, false, i))), talent[i][1], talent[i][2], talent[i][3]), (i == active and activeString or inactiveString)),1,1,1)
+		for i = 1, GetNumSpecGroups () do
+			if GetSpecialization (false, false, i) then
+				GameTooltip:AddLine(string.join(' ', string.format(talentStringTip, select(2, GetSpecializationInfo (GetSpecialization (false, false, i)))), (i == active and activeString or inactiveString)),1,1,1)
 			end
 		end
 		
@@ -81,8 +71,6 @@ if C['datatext'].spec and C['datatext'].spec > 0 then
 			self:UnregisterEvent('PLAYER_ENTERING_WORLD')
 		end
 		
-		-- load talent information
-		LoadTalentTrees()
 
 		-- Setup Talents Tooltip
 		self:SetAllPoints(Text)
@@ -105,7 +93,7 @@ if C['datatext'].spec and C['datatext'].spec > 0 then
 
 	Stat:SetScript("OnMouseDown", function(self, button)
 		if button == "LeftButton" then
-			SetActiveTalentGroup(active == 1 and 2 or 1)
+			SetActiveSpecGroup (active == 1 and 2 or 1)
 		elseif button == "RightButton" then
 			ToggleTalentFrame()
 		end

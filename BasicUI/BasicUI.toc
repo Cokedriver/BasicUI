@@ -1,12 +1,11 @@
-## Interface: 40300
+## Interface: 50400
 ## Author: Cokedriver
-## Version: 3.3
+## Version: 5.4.4
 ## Title: |cff00B4FFBasic|rUI
 ## SavedVariables: BasicDB
 ## SavedVariablesPerCharacter: BasicDBPerCharacter
+## OptionalDeps: SharedMedia, SharedMediaAdditionalFonts, DBM-Core, Recount, Blizzard_TimeManager, Blizzard_TradeSkillUI
 ## RequiredDeps: BasicUI_Config
-## OptionalDeps: SharedMedia, SharedMediaAdditionalFonts, DBM-Core, Recount, Blizzard_TimeManager
-
 
 
 <!-- Libs --!>
@@ -27,25 +26,27 @@ Media\LSMLaunch.lua
 <!-- General --!>
 Modules\General\Font.lua
 Modules\General\Autogreed.lua
+Modules\General\CBOP.lua
+Modules\General\BiggerTradeskill.lua
 Modules\General\BlackBook.lua
 Modules\General\Buttons.lua
 Modules\General\Castbar.lua
 Modules\General\Cooldown.lua
-Modules\General\FacePaint.lua
-Modules\General\Mail.lua
 Modules\General\Merchant.lua
 Modules\General\Minimap.lua
 Modules\General\Nameplates.lua
+Modules\General\OpenAll.lua
 Modules\General\Powerbar.lua
 Modules\General\Quest.lua
-Modules\General\Scale.lua
-Modules\General\SlideBar.lua
+Modules\General\Quicky.lua
 Modules\General\Skinning.lua
+Modules\General\Vellum.lua
 Modules\General\Watchframe.lua
+Modules\General\FlashGatherNodes.lua
+Modules\Unitframes\Unitframes.lua
 
 <!-- Buffs --!>
 Modules\Buffs\Buff.lua
-Modules\Buffs\Selfbuffs.lua
 
 <!-- Chat --!>
 Modules\Chat\Chat.lua
@@ -68,10 +69,15 @@ Modules\Datatext\Bags.lua
 Modules\Datatext\Dps.lua
 Modules\Datatext\Hps.lua
 Modules\Datatext\Spec.lua
-Modules\Datatext\Threatbar.lua
 Modules\Datatext\Zone.lua	
 Modules\Datatext\Calltoarms.lua
 Modules\Datatext\Recount.lua
 
 <!-- Tooltip --!>
 Modules\Tooltip\Tooltip.lua
+Modules\Tooltip\Fade.lua
+Modules\Tooltip\Health.lua
+
+
+<!-- Options --!>
+

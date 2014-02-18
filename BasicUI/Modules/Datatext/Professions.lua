@@ -1,4 +1,5 @@
-﻿local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+﻿local B, C, DB = unpack(select(2, ...)) -- Import:  F - function; C - config; DB - Database
+
 
 --[[
 
@@ -24,7 +25,8 @@ if C['datatext'].pro and C['datatext'].pro > 0 then
 	B.PP(C['datatext'].pro, Text)
 
 	local function Update(self)
-		for _, v in pairs({GetProfessions()}) do
+		for i = 1, select("#", GetProfessions()) do
+			local v = select(i, GetProfessions());
 			if v ~= nil then
 				local name, texture, rank, maxRank = GetProfessionInfo(v)
 				Text:SetFormattedText(hexa.."Professions"..hexb)
@@ -40,7 +42,8 @@ if C['datatext'].pro and C['datatext'].pro > 0 then
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(hexa..B.myname.."'s"..hexb.." Professions")
 		GameTooltip:AddLine' '		
-		for _, v in pairs({GetProfessions()}) do
+		for i = 1, select("#", GetProfessions()) do
+			local v = select(i, GetProfessions());
 			if v ~= nil then
 				local name, texture, rank, maxRank = GetProfessionInfo(v)
 				GameTooltip:AddDoubleLine(name, rank..' / '..maxRank,.75,.9,1,.3,1,.3)

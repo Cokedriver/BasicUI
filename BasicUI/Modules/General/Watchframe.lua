@@ -1,5 +1,7 @@
 local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
 
+if C['general'].watchframe ~= true then return end
+
 --[[
 
 	All Credit for Watchframe.lua goes to Neal and ballagarba.

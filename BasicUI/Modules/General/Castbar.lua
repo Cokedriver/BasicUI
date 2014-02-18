@@ -65,8 +65,7 @@ for k, _ in pairs(C['castbar']) do
 
         _G[k.."Border"]:SetTexture("");
         _G[k.."Text"]:ClearAllPoints("");
-        _G[k.."Text"]:SetPoint(C['castbar'][k].textPosition);
-        _G[k.."Text"]:SetFont(C['media'].font, C['media'].fontMedium, "");
+        _G[k.."Text"]:SetFont(C['media'].font, C["castbar"][k].fontSize, "");
 
         if find(k, "MirrorTimer") then
             d.w = 240 + (5 * 2);
@@ -74,13 +73,15 @@ for k, _ in pairs(C['castbar']) do
             d.x = 5;
             d.y = 5;
             
+			_G[k.."Text"]:SetPoint("CENTER", k, -10, 2);
             _G[k.."StatusBar"]:SetStatusBarTexture(C['castbar'].statusbar);
         else
             d.w = 240 + 24 + (5 * 2) + 5;
             d.h = 24 + (5 * 2);
             d.x = 24 + 5 + 5;
             d.y = 5;
-
+			
+			_G[k.."Text"]:SetPoint(C['castbar'][k].textPosition);
             _G[k]:SetStatusBarTexture(C['castbar'].statusbar);
             _G[k.."Flash"].Show = _G[k.."Flash"].Hide;
             _G[k.."Spark"].Show = _G[k.."Spark"].Hide;
@@ -119,7 +120,7 @@ for k, _ in pairs(C['castbar']) do
              
         if C['castbar'][k].enableTimer then
             _G[k].timer = _G[k]:CreateFontString(nil);
-            _G[k].timer:SetFont(C['media'].font, C['media'].fontMedium, "");
+            _G[k].timer:SetFont(C['media'].font, C['media'].fontSize, "");
             _G[k].timer:SetPoint("RIGHT", _G[k], "RIGHT", -5, 0);
             _G[k].update = .1;
         end;
@@ -131,7 +132,7 @@ for k, _ in pairs(C['castbar']) do
 		a:SetBackdrop({
 			bgFile = C['castbar'].background,
 			edgeFile = C['castbar'].border,
-			edgeSize = 13,
+			tile = true, tileSize = 16, edgeSize = 15,
 			insets = {left = 3, right = 3, top = 3, bottom = 3}
 		})
 		if C['general'].classcolor ~= true then
@@ -146,7 +147,7 @@ for k, _ in pairs(C['castbar']) do
         a:SetScript("OnDragStart", function(self) self:StartMoving() end);
         a:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end);
         a.name = a:CreateFontString(nil, "OVERLAY");
-        a.name:SetFont(C['media'].font, C['media'].fontLarge, "");
+        a.name:SetFont(C['media'].font, C['media'].fontSize, "");
         a.name:SetPoint("CENTER", a);
         _G[k].d = d; _G[k].df = a; _G[k].name = a.name; _G[k].l = true;
        

@@ -23,15 +23,19 @@ if C['datatext'].top == true then
 	DataPanel:SetBackdrop({
 		bgFile = C['datatext'].background,
 		edgeFile = C['datatext'].border,							
-		edgeSize = 25,
+		tile = true, tileSize = 16, edgeSize = 18,
 		insets = {left = 3, right = 3, top = 3, bottom = 3},
 	})
 	DataPanel:SetBackdropColor(0, 0, 0, 1)
 
-	if C['general'].classcolor ~= true then
-		DataPanel:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b,1)
-	else
-		DataPanel:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b, 1)
+	if C['datatext'].border == "BasicUI" then
+		if C['general'].classcolor ~= true then
+			DataPanel:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+		else
+			DataPanel:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+		end
+	else 
+		DataPanel:SetBackdropBorderColor(1, 1, 1)
 	end
 
 
@@ -69,16 +73,21 @@ else
 	DataPanel:SetBackdrop({
 		bgFile = C['datatext'].background,
 		edgeFile = C['datatext'].border,
-		edgeSize = 25,
+		tile = true, tileSize = 16, edgeSize = 18,
 		insets = {left = 5, right = 5, top = 5, bottom = 5}
 	})
 	DataPanel:SetBackdropColor(0, 0, 0, 1)
 
-	if C['general'].classcolor ~= true then
-		DataPanel:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b,1)
-	else
-		DataPanel:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b, 1)
+	if C['datatext'].border == "BasicUI" then
+		if C['general'].classcolor ~= true then
+			DataPanel:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+		else
+			DataPanel:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
+		end
+	else 
+		DataPanel:SetBackdropBorderColor(1, 1, 1)
 	end
+
 
 	
 	-- Left Panel
@@ -122,22 +131,6 @@ if C['datatext'].top == true then
 
 else
 
-	-- Move some stuff for the panel on bottom.
-
-	local bottom = function() end
-	MainMenuBar:ClearAllPoints() MainMenuBar:SetPoint("BOTTOM", DataPanel, "TOP", 0, -3) MainMenuBar.ClearAllPoints = bottom MainMenuBar.SetPoint = bottom
-	VehicleMenuBar:ClearAllPoints() VehicleMenuBar:SetPoint("BOTTOM", DataPanel, "TOP", 0, -3) VehicleMenuBar.ClearAllPoints = bottom VehicleMenuBar.SetPoint = bottom
-	PetActionBarFrame:ClearAllPoints() PetActionBarFrame:SetPoint("BOTTOM", MainMenuBar, "TOP", 40, 47) PetActionBarFrame.ClearAllPoints = bottom PetActionBarFrame.SetPoint = bottom		
-	WorldStateAlwaysUpFrame:ClearAllPoints() WorldStateAlwaysUpFrame:SetPoint('TOP', -20, -40) WorldStateAlwaysUpFrame.ClearAllpoints = bottom WorldStateAlwaysUpFrame.Setpoint = bottom
-	BuffFrame:ClearAllPoints() BuffFrame:SetPoint('TOP', MinimapCluster, -110, -15) BuffFrame.ClearAllPoints = bottom BuffFrame.SetPoint = bottom	
-
-	-- Move the tooltip above the Actionbar
-	if C["tooltip"].enable == true then
-		hooksecurefunc('GameTooltip_SetDefaultAnchor', function(self)
-			self:SetPoint('BOTTOMRIGHT', UIParent, -95, 135)
-		end)
-	end 
-	
 	 -- Move the Bags above the Actionbar
 	CONTAINER_WIDTH = 192;
 	CONTAINER_SPACING = 5;
@@ -146,7 +139,7 @@ else
 	CONTAINER_OFFSET_X = 0;
 
 	 
-	function updateContainerFrameAnchors()
+	function UpdateContainerFrameAnchors()
 		local _, xOffset, yOffset, _, _, _, _;
 		local containerScale = 1;
 		screenHeight = GetScreenHeight() / containerScale;
@@ -173,5 +166,24 @@ else
 			end
 			freeScreenHeight = freeScreenHeight - frame:GetHeight() - VISIBLE_CONTAINER_SPACING;
 		end
-	end	 
+	end	
+
+	-- Move some stuff for the panel on bottom.
+
+	local bottom = function() end
+	MainMenuBar:ClearAllPoints() MainMenuBar:SetPoint("BOTTOM", DataPanel, "TOP", 0, -3) MainMenuBar.ClearAllPoints = bottom MainMenuBar.SetPoint = bottom
+	PetBattleFrame.BottomFrame:ClearAllPoints() PetBattleFrame.BottomFrame:SetPoint("BOTTOM", DataPanel, "TOP", 0, -3) PetBattleFrame.BottomFrame.ClearAllPoints = bottom PetBattleFrame.BottomFrame.SetPoint = bottom
+	OverrideActionBar:ClearAllPoints() OverrideActionBar:SetPoint("BOTTOM", DataPanel, "TOP", 0, -3) OverrideActionBar.ClearAllPoints = bottom OverrideActionBar.SetPoint = bottom
+	PetActionBarFrame:ClearAllPoints() PetActionBarFrame:SetPoint("BOTTOM", MainMenuBar, "TOP", 40, 47) PetActionBarFrame.ClearAllPoints = bottom PetActionBarFrame.SetPoint = bottom		
+	WorldStateAlwaysUpFrame:ClearAllPoints() WorldStateAlwaysUpFrame:SetPoint('TOP', -20, -40) WorldStateAlwaysUpFrame.ClearAllpoints = bottom WorldStateAlwaysUpFrame.Setpoint = bottom
+	BuffFrame:ClearAllPoints() BuffFrame:SetPoint('TOP', MinimapCluster, -110, -15) BuffFrame.ClearAllPoints = bottom BuffFrame.SetPoint = bottom	
+
+	-- Move the tooltip above the Actionbar
+	if C["tooltip"].enable == true then
+		hooksecurefunc('GameTooltip_SetDefaultAnchor', function(self)
+			self:SetPoint('BOTTOMRIGHT', UIParent, -95, 135)
+		end)
+	end 
+	
+ 
 end	

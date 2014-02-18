@@ -10,6 +10,83 @@ if C['chat'].enable ~= true then return end
 	
 ]]
 
+-- Chat Message Groups
+ChatFrame_RemoveAllMessageGroups(ChatFrame1)
+ChatFrame_AddMessageGroup(ChatFrame1, "SAY")
+ChatFrame_AddMessageGroup(ChatFrame1, "EMOTE")
+ChatFrame_AddMessageGroup(ChatFrame1, "YELL")
+ChatFrame_AddMessageGroup(ChatFrame1, "GUILD")
+ChatFrame_AddMessageGroup(ChatFrame1, "OFFICER")
+ChatFrame_AddMessageGroup(ChatFrame1, "GUILD_ACHIEVEMENT")
+ChatFrame_AddMessageGroup(ChatFrame1, "MONSTER_SAY")
+ChatFrame_AddMessageGroup(ChatFrame1, "MONSTER_EMOTE")
+ChatFrame_AddMessageGroup(ChatFrame1, "MONSTER_YELL")
+ChatFrame_AddMessageGroup(ChatFrame1, "MONSTER_BOSS_EMOTE")
+ChatFrame_AddMessageGroup(ChatFrame1, "PARTY")
+ChatFrame_AddMessageGroup(ChatFrame1, "PARTY_LEADER")
+ChatFrame_AddMessageGroup(ChatFrame1, "RAID")
+ChatFrame_AddMessageGroup(ChatFrame1, "RAID_LEADER")
+ChatFrame_AddMessageGroup(ChatFrame1, "RAID_WARNING")
+ChatFrame_AddMessageGroup(ChatFrame1, "INSTANCE_CHAT")
+ChatFrame_AddMessageGroup(ChatFrame1, "INSTANCE_CHAT_LEADER")	
+ChatFrame_AddMessageGroup(ChatFrame1, "BATTLEGROUND")
+ChatFrame_AddMessageGroup(ChatFrame1, "BATTLEGROUND_LEADER")
+ChatFrame_AddMessageGroup(ChatFrame1, "BG_HORDE")
+ChatFrame_AddMessageGroup(ChatFrame1, "BG_ALLIANCE")
+ChatFrame_AddMessageGroup(ChatFrame1, "BG_NEUTRAL")
+ChatFrame_AddMessageGroup(ChatFrame1, "SYSTEM")
+ChatFrame_AddMessageGroup(ChatFrame1, "ERRORS")
+ChatFrame_AddMessageGroup(ChatFrame1, "AFK")
+ChatFrame_AddMessageGroup(ChatFrame1, "DND")
+ChatFrame_AddMessageGroup(ChatFrame1, "IGNORED")
+ChatFrame_AddMessageGroup(ChatFrame1, "ACHIEVEMENT")
+ChatFrame_AddMessageGroup(ChatFrame1, "COMBAT_FACTION_CHANGE")
+ChatFrame_AddMessageGroup(ChatFrame1, "SKILL")
+ChatFrame_AddMessageGroup(ChatFrame1, "LOOT")
+ChatFrame_AddMessageGroup(ChatFrame1, "MONEY")
+ChatFrame_AddMessageGroup(ChatFrame1, "COMBAT_XP_GAIN")
+ChatFrame_AddMessageGroup(ChatFrame1, "COMBAT_HONOR_GAIN")
+ChatFrame_AddMessageGroup(ChatFrame1, "COMBAT_GUILD_XP_GAIN")
+ChatFrame_AddMessageGroup(ChatFrame1, "BN_INLINE_TOAST_ALERT")	
+
+
+ChatFrame_RemoveAllMessageGroups(ChatFrame3)
+ChatFrame_AddMessageGroup(ChatFrame3, "WHISPER")
+ChatFrame_AddMessageGroup(ChatFrame3, "BN_WHISPER")
+ChatFrame_AddMessageGroup(ChatFrame3, "BN_CONVERSATION")
+
+
+
+-- enable classcolor automatically on login and on each character without doing /configure each time.
+ToggleChatColorNamesByClassGroup(true, "SAY")
+ToggleChatColorNamesByClassGroup(true, "EMOTE")
+ToggleChatColorNamesByClassGroup(true, "YELL")
+ToggleChatColorNamesByClassGroup(true, "GUILD")
+ToggleChatColorNamesByClassGroup(true, "OFFICER")
+ToggleChatColorNamesByClassGroup(true, "GUILD_ACHIEVEMENT")
+ToggleChatColorNamesByClassGroup(true, "ACHIEVEMENT")
+ToggleChatColorNamesByClassGroup(true, "WHISPER")
+ToggleChatColorNamesByClassGroup(true, "PARTY")
+ToggleChatColorNamesByClassGroup(true, "PARTY_LEADER")
+ToggleChatColorNamesByClassGroup(true, "RAID")
+ToggleChatColorNamesByClassGroup(true, "RAID_LEADER")
+ToggleChatColorNamesByClassGroup(true, "RAID_WARNING")
+ToggleChatColorNamesByClassGroup(true, "BATTLEGROUND")
+ToggleChatColorNamesByClassGroup(true, "BATTLEGROUND_LEADER")	
+ToggleChatColorNamesByClassGroup(true, "INSTANCE_CHAT")
+ToggleChatColorNamesByClassGroup(true, "INSTANCE_CHAT_LEADER")		
+ToggleChatColorNamesByClassGroup(true, "CHANNEL1")
+ToggleChatColorNamesByClassGroup(true, "CHANNEL2")
+ToggleChatColorNamesByClassGroup(true, "CHANNEL3")
+ToggleChatColorNamesByClassGroup(true, "CHANNEL4")
+ToggleChatColorNamesByClassGroup(true, "CHANNEL5")
+ToggleChatColorNamesByClassGroup(true, "CHANNEL6")
+ToggleChatColorNamesByClassGroup(true, "CHANNEL7")
+ToggleChatColorNamesByClassGroup(true, "CHANNEL8")
+ToggleChatColorNamesByClassGroup(true, "CHANNEL9")
+ToggleChatColorNamesByClassGroup(true, "CHANNEL10")
+ToggleChatColorNamesByClassGroup(true, "CHANNEL11")
+
 local _G = _G
 local type = type
 local select = select
@@ -28,8 +105,6 @@ _G.CHAT_FRAME_TAB_SELECTED_NOMOUSE_ALPHA = 0
 _G.CHAT_FRAME_TAB_NORMAL_MOUSEOVER_ALPHA = 0.5
 _G.CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA = 0
 
---_G.CHAT_FRAME_FADE_OUT_TIME = 0
---_G.CHAT_FRAME_FADE_TIME = 0
 
 _G.CHAT_FONT_HEIGHTS = {
     [1] = 8,
@@ -48,34 +123,27 @@ _G.CHAT_FONT_HEIGHTS = {
 }
 
 
-_G.CHAT_SAY_GET = '%s:\32'
-_G.CHAT_YELL_GET = '%s:\32'
-
-_G.CHAT_WHISPER_GET = '[from] %s:\32'
-_G.CHAT_WHISPER_INFORM_GET = '[to] %s:\32'
-
-_G.CHAT_BN_WHISPER_GET = '[from] %s:\32'
-_G.CHAT_BN_WHISPER_GET = '[to] %s:\32'
-
-
 _G.CHAT_FLAG_AFK = '[AFK] '
 _G.CHAT_FLAG_DND = '[DND] '
 _G.CHAT_FLAG_GM = '[GM] '
 
-_G.CHAT_GUILD_GET = '[|Hchannel:Guild|hG|h] %s:\32'
-_G.CHAT_OFFICER_GET = '[|Hchannel:o|hO|h] %s:\32'
+_G.CHAT_GUILD_GET = '(|Hchannel:Guild|hG|h) %s:\32'
+_G.CHAT_OFFICER_GET = '(|Hchannel:o|hO|h) %s:\32'
 
-_G.CHAT_PARTY_GET = '[|Hchannel:party|hP|h] %s:\32'
-_G.CHAT_PARTY_LEADER_GET = '[|Hchannel:party|hPL|h] %s:\32'
-_G.CHAT_PARTY_GUIDE_GET = '[|Hchannel:party|hDG|h] %s:\32'
-_G.CHAT_MONSTER_PARTY_GET = '[|Hchannel:raid|hR|h] %s:\32'
+_G.CHAT_PARTY_GET = '(|Hchannel:party|hP|h) %s:\32'
+_G.CHAT_PARTY_LEADER_GET = '(|Hchannel:party|hPL|h) %s:\32'
+_G.CHAT_PARTY_GUIDE_GET = '(|Hchannel:party|hDG|h) %s:\32'
+_G.CHAT_MONSTER_PARTY_GET = '(|Hchannel:raid|hR|h) %s:\32'
 
-_G.CHAT_RAID_GET = '[|Hchannel:raid|hR|h] %s:\32'
-_G.CHAT_RAID_WARNING_GET = '[RW!] %s:\32'
-_G.CHAT_RAID_LEADER_GET = '[|Hchannel:raid|hL|h] %s:\32'
+_G.CHAT_RAID_GET = '(|Hchannel:raid|hR|h) %s:\32'
+_G.CHAT_RAID_WARNING_GET = '(RW!) %s:\32'
+_G.CHAT_RAID_LEADER_GET = '(|Hchannel:raid|hL|h) %s:\32'
 
-_G.CHAT_BATTLEGROUND_GET = '[|Hchannel:Battleground|hBG|h] %s:\32'
-_G.CHAT_BATTLEGROUND_LEADER_GET = '[|Hchannel:Battleground|hBL|h] %s:\32'
+_G.CHAT_BATTLEGROUND_GET = '(|Hchannel:Battleground|hBG|h) %s:\32'
+_G.CHAT_BATTLEGROUND_LEADER_GET = '(|Hchannel:Battleground|hBL|h) %s:\32'
+
+_G.CHAT_INSTANCE_CHAT_GET = '|Hchannel:INSTANCE_CHAT|h[I]|h %s:\32';
+_G.CHAT_INSTANCE_CHAT_LEADER_GET = '|Hchannel:INSTANCE_CHAT|h[IL]|h %s:\32';
 
 
 local channelFormat 
@@ -128,7 +196,7 @@ end
 
 ChatFrame1EditBox:SetAltArrowKeyMode(false)
 ChatFrame1EditBox:ClearAllPoints()
-ChatFrame1EditBox:SetFont(C['media'].font, C['media'].fontMedium)
+ChatFrame1EditBox:SetFont(C['media'].font, C['media'].fontSize)
 ChatFrame1EditBox:SetPoint('BOTTOMLEFT', ChatFrame1, 'TOPLEFT', 2, 33)
 ChatFrame1EditBox:SetPoint('BOTTOMRIGHT', ChatFrame1, 'TOPRIGHT', 0, 33)
 ChatFrame1EditBox:SetBackdrop({
@@ -248,7 +316,7 @@ function SkinTab(self)
     tabText:SetJustifyH('CENTER')
     tabText:SetWidth(60)
     if (C['chat'].tab.fontOutline) then
-        tabText:SetFont(C['media'].font, C['media'].fontLarge, 'THINOUTLINE')
+        tabText:SetFont(C['media'].font, C['media'].fontSize, 'THINOUTLINE')
         tabText:SetShadowOffset(0, 0)
     else
         tabText:SetFont(C['media'].font, C['media'].fontLarge)
@@ -533,7 +601,7 @@ f:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 f:Hide()
 
 f.t = f:CreateFontString(nil, 'OVERLAY')
-f.t:SetFont(C['media'].font, C['media'].fontHuge)
+f.t:SetFont(C['media'].font, C['media'].fontSize)
 f.t:SetPoint('TOPLEFT', f, 8, -8)
 f.t:SetTextColor(1, 1, 0)
 f.t:SetShadowOffset(1, -1)
@@ -788,12 +856,39 @@ if C["chat"].windowborder == true then
 		bg:SetPoint("BOTTOMRIGHT", 8, -12);
 		bg:SetBackdrop({
 			edgeFile = C['chat'].border,
-			edgeSize = 18,
+			tile = true, tileSize = 16, edgeSize = 18,
 		})
-		if C['general'].classcolor ~= true then	
+
+		if C['general'].classcolor ~= true then
 			bg:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
 		else
 			bg:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 		end
+
 	end
 end
+
+-- default position of chat
+B.SetDefaultChatPosition = function(frame)
+	if frame then
+		local id = frame:GetID()
+		local name = FCF_GetChatWindowInfo(id)
+		local fontSize = select(2, frame:GetFont())
+
+		-- font size
+		if fontSize < 15 then		
+			FCF_SetChatWindowFontSize(nil, frame, 15)
+		else
+			FCF_SetChatWindowFontSize(nil, frame, fontSize)
+		end
+		
+		if id == 1 then
+			frame:ClearAllPoints()
+			frame:SetPoint("BOTTOMLEFT", UIParent, 50, 185)
+		end
+		
+		-- lock them if unlocked
+		if not frame.isLocked then FCF_SetLocked(frame, 1) end
+	end
+end
+hooksecurefunc("FCF_RestorePositionAndDimensions", B.SetDefaultChatPosition)

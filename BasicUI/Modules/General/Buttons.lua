@@ -12,17 +12,24 @@ if C['general'].buttons.enable == true then
 
 	 -- Hide Keybindings
 	if C['general'].buttons.showHotKeys ~= true then
-		function ActionButton_UpdateHotkeys(self, actionButtonType) end
+		for i=1, 12 do        
+			_G["ActionButton"..i.."HotKey"]:SetAlpha(0) -- main bar        
+			_G["MultiBarBottomRightButton"..i.."HotKey"]:SetAlpha(0) -- bottom right bar        
+			_G["MultiBarBottomLeftButton"..i.."HotKey"]:SetAlpha(0) -- bottom left bar        
+			_G["MultiBarRightButton"..i.."HotKey"]:SetAlpha(0) -- right bar        
+			_G["MultiBarLeftButton"..i.."HotKey"]:SetAlpha(0) -- left bar
+		end
 	end
 	
+	-- Hide Macros
 	if C['general'].buttons.showMacronames ~= true then
-		hooksecurefunc('ActionButton_Update', function(self)
-			if self.buttonType == "EXTRAACTIONBUTTON" then return end
-			local macroname = _G[self:GetName()..'Name']
-			if (not C['general'].buttons.showMacronames) then
-				macroname:SetAlpha(0)
-			end
-		end)
+		for i=1, 12 do        
+			_G["ActionButton"..i.."Name"]:SetAlpha(0) -- main bar        
+			_G["MultiBarBottomRightButton"..i.."Name"]:SetAlpha(0) -- bottom right bar        
+			_G["MultiBarBottomLeftButton"..i.."Name"]:SetAlpha(0) -- bottom left bar        
+			_G["MultiBarRightButton"..i.."Name"]:SetAlpha(0) -- right bar        
+			_G["MultiBarLeftButton"..i.."Name"]:SetAlpha(0) -- left bar
+		end
 	end
 
 	hooksecurefunc('ActionButton_UpdateUsable', function(self)

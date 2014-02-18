@@ -28,6 +28,7 @@ function BasicUIConfig:LoadDefaults()
 			selfbuffs = DB["selfbuffs"],
 			skin = DB["skin"],
 			tooltip = DB["tooltip"],
+			unitframes = DB["unitframes"],
 		},
 		global = {
 			BlackBook = {
@@ -74,27 +75,8 @@ function BasicUIConfig:SetupOptions()
 	self.profileOptions = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db);
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("BasicUIProfiles", self.profileOptions)
 	
-	--[[ Setup our UI's options in the Blizzard Interface Options
-	self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("BasicUIConfig", "|cff00B4FFBasic|rUI");
-	self.optionsFrame.default = function() self:SetDefaultOptions(); ReloadUI(); end;
-	self.profilesFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("BasicUIProfiles", L["|cff00B4FFBasic|rUI Profiles"], "|cff00B4FFBasic|rUI");	
-	self.SetupOptions = nil]]
-	
 	local ACD3 = LibStub("AceConfigDialog-3.0")
-	self.optionsFrame = ACD3:AddToBlizOptions("BasicUIConfig", "|cff00B4FFBasic|rUI", nil, "general")
-	self.optionsFrame = ACD3:AddToBlizOptions("BasicUIConfig", L["|cffffd200Media|r"], "|cff00B4FFBasic|rUI", "media")
-	self.optionsFrame = ACD3:AddToBlizOptions("BasicUIConfig", L["|cffffd200Buff|r"], "|cff00B4FFBasic|rUI", "buff")
-	self.optionsFrame = ACD3:AddToBlizOptions("BasicUIConfig", L["|cffffd200Castbar|r"], "|cff00B4FFBasic|rUI", "castbar")
-	self.optionsFrame = ACD3:AddToBlizOptions("BasicUIConfig", L["|cffffd200Chat|r"], "|cff00B4FFBasic|rUI", "chat")
-	self.optionsFrame = ACD3:AddToBlizOptions("BasicUIConfig", L["|cffffd200Datatext|r"], "|cff00B4FFBasic|rUI", "datatext")
-	self.optionsFrame = ACD3:AddToBlizOptions("BasicUIConfig", L["|cffffd200Merchant|r"], "|cff00B4FFBasic|rUI", "merchant")
-	self.optionsFrame = ACD3:AddToBlizOptions("BasicUIConfig", L["|cffffd200Minimap|r"], "|cff00B4FFBasic|rUI", "minimap")
-	self.optionsFrame = ACD3:AddToBlizOptions("BasicUIConfig", L["|cffffd200Nameplates|r"], "|cff00B4FFBasic|rUI", "nameplates")
-	self.optionsFrame = ACD3:AddToBlizOptions("BasicUIConfig", L["|cffffd200Powerbar|r"], "|cff00B4FFBasic|rUI", "powerbar")
-	self.optionsFrame = ACD3:AddToBlizOptions("BasicUIConfig", L["|cffffd200Quest|r"], "|cff00B4FFBasic|rUI", "quest")
-	self.optionsFrame = ACD3:AddToBlizOptions("BasicUIConfig", L["|cffffd200Selfbuffs|r"], "|cff00B4FFBasic|rUI", "selfbuffs")
-	self.optionsFrame = ACD3:AddToBlizOptions("BasicUIConfig", L["|cffffd200Skin|r"], "|cff00B4FFBasic|rUI", "skin")
-	self.optionsFrame = ACD3:AddToBlizOptions("BasicUIConfig", L["|cffffd200Tootlip|r"], "|cff00B4FFBasic|rUI", "tooltip")
+	self.optionsFrame = ACD3:AddToBlizOptions("BasicUIConfig", "|cff00B4FFBasic|rUI", nil)
 	self.optionsFrame = ACD3:AddToBlizOptions("BasicUIProfiles", L["|cffffd200Profiles|r"], "|cff00B4FFBasic|rUI")	
 	self.SetupOptions = nil	
 	
@@ -134,7 +116,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 		type = "group",	
 		name = "|cff00B4FFBasic|rUI",
 		handler = BasicUI,
-		childGroups = "tree",
+		--childGroups = "tree",
 		args = {
 			Header = {
 				type = "header",			
@@ -177,7 +159,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 				order = 0,				
 				name = L["|cff00B4FFMedia|r"],
 				desc = L["Media Module for |cff00B4FFBasic|rUI."],
-				childGroups = "tree",
+				--childGroups = "tree",
 				get = function(info) return db.media[ info[#info] ] end,
 				set = function(info, value) db.media[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,				
 				args = {
@@ -218,42 +200,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 						name = L["Game Font Size"],
 						desc = L["Controls the Size of the Game Font"],
 						min = 0, max = 30, step = 1,
-					},					
-					fontxSmall = {	
-						type = "range",
-						order = 4,					
-						name = L["Font Extra Small"],
-						desc = L["Controls the Size of the Extra Small Font"],
-						min = 0, max = 30, step = 1,
-					},
-					fontSmall = {
-						type = "range",
-						order = 4,					
-						name = L["Font Small"],
-						desc = L["Controls the Size of the Small Font"],
-						min = 0, max = 30, step = 1,
-					},
-					fontMedium = {
-						type = "range",
-						order = 4,
-						name = L["Font Medium"],
-						desc = L["Controls the Size of Medium Font"],						
-						min = 0, max = 30, step = 1,
-					},
-					fontLarge = {
-						type = "range",
-						order = 4,					
-						name = L["Font Large"],
-						desc = L["Controls the Size of the Large Font"],						
-						min = 0, max = 30, step = 1,
-					},
-					fontHuge = {
-						type = "range",
-						order = 4,					
-						name = L["Font Huge"],
-						desc = L["Controls the Size of the Huge Font"],						
-						min = 0, max = 30, step = 1,
-					},				
+					},									
 				},
 			},
 			general = {
@@ -261,7 +208,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 				order = 1,				
 				name = L["|cff00B4FFGeneral|r"],
 				desc = L["General Modules for |cff00B4FFBasic|rUI."],				
-				childGroups = "tree",
+				--childGroups = "tree",
 				get = function(info) return db.general[ info[#info] ] end,
 				set = function(info, value) db.general[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,				
 				args = {
@@ -288,17 +235,29 @@ function BasicUIConfig.GenerateOptionsInternal()
 						name = " ",
 					},	
 					---------------------------
-					autogreed = {
-						type = "toggle",
-						order = 1,						
-						name = L["Autogreed"],
-						desc = L["Enables Automatically rolling greed on green items when in a instance."],							
-					},
 					cooldown = {
 						type = "toggle",
 						order = 1,						
 						name = L["Cooldown"],
 						desc = L["Enables cooldown counts on action buttons."],							
+					},
+					quicky = {
+						type = "toggle",
+						order = 1,						
+						name = L["Quicky"],
+						desc = L["Enables Simple button on Character Frame to Show/Hide Cloak and Helm."],							
+					},
+					watchframe = {
+						type = "toggle",
+						order = 1,						
+						name = L["Watchframe"],
+						desc = L["Enables Watchframe to be moveable and class colored."],							
+					},
+					flashmapnodes = {
+						type = "toggle",
+						order = 1,						
+						name = L["Flashing MiniMap Nodes"],
+						desc = L["Enables the flashing of minimap nodes. (Ore/Herbs)."],							
 					},					
 					classcolor = {
 						type = "toggle",					
@@ -329,14 +288,129 @@ function BasicUIConfig.GenerateOptionsInternal()
 						name = L["SlideBar"],
 						desc = L["Enables the Minimap AddOn Button SlideBar."],							
 					},					
-					facepaint = {	
-						type = "group",	
-						order = 5,						
-						name = L["FacePaint by Aprikot"],
-						desc = L["Color's Blizzards default Grey's."],					
+					btsw = {
+						type = "toggle",
+						order = 1,						
+						name = L["Bigger Tradeskill Window"],
+						desc = L["Enables a Double Windows Tradeskill Window."],							
+					},
+					cbop = {
+						type = "toggle",
+						order = 1,						
+						name = L["Craftable Bind On Pickup Warning"],
+						desc = L["Enables a Warning Popup anytime you craft a BOP item."],							
+					},
+					vellum = {
+						type = "toggle",
+						order = 1,						
+						name = L["Vellum"],
+						desc = L["Enables a vellum button for Enchanters to click."],							
+					},
+					OpenAll = {								
+						name = L["OpenAll"],
+						desc = L[""],
+						order = 5,							
+						type = "group",								
 						guiInline = true,
-						get = function(info) return db.general.facepaint[ info[#info] ] end,
-						set = function(info, value) db.general.facepaint[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+						get = function(info) return db.general.OpenAll[ info[#info] ] end,
+						set = function(info, value) db.general.OpenAll[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+						args = {					
+							enable = {
+								name = L["Enable"],
+								desc = L[""],
+								order = 0,
+								type = "toggle",								
+							},
+						},
+					},
+					BlackBook = {								
+						name = L["BlackBook"],
+						desc = L[""],
+						order = 5,							
+						type = "group",								
+						guiInline = true,
+						get = function(info) return db.general.BlackBook[ info[#info] ] end,
+						set = function(info, value) db.general.BlackBook[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+						args = {					
+							enable = {
+								name = L["Enable"],
+								desc = L[""],
+								order = 0,
+								type = "toggle",								
+							},
+							AutoFill = {										
+								name = L["Auto Fill"],
+								desc = L[""],
+								order = 1,
+								disabled = function() return not db.general.BlackBook.enable end,
+								type = "toggle",										
+							},
+							AutoCompleteAlts = {									
+								name = L["Auto Complete Alts"],
+								desc = L[""],
+								order = 1,
+								disabled = function() return not db.general.BlackBook.enable end,
+								type = "toggle",																				
+							},
+							AutoCompleteRecent = {										
+								name = L["Auto Complete Recent"],
+								desc = L[""],
+								order = 1,
+								disabled = function() return not db.general.BlackBook.enable end,
+								type = "toggle",										
+							},
+							AutoCompleteContacts = {										
+								name = L["Auto Complete Contacts"],
+								desc = L[""],
+								order = 1,
+								disabled = function() return not db.general.BlackBook.enable end,
+								type = "toggle",										
+							},
+							AutoCompleteFriends = {
+								order = 1,
+								name = L["Auto Complete Friends"],
+								desc = L[""],
+								type = "toggle",
+								disabled = function() return not db.general.BlackBook.enable end,
+							},
+							AutoCompleteGuild = {
+								order = 1,
+								name = L["Auto Complete Guild"],
+								desc = L[""],
+								type = "toggle",
+								disabled = function() return not db.general.BlackBook.enable end,
+							},
+							ExcludeRandoms = {
+								order = 1,
+								name = L["Exclude Randoms"],
+								desc = L[""],
+								type = "toggle",
+								disabled = function() return not db.general.BlackBook.enable end,
+							},
+							DisableBlizzardAutoComplete = {
+								order = 1,
+								name = L["Disable Blizzard Auto Complete"],
+								desc = L[""],
+								type = "toggle",
+								disabled = function() return not db.general.BlackBook.enable end,
+							},
+							UseAutoComplete = {
+								order = 1,
+								name = L["Use Auto Complete"],
+								desc = L[""],
+								type = "toggle",
+								disabled = function() return not db.general.BlackBook.enable end,
+							},
+						},
+					},										
+					loot = {					
+						type = "group",
+						order = 5,						
+						name = L["Auto Roll"],
+						desc = L["Only autorolls on Green Items."],						
+						guiInline = true,
+						get = function(info) return db.general.loot[ info[#info] ] end,
+						set = function(info, value) db.general.loot[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
 						args = {
 							---------------------------
 							--Option Type Seperators
@@ -360,104 +434,20 @@ function BasicUIConfig.GenerateOptionsInternal()
 								order = 5,
 								name = " ",
 							},	
-							---------------------------						
+							---------------------------	
 							enable = {
 								type = "toggle",
 								order = 0,								
 								name = L["Enable"],
-								desc = L["Enables FacePaint Module"],								
+								desc = L["Enables Auto Roll Module"],
+								width = "full",
 							},
-							custom = {
-								type = "group",
-								order = 5,								
-								name = L["FacePaint by Aprikot"],
-								desc = L["Color's Blizzards default Grey's."],					
-								guiInline = true,
-								get = function(info) return db.general.facepaint.custom[ info[#info] ] end,
-								set = function(info, value) db.general.facepaint.custom[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
-								args = {
-									---------------------------
-									--Option Type Seperators
-									sep1 = {
-										type = "description",
-										order = 2,										
-										name = " ",
-									},
-									sep2 = {
-										type = "description",
-										order = 3,										
-										name = " ",
-									},
-									sep3 = {
-										type = "description",
-										order = 4,										
-										name = " ",
-									},
-									sep4 = {
-										type = "description",
-										order = 5,										
-										name = " ",
-									},	
-									---------------------------								
-									gradient = {
-										type = "toggle",
-										order = 1,									
-										name = L["Gradient"],
-										desc = L["Allows Gradient Colors."],
-										disabled = function() return not db.general.facepaint.enable end,
-										width = "full",
-									},
-									topcolor = {
-										type = "color",
-										order = 3,										
-										name = L["Top Color"],
-										desc = L["Picks the Top Color."],
-										disabled = function() return not db.general.facepaint.enable end,										
-										get = function(info)
-											local rc = db.general.facepaint.custom[ info[#info] ]
-											return rc.r, rc.g, rc.b
-										end,
-										set = function(info, r, g, b)
-											db.general.facepaint.custom[ info[#info] ] = {}
-											local rc = db.general.facepaint.custom[ info[#info] ]
-											rc.r, rc.g, rc.b = r, g, b
-											StaticPopup_Show("CFG_RELOAD")
-										end,										
-									},
-									topalpha = {
-										type = "range",									
-										order = 4,
-										name = L["Top Alpha"],
-										desc = L["Controls the Alpha or the Top Color"],
-										min = 0, max = 1, step = 0.1,
-										disabled = function() return not db.general.facepaint.enable end,
-									},							
-									bottomcolor = {
-										type = "color",
-										order = 3,										
-										name = L["Bottom Color"],
-										desc = L["Picks the Bottom Color."],
-										disabled = function() return not db.general.facepaint.enable or not db.general.facepaint.custom.gradient end,										
-										get = function(info)
-											local rc = db.general.facepaint.custom[ info[#info] ]
-											return rc.r, rc.g, rc.b
-										end,
-										set = function(info, r, g, b)
-											db.general.facepaint.custom[ info[#info] ] = {}
-											local rc = db.general.facepaint.custom[ info[#info] ]
-											rc.r, rc.g, rc.b = r, g, b
-											StaticPopup_Show("CFG_RELOAD")
-										end,										
-									},
-									bottomalpha = {
-										type = "range",									
-										order = 4,
-										name = L["Bottom Alpha"],
-										desc = L["Controls the Alpha or the Bottom Color"],
-										min = 0, max = 1, step = 0.1,
-										disabled = function() return not db.general.facepaint.enable or not db.general.facepaint.custom.gradient end,
-									},
-								},
+							disenchant = {
+								type = "toggle",
+								order = 1,								
+								name = L["DisEnchant"],
+								desc = L["\n\n1) Check this box if you want to Disenchant all green items.\n2) Leave unchecked if you just want to roll greed."],
+								disabled = function() return not db.general.buttons.enable end,																
 							},
 						},
 					},
@@ -611,256 +601,6 @@ function BasicUIConfig.GenerateOptionsInternal()
 								},
 							},
 						},
-					},
-					mail = {
-						type = "group",	
-						order = 5,						
-						name = L["Mail"],
-						desc = L["Enables Mailbox Modifications."],
-						guiInline = true,
-						get = function(info) return db.general.mail[ info[#info] ] end,
-						set = function(info, value) db.general.mail[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
-						args = {
-							---------------------------
-							--Option Type Seperators
-							sep1 = {
-								type = "description",
-								order = 2,										
-								name = " ",
-							},
-							sep2 = {
-								type = "description",
-								order = 3,										
-								name = " ",
-							},
-							sep3 = {
-								type = "description",
-								order = 4,										
-								name = " ",
-							},
-							sep4 = {
-								type = "description",
-								order = 5,										
-								name = " ",
-							},	
-							---------------------------							
-							enable = {
-								type = "toggle",
-								order = 0,								
-								name = L["Enable"],
-								desc = L["Enables Mail Module"],
-								width = "full",
-							},						
-							openall = {
-								type = "toggle",
-								order = 1,								
-								name = L["Open All"],
-								desc = L["Enables Open All Collect Button on Mailbox"],	
-								disabled = function() return not db.general.mail.enable end,																
-							},
-							BlackBook = {
-								type = "group",
-								order = 5,								
-								name = L["BlackBook"],
-								desc = L["Enables Send Mail Drop Down Menu. (Barrowed from Postal) "],
-								disabled = function() return not db.general.mail.enable end,																
-								guiInline = true,
-								get = function(info) return db.general.mail.BlackBook[ info[#info] ] end,
-								set = function(info, value) db.general.mail.BlackBook[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
-								args = {
-									---------------------------
-									--Option Type Seperators
-									sep1 = {
-										type = "description",
-										order = 2,										
-										name = " ",
-									},
-									sep2 = {
-										type = "description",
-										order = 3,										
-										name = " ",
-									},
-									sep3 = {
-										type = "description",
-										order = 4,										
-										name = " ",
-									},
-									sep4 = {
-										type = "description",
-										order = 5,										
-										name = " ",
-									},	
-									---------------------------								
-									enable = {
-										type = "toggle",
-										order = 0,										
-										name = L["Enable"],
-										desc = L["Enables BlackBook Module"],
-										width = "full",
-									},
-									AutoFill = {
-										type = "toggle",
-										order = 1,										
-										name = L["Auto Fill"],
-										desc = L["AutoFill Names"],
-										disabled = function() return not db.general.mail.enable or not db.general.mail.BlackBook.enable end,										
-									},
-									AutoCompleteAlts = {
-										type = "toggle",
-										order = 1,										
-										name = L["Auto Complete Alts"],
-										desc = L["Mailing list of Alts."],
-										disabled = function() return not db.general.mail.enable or not db.general.mail.BlackBook.enable end,																			
-									},
-									AutoCompleteRecent = {
-										type = "toggle",
-										order = 1,										
-										name = L["Auto Complete Recent"],
-										desc = L["Mailing list of Recently Mailed People."],
-										disabled = function() return not db.general.mail.enable or not db.general.mail.BlackBook.enable end,										
-									},
-									AutoCompleteContacts = {
-										type = "toggle",
-										order = 1,										
-										name = L["Auto Complete Contacts"],
-										desc = L["Mailing list of Contacts."],
-										disabled = function() return not db.general.mail.enable or not db.general.mail.BlackBook.enable end,										
-									},
-									AutoCompleteFriends = {
-										type = "toggle",									
-										order = 1,
-										name = L["Auto Complete Friends"],
-										desc = L["Mailing list of Friends."],
-										disabled = function() return not db.general.mail.enable or not db.general.mail.BlackBook.enable end,
-									},
-									AutoCompleteGuild = {
-										type = "toggle",							
-										order = 1,
-										name = L["Auto Complete Guild"],
-										desc = L["Mailing list of Guildies."],
-										disabled = function() return not db.general.mail.enable or not db.general.mail.BlackBook.enable end,
-									},
-									ExcludeRandoms = {
-										type = "toggle",							
-										order = 1,
-										name = L["Exclude Randoms"],
-										desc = L["Mailing list of Random People."],
-										disabled = function() return not db.general.mail.enable or not db.general.mail.BlackBook.enable end,
-									},
-									DisableBlizzardAutoComplete = {
-										type = "toggle",							
-										order = 1,
-										name = L["Disable Blizzard Auto Complete"],
-										desc = L["Disable blizzards Auto Complete when Typing."],
-										disabled = function() return not db.general.mail.enable or not db.general.mail.BlackBook.enable end,
-									},
-									UseAutoComplete = {
-										type = "toggle",							
-										order = 1,
-										name = L["Use Auto Complete"],
-										desc = L["Enable Auto Complete when Typing"],
-										disabled = function() return not db.general.mail.enable or not db.general.mail.BlackBook.enable end,
-									},
-								},
-							},	
-						},
-					},
-					scale = {
-						type = "group",
-						order = 5,
-						name = L["Scale"],
-						desc = L["Adjust the scale of Blizzards Unit Frames."],	
-						guiInline = true,
-						get = function(info) return db.general.scale[ info[#info] ] end,
-						set = function(info, value) db.general.scale[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
-						args = {
-							---------------------------
-							--Option Type Seperators
-							sep1 = {
-								type = "description",
-								order = 2,								
-								name = " ",
-							},
-							sep2 = {
-								type = "description",
-								order = 3,
-								name = " ",								
-							},
-							sep3 = {
-								type = "description",
-								order = 4,
-								name = " ",
-							},
-							sep4 = {
-								type = "description",
-								order = 5,
-								name = " ",
-							},	
-							---------------------------						
-							enable = {
-								type = "toggle",							
-								order = 0,
-								name = L["Enable"],
-								desc = L["Enables Scale Module"],
-								width = "full",
-							},						
-							playerFrame = {
-								type = "range",							
-								order = 4,
-								name = L["Player Frame"],
-								desc = L["Controls the scaling of Blizzard's Player Frame"],
-								min = 0.5, max = 2, step = 0.05,
-								disabled = function() return not db.general.scale.enable end,
-							},
-							targetFrame = {
-								type = "range",							
-								order = 4,
-								name = L["Target Frame"],
-								desc = L["Controls the scaling of Blizzard's Target Frame"],
-								min = 0.5, max = 2, step = 0.05,
-								disabled = function() return not db.general.scale.enable end,
-							},
-							focusFrame = {
-								type = "range",							
-								order = 4,
-								name = L["Focus Frame"],
-								desc = L["Controls the scaling of Blizzard's Focus Frame"],
-								min = 0.5, max = 2, step = 0.05,
-								disabled = function() return not db.general.scale.enable end,
-							},
-							partyFrame = {
-								type = "range",							
-								order = 4,
-								name = L["Party Frame"],
-								desc = L["Controls the scaling of Blizzard's Party Frames"],
-								min = 0.5, max = 2, step = 0.05,
-								disabled = function() return not db.general.scale.enable end,
-							},
-							partypetFrame = {
-								type = "range",							
-								order = 4,
-								name = L["Party Pet Frame"],
-								desc = L["Controls the scaling of Blizzard's Party Pet Frames"],
-								min = 0.5, max = 2, step = 0.05,
-								disabled = function() return not db.general.scale.enable end,
-							},
-							arenaFrame = {
-								type = "range",							
-								order = 4,
-								name = L["Arena Frame"],
-								desc = L["Controls the scaling of Blizzard's Arena Frames"],
-								min = 0.5, max = 2, step = 0.05,
-								disabled = function() return not db.general.scale.enable end,
-							},
-							bossFrame = {
-								type = "range",							
-								order = 4,
-								name = L["Boss Frame"],
-								desc = L["Controls the scaling of Blizzard's Boss Frames"],
-								min = 0.5, max = 2, step = 0.05,
-								disabled = function() return not db.general.scale.enable end,
-							},							
-						},
 					},					
 				},
 			},
@@ -902,100 +642,12 @@ function BasicUIConfig.GenerateOptionsInternal()
 						desc = L["Enables Buff Module."],
 						width = "full",						
 					},
-					border = {
-						type = "select",
-						name = L["Border Style."],
-						desc = L["Choose the Border Style"],
-						order = 2,
-						disabled = function() return not db.buff.enable end,
-						dialogControl = 'LSM30_Border',					
-						values = AceGUIWidgetLSMlists.border,								
-					},									
-					buffSize = {
-						type = "range",					
-						order = 4,
-						name = L["Buff Size"],
-						--desc = L["Controls the scaling of Blizzard's Buff Frames"],
-						min = 1, max = 50, step = 1,
-						disabled = function() return not db.buff.enable end,
-					},
 					buffScale = {
 						type = "range",					
 						order = 4,
 						name = L["Buff Scale"],
 						--desc = L["Controls the scaling of the Buff Frames"],
 						min = 0.5, max = 5, step = 0.05,
-						disabled = function() return not db.buff.enable end,
-					},
-					buffFontSize = {
-						type = "range",					
-						order = 4,
-						name = L["Buff Font Size"],
-						--desc = L["Controls the scaling of Blizzard's Buff Frames"],
-						min = 8, max = 25, step = 1,
-						disabled = function() return not db.buff.enable end,
-					},
-					buffCountSize = {
-						type = "range",					
-						order = 4,
-						name = L["Buff Count Size"],
-						--desc = L["Controls the scaling of Blizzard's Buff Frames"],
-						min = 1, max = 10, step = 1,
-						disabled = function() return not db.buff.enable end,
-					},
-					debuffSize = {
-						type = "range",					
-						order = 4,
-						name = L["DeBuff Size"],
-						--desc = L["Controls the scaling of Blizzard's Buff Frames"],
-						min = 1, max = 50, step = 1,
-						disabled = function() return not db.buff.enable end,
-					},
-					debuffScale = {
-						type = "range",					
-						order = 4,
-						name = L["DeBuff Scale"],
-						--desc = L["Controls the scaling of Blizzard's Buff Frames"],
-						min = 0.5, max = 5, step = 0.05,
-						disabled = function() return not db.buff.enable end,
-					},
-					debuffFontSize = {
-						type = "range",					
-						order = 4,
-						name = L["DeBuff Font Size"],
-						min = 8, max = 25, step = 0.05,
-						disabled = function() return not db.buff.enable end,
-					},
-					debuffCountSize = {
-						type = "range",					
-						order = 4,
-						name = L["DeBuff Count Size"],
-						--desc = L["Controls the scaling of Blizzard's Buff Frames"],
-						min = 1, max = 10, step = 1,
-						disabled = function() return not db.buff.enable end,
-					},
-					paddingX = {
-						type = "range",					
-						order = 4,
-						name = L["Padding X"],
-						--desc = L["Controls the scaling of Blizzard's Buff Frames"],
-						min = 1, max = 20, step = 1,
-						disabled = function() return not db.buff.enable end,
-					},
-					paddingY = {
-						type = "range",					
-						order = 4,
-						name = L["Padding Y"],
-						--desc = L["Controls the scaling of Blizzard's Buff Frames"],
-						min = 1, max = 20, step = 1,
-						disabled = function() return not db.buff.enable end,
-					},						
-					buffPerRow = {
-						type = "range",					
-						order = 4,
-						name = L["Buffs Per Row"],
-						--desc = L["Controls the scaling of Blizzard's Buff Frames"],
-						min = 1, max = 20, step = 1,
 						disabled = function() return not db.buff.enable end,
 					},					
 				},
@@ -1005,7 +657,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 				order = 3,
 				name = L["|cff00B4FFCastbar|r"],
 				desc = L["Castbar Module for |cff00B4FFBasic|rUI."],
-				childGroups = "tree",
+				--childGroups = "tree",
 				get = function(info) return db.castbar[ info[#info] ] end,
 				set = function(info, value) db.castbar[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,				
 				args = {
@@ -1038,7 +690,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 						name = L["Enable"],
 						desc = L["Enables Buff Module"],
 						width = "full",							
-					},
+					},					
 					border = {
 						type = "select",
 						order = 2,
@@ -1056,7 +708,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 						disabled = function() return not db.castbar.enable end,
 						dialogControl = 'LSM30_Background', --Select your widget here
 						values = AceGUIWidgetLSMlists.background,
-					},					
+					},				
 					CastingBarFrame = {
 						type = "group",
 						order = 5,
@@ -1071,22 +723,22 @@ function BasicUIConfig.GenerateOptionsInternal()
 							--Option Type Seperators
 							sep1 = {
 								type = "description",
-								order = 2,								
+								order = 1,								
 								name = " ",
 							},
 							sep2 = {
 								type = "description",
-								order = 3,
+								order = 2,
 								name = " ",								
 							},
 							sep3 = {
 								type = "description",
-								order = 4,
+								order = 3,
 								name = " ",
 							},
 							sep4 = {
 								type = "description",
-								order = 5,
+								order = 4,
 								name = " ",
 							},	
 							---------------------------						
@@ -1098,6 +750,13 @@ function BasicUIConfig.GenerateOptionsInternal()
 								disabled = function() return not db.castbar.enable end,
 								width = "full",								
 							},
+							fontSize = {
+								type = "range",
+								order = 0,						
+								name = L["Font Size"],
+								desc = L["Controls the Size of the Font"],
+								min = 0, max = 30, step = 1,
+							},							
 							textPosition = {
 								type = "select",
 								order = 2,
@@ -1153,10 +812,107 @@ function BasicUIConfig.GenerateOptionsInternal()
 								disabled = function() return not db.castbar.enable or not db.castbar.CastingBarFrame.enable end,
 							},
 						},
-					},	
+					},
+					PetCastingBarFrame = {
+						type = "group",
+						order = 6,
+						name = L["Pet Castbar"],
+						desc = L["Settings for the Pet Casting Bar."],
+						guiInline = true,
+						disabled = function() return not db.castbar.enable end,
+						get = function(info) return db.castbar.PetCastingBarFrame[ info[#info] ] end,
+						set = function(info, value) db.castbar.PetCastingBarFrame[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,					
+						args = {
+							---------------------------
+							--Option Type Seperators
+							sep1 = {
+								type = "description",
+								order = 1,								
+								name = " ",
+							},
+							sep2 = {
+								type = "description",
+								order = 2,
+								name = " ",								
+							},
+							sep3 = {
+								type = "description",
+								order = 3,
+								name = " ",
+							},
+							sep4 = {
+								type = "description",
+								order = 4,
+								name = " ",
+							},	
+							---------------------------						
+							enable = {
+								type = "toggle",							
+								order = 0,
+								name = L["Enable"],
+								desc = L["Enables Pet's Castbar."],
+								disabled = function() return not db.castbar.enable end,
+								width = "full",								
+							},
+							fontSize = {
+								type = "range",
+								order = 0,						
+								name = L["Font Size"],
+								desc = L["Controls the Size of the Font"],
+								min = 0, max = 30, step = 1,
+							},
+							textPosition = {
+								type = "select",							
+								order = 2,
+								name = L["Text Position"],
+								desc = L["Spell Text Position."],
+								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
+								values = B.regions;
+							},
+							enableTimer = {
+								type = "toggle",							
+								order = 1,
+								name = L["Show Timer"],
+								desc = L["Enables timer to show on castbar."],
+								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
+							},
+							selfAnchor = {
+								type = "select",							
+								order = 2,
+								name = L["Self Anchor"],
+								desc = L["Self Anchor Position."],
+								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
+								values = B.regions;
+							},
+							relAnchor = {
+								type = "select",							
+								order = 2,
+								name = L["Relative Anchor"],
+								desc = L["Relative Anchor Position."],
+								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
+								values = B.regions;
+							},
+							offSetX = {
+								type = "range",							
+								order = 4,
+								name = L["X Offset."],
+								desc = L["Controls the X offset. (Left - Right)"],
+								min = -250, max = 250, step = 5,
+								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
+							},
+							offSetY = {
+								type = "range",							
+								order = 4,
+								name = L["Y Offset."],
+								desc = L["Controls the Y offset. (Up - Down)"],
+								min = -250, max = 250, step = 5,
+								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
+							},
+						},
+					},											
 					TargetFrameSpellBar = {
 						type = "group",
-						order = 5,
+						order = 7,
 						name = L["Target's Castbar."],
 						desc = L["Settings for the Target Castbar."],
 						guiInline = true,
@@ -1168,24 +924,24 @@ function BasicUIConfig.GenerateOptionsInternal()
 							--Option Type Seperators
 							sep1 = {
 								type = "description",
-								order = 2,								
+								order = 1,								
 								name = " ",
 							},
 							sep2 = {
 								type = "description",
-								order = 3,
+								order = 2,
 								name = " ",								
 							},
 							sep3 = {
 								type = "description",
-								order = 4,
+								order = 3,
 								name = " ",
 							},
 							sep4 = {
 								type = "description",
-								order = 5,
+								order = 4,
 								name = " ",
-							},	
+							},		
 							---------------------------						
 							enable = {
 								type = "toggle",							
@@ -1194,6 +950,13 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Enables Target's Castbar."],
 								disabled = function() return not db.castbar.enable end,
 								width = "full",								
+							},
+							fontSize = {
+								type = "range",
+								order = 0,						
+								name = L["Font Size"],
+								desc = L["Controls the Size of the Font"],
+								min = 0, max = 30, step = 1,
 							},
 							textPosition = {
 								type = "select",
@@ -1253,7 +1016,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 					},						
 					FocusFrameSpellBar = {
 						type = "group",
-						order = 5,
+						order = 8,
 						name = L["Focus Castbar."],
 						desc = L["Settings for the Focus Castbar."],
 						guiInline = true,
@@ -1265,22 +1028,22 @@ function BasicUIConfig.GenerateOptionsInternal()
 							--Option Type Seperators
 							sep1 = {
 								type = "description",
-								order = 2,								
+								order = 1,								
 								name = " ",
 							},
 							sep2 = {
 								type = "description",
-								order = 3,
+								order = 2,
 								name = " ",								
 							},
 							sep3 = {
 								type = "description",
-								order = 4,
+								order = 3,
 								name = " ",
 							},
 							sep4 = {
 								type = "description",
-								order = 5,
+								order = 4,
 								name = " ",
 							},	
 							---------------------------						
@@ -1291,6 +1054,13 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Enables Focus' Castbar."],
 								disabled = function() return not db.castbar.enable end,
 								width = "full",								
+							},
+							fontSize = {
+								type = "range",
+								order = 0,						
+								name = L["Font Size"],
+								desc = L["Controls the Size of the Font"],
+								min = 0, max = 30, step = 1,
 							},
 							textPosition = {
 								type = "select",							
@@ -1350,7 +1120,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 					},						
 					MirrorTimer1 = {
 						type = "group",
-						order = 5,
+						order = 9,
 						name = L["Mirror Timer."],
 						desc = L["Settings for Mirror Timer."],
 						guiInline = true,
@@ -1362,24 +1132,24 @@ function BasicUIConfig.GenerateOptionsInternal()
 							--Option Type Seperators
 							sep1 = {
 								type = "description",
-								order = 2,								
+								order = 1,								
 								name = " ",
 							},
 							sep2 = {
 								type = "description",
-								order = 3,
+								order = 2,
 								name = " ",								
 							},
 							sep3 = {
 								type = "description",
-								order = 4,
+								order = 3,
 								name = " ",
 							},
 							sep4 = {
 								type = "description",
-								order = 5,
+								order = 4,
 								name = " ",
-							},	
+							},		
 							---------------------------						
 							enable = {
 								type = "toggle",							
@@ -1389,13 +1159,12 @@ function BasicUIConfig.GenerateOptionsInternal()
 								disabled = function() return not db.castbar.enable end,
 								width = "full",								
 							},
-							textPosition = {
-								type = "select",							
-								order = 2,
-								name = L["Text Position"],
-								desc = L["Spell Text Position."],
-								disabled = function() return not db.castbar.enable or not db.castbar.MirrorTimer1.enable end,
-								values = B.regions;
+							fontSize = {
+								type = "range",
+								order = 0,						
+								name = L["Font Size"],
+								desc = L["Controls the Size of the Font"],
+								min = 0, max = 30, step = 1,
 							},
 							enableTimer = {
 								type = "toggle",							
@@ -1438,96 +1207,6 @@ function BasicUIConfig.GenerateOptionsInternal()
 							},
 						},
 					},						
-					PetCastingBarFrame = {
-						type = "group",
-						order = 5,
-						name = L["Pet Castbar"],
-						desc = L["Settings for the Pet Casting Bar."],
-						guiInline = true,
-						disabled = function() return not db.castbar.enable end,
-						get = function(info) return db.castbar.PetCastingBarFrame[ info[#info] ] end,
-						set = function(info, value) db.castbar.PetCastingBarFrame[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,					
-						args = {
-							---------------------------
-							--Option Type Seperators
-							sep1 = {
-								type = "description",
-								order = 2,								
-								name = " ",
-							},
-							sep2 = {
-								type = "description",
-								order = 3,
-								name = " ",								
-							},
-							sep3 = {
-								type = "description",
-								order = 4,
-								name = " ",
-							},
-							sep4 = {
-								type = "description",
-								order = 5,
-								name = " ",
-							},	
-							---------------------------						
-							enable = {
-								type = "toggle",							
-								order = 0,
-								name = L["Enable"],
-								desc = L["Enables Pet's Castbar."],
-								disabled = function() return not db.castbar.enable end,
-								width = "full",								
-							},
-							textPosition = {
-								type = "select",							
-								order = 2,
-								name = L["Text Position"],
-								desc = L["Spell Text Position."],
-								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
-								values = B.regions;
-							},
-							enableTimer = {
-								type = "toggle",							
-								order = 1,
-								name = L["Show Timer"],
-								desc = L["Enables timer to show on castbar."],
-								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
-							},
-							selfAnchor = {
-								type = "select",							
-								order = 2,
-								name = L["Self Anchor"],
-								desc = L["Self Anchor Position."],
-								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
-								values = B.regions;
-							},
-							relAnchor = {
-								type = "select",							
-								order = 2,
-								name = L["Relative Anchor"],
-								desc = L["Relative Anchor Position."],
-								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
-								values = B.regions;
-							},
-							offSetX = {
-								type = "range",							
-								order = 4,
-								name = L["X Offset."],
-								desc = L["Controls the X offset. (Left - Right)"],
-								min = -250, max = 250, step = 5,
-								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
-							},
-							offSetY = {
-								type = "range",							
-								order = 4,
-								name = L["Y Offset."],
-								desc = L["Controls the Y offset. (Up - Down)"],
-								min = -250, max = 250, step = 5,
-								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
-							},
-						},
-					},						
 				},
 			},			
 			chat = {
@@ -1535,7 +1214,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 				order = 4,
 				name = L["|cff00B4FFChat|r"],
 				desc = L["Chat Module for |cff00B4FFBasic|rUI."],
-				childGroups = "tree",
+				--childGroups = "tree",
 				get = function(info) return db.chat[ info[#info] ] end,
 				set = function(info, value) db.chat[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,				
 				args = {
@@ -1765,7 +1444,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 				order = 5,
 				name = L["|cff00B4FFDatatext|r"],
 				desc = L["Datatext Module for |cff00B4FFBasic|rUI."],
-				childGroups = "tree",
+				--childGroups = "tree",
 				get = function(info) return db.datatext[ info[#info] ] end,
 				set = function(info, value) db.datatext[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,				
 				args = {
@@ -1822,7 +1501,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 					top = {
 						type = "toggle",					
 						order = 1,
-						name = L["Datapanel Top"],
+						name = L["Top"],
 						desc = L["If checked then panel moves to top of screen, If unchecked panel moves below MainMenuBar"],
 						disabled = function() return not db.datatext.enable end,						
 					},					
@@ -1872,58 +1551,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 						disabled = function() return not db.castbar.enable end,
 						dialogControl = 'LSM30_Background', --Select your widget here
 						values = AceGUIWidgetLSMlists.background,
-					},					
-					--[[colors = {
-						type = "group",					
-						order = 5,
-						name = L["Text Colors"],
-						guiInline = true,
-						get = function(info) return db.datatext.colors[ info[#info] ] end,
-						set = function(info, value) db.datatext.colors[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,							
-						disabled = function() return not db.datatext.enable end,						
-						args = {
-							---------------------------
-							--Option Type Seperators
-							sep1 = {
-								type = "description",
-								order = 2,								
-								name = " ",
-							},
-							sep2 = {
-								type = "description",
-								order = 3,
-								name = " ",								
-							},
-							sep3 = {
-								type = "description",
-								order = 4,
-								name = " ",
-							},
-							sep4 = {
-								type = "description",
-								order = 5,
-								name = " ",
-							},	
-							---------------------------						
-							color = {
-								type = "color",							
-								order = 5,
-								name = L["Custom Color"],
-								desc = L["Picks a Custom Color for the datatext values."],
-								disabled = function() return db.datatext.colors.classcolor or not db.datatext.enable end,
-								get = function(info)
-									local hb = db.datatext.colors[ info[#info] ]
-									return hb.r, hb.g, hb.b
-								end,
-								set = function(info, r, g, b)
-									db.datatext.colors[ info[#info] ] = {}
-									local hb = db.datatext.colors[ info[#info] ]
-									hb.r, hb.g, hb.b = r, g, b
-									StaticPopup_Show("CFG_RELOAD")
-								end,					
-							},								
-						},
-					},]]				
+					},									
 					DataGroup = {
 						type = "group",					
 						order = 5,
@@ -2090,7 +1718,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 				order = 6,
 				name = L["|cff00B4FFMerchant|r"],
 				desc = L["Merchant Module for |cff00B4FFBasic|rUI."],
-				childGroups = "tree",
+				--childGroups = "tree",
 				get = function(info) return db.merchant[ info[#info] ] end,
 				set = function(info, value) db.merchant[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,					
 				args = {
@@ -2207,29 +1835,6 @@ function BasicUIConfig.GenerateOptionsInternal()
 						desc = L["Enable the Clock Frame on Minimap."],
 						disabled = function() return not db.minimap.enable end,								
 					},													
-					border = {	
-						type = "select",
-						order = 2,					
-						name = L["Border Style"],
-						desc = L["Style of Border for Minimap."],
-						disabled = function() return not db.minimap.enable end,
-						dialogControl = 'LSM30_Border', --Select your widget here																
-						values = AceGUIWidgetLSMlists.border,
-					},
-					zoneText = {
-						type = "toggle",					
-						order = 1,
-						name = L["Zone Text"],
-						desc = L["Enable Mouseover Zone Text."],
-						disabled = function() return not db.minimap.enable end,								
-					},
-					instanceDifficulty = {
-						type = "toggle",					
-						order = 1,
-						name = L["Instance Difficulty"],
-						desc = L["Enable Mouseover Instance Difficulty."],
-						disabled = function() return not db.minimap.enable end,								
-					},									
 				},
 			},			
 			nameplates = {
@@ -2321,11 +1926,11 @@ function BasicUIConfig.GenerateOptionsInternal()
 				},
 			},
 			powerbar = {
-				type = "group",			
 				order = 9,
+				type = "group",
 				name = L["|cff00B4FFPowerbar|r"],
-				desc = L["Powerbar Module for |cff00B4FFBasic|rUI."],
-				childGroups = "tree",
+				desc = L["Powerbar for all classes with ComboPoints, Runes, Shards, and HolyPower."],
+				--childGroups = "tree",
 				get = function(info) return db.powerbar[ info[#info] ] end,
 				set = function(info, value) db.powerbar[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,					
 				args = {
@@ -2333,40 +1938,96 @@ function BasicUIConfig.GenerateOptionsInternal()
 					--Option Type Seperators
 					sep1 = {
 						type = "description",
-						order = 2,										
+						order = 2,								
 						name = " ",
 					},
 					sep2 = {
 						type = "description",
-						order = 3,										
-						name = " ",
+						order = 3,
+						name = " ",								
 					},
 					sep3 = {
 						type = "description",
-						order = 4,										
+						order = 4,
 						name = " ",
 					},
 					sep4 = {
 						type = "description",
-						order = 5,										
+						order = 5,
 						name = " ",
 					},	
-					---------------------------	
+					---------------------------								
 					enable = {
-						type = "toggle",
-						order = 0,
+						order = 1,
 						name = L["Enable"],
-						desc = L["Enable Powerbar Settings"],
-						width = "full",						
+						width = "full",
+						--desc = L["Enables Powerbar Module"],
+						type = "toggle",							
+					},					
+					showCombatRegen = {
+						order = 1,
+						name = L["Show Combat Regen"],
+						--desc = L["Shows a players Regen while in combat."],
+						type = "toggle",
+						disabled = function() return not db.powerbar.enable end,
+					},				
+					showSoulshards = {
+						order = 1,
+						name = L["Show Soulshards"],
+						--desc = L["Shows Shards as a number value."],
+						type = "toggle",
+						disabled = function() return not db.powerbar.enable end,
 					},
-					border = {
+					showHolypower = {
+						order = 1,
+						name = L["Show Holypower"],
+						--desc = L["Shows Holypower as a number value."],
+						type = "toggle",
+						disabled = function() return not db.powerbar.enable end,
+					},
+					showMana = {
+						order = 1,
+						name = L["Show Mana"],
+						--desc = L["Shows Holypower as a number value."],
+						type = "toggle",
+						disabled = function() return not db.powerbar.enable end,
+					},
+					showFocus = {
+						order = 1,
+						name = L["Show Focus"],
+						--desc = L["Shows Holypower as a number value."],
+						type = "toggle",
+						disabled = function() return not db.powerbar.enable end,
+					},
+					showRage = {
+						order = 1,
+						name = L["Show Rage"],
+						--desc = L["Shows Holypower as a number value."],
+						type = "toggle",
+						disabled = function() return not db.powerbar.enable end,
+					},
+					valueAbbrev = {
+						order = 1,
+						name = L["Value Abbrev"],
+						--desc = L["Shows Runes cooldowns as numbers."],
+						type = "toggle",
+						disabled = function() return not db.powerbar.enable end,
+					},
+					valueFontOutline = {
+						order = 1,
+						name = L["Value Font Outline"],
+						--desc = L["Shows Focus power."],
+						type = "toggle",
+						disabled = function() return not db.powerbar.enable end,
+					},
+					background = {
 						type = "select",					
 						order = 2,
-						name = L["Border Style"],
-						desc = L["Style of Border for Powerbar."],
+						name = L["Background Style"],
+						desc = L["Style of Background for Powerbar."],
 						disabled = function() return not db.powerbar.enable end,
-						dialogControl = 'LSM30_Border', --Select your widget here
-						values = AceGUIWidgetLSMlists.border,
+						dialogControl = 'LSM30_Background', --Select your widget here
+						values = AceGUIWidgetLSMlists.background,
 					},
 					statusbar = {
 						type = "select",					
@@ -2377,150 +2038,64 @@ function BasicUIConfig.GenerateOptionsInternal()
 						dialogControl = 'LSM30_Statusbar', --Select your widget here
 						values = AceGUIWidgetLSMlists.statusbar,
 					},					
-					showCombatRegen = {
-						type = "toggle",					
-						order = 1,
-						name = L["CombatRegen"],
-						desc = L["Shows a players Regen while in combat."],
-						disabled = function() return not db.powerbar.enable end,
-					},
-					showEclipseBar = {
-						type = "toggle",					
-						order = 1,
-						name = L["Eclipsebar"],
-						desc = L["Move the Eclipsebar above Powerbar."],
-						disabled = function() return not db.powerbar.enable end,
-					},					
-					showSoulshards = {
-						type = "toggle",					
-						order = 1,
-						name = L["Soulshards"],
-						desc = L["Shows Shards as a number value."],
-						disabled = function() return not db.powerbar.enable end,
-					},
-					showHolypower = {
-						type = "toggle",					
-						order = 1,
-						name = L["Holypower"],
-						desc = L["Shows Holypower as a number value."],
-						disabled = function() return not db.powerbar.enable end,
-					},
-					showComboPoints = {
-						type = "toggle",					
-						order = 1,
-						name = L["ComboPoints"],
-						desc = L["Shows ComboPoints as a number value."],
-						disabled = function() return not db.powerbar.enable end,
-					},
-					showRuneCooldown = {
-						type = "toggle",					
-						order = 1,
-						name = L["Rune Cooldown"],
-						desc = L["Shows Runes cooldowns as numbers."],
-						disabled = function() return not db.powerbar.enable end,
-					},
-					energybar = {
-						type = "toggle",					
-						order = 1,
-						name = L["Energybar"],
-						desc = L["Shows Energy Powerbar."],
-						disabled = function() return not db.powerbar.enable end,
-					},
-					focusbar = {
-						type = "toggle",					
-						order = 1,
-						name = L["Focusbar"],
-						desc = L["Shows Focus Powerbar."],
-						disabled = function() return not db.powerbar.enable end,
-					},
-					manabar = {
-						type = "toggle",					
-						order = 1,
-						name = L["Manabar"],
-						desc = L["Shows Mana Powerbar."],
-						disabled = function() return not db.powerbar.enable end,
-					},
-					ragebar = {
-						type = "toggle",					
-						order = 1,
-						name = L["Ragebar"],
-						desc = L["Shows Rage Powerbar."],
-						disabled = function() return not db.powerbar.enable end,
-					},
-					runebar = {
-						type = "toggle",
-						order = 1,
-						name = L["Runebar"],
-						desc = L["Shows Rune Powerbar."],
-						disabled = function() return not db.powerbar.enable end,
-					},
 					sizeWidth= {
-						type = "range",					
-						order = 1,
-						name = L["Width"],
-						desc = L["Controls the width of Powerbar."],
+						order = 4,
+						name = L["Size Width"],
+						--desc = L["Controls the width of power."],
+						type = "range",
 						min = 50, max = 350, step = 25,
 						disabled = function() return not db.powerbar.enable end,
 					},					
-					combo = {
-						type = "group",
-						order = 5,
-						name = L["Combo"],
-						desc = L["Combo Points Options"],	
-						guiInline = true,
+					activeAlpha = {
+						order = 4,
+						name = L["Active Alpha"],
+						--desc = L["Shows ComboPoints as a number value."],
+						type = "range",
+						min = 0, max = 1, step = 0.1,
 						disabled = function() return not db.powerbar.enable end,
-						get = function(info) return db.powerbar.combo[ info[#info] ] end,
-						set = function(info, value) db.powerbar.combo[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
-						args = {
-							---------------------------
-							--Option Type Seperators
-							sep1 = {
-								type = "description",
-								order = 2,								
-								name = " ",
-							},
-							sep2 = {
-								type = "description",
-								order = 3,
-								name = " ",								
-							},
-							sep3 = {
-								type = "description",
-								order = 4,
-								name = " ",
-							},
-							sep4 = {
-								type = "description",
-								order = 5,
-								name = " ",
-							},	
-							---------------------------						
-							FontOutline = {
-								type = "toggle",							
-								order = 1,
-								name = L["Font Outline"],
-								desc = L["Adds a font outline to ComboPoints."],
-								disabled = function() return not db.powerbar.enable end,
-							},
-							FontSize= {
-								type = "range",							
-								order = 4,
-								name = L["Font Size"],
-								desc = L["Controls the ComboPoints font size."],
-								min = 8, max = 25, step = 1,
-								disabled = function() return not db.powerbar.enable end,
-							},						
-						},
 					},
-					extra = {
+					inactiveAlpha = {
+						order = 4,
+						name = L["In Active Alpha"],
+						--desc = L["Shows ComboPoints as a number value."],
+						type = "range",
+						min = 0, max = 1, step = 0.1,
+						disabled = function() return not db.powerbar.enable end,
+					},
+					emptyAlpha = {
+						order = 4,
+						name = L["Empty Alpha"],
+						--desc = L["Shows ComboPoints as a number value."],
+						type = "range",
+						min = 0, max = 1, step = 0.1,
+						disabled = function() return not db.powerbar.enable end,
+					},										
+					valueFontSize = {
+						order = 4,
+						name = L["Value Font Size"],
+						--desc = L["Shows ComboPoints as a number value."],
+						type = "range",
+						min = 8, max = 30, step = 1,
+						disabled = function() return not db.powerbar.enable end,
+					},	
+					valueFontAdjustmentX = {
+						order = 4,
+						name = L["Value Font Adjustment X"],
+						--desc = L["Shows ComboPoints as a number value."],
+						type = "range",
+						min = -200, max = 200, step = 1,
+						disabled = function() return not db.powerbar.enable end,
+					},
+					position = {
 						type = "group",
 						order = 5,
-						name = L["Extra"],
-						desc = L["Options for Soulshards and Holypower Text."],	
 						guiInline = true,
-						disabled = function() return not db.powerbar.enable end,
-						get = function(info) return db.powerbar.extra[ info[#info] ] end,
-						set = function(info, value) db.powerbar.extra[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
+						name = L["Position"],
+						--desc = L["Combo Points Options"],	
+						guiInline = true,
+						disabled = function() return not db.powerbar.enable end,						
+						get = function(info) return db.powerbar.position[ info[#info] ] end,
+						set = function(info, value) db.powerbar.position[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
 						args = {
 							---------------------------
 							--Option Type Seperators
@@ -2544,30 +2119,110 @@ function BasicUIConfig.GenerateOptionsInternal()
 								order = 5,
 								name = " ",
 							},	
-							---------------------------						
-							FontOutline = {
-								type = "toggle",							
-								order = 1,
-								name = L["Font Outline"],
-								desc = L["Adds a font outline to Extra."],
+							---------------------------							
+							selfAnchor = {
+								order = 2,
+								name = L["Self Anchor"],
+								--desc = L["Style of Border for Sqaure Minimap."],
+								disabled = function() return not db.powerbar.enable end,
+								type = "select",
+								values = B.regions;
+							},
+							offSetX= {
+								order = 4,
+								name = L["Off Set X"],
+								--desc = L["Controls the width of power."],
+								type = "range",
+								min = -100, max = 100, step = 1,
 								disabled = function() return not db.powerbar.enable end,
 							},
-								FontSize= {
-								type = "range",								
+							offSetY= {
 								order = 4,
-								name = L["Font Size"],
-								desc = L["Controls the Extra font size."],
+								name = L["Off Set Y"],
+								--desc = L["Controls the width of power."],
+								type = "range",
+								min = -100, max = 100, step = 1,
+								disabled = function() return not db.powerbar.enable end,
+							},
+						},
+					},					
+					energy = {
+						type = "group",
+						order = 5,
+						guiInline = true,
+						name = L["Energy"],
+						--desc = L["Combo Points Options"],	
+						disabled = function() return not db.powerbar.enable end,
+						get = function(info) return db.powerbar.energy[ info[#info] ] end,
+						set = function(info, value) db.powerbar.energy[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
+						args = {
+							---------------------------
+							--Option Type Seperators
+							sep1 = {
+								type = "description",
+								order = 2,								
+								name = " ",
+							},
+							sep2 = {
+								type = "description",
+								order = 3,
+								name = " ",								
+							},
+							sep3 = {
+								type = "description",
+								order = 4,
+								name = " ",
+							},
+							sep4 = {
+								type = "description",
+								order = 5,
+								name = " ",
+							},	
+							---------------------------							
+							show = {
+								order = 1,
+								name = L["Show"],
+								--desc = L["Adds a font outline to ComboPoints."],
+								type = "toggle",
+								disabled = function() return not db.powerbar.enable end,
+							},
+							showComboPoints = {
+								order = 1,
+								name = L["Show Combo Points"],
+								--desc = L["Adds a font outline to ComboPoints."],
+								type = "toggle",
+								disabled = function() return not db.powerbar.enable end,
+							},
+							comboPointsBelow = {
+								order = 1,
+								name = L["Combo Points Below"],
+								--desc = L["Adds a font outline to ComboPoints."],
+								type = "toggle",
+								disabled = function() return not db.powerbar.enable end,
+							},							
+							comboFontOutline = {
+								order = 1,
+								name = L["Combo Font Outline"],
+								--desc = L["Adds a font outline to ComboPoints."],
+								type = "toggle",
+								disabled = function() return not db.powerbar.enable end,
+							},
+							comboFontSize = {
+								order = 4,
+								name = L["Combo Font Size"],
+								--desc = L["Controls the ComboPoints font size."],
+								type = "range",
 								min = 8, max = 25, step = 1,
 								disabled = function() return not db.powerbar.enable end,
-							},						
+							},
 						},
 					},
 					rune = {
 						type = "group",
 						order = 5,
-						name = L["Rune"],
-						desc = L["Options for Rune Text."],	
 						guiInline = true,
+						name = L["Rune"],
+						--desc = L["Options for Rune Text."],	
 						disabled = function() return not db.powerbar.enable end,
 						get = function(info) return db.powerbar.rune[ info[#info] ] end,
 						set = function(info, value) db.powerbar.rune[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
@@ -2594,82 +2249,38 @@ function BasicUIConfig.GenerateOptionsInternal()
 								order = 5,
 								name = " ",
 							},	
-							---------------------------	
-							
-							FontOutline = {
-								type = "toggle",							
+							---------------------------							
+							show = {
 								order = 1,
-								name = L["Font Outline"],
-								desc = L["Adds a font outline to Runes."],
+								name = L["Show"],
+								--desc = L["Adds a font outline to Runes."],
+								type = "toggle",
 								disabled = function() return not db.powerbar.enable end,
 							},
-							FontSize= {
-								type = "range",							
+							showRuneCooldown = {
+								order = 1,
+								name = L["Show Rune Cooldown"],
+								--desc = L["Adds a font outline to Runes."],
+								type = "toggle",
+								disabled = function() return not db.powerbar.enable end,
+							},							
+							runeFontOutline = {
+								order = 1,
+								name = L["Rune Font Outline"],
+								--desc = L["Adds a font outline to Runes."],
+								type = "toggle",
+								disabled = function() return not db.powerbar.enable end,
+							},
+							runeFontSize= {
 								order = 4,
-								name = L["Font Size"],
-								desc = L["Controls the Runes font size."],
+								name = L["Rune Font Size"],
+								--desc = L["Controls the Runes font size."],
+								type = "range",
 								min = 8, max = 25, step = 1,
 								disabled = function() return not db.powerbar.enable end,
 							},						
 						},
 					},					
-					value = {
-						type = "group",
-						order = 5,
-						name = L["Value"],
-						desc = L["Shows the Value on the PowerBar."],
-						guiInline = true,
-						disabled = function() return not db.powerbar.enable end,
-						get = function(info) return db.powerbar.value[ info[#info] ] end,
-						set = function(info, value) db.powerbar.value[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
-						args = {
-							---------------------------
-							--Option Type Seperators
-							sep1 = {
-								type = "description",
-								order = 2,								
-								name = " ",
-							},
-							sep2 = {
-								type = "description",
-								order = 3,
-								name = " ",								
-							},
-							sep3 = {
-								type = "description",
-								order = 4,
-								name = " ",
-							},
-							sep4 = {
-								type = "description",
-								order = 5,
-								name = " ",
-							},	
-							---------------------------						
-							Abbrev = {
-								type = "toggle",							
-								order = 1,
-								name = L["Abbrev"],
-								desc = L["Abbreviates the value. 17000 = 17K"],
-								disabled = function() return not db.powerbar.enable end,
-							},
-							FontOutline = {
-								type = "toggle",							
-								order = 1,
-								name = L["Font Outline"],
-								desc = L["Adds a font outline to value."],
-								disabled = function() return not db.powerbar.enable end,
-							},
-							FontSize= {
-								type = "range",							
-								order = 4,
-								name = L["Font Size"],
-								desc = L["Controls the value font size."],
-								min = 8, max = 25, step = 1,
-								disabled = function() return not db.powerbar.enable end,
-							},							
-						},
-					},
 				},
 			},			
 			quest = {
@@ -2677,7 +2288,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 				order = 10,
 				name = L["|cff00B4FFQuest|r"],
 				desc = L["Quest Module for |cff00B4FFBasic|rUI."],
-				childGroups = "tree",
+				--childGroups = "tree",
 				get = function(info) return db.quest[ info[#info] ] end,
 				set = function(info, value) db.quest[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,					
 				args = {
@@ -2719,78 +2330,12 @@ function BasicUIConfig.GenerateOptionsInternal()
 					},
 				},
 			},
-			selfbuffs = {
-				type = "group",			
-				order = 11,
-				name = L["|cff00B4FFSelfbuff|r"],
-				desc = L["Selfbuff Module for |cff00B4FFBasic|rUI."],
-				childGroups = "tree",
-				get = function(info) return db.selfbuffs[ info[#info] ] end,
-				set = function(info, value) db.selfbuffs[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,					
-				args = {
-					---------------------------
-					--Option Type Seperators
-					sep1 = {
-						type = "description",
-						order = 2,										
-						name = " ",
-					},
-					sep2 = {
-						type = "description",
-						order = 3,										
-						name = " ",
-					},
-					sep3 = {
-						type = "description",
-						order = 4,										
-						name = " ",
-					},
-					sep4 = {
-						type = "description",
-						order = 5,										
-						name = " ",
-					},	
-					---------------------------				
-					enable = {
-						type = "toggle",					
-						order = 0,
-						name = L["Enable"],
-						desc = L["Enables Selfbuff Module"],
-						width = "full",
-					},					
-					playsound = {
-						type = "toggle",					
-						order = 1,
-						name = L["Play Sound"],
-						desc = L["Play's a warning sound when a players class buff is not applied."],
-						disabled = function() return not db.selfbuffs.enable end,
-					},
-					border = {
-						type = "select",					
-						order = 2,
-						name = L["Border Style"],
-						desc = L["Style of Border for Nameplates."],
-						disabled = function() return not db.selfbuffs.enable end,
-						dialogControl = 'LSM30_Border', --Select your widget here
-						values = AceGUIWidgetLSMlists.border,
-					},
-					sound = {
-						type = "select",					
-						order = 2,
-						name = L["Warning Sound"],
-						desc = L["Pick the MP3 you want for your Warning Sound."],
-						disabled = function() return not db.selfbuffs.enable end,
-						dialogControl = 'LSM30_Sound', --Select your widget here
-						values = AceGUIWidgetLSMlists.sound,
-					},				
-				},
-			},
 			skin = {
 				type = "group",
 				order = 9,
 				name = L["|cff00B4FFSkin|r"],
 				desc = L["Skin Module for |cff00B4FFBasic|rUI."],
-				childGroups = "tree",				
+				--childGroups = "tree",				
 				get = function(info) return db.skin[ info[#info] ] end,
 				set = function(info, value) db.skin[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
 				args = {
@@ -2870,7 +2415,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 				order = 12,
 				name = L["|cff00B4FFTooltip|r"],
 				desc = L["Tooltip Module for |cff00B4FFBasic|rUI."],
-				childGroups = "tree",
+				--childGroups = "tree",
 				get = function(info) return db.tooltip[ info[#info] ] end,
 				set = function(info, value) db.tooltip[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,					
 				args = {
@@ -2965,6 +2510,13 @@ function BasicUIConfig.GenerateOptionsInternal()
 						desc = L["Shows PvP Icons in tooltip."],
 						disabled = function() return not db.tooltip.enable end,
 					},
+					showUnitRole = {
+						type = "toggle",					
+						order = 1,
+						name = L["Show Units Role"],
+						desc = L["Shows Units Role in tooltip."],
+						disabled = function() return not db.tooltip.enable end,
+					},
 					abbrevRealmNames = {
 						type = "toggle",					
 						order = 1,
@@ -2984,6 +2536,20 @@ function BasicUIConfig.GenerateOptionsInternal()
 						order = 1,
 						name = L["Item Level"],
 						desc = L["Shows targets average item level."],
+						disabled = function() return not db.tooltip.enable end,
+					},
+					hideInCombat = {
+						type = "toggle",					
+						order = 1,
+						name = L["Hide in Combat"],
+						desc = L["Hides unit frame tooltips during combat."],
+						disabled = function() return not db.tooltip.enable end,
+					},
+					hideRealmText = {
+						type = "toggle",					
+						order = 1,
+						name = L["Hide Realm Text"],
+						desc = L["Hide the coalesced/interactive realm text."],
 						disabled = function() return not db.tooltip.enable end,
 					},
 					healthbar = {
@@ -3118,351 +2684,525 @@ function BasicUIConfig.GenerateOptionsInternal()
 						},
 					},					
 				},
-			},		
-		},
-	}
-end
-
-function BasicUIConfig:SetDefaultOptions()
-	local B, _, _ = unpack(BasicUI)
-	local addon = self.db.profile;
-	addon.media = {
-		["font"] = "BasicUI",
-		['fontSize'] = 14,
-		['fontxSmall'] = 10,
-		["fontSmall"] = 12,
-		['fontMedium'] = 14,
-		['fontLarge'] = 16,
-		['fontHuge'] = 20,
-	}
-	addon.general = {
-		["color"] = { r = 1, g = 1, b = 1},
-		["classcolor"] = true,	
-		["autogreed"] = true,
-		["cooldown"] = true,
-		["slidebar"] = true,		
-		["scale"] = {
-			["enable"] = true,
-			["playerFrame"] = 1.15,
-			["targetFrame"] = 1.15,
-			["focusFrame"] = 1.15,
-			["partyFrame"] = 1.15,
-			["partypetFrame"] = 1.15,
-			["arenaFrame"] = 1.15,
-			["bossFrame"] = 1.15,
-		},	
-		["mail"] = {
-			["enable"] = true,
-			["openall"] = true,
-			-- BlackBook is barrowed from Postal with permission.
-			["BlackBook"] = {
-				["enable"] = true,
-				["AutoFill"] = true,
-				["contacts"] = {},
-				["recent"] = {},
-				["AutoCompleteAlts"] = true,
-				["AutoCompleteRecent"] = true,
-				["AutoCompleteContacts"] = true,
-				["AutoCompleteFriends"] = true,
-				["AutoCompleteGuild"] = true,
-				["ExcludeRandoms"] = true,
-				["DisableBlizzardAutoComplete"] = false,
-				["UseAutoComplete"] = true,
-			},		
-		},
-		["buttons"] = {
-		
-			["enable"] = true,
-			["showHotKeys"] = false,
-			["showMacronames"] = false,
-			["auraborder"] = false,
-			-- Button Colors
-			["color"] = { 
-				["enable"] = true,
-				["OutOfRange"] = { r = 0.9, g = 0, b = 0 },
-				["OutOfMana"] = { r = 0, g = 0, b = 0.9 },			
-				["NotUsable"] = { r = 0.3, g = 0.3, b = 0.3 },
 			},
-		["facepaint"] = {
-			["enable"] = true,
-			["custom"] = {
-				["gradient"] = false, -- false applies one solid color (class color if class = true, topcolor if not)
-				["topcolor"] = { r = 0.9, g = 0.9, b = 0.9 }, -- top gradient color (rgb)
-				["bottomcolor"] = {	r = 0.1, g = 0.1, b = 0.1 }, -- bottom gradient color (rgb)
-				["topalpha"] = 1,	-- top gradient alpha (global if gradient = false)
-				["bottomalpha"] = 1,	-- bottom gradient alpha (not used if gradient = false)
+			unitframes = {
+				type = "group",			
+				order = 13,
+				name = L["|cff00B4FFUnitframes|r"],
+				desc = L["Unitframes Module for |cff00B4FFBasic|rUI."],
+				--childGroups = "tree",
+				get = function(info) return db.unitframes[ info[#info] ] end,
+				set = function(info, value) db.unitframes[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,					
+				args = {
+					---------------------------
+					--Option Type Seperators
+					sep1 = {
+						type = "description",
+						order = 1,										
+						name = " ",
+					},
+					sep2 = {
+						type = "description",
+						order = 2,										
+						name = " ",
+					},
+					sep3 = {
+						type = "description",
+						order = 3,										
+						name = " ",
+					},
+					sep4 = {
+						type = "description",
+						order = 4,										
+						name = " ",
+					},
+					sep5 = {
+						type = "description",
+						order = 5,										
+						name = " ",
+					},
+					sep6 = {
+						type = "description",
+						order = 6,										
+						name = " ",
+					},
+					sep7 = {
+						type = "description",
+						order = 7,										
+						name = " ",
+					},
+					sep8 = {
+						type = "description",
+						order = 8,										
+						name = " ",
+					},
+					sep9 = {
+						type = "description",
+						order = 9,										
+						name = " ",
+					},					
+					---------------------------				
+					enable = {
+						type = "toggle",					
+						order = 0,
+						name = L["Enable"],
+						desc = L["Enables Uniframes Module"],							
+					},
+					pppaapb= {
+						type = "range",							
+						order = 3,
+						width = "full",
+						name = L["HP/Mana Font Size For all Frames Except Player/Target/Focus"],
+						desc = L["Controls the Pet, Party, Party Pet, Arena, Arena Pet, and Boss Frame Healthbar/Manabar value font size."],
+						min = 8, max = 25, step = 1,
+						disabled = function() return not db.unitframes.enable or not db.unitframes.player.enable end,
+					},
+					player = {
+						type = "group",
+						order = 5,
+						name = L["Player Frame"],
+						desc = L["Adjust the Player Frame."],	
+						guiInline = true,
+						get = function(info) return db.unitframes.player[ info[#info] ] end,
+						set = function(info, value) db.unitframes.player[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
+						args = {
+							---------------------------
+							--Option Type Seperators
+							sep1 = {
+								type = "description",
+								order = 2,										
+								name = " ",
+							},
+							sep2 = {
+								type = "description",
+								order = 3,										
+								name = " ",
+							},
+							sep3 = {
+								type = "description",
+								order = 4,										
+								name = " ",
+							},
+							sep4 = {
+								type = "description",
+								order = 5,										
+								name = " ",
+							},
+							---------------------------												
+							enable = {
+								type = "toggle",					
+								order = 0,
+								name = L["Enable"],
+								desc = L["Enables Player Frame Adjustments"],							
+							},
+							scale = {
+								type = "range",							
+								order = 2,
+								name = L["Scale"],
+								desc = L["Controls the scaling of Blizzard's Player Frame"],
+								min = 0.5, max = 2, step = 0.05,
+								disabled = function() return not db.unitframes.enable or not db.unitframes.player.enable end,
+							},							
+							tsHealth = {
+								type = "select",
+								order = 3,
+								name = L["Healthbar Font Display"],
+								desc = L["Lets You choose between 4 different styles for your font."],
+								disabled = function() return not db.unitframes.enable or not db.unitframes.player.enable end,
+								values = B.textstring;
+							},
+							hfSize= {
+								type = "range",							
+								order = 4,
+								name = L["HealthBar Font Size"],
+								desc = L["Controls the Player Frame Healthbar value font size."],
+								min = 8, max = 25, step = 1,
+								disabled = function() return not db.unitframes.enable or not db.unitframes.player.enable end,
+							},
+						},
+					},
+					target = {
+						type = "group",
+						order = 6,
+						name = L["Target Frame"],
+						desc = L["Adjust the Target Frame."],	
+						guiInline = true,
+						get = function(info) return db.unitframes.target[ info[#info] ] end,
+						set = function(info, value) db.unitframes.target[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
+						args = {
+							---------------------------
+							--Option Type Seperators
+							sep1 = {
+								type = "description",
+								order = 2,										
+								name = " ",
+							},
+							sep2 = {
+								type = "description",
+								order = 3,										
+								name = " ",
+							},
+							sep3 = {
+								type = "description",
+								order = 4,										
+								name = " ",
+							},
+							sep4 = {
+								type = "description",
+								order = 5,										
+								name = " ",
+							},
+							---------------------------												
+							enable = {
+								type = "toggle",					
+								order = 0,
+								name = L["Enable"],
+								desc = L["Enables Target Frame Adjustments"],							
+							},
+							scale = {
+								type = "range",							
+								order = 2,
+								name = L["Scale"],
+								desc = L["Controls the scaling of Blizzard's Target Frame"],
+								min = 0.5, max = 2, step = 0.05,
+								disabled = function() return not db.unitframes.enable or not db.unitframes.target.enable end,
+							},							
+							tsHealth = {
+								type = "select",
+								order = 3,
+								name = L["Healthbar Font Display"],
+								desc = L["Lets You choose between 4 different styles for your font."],
+								disabled = function() return not db.unitframes.enable or not db.unitframes.target.enable end,
+								values = B.textstring;
+							},
+							hfSize= {
+								type = "range",							
+								order = 4,
+								name = L["HealthBar Font Size"],
+								desc = L["Controls the Target Frame Healthbar value font size."],
+								min = 8, max = 25, step = 1,
+								disabled = function() return not db.unitframes.enable or not db.unitframes.target.enable end,
+							},
+						},
+					},
+					focus = {
+						type = "group",
+						order = 7,
+						name = L["Focus Frame"],
+						desc = L["Adjust the Focus Frame."],	
+						guiInline = true,
+						get = function(info) return db.unitframes.focus[ info[#info] ] end,
+						set = function(info, value) db.unitframes.focus[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
+						args = {
+							---------------------------
+							--Option Type Seperators
+							sep1 = {
+								type = "description",
+								order = 2,										
+								name = " ",
+							},
+							sep2 = {
+								type = "description",
+								order = 3,										
+								name = " ",
+							},
+							sep3 = {
+								type = "description",
+								order = 4,										
+								name = " ",
+							},
+							sep4 = {
+								type = "description",
+								order = 5,										
+								name = " ",
+							},
+							---------------------------												
+							enable = {
+								type = "toggle",					
+								order = 0,
+								name = L["Enable"],
+								desc = L["Enables Focus Frame Adjustments"],							
+							},
+							scale = {
+								type = "range",							
+								order = 2,
+								name = L["Scale"],
+								desc = L["Controls the scaling of Blizzard's Focus Frame"],
+								min = 0.5, max = 2, step = 0.05,
+								disabled = function() return not db.unitframes.enable or not db.unitframes.focus.enable end,
+							},							
+							tsHealth = {
+								type = "select",
+								order = 3,
+								name = L["Healthbar Font Display"],
+								desc = L["Lets You choose between 4 different styles for your font."],
+								disabled = function() return not db.unitframes.enable or not db.unitframes.focus.enable end,
+								values = B.textstring;
+							},
+							hfSize= {
+								type = "range",							
+								order = 4,
+								name = L["HealthBar Font Size"],
+								desc = L["Controls the Focus Frame Healthbar value font size."],
+								min = 8, max = 25, step = 1,
+								disabled = function() return not db.unitframes.enable or not db.unitframes.focus.enable end,
+							},
+						},
+					},
+					party = {
+						type = "group",
+						order = 8,
+						name = L["Party Frame"],
+						desc = L["Adjust the scale of Blizzards Unit Frames."],	
+						guiInline = true,
+						get = function(info) return db.unitframes.party[ info[#info] ] end,
+						set = function(info, value) db.unitframes.party[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
+						args = {
+							---------------------------
+							sep1 = {
+								type = "description",
+								order = 2,										
+								name = " ",
+							},
+							---------------------------								
+							scale = {
+								type = "range",							
+								order = 1,
+								name = L["Scale"],
+								desc = L["Controls the scaling of Blizzard's Party Frame"],
+								min = 0.5, max = 2, step = 0.05,
+								disabled = function() return not db.unitframes.enable end,
+							},
+							petScale = {
+								type = "range",							
+								order = 2,
+								name = L["Pet Scale"],
+								desc = L["Controls the scaling of Blizzard's Party Pet Frame"],
+								min = 0.5, max = 2, step = 0.05,
+								disabled = function() return not db.unitframes.enable end,
+							},							
+						},
+					},
+					arena = {
+						type = "group",
+						order = 9,
+						name = L["Arena Frames"],
+						desc = L["Adjust the Arena Frames."],	
+						guiInline = true,
+						get = function(info) return db.unitframes.arena[ info[#info] ] end,
+						set = function(info, value) db.unitframes.arena[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
+						args = {
+							---------------------------
+							sep1 = {
+								type = "description",
+								order = 1,										
+								name = " ",
+							},
+							sep2 = {
+								type = "description",
+								order = 2,										
+								name = " ",
+							},
+							sep3 = {
+								type = "description",
+								order = 3,										
+								name = " ",
+							},
+							sep4 = {
+								type = "description",
+								order = 4,										
+								name = " ",
+							},	
+							---------------------------												
+							scale = {
+								type = "range",							
+								order = 1,
+								name = L["Scale"],
+								desc = L["Controls the scaling of Blizzard's Arena Frames"],
+								min = 0.5, max = 2, step = 0.05,
+								disabled = function() return not db.unitframes.enable end,
+							},
+							position = {
+								type = "group",
+								order = 3,
+								guiInline = true,
+								name = L["Position"],
+								--desc = L["Combo Points Options"],	
+								guiInline = true,
+								disabled = function() return not db.unitframes.enable end,						
+								get = function(info) return db.unitframes.arena.position[ info[#info] ] end,
+								set = function(info, value) db.unitframes.arena.position[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
+								args = {
+									---------------------------
+									--Option Type Seperators
+									sep1 = {
+										type = "description",
+										order = 1,								
+										name = " ",
+									},
+									sep2 = {
+										type = "description",
+										order = 2,
+										name = " ",								
+									},
+									sep3 = {
+										type = "description",
+										order = 3,
+										name = " ",
+									},
+									sep4 = {
+										type = "description",
+										order = 4,
+										name = " ",
+									},	
+									---------------------------							
+									selfAnchor = {
+										order = 1,
+										name = L["Self Anchor"],
+										--desc = L["Style of Border for Sqaure Minimap."],
+										disabled = function() return not db.unitframes.enable end,
+										type = "select",
+										values = B.regions;
+									},
+									relAnchor = {
+										type = "select",							
+										order = 2,
+										name = L["Relative Anchor"],
+										desc = L["Relative Anchor Position."],
+										disabled = function() return not db.unitframes.enable end,
+										values = B.regions;
+									},									
+									offSetX= {
+										order = 3,
+										name = L["Off Set X"],
+										--desc = L["Controls the width of power."],
+										type = "range",
+										min = -100, max = 100, step = 1,
+										disabled = function() return not db.unitframes.enable end,
+									},
+									offSetY= {
+										order = 4,
+										name = L["Off Set Y"],
+										--desc = L["Controls the width of power."],
+										type = "range",
+										min = -100, max = 100, step = 1,
+										disabled = function() return not db.unitframes.enable end,
+									},
+								},
+							},
+						},
+					},
+					boss = {
+						type = "group",
+						order = 9,
+						name = L["Boss Frame"],
+						desc = L["Adjust the Boss Frames."],	
+						guiInline = true,
+						get = function(info) return db.unitframes.boss[ info[#info] ] end,
+						set = function(info, value) db.unitframes.boss[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
+						args = {
+							---------------------------
+							sep1 = {
+								type = "description",
+								order = 1,										
+								name = " ",
+							},
+							sep2 = {
+								type = "description",
+								order = 2,										
+								name = " ",
+							},
+							sep3 = {
+								type = "description",
+								order = 3,										
+								name = " ",
+							},
+							sep4 = {
+								type = "description",
+								order = 4,										
+								name = " ",
+							},
+							---------------------------												
+							scale = {
+								type = "range",							
+								order = 1,
+								name = L["Scale"],
+								desc = L["Controls the scaling of Blizzard's Boss Frames"],
+								min = 0.5, max = 2, step = 0.05,
+								disabled = function() return not db.unitframes.enable end,
+							},
+							position = {
+								type = "group",
+								order = 3,
+								guiInline = true,
+								name = L["Position"],
+								--desc = L["Combo Points Options"],	
+								guiInline = true,
+								disabled = function() return not db.unitframes.enable end,						
+								get = function(info) return db.unitframes.boss.position[ info[#info] ] end,
+								set = function(info, value) db.unitframes.boss.position[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
+								args = {
+									---------------------------
+									--Option Type Seperators
+									sep1 = {
+										type = "description",
+										order = 2,								
+										name = " ",
+									},
+									sep2 = {
+										type = "description",
+										order = 3,
+										name = " ",								
+									},
+									sep3 = {
+										type = "description",
+										order = 4,
+										name = " ",
+									},
+									sep4 = {
+										type = "description",
+										order = 5,
+										name = " ",
+									},	
+									---------------------------							
+									selfAnchor = {
+										order = 1,
+										name = L["Self Anchor"],
+										--desc = L["Style of Border for Sqaure Minimap."],
+										disabled = function() return not db.unitframes.enable end,
+										type = "select",
+										values = B.regions;
+									},
+									relAnchor = {
+										type = "select",							
+										order = 2,
+										name = L["Relative Anchor"],
+										desc = L["Relative Anchor Position."],
+										disabled = function() return not db.unitframes.enable end,
+										values = B.regions;
+									},									
+									offSetX= {
+										order = 3,
+										name = L["Off Set X"],
+										--desc = L["Controls the width of power."],
+										type = "range",
+										min = -100, max = 100, step = 1,
+										disabled = function() return not db.unitframes.enable end,
+									},
+									offSetY= {
+										order = 4,
+										name = L["Off Set Y"],
+										--desc = L["Controls the width of power."],
+										type = "range",
+										min = -100, max = 100, step = 1,
+										disabled = function() return not db.unitframes.enable end,
+									},
+								},
+							},
+						},
+					},
+				},
 			},
 		},
-		},	
-	}	
-	addon.buff = {
-		['enable'] = true,
-		['border'] = "Blizzard Dialog",
-		['buffSize'] = 36,
-		['buffScale'] = 1,
-
-		['buffFontSize'] = 14,
-		['buffCountSize'] = 16,
-
-		['debuffSize'] = 36,
-		['debuffScale'] = 1,
-
-		['debuffFontSize'] = 14,
-		['debuffCountSize'] = 16,
-
-		['paddingX'] = 10,
-		['paddingY'] = 10,
-		['buffPerRow'] = 6,
-	}
-	addon.castbar = {
-		["enable"] = true,
-		['border'] = "Blizzard Dialog",
-		['background'] = "Black",
-		['statusbar'] = "Blizzard",
-		
-
-		["CastingBarFrame"] = {
-			["enable"] = true,
-			["textPosition"] = "CENTER",
-			["enableLag"] = true,
-			["enableTimer"] = true,
-			["selfAnchor"] = "BOTTOM",
-			["relAnchor"] = "BOTTOM",
-			["offSetX"] = 0,
-			["offSetY"]	= 175,
-		},
-		["TargetFrameSpellBar"] = {
-			["enable"] = false,
-			["textPosition"] = "CENTER",
-			["enableLag"] = true,
-			["enableTimer"] = true,
-			["selfAnchor"] = "TOP",
-			["relAnchor"] = "TOP",
-			["offSetX"]	= 0,
-			["offSetY"]	= -250,
-		},
-		["FocusFrameSpellBar"] = {
-			["enable"] = true,
-			["textPosition"] = "CENTER",
-			["enableLag"] = true,
-			["enableTimer"] = true,
-			["selfAnchor"] = "TOP",
-			["relAnchor"] = "TOP",
-			["offSetX"]	= 0,
-			["offSetY"]	= -165,
-		},
-		["MirrorTimer1"] = {
-			["enable"] = true,
-			["textPosition"] = "CENTER",
-			["enableTimer"] = true,
-			["selfAnchor"] = "TOP",
-			["relAnchor"] = "TOP",
-			["offSetX"]	= 0,
-			["offSetY"]	= -10,
-		},
-		["PetCastingBarFrame"] = {
-			["enable"] = true,
-			["textPosition"] = "CENTER",
-			["enableTimer"] = true,
-			["selfAnchor"] = "BOTTOM",
-			["relAnchor"] = "BOTTOM",
-			["offSetX"]	= 0,
-			["offSetY"]	= 200,
-		},
-	}	
-	addon.chat = {
-		["enable"] = true,
-		["disableFade"] = false,
-		["chatOutline"] = false,
-		["windowborder"] = true,
-		['enableborder'] = true,
-		
-		-- Chat Media
-		['border'] = "Blizzard Dialog",
-		['background'] = "Blizzard Dialog Background",
-		['editboxborder'] = "Blizzard Dialog",
-		['editboxbackground'] = "Blizzard Dialog Background",
-		['sound'] = "Whisper",
-		
-		["enableBottomButton"] = true, 
-		["enableHyperlinkTooltip"] = true, 
-		["enableBorderColoring"] = true,
-
-		["tab"] = {
-			["fontSize"] = 15,
-			["fontOutline"] = true, 
-			["normalColor"] = {r = 1, g = 1, b = 1},
-			["specialColor"] = {r = 1, g = 0, b = 1},
-			["selectedColor"] = {r = 0, g = 0.75, b = 1},
-		},		
-	}
-	addon.datatext = {	
-		["enable"] = true,
-
-		-- Datapanel Media
-		['border'] = "Blizzard Dialog",
-		['background'] = "Blizzard Dialog Background",
-		
-		["top"] = false,										
-		["fontsize"] = 15,                                  	
-		["bags"] = 9,                                       	
-		["system"] = 0,                                     	
-		["wowtime"] = 0,                                    	
-		["guild"] = 0,                                      	
-		["dur"] = 8,                                        	
-		["friends"] = 7,                                    	
-		["dps_text"] = 0,                                   	
-		["hps_text"] = 0,                                   	
-		["spec"] = 5,											
-		["zone"] = 0,											
-		["coords"] = 0,											
-		["pro"] = 4,											
-		["stat1"] = 1,											
-		["stat2"] = 3,											
-		["recount"] = 2,										
-		["recountraiddps"] = false,								
-		["calltoarms"] = 6,										
-		
-		-- Color Datatext
-		["colors"] = {
-			["classcolor"] = true,               			    
-			["color"] = { r = 0, g = 0, b = 1},                
-		},
-		
-		["battleground"] = true,                            	
-
-		["bag"] = false,									
-
-		-- Clock Settings
-		["time24"] = false,                                  	
-		["localtime"] = true,                              		
-			
-		-- FPS Settings
-		["fps"] = {
-			["enable"] = true,									
-			-- ONLY ONE OF THESE CAN BE TRUE	
-			["home"] = false,									
-			["world"] = false,									
-			["both"] = true,									
-		},
-			
-		["threatbar"] = true,									
-	}
-	addon.merchant = {
-		['enable'] = true,										
-		['sellMisc'] = true, 									
-		['autoSellGrey'] = true,								
-		['autoRepair'] = true,									
-	}
-	addon.minimap = {
-		['enable'] = true,
-		['border'] = "Blizzard Dialog",
-		['gameclock'] = true,
-		['farm'] = false,
-		['farmscale'] = 3,
-		['zoneText'] = true,
-		['instanceDifficulty'] = false,
-	}	
-	addon.nameplates = {
-		['enable'] = true,
-		['enableTankMode'] = true,
-		['colorNameWithThreat'] = true,
-
-		['showFullHP'] = true,
-		['showLevel'] = true,
-		['showTargetBorder'] = true,
-		['showEliteBorder'] = true,
-		['showTotemIcon'] = true,
-		['abbrevLongNames'] = true,
-	}	
-	addon.powerbar = {
-		["enable"] = true,
-		['border'] = "Blizzard Dialog",
-		['statusbar'] = "Blizzard",
-		["sizeWidth"] = 200,
-			
-		["showCombatRegen"] = true, 
-		["showSoulshards"] = true,
-		["showHolypower"] = true,
-		["showComboPoints"] = true,
-		["showRuneCooldown"] = true,
-		["showEclipseBar"] = true,
-
-		
-		["energybar"] = true,
-		["focusbar"] =  true,
-		["manabar"] =  true,
-		["ragebar"] = true,
-		["runebar"]= true,
-
-		
-		["combo"] = {
-			["FontOutline"] = true,
-			["FontSize"] = 16,	
-		},
-		
-		["extra"] = {
-			["FontOutline"] = true,	
-			["FontSize"] = 16,
-		},
-		
-		["rune"] = {
-			["FontOutline"] = true,
-			["FontSize"] = 16,		
-		},
-		
-		["value"] = {	
-			["Abbrev"] = true,	
-			["FontOutline"] = true,
-			["FontSize"] = 15,
-		},		
-	}
-	addon.quest = {
-		['enable'] = true,									
-		['autocomplete'] = false,							
-	}
-	addon.selfbuffs = {
-		["enable"] = true,								
-		['border'] = "Blizzard Dialog",
-		["playsound"] = true,								
-		['sound'] = "Warning",								
-	}
-	addon.skin = {
-		["enable"] = true,
-		['border'] = "Blizzard Dialog",
-		['statusbar'] = "Blizzard",
-		["DBM"] = true,
-		["Recount"] = true,
-		["RecountBackdrop"] = true,
-	}	
-	addon.tooltip = {											
-		["enable"] = true,
-
-		["disableFade"] = false,
-		['border'] = "Blizzard Dialog",
-		['background'] = "Black",
-		['statusbar'] = "Blizzard",
-		["reactionBorderColor"] = true,
-		["itemqualityBorderColor"] = true,
-		
-		["showPlayerTitles"] = true,
-		["showPVPIcons"] = false, 
-		["abbrevRealmNames"] = false, 
-		["showMouseoverTarget"] = true,
-		
-		["showItemLevel"] = true,
-		
-		["healthbar"] = {
-			["showHealthValue"] = true,
-			["showOutline"] = false,
-			["textPos"] = "CENTER",
-			["reactionColoring"] = false,
-			["customColorapply"] = false, 
-			["custom"] = {
-				["apply"] = false,
-				["color"] =	{ r = 1, g = 1, b = 0},
-			},		
-			["fontSize"] = 14,
-		},			
 	}
 end

@@ -1,5 +1,4 @@
 local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
-local Crayon = LibStub:GetLibrary("LibCrayon-3.0")
 
 --[[
 
@@ -9,9 +8,9 @@ local Crayon = LibStub:GetLibrary("LibCrayon-3.0")
 	
 ]]
 
-if C['datatext'].enable ~= true then return end
+if C["datatext"].enable ~= true then return end
 
-if C['datatext'].dur and C['datatext'].dur > 0 then
+if C["datatext"].dur and C["datatext"].dur > 0 then
 
 	Slots = {
 		[1] = {1, "Head", 1000},
@@ -26,36 +25,21 @@ if C['datatext'].dur and C['datatext'].dur > 0 then
 		[10] = {17, "Off Hand", 1000},
 		[11] = {18, "Ranged", 1000}
 	}
-	
 
-	local join = string.join
-	local floor = math.floor
-	local random = math.random
-	local sort = table.sort
-
-	local displayString = string.join("", hexa.."Armor: "..hexb, "%s%d%%|r")
-	local tooltipString = "%d %%"
 
 	local Stat = CreateFrame("Frame")
 	Stat:EnableMouse(true)
 	Stat:SetFrameStrata("MEDIUM")
 	Stat:SetFrameLevel(3)
 
-	local fader = CreateFrame("Frame", "DurabilityDataText", DataPanel)
-
-	local Text  = DurabilityDataText:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C['media'].font, C['datatext'].fontsize,'THINOUTLINE')
+	local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
+	Text:SetFont(C["media"].font, C["datatext"].fontsize,'THINOUTLINE')
 	B.PP(C["datatext"].dur, Text)
-	fader:SetFrameLevel(fader:GetParent():GetFrameLevel())
-	fader:SetFrameStrata(fader:GetParent():GetFrameStrata())
-
-	local Total = 0
-	local current, max
-
 
 	local function OnEvent(self)
-		-- local hexString = "|cff%s"
-		Total = 0
+		local Total = 0
+		local current, max
+		
 		for i = 1, 11 do
 			if GetInventoryItemLink("player", Slots[i][1]) ~= nil then
 				current, max = GetInventoryItemDurability(Slots[i][1])
@@ -65,55 +49,43 @@ if C['datatext'].dur and C['datatext'].dur > 0 then
 				end
 			end
 		end
-		sort(Slots, function(a, b) return a[3] < b[3] end)
-
+		table.sort(Slots, function(a, b) return a[3] < b[3] end)
+		
 		if Total > 0 then
-			percent = floor(Slots[1][3] * 100)
-			Text:SetFormattedText(displayString, format("|cff%s", Crayon:GetThresholdHexColor(Slots[1][3])), percent)
-			if floor(Slots[1][3]*100) <= 20 then
-				local int = -1
-				Stat:SetScript("OnUpdate", function(self, t)
-					int = int - t
-					if int < 0 then
-						B.Flash(Text, .5)
-						int = 1
-					end
-				end)				
-			else
-				Stat:SetScript("OnUpdate", function() end)
-				B.StopFlash(Text)
-			end
+			Text:SetText(hexa.."Armor: "..hexb..floor(Slots[1][3]*100).."% |r")
 		else
-			Text:SetFormattedText(displayString, statusColors[1], 100)
+			Text:SetText(hexa.."Armor: "..hexb.."100% |r")
 		end
 		-- Setup Durability Tooltip
 		self:SetAllPoints(Text)
+		Total = 0
 	end
-
-	Stat:SetScript("OnEnter", function()
-		if InCombatLockdown() then return end
-		local anchor, panel, xoff, yoff = B.DataTextTooltipAnchor(Text)
-		GameTooltip:SetOwner(panel, anchor, xoff, yoff)
-		GameTooltip:ClearLines()
-		GameTooltip:AddLine(hexa..B.myname.."'s"..hexb.." Armor")
-		for i = 1, 11 do
-			if Slots[i][3] ~= 1000 then
-				green = Slots[i][3]*2
-				red = 1 - green
-				-- print(green); print(red);
-				GameTooltip:AddDoubleLine(Slots[i][2], format(tooltipString, floor(Slots[i][3]*100)), 1 ,1 , 1, red + 1, green, 0)
-			end
-		end
-		GameTooltip:AddLine(" ")
-		GameTooltip:AddLine("|cffeda55fClick|r to Show Character Panel")
-		GameTooltip:Show()
-	
-	end)
-	Stat:SetScript("OnLeave", function() GameTooltip:Hide() end)
 
 	Stat:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
 	Stat:RegisterEvent("MERCHANT_SHOW")
 	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
 	Stat:SetScript("OnMouseDown", function() ToggleCharacter("PaperDollFrame") end)
 	Stat:SetScript("OnEvent", OnEvent)
+	Stat:SetScript("OnEnter", function(self)
+		if not InCombatLockdown() then
+			local anchor, panel, xoff, yoff = B.DataTextTooltipAnchor(Text)
+			GameTooltip:SetOwner(panel, anchor, xoff, yoff)
+			GameTooltip:ClearLines()
+			GameTooltip:AddLine(hexa..B.myname.."'s"..hexb.." Durability")
+			GameTooltip:AddLine' '			
+			for i = 1, 11 do
+				if Slots[i][3] ~= 1000 then
+					local green, red
+					green = Slots[i][3]*2
+					red = 1 - green
+					GameTooltip:AddDoubleLine(Slots[i][2], floor(Slots[i][3]*100).."%",1 ,1 , 1, red + 1, green, 0)
+				end
+			end
+		GameTooltip:AddLine(" ")
+		GameTooltip:AddLine("|cffeda55fClick|r to Show Character Panel")
+		GameTooltip:Show()
+		end
+	end)
+	Stat:SetScript("OnLeave", function() GameTooltip:Hide() end)
+
 end

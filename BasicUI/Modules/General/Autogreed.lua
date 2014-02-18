@@ -1,6 +1,6 @@
 local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
 
-if C['general'].autogreed ~= true then return end
+if C['general'].loot.enable ~= true then return end
 
 --[[
 
@@ -14,8 +14,15 @@ local AddOn = CreateFrame('Frame')
 
 AddOn:RegisterEvent('START_LOOT_ROLL')
 AddOn:SetScript('OnEvent', function(_, _, RollID)
-    local _, Name, _, Quality, BoP, _, _, CanDisenchant = GetLootRollItemInfo(RollID)
-    if (Quality == 2 and not BoP) then
-        RollOnLoot(RollID, CanDisenchant and 3 or 2)
-    end
+    local texture, name, count, quality, bindOnPickUp , canNeed, canGreed, canDisenchant = GetLootRollItemInfo(RollID)
+	
+	if C['general'].loot.disenchant ~= true then
+	    if (quality == 2 and not bindOnPickUp) then
+			RollOnLoot(RollID, canGreed and 3 or 2)
+		end
+	else
+		if (quality == 2 and not bindOnPickUp) then
+			RollOnLoot(RollID, canDisenchant and 3 or 2)
+		end
+	end
 end)

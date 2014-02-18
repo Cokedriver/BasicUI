@@ -8,12 +8,7 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 -----------------
 DB["media"] = {
 	["font"] = "BasicUI",
-	["fontSize"] = 14,
-	["fontxSmall"] = 10,
-	["fontSmall"] = 12,
-	["fontMedium"] = 14,
-	["fontLarge"] = 16,
-	["fontHuge"] = 20,
+	["fontSize"] = 15,
 }
 
 -------------------
@@ -22,9 +17,52 @@ DB["media"] = {
 DB["general"] = {
 	["color"] = { r = 1, g = 1, b = 1},
 	["classcolor"] = true,
-	["autogreed"] = true,
 	["cooldown"] = true,
 	["slidebar"] = true,
+	["btsw"] = true,
+	["cbop"] = true,
+	["quicky"] = true,
+	["vellum"] = true,
+	["mail"] = false,
+	["watchframe"] = true,
+	["flashmapnodes"] = true,
+	["loot"] = {
+		["enable"] = true,
+		["disenchant"] = false,
+	},	
+	["BlackBook"] = {
+		["enable"] = true,
+		["AutoFill"] = true,
+		["contacts"] = {},
+		["recent"] = {},
+		["AutoCompleteAlts"] = true,
+		["AutoCompleteRecent"] = true,
+		["AutoCompleteContacts"] = true,
+		["AutoCompleteFriends"] = true,
+		["AutoCompleteGuild"] = true,
+		["ExcludeRandoms"] = true,
+		["DisableBlizzardAutoComplete"] = false,
+		["UseAutoComplete"] = true,
+	},
+	["OpenAll"] = {
+		["enable"] = true,
+		["collected"] = true,
+		["OpenSpeed"] = 0.50,
+		["ChatOutput"] = 1,
+		["AHCancelled"] = true,
+		["AHExpired"] = true,
+		["AHOutbid"] = true,
+		["AHSuccess"] = true,
+		["AHWon"] = true,
+		["NeutralAHCancelled"] = true,
+		["NeutralAHExpired"] = true,
+		["NeutralAHOutbid"] = true,
+		["NeutralAHSuccess"] = true,
+		["NeutralAHWon"] = true,
+		["Attachments"] = true,
+		["SpamChat"] = true,
+		["KeepFreeSpace"] = 1,
+	},
 	["buttons"] = {	
 		["enable"] = true,
 		["showHotKeys"] = false,
@@ -38,46 +76,8 @@ DB["general"] = {
 			["OutOfMana"] = { r = 0, g = 0, b = 0.9 },			
 			["NotUsable"] = { r = 0.3, g = 0.3, b = 0.3 },
 		},
-	},
-	["facepaint"] = {
-		["enable"] = true,
-		["custom"] = {
-			["gradient"] = false, -- false applies one solid color (class color if class = true, topcolor if not)
-			["topcolor"] = { r = 0.9, g = 0.9, b = 0.9 }, -- top gradient color (rgb)
-			["bottomcolor"] = {	r = 0.1, g = 0.1, b = 0.1 }, -- bottom gradient color (rgb)
-			["topalpha"] = 1,	-- top gradient alpha (global if gradient = false)
-			["bottomalpha"] = 1,	-- bottom gradient alpha (not used if gradient = false)
-		},
 	},	
-	["mail"] = {
-		["enable"] = true,
-		["openall"] = true,
-		-- BlackBook is barrowed from Postal with permission.
-		["BlackBook"] = {
-			["enable"] = true,
-			["AutoFill"] = true,
-			["contacts"] = {},
-			["recent"] = {},
-			["AutoCompleteAlts"] = true,
-			["AutoCompleteRecent"] = true,
-			["AutoCompleteContacts"] = true,
-			["AutoCompleteFriends"] = true,
-			["AutoCompleteGuild"] = true,
-			["ExcludeRandoms"] = true,
-			["DisableBlizzardAutoComplete"] = false,
-			["UseAutoComplete"] = true,
-		},		
-	},	
-	["scale"] = {
-		["enable"] = true,
-		["playerFrame"] = 1.15,
-		["targetFrame"] = 1.15,
-		["focusFrame"] = 1.15,
-		["partyFrame"] = 1.15,
-		["partypetFrame"] = 1.15,
-		["arenaFrame"] = 1.15,
-		["bossFrame"] = 1.15,
-	},
+
 }
 
 ---------------
@@ -85,23 +85,7 @@ DB["general"] = {
 ----------------
 DB["buff"] = {
 	["enable"] = true,
-	["border"] = "Blizzard Dialog",
-	["background"] = "Black",
-    ["buffSize"] = 36,
-    ["buffScale"] = 1,
-
-    ["buffFontSize"] = 14,
-    ["buffCountSize"] = 16,
-
-    ["debuffSize"] = 36,
-    ["debuffScale"] = 1,
-
-    ["debuffFontSize"] = 14,
-    ["debuffCountSize"] = 16,
-
-    ["paddingX"] = 10,
-    ["paddingY"] = 10,
-    ["buffPerRow"] = 6,
+    ["buffScale"] = 1.19,
 }	
 
 ------------------
@@ -109,13 +93,14 @@ DB["buff"] = {
 ------------------
 DB["castbar"] = {	
 	["enable"] = true,
-	["border"] = "Blizzard Dialog",
-	["background"] = "Black",
+	["border"] = "Blizzard Tooltip",
+	["background"] = "Blizzard Dialog Background Dark",
 	["statusbar"] = "Blizzard",
 	
 
 	["CastingBarFrame"] = {
 		["enable"] = true,
+		["fontSize"] = 18,
 		["textPosition"] = "CENTER",
 		["enableLag"] = true,
 		["enableTimer"] = true,
@@ -126,6 +111,7 @@ DB["castbar"] = {
 	},
 	["TargetFrameSpellBar"] = {
 		["enable"] = false,
+		["fontSize"] = 18,
 		["textPosition"] = "CENTER",
 		["enableLag"] = true,
 		["enableTimer"] = true,
@@ -136,6 +122,7 @@ DB["castbar"] = {
 	},
 	["FocusFrameSpellBar"] = {
 		["enable"] = true,
+		["fontSize"] = 18,
 		["textPosition"] = "CENTER",
 		["enableLag"] = true,
 		["enableTimer"] = true,
@@ -146,15 +133,16 @@ DB["castbar"] = {
 	},
 	["MirrorTimer1"] = {
 		["enable"] = true,
-		["textPosition"] = "CENTER",
+		["fontSize"] = 18,
 		["enableTimer"] = true,
 		["selfAnchor"] = "TOP",
 		["relAnchor"] = "TOP",
 		["offSetX"]	= 0,
-		["offSetY"]	= -10,
+		["offSetY"]	= -75,
 	},
 	["PetCastingBarFrame"] = {
 		["enable"] = true,
+		["fontSize"] = 18,
 		["textPosition"] = "CENTER",
 		["enableTimer"] = true,
 		["selfAnchor"] = "BOTTOM",
@@ -171,14 +159,14 @@ DB["chat"] = {
 	["enable"] = true,
 	["disableFade"] = false,
 	["chatOutline"] = false,
-	["windowborder"] = true,
-	["enableborder"] = true,
+	["windowborder"] = false,
+	["enableborder"] = false,
 	
 	-- Chat Media
-	["border"] = "Blizzard Dialog",
-	["background"] = "Blizzard Dialog Background",
-	["editboxborder"] = "Blizzard Dialog",
-	["editboxbackground"] = "Blizzard Dialog Background",
+	["border"] = "Blizzard Tooltip",
+	["background"] = "Blizzard Dialog Background Dark",
+	["editboxborder"] = "Blizzard Tooltip",
+	["editboxbackground"] = "Blizzard Dialog Background Dark",
 	["sound"] = "Whisper",
 	
 	["enableBottomButton"] = true, 
@@ -202,27 +190,27 @@ DB["datatext"] = {
 
 	-- Datapanel Media
 	["border"] = "Blizzard Dialog",
-	["background"] = "Blizzard Dialog Background",
+	["background"] = "Blizzard Dialog Background Dark",
 	
 	["top"] = false,										-- if = true then panel on top of screen, if = false panel below mainmenubar
 	["fontsize"] = 15,                                  	-- font size for panels.
 	["bags"] = 9,                                       	-- show space used in bags on panel.
 	["system"] = 0,                                     	-- show total memory and others systems info (FPS/MS) on panel.
 	["wowtime"] = 0,                                    	-- show time on panel.
-	["guild"] = 0,                                      	-- show number on guildmate connected on panel.
+	["guild"] = 4,                                      	-- show number on guildmate connected on panel.
 	["dur"] = 8,                                        	-- show your equipment durability on panel.
-	["friends"] = 7,                                    	-- show number of friends connected.
+	["friends"] = 6,                                    	-- show number of friends connected.
 	["dps_text"] = 0,                                   	-- show a dps meter on panel.
 	["hps_text"] = 0,                                   	-- show a heal meter on panel.
 	["spec"] = 5,											-- show your current spec on panel.
 	["zone"] = 0,											-- show your current zone on panel.
 	["coords"] = 0,											-- show your current coords on panel.
-	["pro"] = 4,											-- shows your professions and tradeskills
+	["pro"] = 7,											-- shows your professions and tradeskills
 	["stat1"] = 1,											-- Stat Based on your Role (Avoidance-Tank, AP-Melee, SP/HP-Caster)
 	["stat2"] = 3,											-- Stat Based on your Role (Armor-Tank, Crit-Melee, Crit-Caster)
 	["recount"] = 2,										-- Stat Based on Recount"s DPS
 	["recountraiddps"] = false,								-- Enables tracking or Recounts Raid DPS
-	["calltoarms"] = 6,										-- Show Current Call to Arms.
+	["calltoarms"] = 0,										-- Show Current Call to Arms.
 	
 	-- Color Datatext
 	["colors"] = {
@@ -265,12 +253,9 @@ DB["merchant"] = {
 --------------------
 DB["minimap"] = {
 	["enable"] = true,
-	["border"] = "BasicUI",
 	["gameclock"] = true,
 	["farm"] = false,
 	["farmscale"] = 3,
-	["zoneText"] = true,
-	["instanceDifficulty"] = false,
 }
 
 ---------------------
@@ -294,46 +279,56 @@ DB["nameplates"] = {
 --------------------
 DB["powerbar"] = {
 	["enable"] = true,
-	["border"] = "BasicUI",
-	["statusbar"] = "Blizzard",
-	["sizeWidth"] = 200,
-		
-	["showCombatRegen"] = true, 
-	["showSoulshards"] = true,
-	["showHolypower"] = true,
-	["showComboPoints"] = true,
-	["showRuneCooldown"] = true,
-	["showEclipseBar"] = true,
+	["background"] = "Blizzard Dialog Background Dark",
+	["statusbar"] = "Blizzard",	
+    ["position"] = {
+		["selfAnchor"] = "CENTER",
+		["frameParent"] = "UIParent",
+		["offSetX"] = 0,
+		["offSetY"] = -100
+	},
+    ["sizeWidth"] = 200,
+    
+    ["showCombatRegen"] = true, 
 
-	
-	["energybar"] = true,
-	["focusbar"] =  true,
-	["manabar"] =  true,
-	["ragebar"] = true,
-	["runebar"]= true,
+    ["activeAlpha"] = 1,
+    ["inactiveAlpha"] = 0.5,
+    ["emptyAlpha"] = 0,
+    
+    ["valueAbbrev"] = true,
+        
+    ["valueFontSize"] = 20,
+    ["valueFontOutline"] = true,
+    ["valueFontAdjustmentX"] = 0,
 
+    ["showSoulshards"] = true,
+    ["showHolypower"] = true,
+    ["showMana"] = true,
+	["showFocus"] = true,
+	["showRage"] = true,
 	
-	["combo"] = {
-		["FontOutline"] = true,
-		["FontSize"] = 16,	
-	},
-	
-	["extra"] = {
-		["FontOutline"] = true,	
-		["FontSize"] = 16,
-	},
-	
-	["rune"] = {
-		["FontOutline"] = true,
-		["FontSize"] = 16,		
-	},
-	
-	["value"] = {	
-		["Abbrev"] = true,	
-		["FontOutline"] = true,
-		["FontSize"] = 15,
-	},	
-}	
+    ["extraFontSize"] = 16,                             -- The fontsize for the holypower and soulshard number
+    ["extraFontOutline"] = true,                        
+        
+    
+    ["energy"] = {
+        ["show"] = true,
+        ["showComboPoints"] = true,
+		["comboPointsBelow"] = false,
+        
+        ["comboFontSize"] = 16,
+        ["comboFontOutline"] = true,
+    },
+    
+    
+    ["rune"] = {
+        ["show"] = true,
+        ["showRuneCooldown"] = true,
+       
+        ["runeFontSize"] = 16,
+        ["runeFontOutline"] = true,
+    },
+}
 	
 -----------------
 -- Quest Options
@@ -344,21 +339,11 @@ DB["quest"] = {
 }
 
 -------------------------
--- Reminder Buff Options
--------------------------
-DB["selfbuffs"] = {
-	["enable"] = true,									-- enable selbuffs module.
-	["border"] = "BasicUI",
-	["playsound"] = true,								-- sound warning
-	["sound"] = "Warning",	
-}
-
--------------------------
 -- Skinning Options
 -------------------------
 DB["skin"] = {
 	["enable"] = true,
-	["border"] = "BasicUI",
+	["border"] = "Blizzard Tooltip",
 	["statusbar"] = "Blizzard",
 	["DBM"] = true,
 	["Recount"] = true,
@@ -370,33 +355,113 @@ DB["skin"] = {
 -------------------
 DB["tooltip"] = {											
 	["enable"] = true,									-- Move the tooltip up so its not overlapping the MainMenubar
-
+	["fontSize"] = 15,
+	["fontOutline"] = true,
 	["disableFade"] = false,                     		-- Can cause errors or a buggy tooltip!
-	["border"] = "BasicUI",
-	["background"] = "Black",
+	["abbrevRealmNames"] = true, 	
+	["border"] = "Blizzard Tooltip",
+	["background"] = "Blizzard Dialog Background Dark",
 	["statusbar"] = "Blizzard",
+    ["hideInCombat"] = false,                       -- Hide unit frame tooltips during combat	
+    ["hideRealmText"] = true,                      -- Hide the coalesced/interactive realm text	
 	["reactionBorderColor"] = true,
 	["itemqualityBorderColor"] = true,
 	
 	["showPlayerTitles"] = true,
 	["showPVPIcons"] = false,                        	-- Show pvp icons instead of just a prefix
-	["abbrevRealmNames"] = false, 
 	["showMouseoverTarget"] = true,
-	
-	["showItemLevel"] = true,
+    ["showOnMouseover"] = false,
+    ["showUnitRole"] = true,
+    ["showItemLevel"] = true,
+    ["showSpecializationIcon"] = false,		
 	
 	["healthbar"] = {
 		["showHealthValue"] = true,
-		["showOutline"] = false,
+		["showOutline"] = true,
+        ["healthFormat"] = '$cur / $max',           -- Possible: $cur, $max, $deficit, $perc, $smartperc, $smartcolorperc, $colorperc
+        ["healthFullFormat"] = '$cur',              -- if the tooltip unit has 100% hp 		
 		["textPos"] = "CENTER",                     -- Possible "TOP" "BOTTOM" "CENTER"	
 		["reactionColoring"] = false,
-		["customColorapply"] = false, 
         ["custom"] = {
 			["apply"] = false,
 			["color"] =	{ r = 1, g = 1, b = 0},
 		},		
-		["fontSize"] = 14,
+		["fontSize"] = 15,
 	},		
 }
+
+
+--------------
+-- Unitframes
+--------------
+DB["unitframes"] = {
+	
+	["enable"] = true,
+	["pppaapb"] = 11,				-- Pet, Party, Party pet, Arena, Arena Pet, and Boss Frame Font Size
+	["player"] = {
+		["enable"] = true,			-- Enable Player Frame Adjustments
+		["scale"] = 1.15,			-- Player Frame Scale
+		
+		-- Healthbar
+		["tsHealth"] = "XX",		-- Options are "XX" or "XX/XX" or "XX XXX" or "XX/XX XXX"
+		["hfSize"] = 14,			-- Healthbar Font Size
+		
+		-- Manabar
+		["tsMana"] = "XX",			-- Options are "XX" or "XX/XX" or "XX %" or "XX/XX %"
+		["mfSize"] = 14,			-- Manabar Font Size
+		
+		-- Alternate Manabar (Druid forms Cat/Bear)
+		["tsAltMana"] = "XX",		-- Options are "XX" or "XX/XX" or "XX %" or "XX/XX %"
+		["amfSize"] = 14,			-- Alternate Manabar Size ( for Druids in Cat/Bear Form)
+	},
+	["target"] = {
+		["enable"] = true,			-- Enable Player Frame Adjustments
+		["scale"] = 1.15,			-- Player Frame Scale
+		
+		-- Healthbar
+		["tsHealth"] = "XX",		-- Options are "XX" or "XX/XX" or "XX XXX" or "XX/XX XXX"
+		["hfSize"] = 14,			-- Healthbar Font Size
+		
+		-- Manabar
+		["tsMana"] = "XX",			-- Options are "XX" or "XX/XX" or "XX %" or "XX/XX %"
+		["mfSize"] = 14,			-- Manabar Font Size
+
+	},
+	["focus"] = {
+		["enable"] = true,			-- Enable Player Frame Adjustments
+		["scale"] = 1.15,			-- Player Frame Scale
+		
+		-- Healthbar
+		["tsHealth"] = "XX",		-- Options are "XX" or "XX/XX" or "XX XXX" or "XX/XX XXX"
+		["hfSize"] = 14,			-- Healthbar Font Size
+		
+		-- Manabar
+		["tsMana"] = "XX",			-- Options are "XX" or "XX/XX" or "XX %" or "XX/XX %"
+		["mfSize"] = 14,			-- Manabar Font Size
+
+	},
+	["party"] = {
+		["scale"] = 1.15,
+		["petScale"] = 1.15,
+	},
+	["arena"] = {
+		["scale"] = 1.15,
+		["position"] = {
+			["relAnchor"] = "TOPRIGHT",
+			["selfAnchor"] = "TOPRIGHT",
+			["offSetX"] = -80,
+			["offSetY"] = -300,
+		},
+	},
+	["boss"] = {
+		["scale"] = 1.15,
+		["position"] = {
+			["relAnchor"] = "TOPRIGHT",
+			["selfAnchor"] = "TOPRIGHT",
+			["offSetX"] = -50,
+			["offSetY"] = -250,
+		},
+	},
+}	
 
 

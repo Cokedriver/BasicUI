@@ -1,4 +1,4 @@
-## Interface: 40300
+## Interface: 50400
 ## Title: |cff00B4FFBasic|rUI Config
 ## Notes: Config for BasicUI
 ## Author: Cokedrivers / Baine

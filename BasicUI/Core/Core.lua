@@ -26,50 +26,80 @@ B.getscreenwidth = tonumber(string.match(({GetScreenResolutions()})[GetCurrentRe
 B.ccolor = RAID_CLASS_COLORS[select(2, UnitClass("player"))]
 B.regions ={['TOPLEFT'] = L['TOPLEFT'], ['TOP'] = L['TOP'], ['TOPRIGHT'] = L['TOPRIGHT'], ['LEFT'] = L['LEFT'], ['CENTER'] = L['CENTER'], ['RIGHT'] = L['RIGHT'], ['BOTTOMLEFT'] = L['BOTTOMLEFT'], ['BOTTOM'] = L['BOTTOM'], ['BOTTOMRIGHT'] = L['BOTTOMRIGHT']}
 B.border = {['Blizzard'] = L['Blizzard'], ['BasicUI'] = L['BasicUI']}
-B.mapshape = {['SQUARE'] = L['SQUARE'], ['ROUND'] = L['ROUND']}
+B.textstring = {['XX'] = L['XX'], ['XX/XX'] = L['XX/XX'], ['XX (%)'] = L['XX (%)'], ['XX/XX (%)'] = L['XX/XX (%)']}
 
 
-
+-- MoP ClassRole's
+	-- PALADIN 		= [1] = "Caster", [2] = "Tank", [3] = "Melee"
+	-- PRIEST 		= "Caster"
+	-- WARLOCK 		= "Caster"
+	-- WARRIOR 		= [1] = "Melee", [2] = "Melee", [3] = "Tank"	
+	-- HUNTER 		= "Melee"
+	-- SHAMAN 		= [1] = "Caster", [2] = "Melee", [3] = "Caster"	
+	-- ROGUE 		= "Melee"
+	-- MAGE 		= "Caster"
+	-- DEATHKNIGHT 	= [1] = "Tank", [2] = "Melee", [3] = "Melee"	
+	-- DRUID 		= [1] = "Caster", [2] = "Melee", [3] = "Tank", [4] = "Caster"
+	-- MONK 		= [1] = "Tank", [2] = "Caster", [3] = "Melee"	
 
 
 --Check Player's Role
-local RoleUpdater = CreateFrame("Frame")
-local function CheckRole(self, event, unit)
-	local tree = GetPrimaryTalentTree()
-	local resilience
-	local resilperc = GetCombatRatingBonus(COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN)
-	if resilperc > GetDodgeChance() and resilperc > GetParryChance() then
-		resilience = true
-	else
-		resilience = false
-	end
-	if ((B.myclass == "PALADIN" and tree == 2) or 
-	(B.myclass == "WARRIOR" and tree == 3) or 
-	(B.myclass == "DEATHKNIGHT" and tree == 1)) and
-	resilience == false or
-	(B.myclass == "DRUID" and tree == 2 and GetBonusBarOffset() == 3) then
-		B.Role = "Tank"
-	else
-		local playerint = select(2, UnitStat("player", 4))
-		local playeragi	= select(2, UnitStat("player", 2))
-		local base, posBuff, negBuff = UnitAttackPower("player");
-		local playerap = base + posBuff + negBuff;
+local classRoles = {
+	PALADIN = {
+		[1] = "Caster",
+		[2] = "Tank",
+		[3] = "Melee",
+	},
+	PRIEST = "Caster",
+	WARLOCK = "Caster",
+	WARRIOR = {
+		[1] = "Melee",
+		[2] = "Melee",
+		[3] = "Tank",	
+	},
+	HUNTER = "Melee",
+	SHAMAN = {
+		[1] = "Caster",
+		[2] = "Melee",
+		[3] = "Caster",	
+	},
+	ROGUE = "Melee",
+	MAGE = "Caster",
+	DEATHKNIGHT = {
+		[1] = "Tank",
+		[2] = "Melee",
+		[3] = "Melee",	
+	},
+	DRUID = {
+		[1] = "Caster",
+		[2] = "Melee",
+		[3] = "Tank",	
+		[4] = "Caster"
+	},
+	MONK = {
+		[1] = "Tank",
+		[2] = "Caster",
+		[3] = "Melee",	
+	},
+}
 
-		if (((playerap > playerint) or (playeragi > playerint)) and not (B.myclass == "SHAMAN" and tree ~= 1 and tree ~= 3) and not (UnitBuff("player", GetSpellInfo(24858)) or UnitBuff("player", GetSpellInfo(65139)))) or B.myclass == "ROGUE" or B.myclass == "HUNTER" or (B.myclass == "SHAMAN" and tree == 2) then
-			B.Role = "Melee"
-		else
-			B.Role = "Caster"
-		end
+local _, playerClass = UnitClass("player")
+local function CheckRole()
+	local talentTree = GetSpecialization()
+
+	if(type(classRoles[playerClass]) == "string") then
+		B.Role = classRoles[playerClass]
+	elseif(talentTree) then
+		B.Role = classRoles[playerClass][talentTree]
 	end
-end	
-RoleUpdater:RegisterEvent("PLAYER_ENTERING_WORLD")
-RoleUpdater:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-RoleUpdater:RegisterEvent("PLAYER_TALENT_UPDATE")
-RoleUpdater:RegisterEvent("CHARACTER_POINTS_CHANGED")
-RoleUpdater:RegisterEvent("UNIT_INVENTORY_CHANGED")
-RoleUpdater:RegisterEvent("UPDATE_BONUS_ACTIONBAR")
-RoleUpdater:SetScript("OnEvent", CheckRole)
-CheckRole()
+end
+
+local eventHandler = CreateFrame("Frame")
+eventHandler:RegisterEvent("PLAYER_ENTERING_WORLD")
+eventHandler:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+eventHandler:RegisterEvent("PLAYER_TALENT_UPDATE")
+eventHandler:RegisterEvent("CHARACTER_POINTS_CHANGED")
+eventHandler:SetScript("OnEvent", CheckRole)
 
 B.SetFontString = function(parent, fontName, fontHeight, fontStyle)
 	local fs = parent:CreateFontString(nil, 'OVERLAY')
@@ -79,23 +109,6 @@ B.SetFontString = function(parent, fontName, fontHeight, fontStyle)
 	fs:SetShadowOffset(1.25, -1.25)
 	return fs
 end
-
--- Greeting
-local EventFrame = CreateFrame("Frame")
-EventFrame:RegisterEvent("PLAYER_LOGIN")
-EventFrame:SetScript("OnEvent", function(self,event,...) 
-	if type(BasicDBPerCharacter) ~= "number" then
-		BasicDBPerCharacter = 1
-		ChatFrame1:AddMessage('Welcome to Azeroth '.. UnitName("Player")..". I do believe this is the first time we've met. Nice to meet you! You're using |cff00B4FFBasicUI v"..B.version..'|r.')
-	else
-		if BasicDBPerCharacter == 1 then
-			ChatFrame1:AddMessage('Welcome to Azeroth '.. UnitName("Player")..". How nice to see you again. You're using |cff00B4FFBasicUI v"..B.version..'|r.')
-		else
-			ChatFrame1:AddMessage('Welcome to Azeroth '.. UnitName("Player")..". How nice to see you again. You're using |cff00B4FFBasicUI v"..B.version..'|r.')
-		end
-		BasicDBPerCharacter = BasicDBPerCharacter + 1
-	end
-end)
 
 --RGB to Hex
 function B.RGBToHex(r, g, b)
@@ -111,6 +124,25 @@ function B.HexToRGB(hex)
 	return tonumber(rhex, 16), tonumber(ghex, 16), tonumber(bhex, 16)
 end
 
+-- Greeting
+local EventFrame = CreateFrame("Frame")
+EventFrame:RegisterEvent("PLAYER_LOGIN")
+EventFrame:SetScript("OnEvent", function(self,event,...) 
+	hexa = ("|cff%.2x%.2x%.2x"):format(B.ccolor.r * 255, B.ccolor.g * 255, B.ccolor.b * 255)
+	hexb = "|r"
+	if type(BasicDBPerCharacter) ~= "number" then
+		BasicDBPerCharacter = 1
+		ChatFrame1:AddMessage('Welcome to Azeroth '..hexa..UnitName("Player")..hexb..". I do believe this is the first time we've met. Nice to meet you! You're using |cff00B4FFBasic|rUI v"..B.version..'.')
+	else
+		if BasicDBPerCharacter == 1 then
+			ChatFrame1:AddMessage('Welcome to Azeroth '..hexa..UnitName("Player")..hexb..". How nice to see you again. You're using |cff00B4FFBasic|r".."|cffffffffUI|r".." v"..B.version..'.',255,255,0)
+		else
+			ChatFrame1:AddMessage('Welcome to Azeroth '..hexa..UnitName("Player")..hexb..". How nice to see you again. You're using |cff00B4FFBasic|r".."|cffffffffUI|r".." v"..B.version..'.',255,255,0)
+		end
+		BasicDBPerCharacter = BasicDBPerCharacter + 1
+	end
+end)
+
 function B.ShortValue(v)
 	if v >= 1e6 then
 		return ("%.1fm"):format(v / 1e6):gsub("%.?0+([km])$", "%1")
@@ -118,34 +150,6 @@ function B.ShortValue(v)
 		return ("%.1fk"):format(v / 1e3):gsub("%.?0+([km])$", "%1")
 	else
 		return v
-	end
-end
-
-B.SetUpAnimGroup = function(self)
-	self.anim = self:CreateAnimationGroup("Pulse")
-	self.anim.fadein = self.anim:CreateAnimation("ALPHA", "FadeIn")
-	self.anim.fadein:SetChange(1)
-	self.anim.fadein:SetOrder(2)
-
-	self.anim.fadeout = self.anim:CreateAnimation("ALPHA", "FadeOut")
-	self.anim.fadeout:SetChange(-1)
-	self.anim.fadeout:SetOrder(1)
-end
-
-B.Flash = function(self, duration)
-	if not self.anim then
-		B.SetUpAnimGroup(self)
-	end
-
-	self.anim.fadein:SetDuration(duration)
-	self.anim.fadeout:SetDuration(duration)
-	self.anim:SetLooping("REPEAT")
-	self.anim:Play()
-end
-
-B.StopFlash = function(self)
-	if self.anim then
-		self.anim:Finish()
 	end
 end
 
@@ -224,3 +228,38 @@ event:SetScript('OnEvent', function(self, event, error)
 end)
 
 event:RegisterEvent('UI_ERROR_MESSAGE')
+
+
+--[[ First Time Character Setup Chat (will not over ride your current chat setup)
+FCF_ResetChatWindows()
+FCF_SetLocked(ChatFrame1, 1)
+FCF_DockFrame(ChatFrame2)
+FCF_SetLocked(ChatFrame2, 1)	
+FCF_OpenNewWindow("")
+FCF_SetLocked(ChatFrame3, 1)
+FCF_DockFrame(ChatFrame3)
+]]
+
+for i = 1, NUM_CHAT_WINDOWS do
+	local frame = _G[format("ChatFrame%s", i)]
+	local chatFrameId = frame:GetID()
+	local chatName = FCF_GetChatWindowInfo(chatFrameId)
+	
+	-- set the size of chat frames
+	frame:SetSize(350, 150)
+	
+	-- save new default position and dimension
+	FCF_SavePositionAndDimensions(frame)	
+	
+	-- set default font size
+	--FCF_SetChatWindowFontSize(nil, frame, 15)
+	
+	-- rename windows general and combat log
+	if i == 1 then FCF_SetWindowName(frame, "General") end
+	if i == 2 then FCF_SetWindowName(frame, "Combat") end
+	if i == 3 then FCF_SetWindowName(frame, "Whisper") end
+
+	if B.SetDefaultChatPosition then
+		B.SetDefaultChatPosition(frame)
+	end	
+end

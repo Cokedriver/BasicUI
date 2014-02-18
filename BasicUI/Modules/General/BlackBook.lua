@@ -15,7 +15,7 @@ end })
 ]]
 
  -- Credit for BlackBook goes to Xinhuan and grennon from WoWAce.com
-if C['general'].mail.BlackBook.enable == true then
+if C['general'].BlackBook.enable == true then
 	local BasicUIConfig = LibStub("AceAddon-3.0"):GetAddon("BasicUIConfig")
 	local Mail_BlackBook = BasicUIConfig:NewModule("BlackBook", "AceEvent-3.0", "AceHook-3.0")
 	Mail_BlackBook.description = "Adds a contact list next to the To: field."
@@ -74,7 +74,7 @@ if C['general'].mail.BlackBook.enable == true then
 			Mail_BlackBookButton:SetScript("OnHide", Mail_DropDownMenu.HideMenu)
 		end
 
-		local db = C['general'].mail.BlackBook
+		local db = C['general'].BlackBook
 
 		SendMailNameEditBox:SetHistoryLines(15)
 		self:RawHook("SendMailFrame_Reset", true)
@@ -98,10 +98,10 @@ if C['general'].mail.BlackBook.enable == true then
 		db.AutoCompleteRealIDFriends = nil
 
 		-- Delete old recent data without faction and realm data
-		for i = #C['general'].mail.BlackBook.recent, 1, -1 do
-			local p, r, f = strsplit("|", C['general'].mail.BlackBook.recent[i])
+		for i = #C['general'].BlackBook.recent, 1, -1 do
+			local p, r, f = strsplit("|", C['general'].BlackBook.recent[i])
 			if (not r) or (not f) then
-				tremove(C['general'].mail.BlackBook.recent, i)
+				tremove(C['general'].BlackBook.recent, i)
 			end
 		end
 
@@ -188,7 +188,7 @@ if C['general'].mail.BlackBook.enable == true then
 		if not realm or not faction then return self.hooks["SendMailFrame_Reset"]() end
 
 		local namestring = ("%s|%s|%s"):format(name, realm, faction)
-		local db = C['general'].mail.BlackBook.recent
+		local db = C['general'].BlackBook.recent
 		for k = 1, #db do
 			if namestring == db[k] then tremove(db, k) break end
 		end
@@ -197,7 +197,7 @@ if C['general'].mail.BlackBook.enable == true then
 			tremove(db, k)
 		end
 		local a, b, c = self.hooks["SendMailFrame_Reset"]()
-		if C['general'].mail.BlackBook.AutoFill then
+		if C['general'].BlackBook.AutoFill then
 			SendMailNameEditBox:SetText(name)
 			SendMailNameEditBox:HighlightText()
 		end
@@ -205,20 +205,20 @@ if C['general'].mail.BlackBook.enable == true then
 	end
 
 	function Mail_BlackBook.ClearRecent(dropdownbutton, arg1, arg2, checked)
-		wipe(C['general'].mail.BlackBook.recent)
+		wipe(C['general'].BlackBook.recent)
 		CloseDropDownMenus()
 	end
 
 	function Mail_BlackBook:MailFrameTab_OnClick(button, tab)
 		self.hooks["MailFrameTab_OnClick"](button, tab)
-		if C['general'].mail.BlackBook.AutoFill and tab == 2 then
+		if C['general'].BlackBook.AutoFill and tab == 2 then
 			local realm = GetRealmName()
 			local faction = UnitFactionGroup("player")
 			local player = UnitName("player")
 			
 			-- Find the first eligible recently mailed
-			for i = 1, #C['general'].mail.BlackBook.recent do
-				local p, r, f = strsplit("|", C['general'].mail.BlackBook.recent[i])
+			for i = 1, #C['general'].BlackBook.recent do
+				local p, r, f = strsplit("|", C['general'].BlackBook.recent[i])
 				if r == realm and f == faction and p ~= player then
 					if p and SendMailNameEditBox:GetText() == "" then
 						SendMailNameEditBox:SetText(p)
@@ -236,7 +236,7 @@ if C['general'].mail.BlackBook.enable == true then
 	end
 
 	function Mail_BlackBook:AutoComplete_Update(editBox, editBoxText, utf8Position, ...)
-		if editBox ~= SendMailNameEditBox or not C['general'].mail.BlackBook.DisableBlizzardAutoComplete then
+		if editBox ~= SendMailNameEditBox or not C['general'].BlackBook.DisableBlizzardAutoComplete then
 			self.hooks["AutoComplete_Update"](editBox, editBoxText, utf8Position, ...)
 		end
 	end
@@ -247,7 +247,7 @@ if C['general'].mail.BlackBook.enable == true then
 	function Mail_BlackBook:OnChar(editbox, ...)
 		if editbox:GetUTF8CursorPosition() ~= strlenutf8(editbox:GetText()) then return end
 
-		local db = C['general'].mail.BlackBook
+		local db = C['general'].BlackBook
 		local text = strupper(editbox:GetText())
 		local textlen = strlen(text)
 		local realm = GetRealmName()
@@ -329,7 +329,7 @@ if C['general'].mail.BlackBook.enable == true then
 	function Mail_BlackBook.AddContact(dropdownbutton, arg1, arg2, checked)
 		local name = strtrim(SendMailNameEditBox:GetText())
 		if name == "" then return end
-		local db = C['general'].mail.BlackBook.contacts
+		local db = C['general'].BlackBook.contacts
 		for k = 1, #db do
 			if name == db[k] then return end
 		end
@@ -340,7 +340,7 @@ if C['general'].mail.BlackBook.enable == true then
 	function Mail_BlackBook.RemoveContact(dropdownbutton, arg1, arg2, checked)
 		local name = strtrim(SendMailNameEditBox:GetText())
 		if name == "" then return end
-		local db = C['general'].mail.BlackBook.contacts
+		local db = C['general'].BlackBook.contacts
 		for k = 1, #db do
 			if name == db[k] then tremove(db, k) return end
 		end
@@ -397,7 +397,7 @@ if C['general'].mail.BlackBook.enable == true then
 			info.disabled = nil
 			info.isTitle = nil
 
-			local db = C['general'].mail.BlackBook.contacts
+			local db = C['general'].BlackBook.contacts
 			for i = 1, #db do
 				info.text = db[i]
 				info.func = Mail_BlackBook.SetSendMailName
@@ -431,7 +431,7 @@ if C['general'].mail.BlackBook.enable == true then
 			info.keepShownOnClick = 1
 			info.func = self.UncheckHack
 
-			info.disabled = #C['general'].mail.BlackBook.recent == 0
+			info.disabled = #C['general'].BlackBook.recent == 0
 			info.text = "Recently Mailed"
 			info.value = "recent"
 			UIDropDownMenu_AddButton(info, level)
@@ -467,7 +467,7 @@ if C['general'].mail.BlackBook.enable == true then
 				local realm = GetRealmName()
 				local faction = UnitFactionGroup("player")
 				local player = UnitName("player")
-				local db = C['general'].mail.BlackBook.recent
+				local db = C['general'].BlackBook.recent
 				if #db == 0 then return end
 				for i = 1, #db do
 					local p, r, f = strsplit("|", db[i])
@@ -634,7 +634,7 @@ if C['general'].mail.BlackBook.enable == true then
 
 	function Mail_BlackBook.SaveFriendGuildOption(dropdownbutton, arg1, arg2, checked)
 		Mail.SaveOption(dropdownbutton, arg1, arg2, checked)
-		local db = C['general'].mail.BlackBook
+		local db = C['general'].BlackBook
 		local exclude = bit.bor(db.AutoCompleteFriends and AUTOCOMPLETE_FLAG_NONE or AUTOCOMPLETE_FLAG_FRIEND,
 			db.AutoCompleteGuild and AUTOCOMPLETE_FLAG_NONE or AUTOCOMPLETE_FLAG_IN_GUILD)
 		Mail_BlackBook_Autocomplete_Flags.include = bit.bxor(
@@ -643,7 +643,7 @@ if C['general'].mail.BlackBook.enable == true then
 
 	function Mail_BlackBook.SetAutoComplete(dropdownbutton, arg1, arg2, checked)
 		local self = Mail_BlackBook
-		C['general'].mail.BlackBook.UseAutoComplete = not checked
+		C['general'].BlackBook.UseAutoComplete = not checked
 		if checked then
 			if self:IsHooked(SendMailNameEditBox, "OnChar") then
 				self:Unhook(SendMailNameEditBox, "OnChar")
@@ -666,7 +666,7 @@ if C['general'].mail.BlackBook.enable == true then
 			info.func = Mail.SaveOption
 			info.arg1 = "BlackBook"
 			info.arg2 = "AutoFill"
-			info.checked = C['general'].mail.BlackBook.AutoFill
+			info.checked = C['general'].BlackBook.AutoFill
 			UIDropDownMenu_AddButton(info, level)
 
 			info.hasArrow = 1
@@ -682,7 +682,7 @@ if C['general'].mail.BlackBook.enable == true then
 			self.UncheckHack(_G[listFrame:GetName().."Button"..listFrame.numButtons])
 
 		elseif level == 2 + self.levelAdjust then
-			local db = C['general'].mail.BlackBook
+			local db = C['general'].BlackBook
 			info.arg1 = "BlackBook"
 
 			if UIDROPDOWNMENU_MENU_VALUE == "AutoComplete" then

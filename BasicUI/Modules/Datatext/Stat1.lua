@@ -1,4 +1,5 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C, DB = unpack(select(2, ...)) -- Import:  F - function; C - config; DB - Database
+
 
 --[[
 
@@ -68,7 +69,7 @@ if C['datatext'].stat1 and C['datatext'].stat1 > 0 then
 			GameTooltip:AddDoubleLine(STAT_HIT_CHANCE, format(modifierString, hit, hitBonus), 1, 1, 1)
 			
 			--Hunters don't use expertise
-			if B.myclass ~= "HUNTER" then
+			--[[if B.myclass ~= "HUNTER" then
 				local expertisePercent, offhandExpertisePercent = GetExpertisePercent()
 				expertisePercent = format("%.2f", expertisePercent)
 				offhandExpertisePercent = format("%.2f", offhandExpertisePercent)
@@ -80,7 +81,7 @@ if C['datatext'].stat1 and C['datatext'].stat1 > 0 then
 					expertisePercentDisplay = expertisePercent.."%"
 				end
 				GameTooltip:AddDoubleLine(COMBAT_RATING_NAME24, format('%d (+%s)', GetCombatRating(CR_EXPERTISE), expertisePercentDisplay), 1, 1, 1)
-			end
+			end]]
 			
 			local haste = B.myclass == "HUNTER" and GetCombatRating(CR_HASTE_RANGED) or GetCombatRating(CR_HASTE_MELEE)
 			local hasteBonus = B.myclass == "HUNTER" and GetCombatRatingBonus(CR_HASTE_RANGED) or GetCombatRatingBonus(CR_HASTE_MELEE)
@@ -89,17 +90,17 @@ if C['datatext'].stat1 and C['datatext'].stat1 > 0 then
 		end
 		
 		local masteryspell
-		if GetCombatRating(CR_MASTERY) ~= 0 and GetPrimaryTalentTree() then
+		if GetCombatRating(CR_MASTERY) ~= 0 and GetSpecialization () then
 			if B.myclass == "DRUID" then
 				if B.Role == "Melee" then
-					masteryspell = select(2, GetTalentTreeMasterySpells(GetPrimaryTalentTree()))
+					masteryspell = select(2, GetSpecializationMasterySpells(GetSpecialization ()))
 				elseif B.Role == "Tank" then
-					masteryspell = select(1, GetTalentTreeMasterySpells(GetPrimaryTalentTree()))
+					masteryspell = select(1, GetSpecializationMasterySpells(GetSpecialization ()))
 				else
-					masteryspell = GetTalentTreeMasterySpells(GetPrimaryTalentTree())
+					masteryspell = GetSpecializationMasterySpells(GetSpecialization ())
 				end
 			else
-				masteryspell = GetTalentTreeMasterySpells(GetPrimaryTalentTree())
+				masteryspell = GetSpecializationMasterySpells(GetSpecialization ())
 			end
 			
 
