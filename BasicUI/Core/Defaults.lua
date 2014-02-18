@@ -187,6 +187,7 @@ DB["chat"] = {
 ---------------------
 DB["datatext"] = {	
 	["enable"] = true,
+	["tooltipadjust"] = true,
 
 	-- Datapanel Media
 	["border"] = "Blizzard Dialog",
@@ -373,7 +374,14 @@ DB["tooltip"] = {
     ["showOnMouseover"] = false,
     ["showUnitRole"] = true,
     ["showItemLevel"] = true,
-    ["showSpecializationIcon"] = false,		
+    ["showSpecializationIcon"] = false,
+
+    ["position"] = {
+		["selfAnchor"] = "BOTTOM",
+		["relAnchor"] = "BOTTOM",
+		["offSetX"]	= 0,
+		["offSetY"]	= 200,
+	},	
 	
 	["healthbar"] = {
 		["showHealthValue"] = true,

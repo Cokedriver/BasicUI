@@ -710,3 +710,10 @@ f:SetScript('OnEvent', function(self, event)
         self:UnregisterEvent('ADDON_LOADED')
     end
 end)
+
+if C["datatext"].tooltipadjust ~= true then
+	hooksecurefunc('GameTooltip_SetDefaultAnchor', function(self)
+		self:ClearAllPoints()
+		self:SetPoint(C['tooltip'].position.relAnchor, "UIParent", C['tooltip'].position.selfAnchor,(C['tooltip'].position.offSetX),(C['tooltip'].position.offSetY))
+	end)
+end 

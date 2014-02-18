@@ -1504,7 +1504,14 @@ function BasicUIConfig.GenerateOptionsInternal()
 						name = L["Top"],
 						desc = L["If checked then panel moves to top of screen, If unchecked panel moves below MainMenuBar"],
 						disabled = function() return not db.datatext.enable end,						
-					},					
+					},
+					tooltipadjust = {
+						type = "toggle",					
+						order = 1,
+						name = L["Tooltip Adjust"],
+						desc = L["This auto adjust the tooltip to be in the default spot but moved up to have room for datapanel"],
+						disabled = function() return not db.datatext.enable end,						
+					},									
 					localtime = {
 						type = "toggle",					
 						order = 1,
@@ -1519,13 +1526,6 @@ function BasicUIConfig.GenerateOptionsInternal()
 						desc = L["Display Recount's Raid DPS (RECOUNT MUST BE INSTALLED)"],
 						disabled = function() return not db.datatext.enable end,								
 					},						
-					threatbar = {
-						type = "toggle",					
-						order = 1,
-						name = L["Threatbar"],
-						desc = L["Display Threat Text in center of panel."],
-						disabled = function() return not db.datatext.enable end,						
-					},
 					fontsize = {
 						type = "range",					
 						order = 4,
@@ -2552,6 +2552,74 @@ function BasicUIConfig.GenerateOptionsInternal()
 						desc = L["Hide the coalesced/interactive realm text."],
 						disabled = function() return not db.tooltip.enable end,
 					},
+					position = {
+						type = "group",
+						order = 5,
+						guiInline = true,
+						name = L["Position"],
+						desc = L["To Enable this positioning you must disable Datatext Tooltip Adjust."],	
+						guiInline = true,
+						disabled = function() return not db.tooltip.enable or db.datatext.tooltipadjust end,						
+						get = function(info) return db.tooltip.position[ info[#info] ] end,
+						set = function(info, value) db.tooltip.position[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
+						args = {
+							---------------------------
+							--Option Type Seperators
+							sep1 = {
+								type = "description",
+								order = 2,								
+								name = " ",
+							},
+							sep2 = {
+								type = "description",
+								order = 3,
+								name = " ",								
+							},
+							sep3 = {
+								type = "description",
+								order = 4,
+								name = " ",
+							},
+							sep4 = {
+								type = "description",
+								order = 5,
+								name = " ",
+							},	
+							---------------------------							
+							selfAnchor = {
+								type = "select",							
+								order = 2,
+								name = L["Self Anchor"],
+								desc = L["Self Anchor Position."],
+								disabled = function() return not db.tooltip.enable or db.datatext.tooltipadjust end,
+								values = B.regions;
+							},
+							relAnchor = {
+								type = "select",							
+								order = 2,
+								name = L["Relative Anchor"],
+								desc = L["Relative Anchor Position."],
+								disabled = function() return not db.tooltip.enable or db.datatext.tooltipadjust end,
+								values = B.regions;
+							},
+							offSetX = {
+								type = "range",							
+								order = 4,
+								name = L["X Offset"],
+								desc = L["Controls the X offset. (Left - Right)"],
+								min = -250, max = 250, step = 5,
+								disabled = function() return not db.tooltip.enable or db.datatext.tooltipadjust end,
+							},
+							offSetY = {
+								type = "range",							
+								order = 4,
+								name = L["Y Offset"],
+								desc = L["Controls the Y offset. (Up - Down)"],
+								min = -250, max = 250, step = 5,
+								disabled = function() return not db.tooltip.enable or db.datatext.tooltipadjust end,
+							},
+						},
+					},					
 					healthbar = {
 						type = "group",
 						order = 5,

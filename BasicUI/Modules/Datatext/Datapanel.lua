@@ -179,8 +179,9 @@ else
 	BuffFrame:ClearAllPoints() BuffFrame:SetPoint('TOP', MinimapCluster, -110, -15) BuffFrame.ClearAllPoints = bottom BuffFrame.SetPoint = bottom	
 
 	-- Move the tooltip above the Actionbar
-	if C["tooltip"].enable == true then
+	if C["datatext"].tooltipadjust == true then
 		hooksecurefunc('GameTooltip_SetDefaultAnchor', function(self)
+			self:ClearAllPoints()
 			self:SetPoint('BOTTOMRIGHT', UIParent, -95, 135)
 		end)
 	end 
