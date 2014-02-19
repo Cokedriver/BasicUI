@@ -2128,20 +2128,20 @@ function BasicUIConfig.GenerateOptionsInternal()
 								type = "select",
 								values = B.regions;
 							},
-							offSetX= {
+							offSetX = {
+								type = "range",							
 								order = 4,
-								name = L["Off Set X"],
-								--desc = L["Controls the width of power."],
-								type = "range",
-								min = -100, max = 100, step = 1,
+								name = L["X Offset"],
+								desc = L["Controls the X offset. (Left - Right)"],
+								min = -250, max = 250, step = 5,
 								disabled = function() return not db.powerbar.enable end,
 							},
-							offSetY= {
+							offSetY = {
+								type = "range",							
 								order = 4,
-								name = L["Off Set Y"],
-								--desc = L["Controls the width of power."],
-								type = "range",
-								min = -100, max = 100, step = 1,
+								name = L["Y Offset"],
+								desc = L["Controls the Y offset. (Up - Down)"],
+								min = -250, max = 250, step = 5,
 								disabled = function() return not db.powerbar.enable end,
 							},
 						},
@@ -3048,6 +3048,66 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Controls the scaling of Blizzard's Party Pet Frame"],
 								min = 0.5, max = 2, step = 0.05,
 								disabled = function() return not db.unitframes.enable end,
+							},
+							position = {
+								type = "group",
+								order = 3,
+								guiInline = true,
+								name = L["Position"],
+								--desc = L["Combo Points Options"],	
+								guiInline = true,
+								disabled = function() return not db.unitframes.enable end,						
+								get = function(info) return db.unitframes.party.position[ info[#info] ] end,
+								set = function(info, value) db.unitframes.party.position[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
+								args = {
+									---------------------------
+									--Option Type Seperators
+									sep1 = {
+										type = "description",
+										order = 2,								
+										name = " ",
+									},
+									sep2 = {
+										type = "description",
+										order = 3,
+										name = " ",								
+									},
+									sep3 = {
+										type = "description",
+										order = 4,
+										name = " ",
+									},
+									sep4 = {
+										type = "description",
+										order = 5,
+										name = " ",
+									},	
+									---------------------------							
+									relAnchor = {
+										order = 1,
+										name = L["Self Anchor"],
+										--desc = L["Style of Border for Sqaure Minimap."],
+										disabled = function() return not db.unitframes.enable end,
+										type = "select",
+										values = B.regions;
+									},									
+									offSetX = {
+										type = "range",							
+										order = 4,
+										name = L["X Offset"],
+										desc = L["Controls the X offset. (Left - Right)"],
+										min = -250, max = 250, step = 5,
+										disabled = function() return not db.unitframes.enable end,
+									},
+									offSetY = {
+										type = "range",							
+										order = 4,
+										name = L["Y Offset"],
+										desc = L["Controls the Y offset. (Up - Down)"],
+										min = -250, max = 250, step = 5,
+										disabled = function() return not db.unitframes.enable end,
+									},
+								},
 							},							
 						},
 					},
@@ -3140,20 +3200,20 @@ function BasicUIConfig.GenerateOptionsInternal()
 										disabled = function() return not db.unitframes.enable end,
 										values = B.regions;
 									},									
-									offSetX= {
-										order = 3,
-										name = L["Off Set X"],
-										--desc = L["Controls the width of power."],
-										type = "range",
-										min = -100, max = 100, step = 1,
+									offSetX = {
+										type = "range",							
+										order = 4,
+										name = L["X Offset"],
+										desc = L["Controls the X offset. (Left - Right)"],
+										min = -250, max = 250, step = 5,	
 										disabled = function() return not db.unitframes.enable end,
 									},
-									offSetY= {
+									offSetY = {
+										type = "range",							
 										order = 4,
-										name = L["Off Set Y"],
-										--desc = L["Controls the width of power."],
-										type = "range",
-										min = -100, max = 100, step = 1,
+										name = L["Y Offset"],
+										desc = L["Controls the Y offset. (Up - Down)"],
+										min = -250, max = 250, step = 5,
 										disabled = function() return not db.unitframes.enable end,
 									},
 								},
@@ -3249,20 +3309,20 @@ function BasicUIConfig.GenerateOptionsInternal()
 										disabled = function() return not db.unitframes.enable end,
 										values = B.regions;
 									},									
-									offSetX= {
-										order = 3,
-										name = L["Off Set X"],
-										--desc = L["Controls the width of power."],
-										type = "range",
-										min = -100, max = 100, step = 1,
+									offSetX = {
+										type = "range",							
+										order = 4,
+										name = L["X Offset"],
+										desc = L["Controls the X offset. (Left - Right)"],
+										min = -250, max = 250, step = 5,
 										disabled = function() return not db.unitframes.enable end,
 									},
-									offSetY= {
+									offSetY = {
+										type = "range",							
 										order = 4,
-										name = L["Off Set Y"],
-										--desc = L["Controls the width of power."],
-										type = "range",
-										min = -100, max = 100, step = 1,
+										name = L["Y Offset"],
+										desc = L["Controls the Y offset. (Up - Down)"],
+										min = -250, max = 250, step = 5,
 										disabled = function() return not db.unitframes.enable end,
 									},
 								},

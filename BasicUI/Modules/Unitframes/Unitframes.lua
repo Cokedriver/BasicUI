@@ -122,6 +122,51 @@ if C["unitframes"].focus.enable then
 	end)
 end
 
+
+
+ -- Party Frames
+for i = 1,4 do
+	local party = _G["PartyMemberFrame"..i]
+	if party then
+		party:SetScale(C["unitframes"].party.scale)	
+		party:ClearAllPoints()
+		party:SetPoint(C['unitframes'].party.position.relAnchor, "UIParent", C['unitframes'].party.position.offSetX, C['unitframes'].party.position.offSetY)
+
+	end
+end
+
+ -- Party Pet Frames
+for i = 1,4 do
+	local partypet = _G["PartyMemberPetFrame"..i]
+	if partypet then
+		partypet:SetScale(C["unitframes"].party.petScale)
+	end
+end
+
+ -- Arena Frames
+for i = 1,5 do
+	local arena = _G["ArenaEnemyFrame"..i]
+	if arena then
+		arena:SetScale(C["unitframes"].arena.scale)
+		arena:ClearAllPoints()
+		arena:SetPoint(C['unitframes'].arena.position.relAnchor, "UIParent", C['unitframes'].arena.position.selfAnchor, C['unitframes'].arena.position.offSetX, C['unitframes'].arena.position.offSetY)
+		arena.ClearAllPoints = UF
+		arena.SetPoint = UF		
+	end
+end
+
+ -- Boss Frames
+for i = 1,4 do
+	local boss = _G["Boss"..i.."TargetFrame"]
+	if boss then
+		boss:SetScale(C["unitframes"].boss.scale)
+		boss:ClearAllPoints()
+		boss:SetPoint(C['unitframes'].boss.position.relAnchor, "UIParent", C['unitframes'].boss.position.selfAnchor, C['unitframes'].boss.position.offSetX, C['unitframes'].boss.position.offSetY)
+		boss.ClearAllPoints = UF
+		boss.SetPoint = UF		
+	end
+end
+
 local UnitFromFrame = {
   ["PetFrame"] = "pet",
   ["PartyMemberFrame1"] = "party1",
@@ -161,46 +206,6 @@ hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", function(Frame)
 
 	Frame.TextString:SetFont(C['media'].font, C["unitframes"].pppaapb, "OUTLINE")
 end)
-
- -- Party Frames
-for i = 1,4 do
-	local party = _G["PartyMemberFrame"..i]
-	if party then
-		party:SetScale(C["unitframes"].party.scale)		
-	end
-end
-
- -- Party Pet Frames
-for i = 1,4 do
-	local partypet = _G["PartyMemberPetFrame"..i]
-	if partypet then
-		partypet:SetScale(C["unitframes"].party.petScale)
-	end
-end
-
- -- Arena Frames
-for i = 1,5 do
-	local arena = _G["ArenaEnemyFrame"..i]
-	if arena then
-		arena:SetScale(C["unitframes"].arena.scale)
-		arena:ClearAllPoints()
-		arena:SetPoint(C['unitframes'].arena.position.relAnchor, "UIParent", C['unitframes'].arena.position.selfAnchor, C['unitframes'].arena.position.offSetX, C['unitframes'].arena.position.offSetY)
-		arena.ClearAllPoints = UF
-		arena.SetPoint = UF		
-	end
-end
-
- -- Boss Frames
-for i = 1,4 do
-	local boss = _G["Boss"..i.."TargetFrame"]
-	if boss then
-		boss:SetScale(C["unitframes"].boss.scale)
-		boss:ClearAllPoints()
-		boss:SetPoint(C['unitframes'].boss.position.relAnchor, "UIParent", C['unitframes'].boss.position.selfAnchor, C['unitframes'].boss.position.offSetX, C['unitframes'].boss.position.offSetY)
-		boss.ClearAllPoints = UF
-		boss.SetPoint = UF		
-	end
-end
 
 -- Disable healing/damage spam over player/pet frame:
 PlayerHitIndicator:SetText(nil)

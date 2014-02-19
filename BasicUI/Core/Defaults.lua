@@ -451,6 +451,12 @@ DB["unitframes"] = {
 	["party"] = {
 		["scale"] = 1.15,
 		["petScale"] = 1.15,
+		["position"] = {
+			["relAnchor"] = "TOPLEFT",
+			--["selfAnchor"] = "TOPLEFT",
+			["offSetX"] = 15,
+			["offSetY"] = -175,
+		},
 	},
 	["arena"] = {
 		["scale"] = 1.15,
