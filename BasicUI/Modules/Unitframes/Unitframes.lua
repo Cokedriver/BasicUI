@@ -2,6 +2,10 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 
 if C["unitframes"].enable ~= true then return end
 
+
+-- Special Thanks to the guys over at Arena Junkies for most of these scripts
+-- http://www.arenajunkies.com/topic/222642-default-ui-scripts/
+
 local _G = _G
 local UF = function() end
 
@@ -124,36 +128,79 @@ end
 
 
 
- -- Party Frames
-for i = 1,4 do
-	local party = _G["PartyMemberFrame"..i]
-	if party then
-		party:SetScale(C["unitframes"].party.scale)	
-		party:ClearAllPoints()
-		party:SetPoint(C['unitframes'].party.position.relAnchor, "UIParent", C['unitframes'].party.position.offSetX, C['unitframes'].party.position.offSetY)
+-- Party Frames --
 
-	end
-end
+-- Clear all old settings
+PartyMemberFrame1:ClearAllPoints()
+PartyMemberFrame2:ClearAllPoints()
+PartyMemberFrame3:ClearAllPoints()
+PartyMemberFrame4:ClearAllPoints()
 
- -- Party Pet Frames
-for i = 1,4 do
-	local partypet = _G["PartyMemberPetFrame"..i]
-	if partypet then
-		partypet:SetScale(C["unitframes"].party.petScale)
-	end
-end
+-- Create new locations
+PartyMemberFrame1:SetPoint(C['unitframes'].party.position.relAnchor, UIParent, C['unitframes'].party.position.offSetX, C['unitframes'].party.position.offSetY)
+PartyMemberFrame2:SetPoint("TOPLEFT", PartyMemberFrame1, 0, -75)
+PartyMemberFrame3:SetPoint("TOPLEFT", PartyMemberFrame2, 0, -75)
+PartyMemberFrame4:SetPoint("TOPLEFT", PartyMemberFrame3, 0, -75)
+
+-- Make the new locations stay
+PartyMemberFrame1.SetPoint = function() end
+PartyMemberFrame2.SetPoint = function() end
+PartyMemberFrame3.SetPoint = function() end
+PartyMemberFrame4.SetPoint = function() end
+
+-- Set the scale of all the frames
+PartyMemberFrame1:SetScale(C["unitframes"].party.scale)
+PartyMemberFrame2:SetScale(C["unitframes"].party.scale)
+PartyMemberFrame3:SetScale(C["unitframes"].party.scale)
+PartyMemberFrame4:SetScale(C["unitframes"].party.scale)
+
 
  -- Arena Frames
-for i = 1,5 do
-	local arena = _G["ArenaEnemyFrame"..i]
-	if arena then
-		arena:SetScale(C["unitframes"].arena.scale)
-		arena:ClearAllPoints()
-		arena:SetPoint(C['unitframes'].arena.position.relAnchor, "UIParent", C['unitframes'].arena.position.selfAnchor, C['unitframes'].arena.position.offSetX, C['unitframes'].arena.position.offSetY)
-		arena.ClearAllPoints = UF
-		arena.SetPoint = UF		
+ 
+LoadAddOn("Blizzard_ArenaUI") -- You only need to run this once. You can safely delete any copies of this line.
+ 
+ArenaEnemyFrames:SetScale(C["unitframes"].arena.scale)
+
+if C["unitframes"].arena.tracker == true then
+	trinkets = {}
+	local arenaFrame,trinket
+	for i = 1, 5 do
+		arenaFrame = "ArenaEnemyFrame"..i
+        trinket = CreateFrame("Cooldown", arenaFrame.."Trinket", ArenaEnemyFrames)
+        trinket:SetPoint("TOPRIGHT", arenaFrame, 30, -6)
+        trinket:SetSize(24, 24)
+        trinket.icon = trinket:CreateTexture(nil, "BACKGROUND")
+        trinket.icon:SetAllPoints()
+        trinket.icon:SetTexture("Interface\\Icons\\inv_jewelry_trinketpvp_01")
+        trinket:Hide()
+        trinkets["arena"..i] = trinket
 	end
+	local events = CreateFrame("Frame")
+	function events:UNIT_SPELLCAST_SUCCEEDED(unitID, spell, rank, lineID, spellID)
+		if not trinkets[unitID] then
+			return
+		end        
+		if spellID == 59752 or spellID == 42292 then
+			CooldownFrame_SetTimer(trinkets[unitID], GetTime(), 120, 1)
+			SendChatMessage("Trinket used by: "..GetUnitName(unitID, true), "PARTY")
+		end
+	end
+	function events:PLAYER_ENTERING_WORLD()
+		local _, instanceType = IsInInstance()
+		if instanceType == "arena" then
+			self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
+		elseif self:IsEventRegistered("UNIT_SPELLCAST_SUCCEEDED") then
+			self:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED") 
+			for _, trinket in pairs(trinkets) do
+				trinket:SetCooldown(0, 0)
+				trinket:Hide()
+            end        
+		end
+	end
+	events:SetScript("OnEvent", function(self, event, ...) return self[event](self, ...) end)
+	events:RegisterEvent("PLAYER_ENTERING_WORLD")
 end
+ 
 
  -- Boss Frames
 for i = 1,4 do
@@ -161,11 +208,12 @@ for i = 1,4 do
 	if boss then
 		boss:SetScale(C["unitframes"].boss.scale)
 		boss:ClearAllPoints()
-		boss:SetPoint(C['unitframes'].boss.position.relAnchor, "UIParent", C['unitframes'].boss.position.selfAnchor, C['unitframes'].boss.position.offSetX, C['unitframes'].boss.position.offSetY)
+		boss:SetPoint(C['unitframes'].boss.position.relAnchor, UIParent, C['unitframes'].boss.position.offSetX, C['unitframes'].boss.position.offSetY)
 		boss.ClearAllPoints = UF
 		boss.SetPoint = UF		
 	end
 end
+
 
 local UnitFromFrame = {
   ["PetFrame"] = "pet",

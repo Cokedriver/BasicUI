@@ -450,28 +450,20 @@ DB["unitframes"] = {
 	},
 	["party"] = {
 		["scale"] = 1.15,
-		["petScale"] = 1.15,
 		["position"] = {
 			["relAnchor"] = "TOPLEFT",
-			--["selfAnchor"] = "TOPLEFT",
-			["offSetX"] = 15,
-			["offSetY"] = -175,
+			["offSetX"] = 10,
+			["offSetY"] = -150,
 		},
 	},
 	["arena"] = {
-		["scale"] = 1.15,
-		["position"] = {
-			["relAnchor"] = "TOPRIGHT",
-			["selfAnchor"] = "TOPRIGHT",
-			["offSetX"] = -80,
-			["offSetY"] = -300,
-		},
+		["scale"] = 1.5,
+		["tracker"] = true,
 	},
 	["boss"] = {
 		["scale"] = 1.15,
 		["position"] = {
 			["relAnchor"] = "TOPRIGHT",
-			["selfAnchor"] = "TOPRIGHT",
 			["offSetX"] = -50,
 			["offSetY"] = -250,
 		},

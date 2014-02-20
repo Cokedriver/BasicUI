@@ -3141,7 +3141,13 @@ function BasicUIConfig.GenerateOptionsInternal()
 								order = 4,										
 								name = " ",
 							},	
-							---------------------------												
+							---------------------------	
+							tracker = {
+								type = "toggle",					
+								order = 0,
+								name = L["Trinket Tracker"],
+								desc = L["This puts icons to the right of the arena frames. Does not track WotF - it now simply shares 30 seconds CD with trinkets, so it's impossible to track with just 1 icon. Only enables in arenas"],							
+							},							
 							scale = {
 								type = "range",							
 								order = 1,
@@ -3149,74 +3155,6 @@ function BasicUIConfig.GenerateOptionsInternal()
 								desc = L["Controls the scaling of Blizzard's Arena Frames"],
 								min = 0.5, max = 2, step = 0.05,
 								disabled = function() return not db.unitframes.enable end,
-							},
-							position = {
-								type = "group",
-								order = 3,
-								guiInline = true,
-								name = L["Position"],
-								--desc = L["Combo Points Options"],	
-								guiInline = true,
-								disabled = function() return not db.unitframes.enable end,						
-								get = function(info) return db.unitframes.arena.position[ info[#info] ] end,
-								set = function(info, value) db.unitframes.arena.position[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,						
-								args = {
-									---------------------------
-									--Option Type Seperators
-									sep1 = {
-										type = "description",
-										order = 1,								
-										name = " ",
-									},
-									sep2 = {
-										type = "description",
-										order = 2,
-										name = " ",								
-									},
-									sep3 = {
-										type = "description",
-										order = 3,
-										name = " ",
-									},
-									sep4 = {
-										type = "description",
-										order = 4,
-										name = " ",
-									},	
-									---------------------------							
-									selfAnchor = {
-										order = 1,
-										name = L["Self Anchor"],
-										--desc = L["Style of Border for Sqaure Minimap."],
-										disabled = function() return not db.unitframes.enable end,
-										type = "select",
-										values = B.regions;
-									},
-									relAnchor = {
-										type = "select",							
-										order = 2,
-										name = L["Relative Anchor"],
-										desc = L["Relative Anchor Position."],
-										disabled = function() return not db.unitframes.enable end,
-										values = B.regions;
-									},									
-									offSetX = {
-										type = "range",							
-										order = 4,
-										name = L["X Offset"],
-										desc = L["Controls the X offset. (Left - Right)"],
-										min = -250, max = 250, step = 5,	
-										disabled = function() return not db.unitframes.enable end,
-									},
-									offSetY = {
-										type = "range",							
-										order = 4,
-										name = L["Y Offset"],
-										desc = L["Controls the Y offset. (Up - Down)"],
-										min = -250, max = 250, step = 5,
-										disabled = function() return not db.unitframes.enable end,
-									},
-								},
 							},
 						},
 					},
@@ -3293,14 +3231,6 @@ function BasicUIConfig.GenerateOptionsInternal()
 										name = " ",
 									},	
 									---------------------------							
-									selfAnchor = {
-										order = 1,
-										name = L["Self Anchor"],
-										--desc = L["Style of Border for Sqaure Minimap."],
-										disabled = function() return not db.unitframes.enable end,
-										type = "select",
-										values = B.regions;
-									},
 									relAnchor = {
 										type = "select",							
 										order = 2,
