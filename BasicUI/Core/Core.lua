@@ -160,42 +160,77 @@ SlashCmdList['RELOADUI'] = function()
 end
 SLASH_RELOADUI1 = '/rl'
 
-SLASH_FRAME1 = "/frame"
-SlashCmdList["FRAME"] = function(arg)
-	if arg ~= "" then
-		arg = _G[arg]
-	else
-		arg = GetMouseFocus()
-	end
-	if arg ~= nil and arg:GetName() ~= nil then
-		local point, relativeTo, relativePoint, xOfs, yOfs = arg:GetPoint()
-		ChatFrame1:AddMessage("|cffCC0000----------------------------")
-		ChatFrame1:AddMessage("Name: |cffFFD100"..arg:GetName())
-		if arg:GetParent() and arg:GetParent():GetName() then
-			ChatFrame1:AddMessage("Parent: |cffFFD100"..arg:GetParent():GetName())
-		end
- 
-		ChatFrame1:AddMessage("Width: |cffFFD100"..format("%.2f",arg:GetWidth()))
-		ChatFrame1:AddMessage("Height: |cffFFD100"..format("%.2f",arg:GetHeight()))
-		ChatFrame1:AddMessage("Strata: |cffFFD100"..arg:GetFrameStrata())
-		ChatFrame1:AddMessage("Level: |cffFFD100"..arg:GetFrameLevel())
- 
-		if xOfs then
-			ChatFrame1:AddMessage("X: |cffFFD100"..format("%.2f",xOfs))
-		end
-		if yOfs then
-			ChatFrame1:AddMessage("Y: |cffFFD100"..format("%.2f",yOfs))
-		end
-		if relativeTo and relativeTo:GetName() then
-			ChatFrame1:AddMessage("Point: |cffFFD100"..point.."|r anchored to "..relativeTo:GetName().."'s |cffFFD100"..relativePoint)
-		end
-		ChatFrame1:AddMessage("|cffCC0000----------------------------")
-	elseif arg == nil then
-		ChatFrame1:AddMessage("Invalid frame name")
-	else
-		ChatFrame1:AddMessage("Could not find frame info")
-	end
+CUSTOM_FACTION_BAR_COLORS = {
+    [1] = {r = 1, g = 0, b = 0},
+    [2] = {r = 1, g = 0, b = 0},
+    [3] = {r = 1, g = 1, b = 0},
+    [4] = {r = 1, g = 1, b = 0},
+    [5] = {r = 0, g = 1, b = 0},
+    [6] = {r = 0, g = 1, b = 0},
+    [7] = {r = 0, g = 1, b = 0},
+    [8] = {r = 0, g = 1, b = 0},
+}
+
+function GameTooltip_UnitColor(unit)
+    local r, g, b
+
+    if (UnitIsDead(unit) or UnitIsGhost(unit) or UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then
+        r = 0.5
+        g = 0.5
+        b = 0.5 
+    elseif (UnitIsPlayer(unit)) then
+        if (UnitIsFriend(unit, 'player')) then
+            local _, class = UnitClass(unit)
+            r = RAID_CLASS_COLORS[class].r
+            g = RAID_CLASS_COLORS[class].g
+            b = RAID_CLASS_COLORS[class].b
+        elseif (not UnitIsFriend(unit, 'player')) then
+            r = 1
+            g = 0
+            b = 0
+        end
+    elseif (UnitPlayerControlled(unit)) then
+        if (UnitCanAttack(unit, 'player')) then
+            if (not UnitCanAttack('player', unit)) then
+                r = 157/255
+                g = 197/255
+                b = 255/255
+            else
+                r = 1
+                g = 0
+                b = 0
+            end
+        elseif (UnitCanAttack('player', unit)) then
+            r = 1
+            g = 1
+            b = 0
+        elseif (UnitIsPVP(unit)) then
+            r = 0
+            g = 1
+            b = 0
+        else
+            r = 157/255
+            g = 197/255
+            b = 255/255
+        end
+    else
+        local reaction = UnitReaction(unit, 'player')
+
+        if (reaction) then
+            r = CUSTOM_FACTION_BAR_COLORS[reaction].r
+            g = CUSTOM_FACTION_BAR_COLORS[reaction].g
+            b = CUSTOM_FACTION_BAR_COLORS[reaction].b
+        else
+            r = 157/255
+            g = 197/255
+            b = 255/255
+        end
+    end
+
+    return r, g, b
 end
+  
+UnitSelectionColor = GameTooltip_UnitColor
 
 
 -- Error Message Ignore List
@@ -228,38 +263,3 @@ event:SetScript('OnEvent', function(self, event, error)
 end)
 
 event:RegisterEvent('UI_ERROR_MESSAGE')
-
-
---[[ First Time Character Setup Chat (will not over ride your current chat setup)
-FCF_ResetChatWindows()
-FCF_SetLocked(ChatFrame1, 1)
-FCF_DockFrame(ChatFrame2)
-FCF_SetLocked(ChatFrame2, 1)	
-FCF_OpenNewWindow("")
-FCF_SetLocked(ChatFrame3, 1)
-FCF_DockFrame(ChatFrame3)
-]]
-
-for i = 1, NUM_CHAT_WINDOWS do
-	local frame = _G[format("ChatFrame%s", i)]
-	local chatFrameId = frame:GetID()
-	local chatName = FCF_GetChatWindowInfo(chatFrameId)
-	
-	-- set the size of chat frames
-	frame:SetSize(350, 150)
-	
-	-- save new default position and dimension
-	FCF_SavePositionAndDimensions(frame)	
-	
-	-- set default font size
-	--FCF_SetChatWindowFontSize(nil, frame, 15)
-	
-	-- rename windows general and combat log
-	if i == 1 then FCF_SetWindowName(frame, "General") end
-	if i == 2 then FCF_SetWindowName(frame, "Combat") end
-	if i == 3 then FCF_SetWindowName(frame, "Whisper") end
-
-	if B.SetDefaultChatPosition then
-		B.SetDefaultChatPosition(frame)
-	end	
-end

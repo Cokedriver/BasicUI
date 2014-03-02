@@ -70,6 +70,7 @@ f:SetScript("OnEvent", function()
 	SetFont(Tooltip_Med,                        NORMAL, C['media'].fontSize)
 	SetFont(Tooltip_Small,                        BOLD, C['media'].fontSize)
 	SetFont(ChatBubbleFont,						NORMAL, C['media'].fontSize)
+	
 
 	-- Derived fonts
 	SetFont(BossEmoteNormalHuge,     BOLDITALIC, 27, "THICKOUTLINE")
@@ -93,6 +94,34 @@ f:SetScript("OnEvent", function()
 	end
 
 	for _,butt in pairs(PaperDollTitlesPane.buttons) do butt.text:SetFontObject(GameFontHighlightSmallLeft) end
+	
+	--[[["PlayerFrame"] = "player",
+	["TargetFrame"] = "target",
+	["FocusFrame"] = "focus",
+	["PetFrame"] = "pet",
+	["PartyMemberFrame1"] = "party1",
+	["PartyMemberFrame2"] = "party2",
+	["PartyMemberFrame3"] = "party3",
+	["PartyMemberFrame4"] = "party4",
+	["PartyMemberFrame1PetFrame"] = "party1pet",
+	["PartyMemberFrame2PetFrame"] = "party2pet",
+	["PartyMemberFrame3PetFrame"] = "party3pet",
+	["PartyMemberFrame4PetFrame"] = "party4pet",
+	["ArenaEnemyFrame1"] = "arena1",
+	["ArenaEnemyFrame2"] = "arena2",
+	["ArenaEnemyFrame3"] = "arena3",
+	["ArenaEnemyFrame4"] = "arena4",
+	["ArenaEnemyFrame5"] = "arena5",
+	["ArenaEnemyFrame1PetFrame"] = "arena1pet",
+	["ArenaEnemyFrame2PetFrame"] = "arena2pet",
+	["ArenaEnemyFrame3PetFrame"] = "arena3pet",
+	["ArenaEnemyFrame4PetFrame"] = "arena4pet",
+	["ArenaEnemyFrame5PetFrame"] = "arena5pet",
+	["Boss1TargetFrame"] = "boss1",
+	["Boss2TargetFrame"] = "boss2",
+	["Boss3TargetFrame"] = "boss3",
+	["Boss4TargetFrame"] = "boss4",]]
+
 end)
 
 --[[	

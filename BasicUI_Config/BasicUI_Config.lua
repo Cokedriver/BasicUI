@@ -2798,16 +2798,6 @@ function BasicUIConfig.GenerateOptionsInternal()
 						type = "description",
 						order = 7,										
 						name = " ",
-					},
-					sep8 = {
-						type = "description",
-						order = 8,										
-						name = " ",
-					},
-					sep9 = {
-						type = "description",
-						order = 9,										
-						name = " ",
 					},					
 					---------------------------				
 					enable = {
@@ -2815,19 +2805,10 @@ function BasicUIConfig.GenerateOptionsInternal()
 						order = 0,
 						name = L["Enable"],
 						desc = L["Enables Uniframes Module"],							
-					},
-					pppaapb= {
-						type = "range",							
-						order = 3,
-						width = "full",
-						name = L["HP/Mana Font Size For all Frames Except Player/Target/Focus"],
-						desc = L["Controls the Pet, Party, Party Pet, Arena, Arena Pet, and Boss Frame Healthbar/Manabar value font size."],
-						min = 8, max = 25, step = 1,
-						disabled = function() return not db.unitframes.enable or not db.unitframes.player.enable end,
-					},
+					},				
 					player = {
 						type = "group",
-						order = 5,
+						order = 3,
 						name = L["Player Frame"],
 						desc = L["Adjust the Player Frame."],	
 						guiInline = true,
@@ -2838,22 +2819,22 @@ function BasicUIConfig.GenerateOptionsInternal()
 							--Option Type Seperators
 							sep1 = {
 								type = "description",
-								order = 2,										
+								order = 1,										
 								name = " ",
 							},
 							sep2 = {
 								type = "description",
-								order = 3,										
+								order = 2,										
 								name = " ",
 							},
 							sep3 = {
 								type = "description",
-								order = 4,										
+								order = 3,										
 								name = " ",
 							},
 							sep4 = {
 								type = "description",
-								order = 5,										
+								order = 4,										
 								name = " ",
 							},
 							---------------------------												
@@ -2865,33 +2846,33 @@ function BasicUIConfig.GenerateOptionsInternal()
 							},
 							scale = {
 								type = "range",							
-								order = 2,
-								name = L["Scale"],
+								order = 1,
+								name = L["Frame Scale"],
 								desc = L["Controls the scaling of Blizzard's Player Frame"],
 								min = 0.5, max = 2, step = 0.05,
 								disabled = function() return not db.unitframes.enable or not db.unitframes.player.enable end,
-							},							
-							tsHealth = {
-								type = "select",
-								order = 3,
-								name = L["Healthbar Font Display"],
-								desc = L["Lets You choose between 4 different styles for your font."],
-								disabled = function() return not db.unitframes.enable or not db.unitframes.player.enable end,
-								values = B.textstring;
 							},
-							hfSize= {
+							fontSize= {
 								type = "range",							
-								order = 4,
-								name = L["HealthBar Font Size"],
-								desc = L["Controls the Player Frame Healthbar value font size."],
+								order = 2,
+								name = L["HP/Mana Font Size"],
+								desc = L["Controls the Player Healthbar/Manabar value font size."],
 								min = 8, max = 25, step = 1,
 								disabled = function() return not db.unitframes.enable or not db.unitframes.player.enable end,
 							},
+							fontSizepet= {
+								type = "range",							
+								order = 2,
+								name = L["HP/Mana Font Size for your pet"],
+								desc = L["Controls the Player Pet Healthbar/Manabar value font size."],
+								min = 8, max = 25, step = 1,
+								disabled = function() return not db.unitframes.enable or not db.unitframes.player.enable end,
+							},							
 						},
 					},
 					target = {
 						type = "group",
-						order = 6,
+						order = 4,
 						name = L["Target Frame"],
 						desc = L["Adjust the Target Frame."],	
 						guiInline = true,
@@ -2902,22 +2883,22 @@ function BasicUIConfig.GenerateOptionsInternal()
 							--Option Type Seperators
 							sep1 = {
 								type = "description",
-								order = 2,										
+								order = 1,										
 								name = " ",
 							},
 							sep2 = {
 								type = "description",
-								order = 3,										
+								order = 2,										
 								name = " ",
 							},
 							sep3 = {
 								type = "description",
-								order = 4,										
+								order = 3,										
 								name = " ",
 							},
 							sep4 = {
 								type = "description",
-								order = 5,										
+								order = 4,										
 								name = " ",
 							},
 							---------------------------												
@@ -2929,33 +2910,25 @@ function BasicUIConfig.GenerateOptionsInternal()
 							},
 							scale = {
 								type = "range",							
-								order = 2,
-								name = L["Scale"],
+								order = 1,
+								name = L["Frame Scale"],
 								desc = L["Controls the scaling of Blizzard's Target Frame"],
 								min = 0.5, max = 2, step = 0.05,
 								disabled = function() return not db.unitframes.enable or not db.unitframes.target.enable end,
-							},							
-							tsHealth = {
-								type = "select",
-								order = 3,
-								name = L["Healthbar Font Display"],
-								desc = L["Lets You choose between 4 different styles for your font."],
-								disabled = function() return not db.unitframes.enable or not db.unitframes.target.enable end,
-								values = B.textstring;
 							},
-							hfSize= {
+							fontSize= {
 								type = "range",							
-								order = 4,
-								name = L["HealthBar Font Size"],
-								desc = L["Controls the Target Frame Healthbar value font size."],
+								order = 2,
+								name = L["HP/Mana Font Size"],
+								desc = L["Controls the Target Healthbar/Manabar value font size."],
 								min = 8, max = 25, step = 1,
 								disabled = function() return not db.unitframes.enable or not db.unitframes.target.enable end,
-							},
+							},								
 						},
 					},
 					focus = {
 						type = "group",
-						order = 7,
+						order = 5,
 						name = L["Focus Frame"],
 						desc = L["Adjust the Focus Frame."],	
 						guiInline = true,
@@ -2966,22 +2939,22 @@ function BasicUIConfig.GenerateOptionsInternal()
 							--Option Type Seperators
 							sep1 = {
 								type = "description",
-								order = 2,										
+								order = 1,										
 								name = " ",
 							},
 							sep2 = {
 								type = "description",
-								order = 3,										
+								order = 2,										
 								name = " ",
 							},
 							sep3 = {
 								type = "description",
-								order = 4,										
+								order = 3,										
 								name = " ",
 							},
 							sep4 = {
 								type = "description",
-								order = 5,										
+								order = 4,										
 								name = " ",
 							},
 							---------------------------												
@@ -2993,33 +2966,25 @@ function BasicUIConfig.GenerateOptionsInternal()
 							},
 							scale = {
 								type = "range",							
-								order = 2,
-								name = L["Scale"],
+								order = 1,
+								name = L["Frame Scale"],
 								desc = L["Controls the scaling of Blizzard's Focus Frame"],
 								min = 0.5, max = 2, step = 0.05,
 								disabled = function() return not db.unitframes.enable or not db.unitframes.focus.enable end,
-							},							
-							tsHealth = {
-								type = "select",
-								order = 3,
-								name = L["Healthbar Font Display"],
-								desc = L["Lets You choose between 4 different styles for your font."],
-								disabled = function() return not db.unitframes.enable or not db.unitframes.focus.enable end,
-								values = B.textstring;
 							},
-							hfSize= {
+							fontSize= {
 								type = "range",							
-								order = 4,
-								name = L["HealthBar Font Size"],
-								desc = L["Controls the Focus Frame Healthbar value font size."],
+								order = 2,
+								name = L["HP/Mana Font Size"],
+								desc = L["Controls the Focus Healthbar/Manabar value font size."],
 								min = 8, max = 25, step = 1,
 								disabled = function() return not db.unitframes.enable or not db.unitframes.focus.enable end,
-							},
+							},								
 						},
 					},
 					party = {
 						type = "group",
-						order = 8,
+						order = 6,
 						name = L["Party Frame"],
 						desc = L["Adjust the scale of Blizzards Unit Frames."],	
 						guiInline = true,
@@ -3029,10 +2994,36 @@ function BasicUIConfig.GenerateOptionsInternal()
 							---------------------------
 							sep1 = {
 								type = "description",
+								order = 1,										
+								name = " ",
+							},
+							sep2 = {
+								type = "description",
 								order = 2,										
 								name = " ",
 							},
-							---------------------------								
+							sep3 = {
+								type = "description",
+								order = 3,										
+								name = " ",
+							},
+							sep4 = {
+								type = "description",
+								order = 4,										
+								name = " ",
+							},
+							sep5 = {
+								type = "description",
+								order = 5,										
+								name = " ",
+							},
+							---------------------------	
+							enable = {
+								type = "toggle",					
+								order = 0,
+								name = L["Enable"],
+								desc = L["Enables Party Frame Adjustments"],							
+							},							
 							scale = {
 								type = "range",							
 								order = 1,
@@ -3041,17 +3032,17 @@ function BasicUIConfig.GenerateOptionsInternal()
 								min = 0.5, max = 2, step = 0.05,
 								disabled = function() return not db.unitframes.enable end,
 							},
-							petScale = {
+							fontSize= {
 								type = "range",							
 								order = 2,
-								name = L["Pet Scale"],
-								desc = L["Controls the scaling of Blizzard's Party Pet Frame"],
-								min = 0.5, max = 2, step = 0.05,
-								disabled = function() return not db.unitframes.enable end,
-							},
+								name = L["HP/Mana Font Size"],
+								desc = L["Controls the Party Healthbar/Manabar value font size."],
+								min = 8, max = 25, step = 1,
+								disabled = function() return not db.unitframes.enable or not db.unitframes.party.enable end,
+							},	
 							position = {
 								type = "group",
-								order = 3,
+								order = 2,
 								guiInline = true,
 								name = L["Position"],
 								--desc = L["Combo Points Options"],	
@@ -3064,22 +3055,22 @@ function BasicUIConfig.GenerateOptionsInternal()
 									--Option Type Seperators
 									sep1 = {
 										type = "description",
-										order = 2,								
+										order = 1,								
 										name = " ",
 									},
 									sep2 = {
 										type = "description",
-										order = 3,
+										order = 2,
 										name = " ",								
 									},
 									sep3 = {
 										type = "description",
-										order = 4,
+										order = 3,
 										name = " ",
 									},
 									sep4 = {
 										type = "description",
-										order = 5,
+										order = 4,
 										name = " ",
 									},	
 									---------------------------							
@@ -3093,7 +3084,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 									},									
 									offSetX = {
 										type = "range",							
-										order = 4,
+										order = 2,
 										name = L["X Offset"],
 										desc = L["Controls the X offset. (Left - Right)"],
 										min = -250, max = 250, step = 5,
@@ -3101,7 +3092,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 									},
 									offSetY = {
 										type = "range",							
-										order = 4,
+										order = 3,
 										name = L["Y Offset"],
 										desc = L["Controls the Y offset. (Up - Down)"],
 										min = -250, max = 250, step = 5,
@@ -3113,7 +3104,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 					},
 					arena = {
 						type = "group",
-						order = 9,
+						order = 7,
 						name = L["Arena Frames"],
 						desc = L["Adjust the Arena Frames."],	
 						guiInline = true,
@@ -3142,25 +3133,39 @@ function BasicUIConfig.GenerateOptionsInternal()
 								name = " ",
 							},	
 							---------------------------	
-							tracker = {
+							enable = {
 								type = "toggle",					
 								order = 0,
+								name = L["Enable"],
+								desc = L["Enables Arena Frame Adjustments"],							
+							},
+							tracker = {
+								type = "toggle",					
+								order = 1,
 								name = L["Trinket Tracker"],
 								desc = L["This puts icons to the right of the arena frames. Does not track WotF - it now simply shares 30 seconds CD with trinkets, so it's impossible to track with just 1 icon. Only enables in arenas"],							
 							},							
 							scale = {
 								type = "range",							
-								order = 1,
+								order = 2,
 								name = L["Scale"],
 								desc = L["Controls the scaling of Blizzard's Arena Frames"],
 								min = 0.5, max = 2, step = 0.05,
 								disabled = function() return not db.unitframes.enable end,
 							},
+							fontSize= {
+								type = "range",							
+								order = 2,
+								name = L["HP/Mana Font Size"],
+								desc = L["Controls the Arena Healthbar/Manabar value font size."],
+								min = 8, max = 25, step = 1,
+								disabled = function() return not db.unitframes.enable or not db.unitframes.arena.enable end,
+							},	
 						},
 					},
 					boss = {
 						type = "group",
-						order = 9,
+						order = 8,
 						name = L["Boss Frame"],
 						desc = L["Adjust the Boss Frames."],	
 						guiInline = true,
@@ -3188,7 +3193,18 @@ function BasicUIConfig.GenerateOptionsInternal()
 								order = 4,										
 								name = " ",
 							},
-							---------------------------												
+							sep5 = {
+								type = "description",
+								order = 5,										
+								name = " ",
+							},
+							---------------------------	
+							enable = {
+								type = "toggle",					
+								order = 0,
+								name = L["Enable"],
+								desc = L["Enables Boss Frame Adjustments"],							
+							},							
 							scale = {
 								type = "range",							
 								order = 1,
@@ -3197,9 +3213,17 @@ function BasicUIConfig.GenerateOptionsInternal()
 								min = 0.5, max = 2, step = 0.05,
 								disabled = function() return not db.unitframes.enable end,
 							},
+							fontSize= {
+								type = "range",							
+								order = 2,
+								name = L["HP/Mana Font Size"],
+								desc = L["Controls the Boss Healthbar/Manabar value font size."],
+								min = 8, max = 25, step = 1,
+								disabled = function() return not db.unitframes.enable or not db.unitframes.boss.enable end,
+							},	
 							position = {
 								type = "group",
-								order = 3,
+								order = 5,
 								guiInline = true,
 								name = L["Position"],
 								--desc = L["Combo Points Options"],	
@@ -3212,28 +3236,28 @@ function BasicUIConfig.GenerateOptionsInternal()
 									--Option Type Seperators
 									sep1 = {
 										type = "description",
-										order = 2,								
+										order = 1,								
 										name = " ",
 									},
 									sep2 = {
 										type = "description",
-										order = 3,
+										order = 2,
 										name = " ",								
 									},
 									sep3 = {
 										type = "description",
-										order = 4,
+										order = 3,
 										name = " ",
 									},
 									sep4 = {
 										type = "description",
-										order = 5,
+										order = 4,
 										name = " ",
 									},	
 									---------------------------							
 									relAnchor = {
 										type = "select",							
-										order = 2,
+										order = 1,
 										name = L["Relative Anchor"],
 										desc = L["Relative Anchor Position."],
 										disabled = function() return not db.unitframes.enable end,
@@ -3241,7 +3265,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 									},									
 									offSetX = {
 										type = "range",							
-										order = 4,
+										order = 2,
 										name = L["X Offset"],
 										desc = L["Controls the X offset. (Left - Right)"],
 										min = -250, max = 250, step = 5,
@@ -3249,7 +3273,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 									},
 									offSetY = {
 										type = "range",							
-										order = 4,
+										order = 3,
 										name = L["Y Offset"],
 										desc = L["Controls the Y offset. (Up - Down)"],
 										min = -250, max = 250, step = 5,

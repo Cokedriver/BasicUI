@@ -7,252 +7,182 @@ if C["unitframes"].enable ~= true then return end
 -- http://www.arenajunkies.com/topic/222642-default-ui-scripts/
 
 local _G = _G
-local UF = function() end
+
 
 -- Player Frame
 if C["unitframes"].player.enable then
 
 	-- Frame Scale
-	 _G["PlayerFrame"]:SetScale(C["unitframes"].player.scale)
-	 
-	-- Font Size/Style
-	hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", function()
-	
-		-- Player Healthbar Font Formating
-		if C["unitframes"].player.tsHealth == "XX" then
-			PlayerFrameHealthBar.TextString:SetText(AbbreviateLargeNumbers(UnitHealth("player")))
-		elseif C["unitframes"].player.tsHealth == "XX/XX" then
-			PlayerFrameHealthBar.TextString:SetText(AbbreviateLargeNumbers(UnitHealth("player")).." / "..(UnitHealthMax("player")))
-		elseif C["unitframes"].player.tsHealth == "XX (%)" then
-			PlayerFrameHealthBar.TextString:SetText(AbbreviateLargeNumbers(UnitHealth("player"))..' ('..(floor(((UnitHealth("player"))/(UnitHealthMax("player")))*100))..'%)')
-		elseif C["unitframes"].player.tsHealth == "XX/XX (%)" then
-			PlayerFrameHealthBar.TextString:SetText(AbbreviateLargeNumbers(UnitHealth("player")).." / "..(UnitHealthMax("player"))..' ('..(floor(((UnitHealth("player"))/(UnitHealthMax("player")))*100))..'%)')
-		end
-		PlayerFrameHealthBar.TextString:SetFont(C['media'].font, C["unitframes"].player.hfSize, "OUTLINE")
+	_G["PlayerFrame"]:SetScale(C["unitframes"].player.scale);	
+	PlayerFrameHealthBarText:SetFont(C["media"].font, C["unitframes"].player.fontSize,"THINOUTLINE");
+	PlayerFrameManaBarText:SetFont(C["media"].font, C["unitframes"].player.fontSize, "THINOUTLINE");
+	PlayerFrameAlternateManaBarText:SetFont(C["media"].font, C["unitframes"].player.fontSize, "THINOUTLINE");
+	PetFrameHealthBarText:SetFont(C["media"].font, C["unitframes"].player.fontSizepet,"THINOUTLINE");
+	PetFrameManaBarText:SetFont(C["media"].font, C["unitframes"].player.fontSizepet, "THINOUTLINE");
 
-		-- Player Manabar Font Formating
-		if C["unitframes"].player.tsMana == "XX" then
-			PlayerFrameManaBar.TextString:SetText(AbbreviateLargeNumbers(UnitMana("player")))
-		elseif C["unitframes"].player.tsMana == "XX/XX" then
-			PlayerFrameManaBar.TextString:SetText(AbbreviateLargeNumbers(UnitMana("player")).." / "..(UnitManaMax("player")))
-		elseif C["unitframes"].player.tsMana == "XX (%)" then
-			PlayerFrameManaBar.TextString:SetText(AbbreviateLargeNumbers(UnitMana("player"))..' ('..(floor(((UnitMana("player"))/(UnitManaMax("player")))*100))..'%)')
-		elseif C["unitframes"].player.tsMana == "XX/XX (%)" then
-			PlayerFrameManaBar.TextString:SetText(AbbreviateLargeNumbers(UnitMana("player")).." / "..(UnitManaMax("player"))..' ('..(floor(((UnitMana("player"))/(UnitManaMax("player")))*100))..'%)')
-		end		
-		PlayerFrameManaBar.TextString:SetFont(C['media'].font, C["unitframes"].player.mfSize, "OUTLINE")
-		
-		-- Player Alternate Manabar Font Formating (Druid Cat/Bear Form)
-		if C["unitframes"].player.tsAltMana == "XX" then
-			PlayerFrameAlternateManaBar.TextString:SetText(AbbreviateLargeNumbers(UnitPower("Player", 0)))
-		elseif C["unitframes"].player.tsAltMana == "XX/XX" then
-			PlayerFrameAlternateManaBar.TextString:SetText(AbbreviateLargeNumbers(UnitPower("Player", 0)).." / "..(UnitPowerMax("Player", 0)))
-		elseif C["unitframes"].player.tsAltMana == "XX (%)" then
-			PlayerFrameAlternateManaBar.TextString:SetText(AbbreviateLargeNumbers(UnitPower("Player", 0))..' ('..(floor(((UnitPower("Player", 0))/(UnitPowerMax("Player", 0)))*100))..'%)')
-		elseif C["unitframes"].player.tsAltMana == "XX/XX (%)" then
-			PlayerFrameAlternateManaBar.TextString:SetText(AbbreviateLargeNumbers(UnitPower("Player", 0)).." / "..(UnitPowerMax("Player", 0))..' ('..(floor(((UnitPower("Player", 0))/(UnitPowerMax("Player", 0)))*100))..'%)')
-		end	
-		PlayerFrameAlternateManaBar.TextString:SetFont(C['media'].font, C["unitframes"].player.amfSize, "OUTLINE")			
-	end)
 end
 
 -- Target Frame
 if C["unitframes"].target.enable then
 
 	-- Frame Scale
-	 _G["TargetFrame"]:SetScale(C["unitframes"].target.scale)
-	 
-	-- Font Size/Style
-	hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", function()
-	
-		-- Target Healthbar Font Formating
-		if C["unitframes"].target.tsHealth == "XX" then
-			TargetFrameHealthBar.TextString:SetText(AbbreviateLargeNumbers(UnitHealth("target")))
-		elseif C["unitframes"].target.tsHealth == "XX/XX" then
-			TargetFrameHealthBar.TextString:SetText(AbbreviateLargeNumbers(UnitHealth("target")).." / "..(UnitHealthMax("target")))
-		elseif C["unitframes"].target.tsHealth == "XX (%)" then
-			TargetFrameHealthBar.TextString:SetText(AbbreviateLargeNumbers(UnitHealth("target"))..' ('..(floor(((UnitHealth("target"))/(UnitHealthMax("target")))*100))..'%)')
-		elseif C["unitframes"].target.tsHealth == "XX/XX (%)" then
-			TargetFrameHealthBar.TextString:SetText(AbbreviateLargeNumbers(UnitHealth("target")).." / "..(UnitHealthMax("target"))..' ('..(floor(((UnitHealth("target"))/(UnitHealthMax("target")))*100))..'%)')
-		end
-		TargetFrameHealthBar.TextString:SetFont(C['media'].font, C["unitframes"].target.hfSize, "OUTLINE")
+	 _G["TargetFrame"]:SetScale(C["unitframes"].target.scale);
+ 	TargetFrameTextureFrameHealthBarText:SetFont(C["media"].font, C["unitframes"].target.fontSize, "THINOUTLINE");
+	TargetFrameTextureFrameManaBarText:SetFont(C["media"].font, C["unitframes"].target.fontSize, "THINOUTLINE");
 
-		-- Target Manabar Font Formating
-		if C["unitframes"].target.tsMana == "XX" then
-			TargetFrameManaBar.TextString:SetText(AbbreviateLargeNumbers(UnitMana("target")))
-		elseif C["unitframes"].target.tsMana == "XX/XX" then
-			TargetFrameManaBar.TextString:SetText(AbbreviateLargeNumbers(UnitMana("target")).." / "..(UnitManaMax("target")))
-		elseif C["unitframes"].target.tsMana == "XX (%)" then
-			TargetFrameManaBar.TextString:SetText(AbbreviateLargeNumbers(UnitMana("target"))..' ('..(floor(((UnitMana("target"))/(UnitManaMax("target")))*100))..'%)')
-		elseif C["unitframes"].target.tsMana == "XX/XX (%)" then
-			TargetFrameManaBar.TextString:SetText(AbbreviateLargeNumbers(UnitMana("target")).." / "..(UnitManaMax("target"))..' ('..(floor(((UnitMana("target"))/(UnitManaMax("target")))*100))..'%)')
-		end		
-		TargetFrameManaBar.TextString:SetFont(C['media'].font, C["unitframes"].target.mfSize, "OUTLINE")		
-	end)
-end
+end;
 
 -- Focus Frame
 if C["unitframes"].focus.enable then
 
 	-- Frame Scale
 	 _G["FocusFrame"]:SetScale(C["unitframes"].focus.scale)
-	 
-	-- Font Size/Style
-	hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", function()
-	
-		-- Focus Healthbar Font Formating
-		if C["unitframes"].focus.tsHealth == "XX" then
-			FocusFrameHealthBar.TextString:SetText(AbbreviateLargeNumbers(UnitHealth("focus")))
-		elseif C["unitframes"].focus.tsHealth == "XX/XX" then
-			FocusFrameHealthBar.TextString:SetText(AbbreviateLargeNumbers(UnitHealth("focus")).." / "..(UnitHealthMax("focus")))
-		elseif C["unitframes"].focus.tsHealth == "XX (%)" then
-			FocusFrameHealthBar.TextString:SetText(AbbreviateLargeNumbers(UnitHealth("focus"))..' ('..(floor(((UnitHealth("focus"))/(UnitHealthMax("focus")))*100))..'%)')
-		elseif C["unitframes"].focus.tsHealth == "XX/XX (%)" then
-			FocusFrameHealthBar.TextString:SetText(AbbreviateLargeNumbers(UnitHealth("focus")).." / "..(UnitHealthMax("focus"))..' ('..(floor(((UnitHealth("focus"))/(UnitHealthMax("focus")))*100))..'%)')
-		end
-		FocusFrameHealthBar.TextString:SetFont(C['media'].font, C["unitframes"].focus.hfSize, "OUTLINE")
+	FocusFrameTextureFrameHealthBarText:SetFont(C["media"].font, C["unitframes"].focus.fontSize,"THINOUTLINE")
+	FocusFrameTextureFrameManaBarText:SetFont(C["media"].font, C["unitframes"].focus.fontSize,"THINOUTLINE")
 
-		-- focus Manabar Font Formating
-		if C["unitframes"].focus.tsMana == "XX" then
-			FocusFrameManaBar.TextString:SetText(AbbreviateLargeNumbers(UnitMana("focus")))
-		elseif C["unitframes"].focus.tsMana == "XX/XX" then
-			FocusFrameManaBar.TextString:SetText(AbbreviateLargeNumbers(UnitMana("focus")).." / "..(UnitManaMax("focus")))
-		elseif C["unitframes"].focus.tsMana == "XX (%)" then
-			FocusFrameManaBar.TextString:SetText(AbbreviateLargeNumbers(UnitMana("focus"))..' ('..(floor(((UnitMana("focus"))/(UnitManaMax("focus")))*100))..'%)')
-		elseif C["unitframes"].focus.tsMana == "XX/XX (%)" then
-			FocusFrameManaBar.TextString:SetText(AbbreviateLargeNumbers(UnitMana("focus")).." / "..(UnitManaMax("focus"))..' ('..(floor(((UnitMana("focus"))/(UnitManaMax("focus")))*100))..'%)')
-		end		
-		FocusFrameManaBar.TextString:SetFont(C['media'].font, C["unitframes"].focus.mfSize, "OUTLINE")		
-	end)
-end
-
+end;
 
 
 -- Party Frames --
+if C["unitframes"].party.enable then
 
--- Clear all old settings
-PartyMemberFrame1:ClearAllPoints()
-PartyMemberFrame2:ClearAllPoints()
-PartyMemberFrame3:ClearAllPoints()
-PartyMemberFrame4:ClearAllPoints()
+	-- Clear all old settings
+	PartyMemberFrame1:ClearAllPoints();
+	PartyMemberFrame2:ClearAllPoints();
+	PartyMemberFrame3:ClearAllPoints();
+	PartyMemberFrame4:ClearAllPoints();
 
--- Create new locations
-PartyMemberFrame1:SetPoint(C['unitframes'].party.position.relAnchor, UIParent, C['unitframes'].party.position.offSetX, C['unitframes'].party.position.offSetY)
-PartyMemberFrame2:SetPoint("TOPLEFT", PartyMemberFrame1, 0, -75)
-PartyMemberFrame3:SetPoint("TOPLEFT", PartyMemberFrame2, 0, -75)
-PartyMemberFrame4:SetPoint("TOPLEFT", PartyMemberFrame3, 0, -75)
+	-- Create new locations
+	PartyMemberFrame1:SetPoint(C['unitframes'].party.position.relAnchor, UIParent, C['unitframes'].party.position.offSetX, C['unitframes'].party.position.offSetY);
+	PartyMemberFrame2:SetPoint("TOPLEFT", PartyMemberFrame1, 0, -75);
+	PartyMemberFrame3:SetPoint("TOPLEFT", PartyMemberFrame2, 0, -75);
+	PartyMemberFrame4:SetPoint("TOPLEFT", PartyMemberFrame3, 0, -75);
 
--- Make the new locations stay
-PartyMemberFrame1.SetPoint = function() end
-PartyMemberFrame2.SetPoint = function() end
-PartyMemberFrame3.SetPoint = function() end
-PartyMemberFrame4.SetPoint = function() end
+	-- Make the new locations stay
+	PartyMemberFrame1.SetPoint = function() end;
+	PartyMemberFrame2.SetPoint = function() end;
+	PartyMemberFrame3.SetPoint = function() end;
+	PartyMemberFrame4.SetPoint = function() end;
 
--- Set the scale of all the frames
-PartyMemberFrame1:SetScale(C["unitframes"].party.scale)
-PartyMemberFrame2:SetScale(C["unitframes"].party.scale)
-PartyMemberFrame3:SetScale(C["unitframes"].party.scale)
-PartyMemberFrame4:SetScale(C["unitframes"].party.scale)
-
+	-- Set the scale of all the frames
+	PartyMemberFrame1:SetScale(C["unitframes"].party.scale);
+	PartyMemberFrame2:SetScale(C["unitframes"].party.scale);
+	PartyMemberFrame3:SetScale(C["unitframes"].party.scale);
+	PartyMemberFrame4:SetScale(C["unitframes"].party.scale);
+	
+	-- Set Font Size
+	PartyMemberFrame1HealthBarText:SetFont(C["media"].font, C["unitframes"].party.fontSize, "THINOUTLINE")
+	PartyMemberFrame1ManaBarText:SetFont(C["media"].font, C["unitframes"].party.fontSize, "THINOUTLINE")
+	PartyMemberFrame2HealthBarText:SetFont(C["media"].font, C["unitframes"].party.fontSize, "THINOUTLINE")
+	PartyMemberFrame2ManaBarText:SetFont(C["media"].font, C["unitframes"].party.fontSize, "THINOUTLINE")
+	PartyMemberFrame3HealthBarText:SetFont(C["media"].font, C["unitframes"].party.fontSize, "THINOUTLINE")
+	PartyMemberFrame3ManaBarText:SetFont(C["media"].font, C["unitframes"].party.fontSize, "THINOUTLINE")
+	PartyMemberFrame4HealthBarText:SetFont(C["media"].font, C["unitframes"].party.fontSize, "THINOUTLINE")
+	PartyMemberFrame4ManaBarText:SetFont(C["media"].font, C["unitframes"].party.fontSize, "THINOUTLINE")
+end;
 
  -- Arena Frames
- 
-LoadAddOn("Blizzard_ArenaUI") -- You only need to run this once. You can safely delete any copies of this line.
- 
-ArenaEnemyFrames:SetScale(C["unitframes"].arena.scale)
+if C["unitframes"].arena.enable then
+	LoadAddOn("Blizzard_ArenaUI"); -- You only need to run this once. You can safely delete any copies of this line.
+	 
+	ArenaEnemyFrames:SetScale(C["unitframes"].arena.scale);
+	
+	ArenaEnemyFrame1HealthBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize,"THINOUTLINE");
+	ArenaEnemyFrame1ManaBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize, "THINOUTLINE");
+	ArenaEnemyFrame2HealthBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize,"THINOUTLINE");
+	ArenaEnemyFrame2ManaBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize, "THINOUTLINE");
+	ArenaEnemyFrame3HealthBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize,"THINOUTLINE");
+	ArenaEnemyFrame3ManaBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize, "THINOUTLINE");
+	ArenaEnemyFrame4HealthBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize,"THINOUTLINE");
+	ArenaEnemyFrame4ManaBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize, "THINOUTLINE");
+	ArenaEnemyFrame5HealthBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize,"THINOUTLINE");
+	ArenaEnemyFrame5ManaBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize, "THINOUTLINE");
 
-if C["unitframes"].arena.tracker == true then
-	trinkets = {}
-	local arenaFrame,trinket
-	for i = 1, 5 do
-		arenaFrame = "ArenaEnemyFrame"..i
-        trinket = CreateFrame("Cooldown", arenaFrame.."Trinket", ArenaEnemyFrames)
-        trinket:SetPoint("TOPRIGHT", arenaFrame, 30, -6)
-        trinket:SetSize(24, 24)
-        trinket.icon = trinket:CreateTexture(nil, "BACKGROUND")
-        trinket.icon:SetAllPoints()
-        trinket.icon:SetTexture("Interface\\Icons\\inv_jewelry_trinketpvp_01")
-        trinket:Hide()
-        trinkets["arena"..i] = trinket
-	end
-	local events = CreateFrame("Frame")
-	function events:UNIT_SPELLCAST_SUCCEEDED(unitID, spell, rank, lineID, spellID)
-		if not trinkets[unitID] then
-			return
-		end        
-		if spellID == 59752 or spellID == 42292 then
-			CooldownFrame_SetTimer(trinkets[unitID], GetTime(), 120, 1)
-			SendChatMessage("Trinket used by: "..GetUnitName(unitID, true), "PARTY")
-		end
-	end
-	function events:PLAYER_ENTERING_WORLD()
-		local _, instanceType = IsInInstance()
-		if instanceType == "arena" then
-			self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
-		elseif self:IsEventRegistered("UNIT_SPELLCAST_SUCCEEDED") then
-			self:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED") 
-			for _, trinket in pairs(trinkets) do
-				trinket:SetCooldown(0, 0)
-				trinket:Hide()
-            end        
-		end
-	end
-	events:SetScript("OnEvent", function(self, event, ...) return self[event](self, ...) end)
-	events:RegisterEvent("PLAYER_ENTERING_WORLD")
-end
- 
+
+	if C["unitframes"].arena.tracker == true then
+		trinkets = {};
+		local arenaFrame,trinket;
+		for i = 1, 5 do
+			arenaFrame = "ArenaEnemyFrame"..i;
+			trinket = CreateFrame("Cooldown", arenaFrame.."Trinket", ArenaEnemyFrames);
+			trinket:SetPoint("TOPRIGHT", arenaFrame, 30, -6);
+			trinket:SetSize(24, 24);
+			trinket.icon = trinket:CreateTexture(nil, "BACKGROUND");
+			trinket.icon:SetAllPoints();
+			trinket.icon:SetTexture("Interface\\Icons\\inv_jewelry_trinketpvp_01");
+			trinket:Hide();
+			trinkets["arena"..i] = trinket;
+		end;
+		local events = CreateFrame("Frame");
+		function events:UNIT_SPELLCAST_SUCCEEDED(unitID, spell, rank, lineID, spellID)
+			if not trinkets[unitID] then
+				return;
+			end ;       
+			if spellID == 59752 or spellID == 42292 then
+				CooldownFrame_SetTimer(trinkets[unitID], GetTime(), 120, 1);
+				SendChatMessage("Trinket used by: "..GetUnitName(unitID, true), "PARTY");
+			end;
+		end;
+		function events:PLAYER_ENTERING_WORLD()
+			local _, instanceType = IsInInstance();
+			if instanceType == "arena" then
+				self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED");
+			elseif self:IsEventRegistered("UNIT_SPELLCAST_SUCCEEDED") then
+				self:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED"); 
+				for _, trinket in pairs(trinkets) do
+					trinket:SetCooldown(0, 0);
+					trinket:Hide();
+				end;        
+			end;
+		end;
+		events:SetScript("OnEvent", function(self, event, ...) return self[event](self, ...) end);
+		events:RegisterEvent("PLAYER_ENTERING_WORLD");
+	end;
+end;
 
  -- Boss Frames
-for i = 1,4 do
-	local boss = _G["Boss"..i.."TargetFrame"]
-	if boss then
-		boss:SetScale(C["unitframes"].boss.scale)
-		boss:ClearAllPoints()
-		boss:SetPoint(C['unitframes'].boss.position.relAnchor, UIParent, C['unitframes'].boss.position.offSetX, C['unitframes'].boss.position.offSetY)
-		boss.ClearAllPoints = UF
-		boss.SetPoint = UF		
-	end
+if C["unitframes"].boss.enable then
+	for i = 1,4 do
+		local boss = _G["Boss"..i.."TargetFrame"];
+		if boss then
+			boss:SetScale(C["unitframes"].boss.scale)
+			boss:ClearAllPoints();
+			boss:SetPoint(C['unitframes'].boss.position.relAnchor, UIParent, C['unitframes'].boss.position.offSetX, C['unitframes'].boss.position.offSetY);
+			boss.ClearAllPoints = function() end;
+			boss.SetPoint = function() end;		
+		end;
+	end;
+end;
+
+-- Font Style thanks to Phanx from WoWinterface.
+local shorts = {
+	{ 1e10, 1e9, "%.0fb" }, --  10b+ as  12b
+	{  1e9, 1e9, "%.1fb" }, --   1b+ as 8.3b
+	{  1e7, 1e6, "%.0fm" }, --  10m+ as  14m
+	{  1e6, 1e6, "%.1fm" }, --   1m+ as 7.4m
+	{  1e5, 1e3, "%.0fk" }, -- 100k+ as 840k
+	{  1e3, 1e3, "%.1fk" }, --   1k+ as 2.5k
+	{    0,   1,    "%d" }, -- < 1k  as  974
+}
+for i = 1, #shorts do
+	shorts[i][4] = shorts[i][3] .. " (%.0f%%)"
 end
 
-
-local UnitFromFrame = {
-  ["PetFrame"] = "pet",
-  ["PartyMemberFrame1"] = "party1",
-  ["PartyMemberFrame2"] = "party2",
-  ["PartyMemberFrame3"] = "party3",
-  ["PartyMemberFrame4"] = "party4",
-  ["PartyMemberFrame1PetFrame"] = "party1pet",
-  ["PartyMemberFrame2PetFrame"] = "party2pet",
-  ["PartyMemberFrame3PetFrame"] = "party3pet",
-  ["PartyMemberFrame4PetFrame"] = "party4pet",
-  ["ArenaEnemyFrame1"] = "arena1",
-  ["ArenaEnemyFrame2"] = "arena2",
-  ["ArenaEnemyFrame3"] = "arena3",
-  ["ArenaEnemyFrame4"] = "arena4",
-  ["ArenaEnemyFrame5"] = "arena5",
-  ["ArenaEnemyFrame1PetFrame"] = "arena1pet",
-  ["ArenaEnemyFrame2PetFrame"] = "arena2pet",
-  ["ArenaEnemyFrame3PetFrame"] = "arena3pet",
-  ["ArenaEnemyFrame4PetFrame"] = "arena4pet",
-  ["ArenaEnemyFrame5PetFrame"] = "arena5pet",
-  ["Boss1TargetFrame"] = "boss1",
-  ["Boss2TargetFrame"] = "boss2",
-  ["Boss3TargetFrame"] = "boss3",
-  ["Boss4TargetFrame"] = "boss4",
- }
- 
-hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", function(Frame)
-	if not UnitFromFrame[Frame:GetParent():GetName()] then return end
-	local Unit = UnitFromFrame[Frame:GetParent():GetName()]
-	Frame.TextString:SetText(AbbreviateLargeNumbers(UnitPower(Unit)))
-	if Frame:GetName():find("Health") then
-		Frame.TextString:SetText(AbbreviateLargeNumbers(UnitHealth(Unit)))	
+hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", function(statusBar, fontString, value, valueMin, valueMax)
+	local style = GetCVar("statusTextDisplay")
+	if style == "PERCENT" then
+		return fontString:SetFormattedText("%.0f%%", value / valueMax * 100)
 	end
-	if Frame:GetName():find("Mana") then
-		Frame.TextString:SetText(AbbreviateLargeNumbers(UnitMana(Unit)))
+	for i = 1, #shorts do
+		local t = shorts[i]
+		if value >= t[1] then
+			if style == "BOTH" then
+				return fontString:SetFormattedText(t[4], value / t[2], value / valueMax * 100)
+			else
+				return fontString:SetFormattedText(t[3], value / t[2])				
+			end
+		end
 	end
-
-	Frame.TextString:SetFont(C['media'].font, C["unitframes"].pppaapb, "OUTLINE")
 end)
 
 -- Disable healing/damage spam over player/pet frame:

@@ -62,16 +62,12 @@ if C['datatext'].pro and C['datatext'].pro > 0 then
 		local prof1, prof2 = GetProfessions()
 		if btn == "LeftButton" then
 			if prof1 then
-				if (GetProfessionInfo(prof1) == (B.locale == "deDE" and "Kr\195\164uterkunde" or'Herbalism')) then
-						print('|cff00B4FFBasic|rUI: |cffFF0000Herbalism has no options!|r')
-				elseif(GetProfessionInfo(prof1) == (B.locale == "deDE" and "K\195\188rschnerei" or 'Skinning')) then
-						print('|cff00B4FFBasic|rUI: |cffFF0000Skinning has no options!|r')
-				elseif(GetProfessionInfo(prof1) == (B.locale == "deDE" and "Bergbau" or 'Mining')) then
-					if(B.locale == "deDE") then
-						CastSpellByName("Verh\195\188ttung")
-					else
-						CastSpellByName("Smelting")
-					end
+				if (GetProfessionInfo(prof1) == ('Herbalism')) then
+					print('|cff00B4FFBasic|rUI: |cffFF0000Herbalism has no options!|r')
+				elseif(GetProfessionInfo(prof1) == ('Skinning')) then
+					print('|cff00B4FFBasic|rUI: |cffFF0000Skinning has no options!|r')
+				elseif(GetProfessionInfo(prof1) == ('Mining')) then
+					CastSpellByName("Smelting")
 				else	
 					CastSpellByName((GetProfessionInfo(prof1)))
 				end
@@ -79,19 +75,15 @@ if C['datatext'].pro and C['datatext'].pro > 0 then
 				print('|cff00B4FFBasic|rUI: |cffFF0000No Profession Found!|r')
 			end
 		elseif btn == 'MiddleButton' then
-			ToggleFrame(SpellBookFrame)		
+			ToggleSpellBook(BOOKTYPE_PROFESSION);	
 		elseif btn == "RightButton" then
 			if prof2 then
-				if (GetProfessionInfo(prof2) == (B.locale == "deDE" and "Kräuterkunde" or'Herbalism')) then
-						print('|cff00B4FFBasic|rUI: |cffFF0000Herbalism has no options!|r')
-				elseif(GetProfessionInfo(prof2) == (B.locale == "deDE" and "K\195\188rschnerei" or 'Skinning')) then
-						print('|cff00B4FFBasic|rUI: |cffFF0000Skinning has no options!|r')
-				elseif(GetProfessionInfo(prof2) == (B.locale == "deDE" and "Bergbau" or 'Mining')) then
-					if(B.locale == "deDE") then
-						CastSpellByName("Verh\195\188ttung")
-					else
-						CastSpellByName("Smelting")
-					end
+				if (GetProfessionInfo(prof2) == ('Herbalism')) then
+					print('|cff00B4FFBasic|rUI: |cffFF0000Herbalism has no options!|r')
+				elseif(GetProfessionInfo(prof2) == ('Skinning')) then
+					print('|cff00B4FFBasic|rUI: |cffFF0000Skinning has no options!|r')
+				elseif(GetProfessionInfo(prof2) == ('Mining')) then
+					CastSpellByName("Smelting")
 				else
 					CastSpellByName((GetProfessionInfo(prof2)))
 				end

@@ -405,67 +405,46 @@ DB["tooltip"] = {
 DB["unitframes"] = {
 	
 	["enable"] = true,
-	["pppaapb"] = 11,				-- Pet, Party, Party pet, Arena, Arena Pet, and Boss Frame Font Size
 	["player"] = {
 		["enable"] = true,			-- Enable Player Frame Adjustments
 		["scale"] = 1.15,			-- Player Frame Scale
-		
-		-- Healthbar
-		["tsHealth"] = "XX",		-- Options are "XX" or "XX/XX" or "XX XXX" or "XX/XX XXX"
-		["hfSize"] = 14,			-- Healthbar Font Size
-		
-		-- Manabar
-		["tsMana"] = "XX",			-- Options are "XX" or "XX/XX" or "XX %" or "XX/XX %"
-		["mfSize"] = 14,			-- Manabar Font Size
-		
-		-- Alternate Manabar (Druid forms Cat/Bear)
-		["tsAltMana"] = "XX",		-- Options are "XX" or "XX/XX" or "XX %" or "XX/XX %"
-		["amfSize"] = 14,			-- Alternate Manabar Size ( for Druids in Cat/Bear Form)
+		["fontSize"] = 13,			-- Stausbar Font Size
+		["fontSizepet"] = 10,			-- Stausbar Font Size
 	},
 	["target"] = {
-		["enable"] = true,			-- Enable Player Frame Adjustments
-		["scale"] = 1.15,			-- Player Frame Scale
-		
-		-- Healthbar
-		["tsHealth"] = "XX",		-- Options are "XX" or "XX/XX" or "XX XXX" or "XX/XX XXX"
-		["hfSize"] = 14,			-- Healthbar Font Size
-		
-		-- Manabar
-		["tsMana"] = "XX",			-- Options are "XX" or "XX/XX" or "XX %" or "XX/XX %"
-		["mfSize"] = 14,			-- Manabar Font Size
-
+		["enable"] = true,			-- Enable Target Frame Adjustments
+		["scale"] = 1.15,			-- Target Frame Scale
+		["fontSize"] = 13,			-- Stausbar Font Size
 	},
 	["focus"] = {
-		["enable"] = true,			-- Enable Player Frame Adjustments
-		["scale"] = 1.15,			-- Player Frame Scale
-		
-		-- Healthbar
-		["tsHealth"] = "XX",		-- Options are "XX" or "XX/XX" or "XX XXX" or "XX/XX XXX"
-		["hfSize"] = 14,			-- Healthbar Font Size
-		
-		-- Manabar
-		["tsMana"] = "XX",			-- Options are "XX" or "XX/XX" or "XX %" or "XX/XX %"
-		["mfSize"] = 14,			-- Manabar Font Size
-
+		["enable"] = true,			-- Enable Focus Frame Adjustments
+		["scale"] = 1.15,			-- Focus Frame Scale
+		["fontSize"] = 13,			-- Stausbar Font Size
 	},
 	["party"] = {
+		["enable"] = true,
 		["scale"] = 1.15,
+		["fontSize"] = 11,			-- Stausbar Font Size
 		["position"] = {
 			["relAnchor"] = "TOPLEFT",
-			["offSetX"] = 10,
-			["offSetY"] = -150,
+			["offSetX"] = 10,		-- Controls the X offset. (Left - Right)
+			["offSetY"] = -150,		-- Controls the Y offset. (Up - Down)
 		},
 	},
 	["arena"] = {
+		["enable"] = true,
 		["scale"] = 1.5,
+		["fontSize"] = 11,			-- Stausbar Font Size
 		["tracker"] = true,
 	},
 	["boss"] = {
+		["enable"] = true,
 		["scale"] = 1.15,
+		["fontSize"] = 13,			-- Stausbar Font Size	
 		["position"] = {
 			["relAnchor"] = "TOPRIGHT",
-			["offSetX"] = -50,
-			["offSetY"] = -250,
+			["offSetX"] = -50,		-- Controls the X offset. (Left - Right)
+			["offSetY"] = -250,		-- Controls the Y offset. (Up - Down)
 		},
 	},
 }	
