@@ -17,7 +17,7 @@ if C['datatext'].zone and C['datatext'].zone > 0 then
 	Stat:SetFrameLevel(3)
 
 	local Text = DataPanel:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C['media'].font, C['datatext'].fontsize,'THINOUTLINE')
+	Text:SetFont(C['media'].fontNormal, C['datatext'].fontsize,'THINOUTLINE')
 	B.PP(C['datatext'].zone, Text)
 
 	local function Update(self)

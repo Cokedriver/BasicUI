@@ -14,11 +14,11 @@ if C["unitframes"].player.enable then
 
 	-- Frame Scale
 	_G["PlayerFrame"]:SetScale(C["unitframes"].player.scale);	
-	PlayerFrameHealthBarText:SetFont(C["media"].font, C["unitframes"].player.fontSize,"THINOUTLINE");
-	PlayerFrameManaBarText:SetFont(C["media"].font, C["unitframes"].player.fontSize, "THINOUTLINE");
-	PlayerFrameAlternateManaBarText:SetFont(C["media"].font, C["unitframes"].player.fontSize, "THINOUTLINE");
-	PetFrameHealthBarText:SetFont(C["media"].font, C["unitframes"].player.fontSizepet,"THINOUTLINE");
-	PetFrameManaBarText:SetFont(C["media"].font, C["unitframes"].player.fontSizepet, "THINOUTLINE");
+	PlayerFrameHealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].player.fontSize,"THINOUTLINE");
+	PlayerFrameManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].player.fontSize, "THINOUTLINE");
+	PlayerFrameAlternateManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].player.fontSize, "THINOUTLINE");
+	PetFrameHealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].player.fontSizepet,"THINOUTLINE");
+	PetFrameManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].player.fontSizepet, "THINOUTLINE");
 
 end
 
@@ -27,8 +27,8 @@ if C["unitframes"].target.enable then
 
 	-- Frame Scale
 	 _G["TargetFrame"]:SetScale(C["unitframes"].target.scale);
- 	TargetFrameTextureFrameHealthBarText:SetFont(C["media"].font, C["unitframes"].target.fontSize, "THINOUTLINE");
-	TargetFrameTextureFrameManaBarText:SetFont(C["media"].font, C["unitframes"].target.fontSize, "THINOUTLINE");
+ 	TargetFrameTextureFrameHealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].target.fontSize, "THINOUTLINE");
+	TargetFrameTextureFrameManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].target.fontSize, "THINOUTLINE");
 
 end;
 
@@ -37,8 +37,8 @@ if C["unitframes"].focus.enable then
 
 	-- Frame Scale
 	 _G["FocusFrame"]:SetScale(C["unitframes"].focus.scale)
-	FocusFrameTextureFrameHealthBarText:SetFont(C["media"].font, C["unitframes"].focus.fontSize,"THINOUTLINE")
-	FocusFrameTextureFrameManaBarText:SetFont(C["media"].font, C["unitframes"].focus.fontSize,"THINOUTLINE")
+	FocusFrameTextureFrameHealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].focus.fontSize,"THINOUTLINE")
+	FocusFrameTextureFrameManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].focus.fontSize,"THINOUTLINE")
 
 end;
 
@@ -71,14 +71,14 @@ if C["unitframes"].party.enable then
 	PartyMemberFrame4:SetScale(C["unitframes"].party.scale);
 	
 	-- Set Font Size
-	PartyMemberFrame1HealthBarText:SetFont(C["media"].font, C["unitframes"].party.fontSize, "THINOUTLINE")
-	PartyMemberFrame1ManaBarText:SetFont(C["media"].font, C["unitframes"].party.fontSize, "THINOUTLINE")
-	PartyMemberFrame2HealthBarText:SetFont(C["media"].font, C["unitframes"].party.fontSize, "THINOUTLINE")
-	PartyMemberFrame2ManaBarText:SetFont(C["media"].font, C["unitframes"].party.fontSize, "THINOUTLINE")
-	PartyMemberFrame3HealthBarText:SetFont(C["media"].font, C["unitframes"].party.fontSize, "THINOUTLINE")
-	PartyMemberFrame3ManaBarText:SetFont(C["media"].font, C["unitframes"].party.fontSize, "THINOUTLINE")
-	PartyMemberFrame4HealthBarText:SetFont(C["media"].font, C["unitframes"].party.fontSize, "THINOUTLINE")
-	PartyMemberFrame4ManaBarText:SetFont(C["media"].font, C["unitframes"].party.fontSize, "THINOUTLINE")
+	PartyMemberFrame1HealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].party.fontSize, "THINOUTLINE")
+	PartyMemberFrame1ManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].party.fontSize, "THINOUTLINE")
+	PartyMemberFrame2HealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].party.fontSize, "THINOUTLINE")
+	PartyMemberFrame2ManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].party.fontSize, "THINOUTLINE")
+	PartyMemberFrame3HealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].party.fontSize, "THINOUTLINE")
+	PartyMemberFrame3ManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].party.fontSize, "THINOUTLINE")
+	PartyMemberFrame4HealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].party.fontSize, "THINOUTLINE")
+	PartyMemberFrame4ManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].party.fontSize, "THINOUTLINE")
 end;
 
  -- Arena Frames
@@ -87,16 +87,16 @@ if C["unitframes"].arena.enable then
 	 
 	ArenaEnemyFrames:SetScale(C["unitframes"].arena.scale);
 	
-	ArenaEnemyFrame1HealthBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize,"THINOUTLINE");
-	ArenaEnemyFrame1ManaBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize, "THINOUTLINE");
-	ArenaEnemyFrame2HealthBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize,"THINOUTLINE");
-	ArenaEnemyFrame2ManaBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize, "THINOUTLINE");
-	ArenaEnemyFrame3HealthBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize,"THINOUTLINE");
-	ArenaEnemyFrame3ManaBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize, "THINOUTLINE");
-	ArenaEnemyFrame4HealthBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize,"THINOUTLINE");
-	ArenaEnemyFrame4ManaBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize, "THINOUTLINE");
-	ArenaEnemyFrame5HealthBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize,"THINOUTLINE");
-	ArenaEnemyFrame5ManaBarText:SetFont(C["media"].font, C["unitframes"].arena.fontSize, "THINOUTLINE");
+	ArenaEnemyFrame1HealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize,"THINOUTLINE");
+	ArenaEnemyFrame1ManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize, "THINOUTLINE");
+	ArenaEnemyFrame2HealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize,"THINOUTLINE");
+	ArenaEnemyFrame2ManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize, "THINOUTLINE");
+	ArenaEnemyFrame3HealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize,"THINOUTLINE");
+	ArenaEnemyFrame3ManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize, "THINOUTLINE");
+	ArenaEnemyFrame4HealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize,"THINOUTLINE");
+	ArenaEnemyFrame4ManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize, "THINOUTLINE");
+	ArenaEnemyFrame5HealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize,"THINOUTLINE");
+	ArenaEnemyFrame5ManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize, "THINOUTLINE");
 
 
 	if C["unitframes"].arena.tracker == true then
@@ -182,6 +182,21 @@ hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", function(statusBar, f
 				return fontString:SetFormattedText(t[3], value / t[2])				
 			end
 		end
+	end
+end)
+
+hooksecurefunc("UnitFrame_Update", function(self)
+	if not self.name then return end
+
+	if UnitIsPlayer(self.unit) then
+		-- Color by class:
+		local _, class = UnitClass(self.unit)
+		local color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
+		self.name:SetTextColor(color.r, color.g, color.b)
+	else
+		-- Not a player. Return to default color:
+		local reaction = UnitReaction(self.unit);
+		self.name:SetTextColor(FACTION_BAR_COLORS[reaction].r, FACTION_BAR_COLORS[reaction].g, FACTION_BAR_COLORS[reaction].b)
 	end
 end)
 

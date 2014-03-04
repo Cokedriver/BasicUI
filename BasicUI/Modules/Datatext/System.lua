@@ -20,7 +20,7 @@ if C['datatext'].system and C['datatext'].system > 0 then
 	Stat.tooltip = false
 
 	local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C['media'].font, C['datatext'].fontsize,'THINOUTLINE')
+	Text:SetFont(C['media'].fontNormal, C['datatext'].fontsize,'THINOUTLINE')
 	B.PP(C['datatext'].system, Text)
 
 	local bandwidthString = "%.2f Mbps"

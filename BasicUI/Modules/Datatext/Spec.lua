@@ -18,7 +18,7 @@ if C['datatext'].spec and C['datatext'].spec > 0 then
 	Stat:SetFrameLevel(3)
 
 	local Text  = DataPanel:CreateFontString(nil, 'OVERLAY')
-	Text:SetFont(C['media'].font, C['datatext'].fontsize,'THINOUTLINE')
+	Text:SetFont(C['media'].fontNormal, C['datatext'].fontsize,'THINOUTLINE')
 	B.PP(C['datatext'].spec, Text)
 
 	local talent = {}

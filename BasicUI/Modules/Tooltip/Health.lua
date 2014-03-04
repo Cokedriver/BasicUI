@@ -19,10 +19,10 @@ bar.Text = bar:CreateFontString(nil, 'OVERLAY')
 bar.Text:SetPoint('CENTER', bar, cfg.healthbar.textPos, 0, 1)
 
 if (cfg.healthbar.showOutline) then
-    bar.Text:SetFont(C['media'].font, cfg.healthbar.fontSize, 'THINOUTLINE')
+    bar.Text:SetFont(C['media'].fontNormal, cfg.healthbar.fontSize, 'THINOUTLINE')
     bar.Text:SetShadowOffset(0, 0)
 else
-    bar.Text:SetFont(C['media'].font, cfg.healthbar.fontSize)
+    bar.Text:SetFont(C['media'].fontNormal, cfg.healthbar.fontSize)
     bar.Text:SetShadowOffset(1, -1)
 end
 

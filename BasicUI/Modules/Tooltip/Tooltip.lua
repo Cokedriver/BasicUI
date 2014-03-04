@@ -61,27 +61,28 @@ local symbiosis = {
     -- Some tooltip changes
 
 if (cfg.fontOutline) then
-    GameTooltipHeaderText:SetFont(C['media'].font, (cfg.fontSize + 2), 'THINOUTLINE')
+    GameTooltipHeaderText:SetFont(C['media'].fontBold, (cfg.fontSize + 2), 'THINOUTLINE')
     GameTooltipHeaderText:SetShadowOffset(0, 0)
 
-    GameTooltipText:SetFont(C['media'].font, (cfg.fontSize), 'THINOUTLINE')
+    GameTooltipText:SetFont(C['media'].fontNormal, (cfg.fontSize), 'THINOUTLINE')
     GameTooltipText:SetShadowOffset(0, 0)
 
-    GameTooltipTextSmall:SetFont(C['media'].font, (cfg.fontSize), 'THINOUTLINE')
+    GameTooltipTextSmall:SetFont(C['media'].fontNormal, (cfg.fontSize), 'THINOUTLINE')
     GameTooltipTextSmall:SetShadowOffset(0, 0)
 else
-    GameTooltipHeaderText:SetFont(C['media'].font, (cfg.fontSize + 2))
-    GameTooltipText:SetFont(C['media'].font, (cfg.fontSize))
-    GameTooltipTextSmall:SetFont(C['media'].font, (cfg.fontSize))
+    GameTooltipHeaderText:SetFont(C['media'].fontBold, (cfg.fontSize + 2))
+    GameTooltipText:SetFont(C['media'].fontNormal, (cfg.fontSize))
+    GameTooltipTextSmall:SetFont(C['media'].fontNormal, (cfg.fontSize))
 end
 
 GameTooltipStatusBar:SetHeight(7)
 GameTooltipStatusBar:SetBackdrop({bgFile = 'Interface\\Buttons\\WHITE8x8'})
 GameTooltipStatusBar:SetBackdropColor(0, 1, 0, 0.3)
 
+
 function GameTooltip_UnitColor(unit)
     local r, g, b
-    
+
     if (UnitIsDead(unit) or UnitIsGhost(unit) or UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then
         r = 0.5
         g = 0.5
@@ -123,7 +124,7 @@ function GameTooltip_UnitColor(unit)
         end
     else
         local reaction = UnitReaction(unit, 'player')
-        
+
         if (reaction) then
             r = FACTION_BAR_COLORS[reaction].r
             g = FACTION_BAR_COLORS[reaction].g
@@ -134,7 +135,7 @@ function GameTooltip_UnitColor(unit)
             b = 255/255
         end
     end
-    
+
     return r, g, b
 end
   

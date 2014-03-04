@@ -79,10 +79,10 @@ if (C['powerbar'].energy.showComboPoints) then
         f.ComboPoints[i] = f:CreateFontString(nil, 'ARTWORK')
 
         if (C['powerbar'].energy.comboFontOutline) then
-            f.ComboPoints[i]:SetFont(C['media'].font, C['powerbar'].energy.comboFontSize, 'THINOUTLINE')
+            f.ComboPoints[i]:SetFont(C['media'].fontBold, C['powerbar'].energy.comboFontSize, 'THINOUTLINE')
             f.ComboPoints[i]:SetShadowOffset(0, 0)
         else
-            f.ComboPoints[i]:SetFont(C['media'].font, C['powerbar'].energy.comboFontSize)
+            f.ComboPoints[i]:SetFont(C['media'].fontBold, C['powerbar'].energy.comboFontSize)
             f.ComboPoints[i]:SetShadowOffset(1, -1)
         end
 
@@ -106,7 +106,7 @@ if (playerClass == 'MONK') then
     for i = 1, 5 do
         f.Chi[i] = f:CreateFontString(nil, 'ARTWORK')
 
-        f.Chi[i]:SetFont(C['media'].font, C['powerbar'].energy.comboFontSize, 'THINOUTLINE')
+        f.Chi[i]:SetFont(C['media'].fontBold, C['powerbar'].energy.comboFontSize, 'THINOUTLINE')
         f.Chi[i]:SetShadowOffset(0, 0)
 
         f.Chi[i]:SetParent(f)
@@ -127,10 +127,10 @@ if (playerClass == 'WARLOCK' and C['powerbar'].showSoulshards or playerClass == 
     f.extraPoints = f:CreateFontString(nil, 'ARTWORK')
 
     if (C['powerbar'].extraFontOutline) then
-        f.extraPoints:SetFont(C['media'].font, C['powerbar'].extraFontSize, 'THINOUTLINE')
+        f.extraPoints:SetFont(C['media'].fontBold, C['powerbar'].extraFontSize, 'THINOUTLINE')
         f.extraPoints:SetShadowOffset(0, 0)
     else
-        f.extraPoints:SetFont(C['media'].font, C['powerbar'].extraFontSize)
+        f.extraPoints:SetFont(C['media'].fontBold, C['powerbar'].extraFontSize)
         f.extraPoints:SetShadowOffset(1, -1)
     end
 
@@ -150,10 +150,10 @@ if (playerClass == 'DEATHKNIGHT' and C['powerbar'].rune.showRuneCooldown) then
         f.Rune[i] = f:CreateFontString(nil, 'ARTWORK')
 
         if (C['powerbar'].rune.runeFontOutline) then
-            f.Rune[i]:SetFont(C['media'].font, C['powerbar'].rune.runeFontSize, 'THINOUTLINE')
+            f.Rune[i]:SetFont(C['media'].fontBold, C['powerbar'].rune.runeFontSize, 'THINOUTLINE')
             f.Rune[i]:SetShadowOffset(0, 0)
         else
-            f.Rune[i]:SetFont(C['media'].font, C['powerbar'].rune.runeFontSize)
+            f.Rune[i]:SetFont(C['media'].fontBold, C['powerbar'].rune.runeFontSize)
             f.Rune[i]:SetShadowOffset(1, -1)
         end
 
@@ -179,10 +179,10 @@ f.Power:SetAlpha(0)
 f.Power.Value = f.Power:CreateFontString(nil, 'ARTWORK')
 
 if (C['powerbar'].valueFontOutline) then
-    f.Power.Value:SetFont(C['media'].font, C['powerbar'].valueFontSize, 'THINOUTLINE')
+    f.Power.Value:SetFont(C['media'].fontNormal, C['powerbar'].valueFontSize, 'THINOUTLINE')
     f.Power.Value:SetShadowOffset(0, 0)
 else
-    f.Power.Value:SetFont(C['media'].font, C['powerbar'].valueFontSize)
+    f.Power.Value:SetFont(C['media'].fontNormal, C['powerbar'].valueFontSize)
     f.Power.Value:SetShadowOffset(1, -1)
 end
 
@@ -219,7 +219,7 @@ f.Power.Above:SetPoint('BOTTOM', f.Power.Below, 'TOP', 0, f.Power:GetHeight())
 
 if (C['powerbar'].showCombatRegen) then
     f.mpreg = f.Power:CreateFontString(nil, 'ARTWORK')
-    f.mpreg:SetFont(C['media'].font, 12, 'THINOUTLINE')
+    f.mpreg:SetFont(C['media'].fontNormal, 12, 'THINOUTLINE')
     f.mpreg:SetShadowOffset(0, 0)
     f.mpreg:SetPoint('TOP', f.Power.Below, 'BOTTOM', 0, 4)
     f.mpreg:SetParent(f.Power)

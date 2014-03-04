@@ -17,7 +17,7 @@ if C['datatext'].hps_text and C['datatext'].hps_text > 0 then
 	local actual_heals_total, cmbt_time = 0
  
 	local hText = DataPanel:CreateFontString(nil, 'OVERLAY')
-	hText:SetFont(C['media'].font, C['datatext'].fontsize,'THINOUTLINE')
+	hText:SetFont(C['media'].fontNormal, C['datatext'].fontsize,'THINOUTLINE')
 	hText:SetText("HPS: ", '0')
  
 	B.PP(C['datatext'].hps_text, hText)

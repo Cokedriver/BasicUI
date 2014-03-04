@@ -160,78 +160,6 @@ SlashCmdList['RELOADUI'] = function()
 end
 SLASH_RELOADUI1 = '/rl'
 
-CUSTOM_FACTION_BAR_COLORS = {
-    [1] = {r = 1, g = 0, b = 0},
-    [2] = {r = 1, g = 0, b = 0},
-    [3] = {r = 1, g = 1, b = 0},
-    [4] = {r = 1, g = 1, b = 0},
-    [5] = {r = 0, g = 1, b = 0},
-    [6] = {r = 0, g = 1, b = 0},
-    [7] = {r = 0, g = 1, b = 0},
-    [8] = {r = 0, g = 1, b = 0},
-}
-
-function GameTooltip_UnitColor(unit)
-    local r, g, b
-
-    if (UnitIsDead(unit) or UnitIsGhost(unit) or UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then
-        r = 0.5
-        g = 0.5
-        b = 0.5 
-    elseif (UnitIsPlayer(unit)) then
-        if (UnitIsFriend(unit, 'player')) then
-            local _, class = UnitClass(unit)
-            r = RAID_CLASS_COLORS[class].r
-            g = RAID_CLASS_COLORS[class].g
-            b = RAID_CLASS_COLORS[class].b
-        elseif (not UnitIsFriend(unit, 'player')) then
-            r = 1
-            g = 0
-            b = 0
-        end
-    elseif (UnitPlayerControlled(unit)) then
-        if (UnitCanAttack(unit, 'player')) then
-            if (not UnitCanAttack('player', unit)) then
-                r = 157/255
-                g = 197/255
-                b = 255/255
-            else
-                r = 1
-                g = 0
-                b = 0
-            end
-        elseif (UnitCanAttack('player', unit)) then
-            r = 1
-            g = 1
-            b = 0
-        elseif (UnitIsPVP(unit)) then
-            r = 0
-            g = 1
-            b = 0
-        else
-            r = 157/255
-            g = 197/255
-            b = 255/255
-        end
-    else
-        local reaction = UnitReaction(unit, 'player')
-
-        if (reaction) then
-            r = CUSTOM_FACTION_BAR_COLORS[reaction].r
-            g = CUSTOM_FACTION_BAR_COLORS[reaction].g
-            b = CUSTOM_FACTION_BAR_COLORS[reaction].b
-        else
-            r = 157/255
-            g = 197/255
-            b = 255/255
-        end
-    end
-
-    return r, g, b
-end
-  
-UnitSelectionColor = GameTooltip_UnitColor
-
 
 -- Error Message Ignore List
 UIErrorsFrame:UnregisterEvent('UI_ERROR_MESSAGE')
@@ -263,3 +191,63 @@ event:SetScript('OnEvent', function(self, event, error)
 end)
 
 event:RegisterEvent('UI_ERROR_MESSAGE')
+
+
+--[[local frame=CreateFrame("Frame")
+frame:RegisterEvent("ADDON_LOADED")
+frame:SetScript("OnEvent", function(self, event, addon)
+	if (addon == "Blizzard_TimeManager") then                
+		for i, v in pairs({
+			PlayerFrameTexture,
+			TargetFrameTextureFrameTexture,
+			PetFrameTexture,
+			PartyMemberFrame1Texture,
+			PartyMemberFrame2Texture,
+			PartyMemberFrame3Texture,
+			PartyMemberFrame4Texture,
+			PartyMemberFrame1PetFrameTexture,
+			PartyMemberFrame2PetFrameTexture,
+			PartyMemberFrame3PetFrameTexture,
+			PartyMemberFrame4PetFrameTexture,
+			FocusFrameTextureFrameTexture,
+			TargetFrameToTTextureFrameTexture,
+			FocusFrameToTTextureFrameTexture,
+			BonusActionBarFrameTexture0,
+			BonusActionBarFrameTexture1,
+			BonusActionBarFrameTexture2,
+			BonusActionBarFrameTexture3,
+			BonusActionBarFrameTexture4,
+			MainMenuBarTexture0,
+			MainMenuBarTexture1,
+			MainMenuBarTexture2,
+			MainMenuBarTexture3,
+			MainMenuMaxLevelBar0,
+			MainMenuMaxLevelBar1,
+			MainMenuMaxLevelBar2,
+			MainMenuMaxLevelBar3,
+			MinimapBorder,
+			CastingBarFrameBorder,
+			FocusFrameSpellBarBorder,
+			TargetFrameSpellBarBorder,
+			MiniMapTrackingButtonBorder,
+			MiniMapLFGFrameBorder,
+			MiniMapBattlefieldBorder,
+			MiniMapMailBorder,
+			MinimapBorderTop,
+			select(1, TimeManagerClockButton:GetRegions())
+		}) do
+			v:SetVertexColor(.4, .4, .4)
+		end
+
+		for i,v in pairs({ select(2, TimeManagerClockButton:GetRegions()) }) do
+			v:SetVertexColor(1, 1, 1)
+		end                
+		
+		self:UnregisterEvent("ADDON_LOADED")
+		frame:SetScript("OnEvent", nil)        
+	end
+end)
+
+for i, v in pairs({ MainMenuBarLeftEndCap, MainMenuBarRightEndCap }) do
+	v:SetVertexColor(.4, .4, .4)
+end]]

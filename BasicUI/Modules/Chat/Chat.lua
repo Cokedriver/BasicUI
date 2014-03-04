@@ -196,7 +196,7 @@ end
 
 ChatFrame1EditBox:SetAltArrowKeyMode(false)
 ChatFrame1EditBox:ClearAllPoints()
-ChatFrame1EditBox:SetFont(C['media'].font, C['media'].fontSize)
+ChatFrame1EditBox:SetFont(C['media'].fontNormal, C['media'].fontSize)
 ChatFrame1EditBox:SetPoint('BOTTOMLEFT', ChatFrame1, 'TOPLEFT', 2, 33)
 ChatFrame1EditBox:SetPoint('BOTTOMRIGHT', ChatFrame1, 'TOPRIGHT', 0, 33)
 ChatFrame1EditBox:SetBackdrop({
@@ -316,10 +316,10 @@ function SkinTab(self)
     tabText:SetJustifyH('CENTER')
     tabText:SetWidth(60)
     if (C['chat'].tab.fontOutline) then
-        tabText:SetFont(C['media'].font, C['media'].fontSize, 'THINOUTLINE')
+        tabText:SetFont(C['media'].fontBold, C['media'].fontSize, 'THINOUTLINE')
         tabText:SetShadowOffset(0, 0)
     else
-        tabText:SetFont(C['media'].font, C['media'].fontLarge)
+        tabText:SetFont(C['media'].fontBold, C['media'].fontLarge)
         tabText:SetShadowOffset(1, -1)
     end
 
@@ -398,7 +398,7 @@ local function ModChat(self)
     SkinTab(self)
 
     local font, fontsize, fontflags = chat:GetFont()
-    chat:SetFont(C["media"].font, fontsize, C['chat'].chatOutline and 'THINOUTLINE' or fontflags)
+    chat:SetFont(C['media'].fontNormal, fontsize, C['chat'].chatOutline and 'THINOUTLINE' or fontflags)
     chat:SetClampedToScreen(false)
 
     chat:SetClampRectInsets(0, 0, 0, 0)
@@ -601,7 +601,7 @@ f:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 f:Hide()
 
 f.t = f:CreateFontString(nil, 'OVERLAY')
-f.t:SetFont(C['media'].font, C['media'].fontSize)
+f.t:SetFont(C['media'].fontNormal, C['media'].fontSize)
 f.t:SetPoint('TOPLEFT', f, 8, -8)
 f.t:SetTextColor(1, 1, 0)
 f.t:SetShadowOffset(1, -1)

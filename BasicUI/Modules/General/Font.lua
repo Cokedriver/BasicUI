@@ -12,11 +12,11 @@ end
 local f = CreateFrame("Frame")
 f:RegisterEvent("ADDON_LOADED")
 f:SetScript("OnEvent", function()
-	local NORMAL     = C['media'].font
-	local BOLD       = C['media'].font
-	local BOLDITALIC = C['media'].font
-	local ITALIC     = C['media'].font
-	local NUMBER     = C['media'].font
+	local NORMAL     = C['media'].fontNormal
+	local BOLD       = C['media'].fontBold
+	local BOLDITALIC = C['media'].fontBoldItalic
+	local ITALIC     = C['media'].fontItalic
+	local NUMBER     = C['media'].fontNormal
 
 	UIDROPDOWNMENU_DEFAULT_TEXT_HEIGHT = 15
 	CHAT_FONT_HEIGHTS = {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24}
@@ -95,78 +95,6 @@ f:SetScript("OnEvent", function()
 
 	for _,butt in pairs(PaperDollTitlesPane.buttons) do butt.text:SetFontObject(GameFontHighlightSmallLeft) end
 	
-	--[[["PlayerFrame"] = "player",
-	["TargetFrame"] = "target",
-	["FocusFrame"] = "focus",
-	["PetFrame"] = "pet",
-	["PartyMemberFrame1"] = "party1",
-	["PartyMemberFrame2"] = "party2",
-	["PartyMemberFrame3"] = "party3",
-	["PartyMemberFrame4"] = "party4",
-	["PartyMemberFrame1PetFrame"] = "party1pet",
-	["PartyMemberFrame2PetFrame"] = "party2pet",
-	["PartyMemberFrame3PetFrame"] = "party3pet",
-	["PartyMemberFrame4PetFrame"] = "party4pet",
-	["ArenaEnemyFrame1"] = "arena1",
-	["ArenaEnemyFrame2"] = "arena2",
-	["ArenaEnemyFrame3"] = "arena3",
-	["ArenaEnemyFrame4"] = "arena4",
-	["ArenaEnemyFrame5"] = "arena5",
-	["ArenaEnemyFrame1PetFrame"] = "arena1pet",
-	["ArenaEnemyFrame2PetFrame"] = "arena2pet",
-	["ArenaEnemyFrame3PetFrame"] = "arena3pet",
-	["ArenaEnemyFrame4PetFrame"] = "arena4pet",
-	["ArenaEnemyFrame5PetFrame"] = "arena5pet",
-	["Boss1TargetFrame"] = "boss1",
-	["Boss2TargetFrame"] = "boss2",
-	["Boss3TargetFrame"] = "boss3",
-	["Boss4TargetFrame"] = "boss4",]]
+
 
 end)
-
---[[	
-local NORMAL     = C['media'].font
-local COMBAT     = C['media'].font
-local NUMBER     = C['media'].font
-local _, editBoxFontSize, _, _, _, _, _, _, _, _ = GetChatWindowInfo(1)
-
-UIDROPDOWNMENU_DEFAULT_TEXT_HEIGHT = 12
-CHAT_FONT_HEIGHTS = {12, 13, 14, 15, 16, 17, 18, 19, 20}
-
-UNIT_NAME_FONT     = NORMAL
-NAMEPLATE_FONT     = NORMAL
-DAMAGE_TEXT_FONT   = COMBAT
-STANDARD_TEXT_FONT = NORMAL
-
-
--- Base fonts
-SetFont(GameTooltipHeader,                  NORMAL, C['media'].fontSize)
-SetFont(NumberFont_OutlineThick_Mono_Small, NUMBER, C['media'].fontSize, "OUTLINE")
-SetFont(NumberFont_Outline_Huge,            NUMBER, 28, "THICKOUTLINE", 28)
-SetFont(NumberFont_Outline_Large,           NUMBER, 15, "OUTLINE")
-SetFont(NumberFont_Outline_Med,             NUMBER, C['media'].fontSize*1.1, "OUTLINE")
-SetFont(NumberFont_Shadow_Med,              NORMAL, C['media'].fontSize) --chat editbox uses this
-SetFont(NumberFont_Shadow_Small,            NORMAL, C['media'].fontSize)
-SetFont(QuestFont,                          NORMAL, C['media'].fontSize)
-SetFont(QuestFont_Large,                    NORMAL, 14)
-SetFont(SystemFont_Large,                   NORMAL, 15)
-SetFont(SystemFont_Shadow_Huge1,			NORMAL, 20, "OUTLINE") -- Raid Warning, Boss emote frame too
-SetFont(SystemFont_Med1,                    NORMAL, C['media'].fontSize)
-SetFont(SystemFont_Med3,                    NORMAL, C['media'].fontSize*1.1)
-SetFont(SystemFont_OutlineThick_Huge2,      NORMAL, 20, "THICKOUTLINE")
-SetFont(SystemFont_Outline_Small,           NUMBER, C['media'].fontSize, "OUTLINE")
-SetFont(SystemFont_Shadow_Large,            NORMAL, 15)
-SetFont(SystemFont_Shadow_Med1,             NORMAL, C['media'].fontSize)
-SetFont(SystemFont_Shadow_Med3,             NORMAL, C['media'].fontSize*1.1)
-SetFont(SystemFont_Shadow_Outline_Huge2,    NORMAL, 20, "OUTLINE")
-SetFont(SystemFont_Shadow_Small,            NORMAL, C['media'].fontSize*0.9)
-SetFont(SystemFont_Small,                   NORMAL, C['media'].fontSize)
-SetFont(SystemFont_Tiny,                    NORMAL, C['media'].fontSize)
-SetFont(Tooltip_Med,                        NORMAL, C['media'].fontSize)
-SetFont(Tooltip_Small,                      NORMAL, C['media'].fontSize)
-SetFont(ZoneTextString,						NORMAL, 32, "OUTLINE")
-SetFont(SubZoneTextString,					NORMAL, 25, "OUTLINE")
-SetFont(PVPInfoTextString,					NORMAL, 22, "OUTLINE")
-SetFont(PVPArenaTextString,					NORMAL, 22, "OUTLINE")
-SetFont(CombatTextFont,                     COMBAT, 100, "OUTLINE") -- number here just increase the font quality.
-]]

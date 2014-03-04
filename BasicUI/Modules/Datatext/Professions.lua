@@ -21,7 +21,7 @@ if C['datatext'].pro and C['datatext'].pro > 0 then
 	Stat.tooltip = false
 
 	local Text = DataPanel:CreateFontString(nil, 'OVERLAY')
-	Text:SetFont(C['media'].font, C['datatext'].fontsize,'THINOUTLINE')
+	Text:SetFont(C['media'].fontNormal, C['datatext'].fontsize,'THINOUTLINE')
 	B.PP(C['datatext'].pro, Text)
 
 	local function Update(self)

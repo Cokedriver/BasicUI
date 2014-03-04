@@ -65,7 +65,7 @@ for k, _ in pairs(C['castbar']) do
 
         _G[k.."Border"]:SetTexture("");
         _G[k.."Text"]:ClearAllPoints("");
-        _G[k.."Text"]:SetFont(C['media'].font, C["castbar"][k].fontSize, "");
+        _G[k.."Text"]:SetFont(C['media'].fontNormal, C["castbar"][k].fontSize, "");
 
         if find(k, "MirrorTimer") then
             d.w = 240 + (5 * 2);
@@ -120,7 +120,7 @@ for k, _ in pairs(C['castbar']) do
              
         if C['castbar'][k].enableTimer then
             _G[k].timer = _G[k]:CreateFontString(nil);
-            _G[k].timer:SetFont(C['media'].font, C['media'].fontSize, "");
+            _G[k].timer:SetFont(C['media'].fontNormal, C['media'].fontSize, "");
             _G[k].timer:SetPoint("RIGHT", _G[k], "RIGHT", -5, 0);
             _G[k].update = .1;
         end;
@@ -147,7 +147,7 @@ for k, _ in pairs(C['castbar']) do
         a:SetScript("OnDragStart", function(self) self:StartMoving() end);
         a:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end);
         a.name = a:CreateFontString(nil, "OVERLAY");
-        a.name:SetFont(C['media'].font, C['media'].fontSize, "");
+        a.name:SetFont(C['media'].fontNormal, C['media'].fontSize, "");
         a.name:SetPoint("CENTER", a);
         _G[k].d = d; _G[k].df = a; _G[k].name = a.name; _G[k].l = true;
        

@@ -48,7 +48,7 @@ Stat:SetFrameStrata("MEDIUM")
 Stat:SetFrameLevel(3)
 
 local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-Text:SetFont(C["media"].font, C["datatext"].fontsize,'THINOUTLINE')
+Text:SetFont(C['media'].fontNormal, C["datatext"].fontsize,'THINOUTLINE')
 B.PP(C["datatext"].friends, Text)
 
 

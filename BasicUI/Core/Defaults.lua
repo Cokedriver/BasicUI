@@ -7,7 +7,11 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 -- Media Options
 -----------------
 DB["media"] = {
-	["font"] = "BasicUI",
+	["fontNormal"] = "BasicUI NORMAL",
+	["fontBold"] = "BasicUI BOLD",
+	["fontItalic"] = "BasicUI ITALIC",
+	["fontBoldItalic"] = "BasicUI BOLD ITALIC",
+	["fontNumber"] = "BasicUI NUMBER",
 	["fontSize"] = 15,
 }
 

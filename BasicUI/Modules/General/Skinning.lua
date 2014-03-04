@@ -145,7 +145,7 @@ f:SetScript('OnEvent', function(self, ...)
 							name:SetPoint("LEFT", frame, "LEFT", 4, 0)
 							name:SetWidth(165)
 							name:SetHeight(8)
-							name:SetFont(C['media'].font, C['media'].fontMedium)
+							name:SetFont(C['media'].fontNormal, C['media'].fontSize)
 							name:SetJustifyH("LEFT")
 							name:SetShadowColor(0, 0, 0, 0)
 							name.SetFont = B.dummy
@@ -155,7 +155,7 @@ f:SetScript('OnEvent', function(self, ...)
 						if not timer.styled then	
 							timer:ClearAllPoints()
 							timer:SetPoint("RIGHT", frame, "RIGHT", -4, 0)
-							timer:SetFont(C['media'].font, C['media'].fontMedium)
+							timer:SetFont(C['media'].fontNormal, C['media'].fontSize)
 							timer:SetJustifyH("RIGHT")
 							timer:SetShadowColor(0, 0, 0, 0)
 							timer.SetFont = B.dummy
@@ -183,7 +183,7 @@ f:SetScript('OnEvent', function(self, ...)
 			if not anchor.styled then
 				local header={anchor:GetRegions()}
 					if header[1]:IsObjectType("FontString") then
-						header[1]:SetFont(C['media'].font, C['media'].fontMedium)
+						header[1]:SetFont(C['media'].fontNormal, C['media'].fontSize)
 						header[1]:SetTextColor(1,1,1,1)
 						header[1]:SetShadowColor(0, 0, 0, 0)
 						anchor.styled=true	
@@ -253,7 +253,7 @@ f:SetScript('OnEvent', function(self, ...)
 				if not name.styled then
 					name:ClearAllPoints()
 					name:SetPoint("LEFT", bar, "LEFT", 4, 0)
-					name:SetFont(C['media'].font, C['media'].fontMedium)
+					name:SetFont(C['media'].fontNormal, C['media'].fontSize)
 					name:SetJustifyH("LEFT")
 					name:SetShadowColor(0, 0, 0, 0)
 					name.styled=true
@@ -262,7 +262,7 @@ f:SetScript('OnEvent', function(self, ...)
 				if not timer.styled then
 					timer:ClearAllPoints()
 					timer:SetPoint("RIGHT", bar, "RIGHT", -4, 0)
-					timer:SetFont(C['media'].font, C['media'].fontMedium)
+					timer:SetFont(C['media'].fontNormal, C['media'].fontSize)
 					timer:SetJustifyH("RIGHT")
 					timer:SetShadowColor(0, 0, 0, 0)
 					timer.styled=true

@@ -4,7 +4,12 @@ local LSM = LibStub("LibSharedMedia-3.0")
 -- Load All SharedMedia
 
 -- Font Media
-C["media"].font = LSM:Fetch("font", C["media"].font)
+
+C["media"].fontNormal = LSM:Fetch("font", C["media"].fontNormal)
+C["media"].fontBold = LSM:Fetch("font", C["media"].fontBold)
+C["media"].fontItalic = LSM:Fetch("font", C["media"].fontItalic)
+C["media"].fontBoldItalic = LSM:Fetch("font", C["media"].fontBoldItalic)
+C["media"].fontNumber = LSM:Fetch("font", C["media"].fontNumber)
 
 -- Minimap Media
 C["minimap"].border = LSM:Fetch("border", C["minimap"].border)
