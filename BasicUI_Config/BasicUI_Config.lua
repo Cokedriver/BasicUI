@@ -186,10 +186,42 @@ function BasicUIConfig.GenerateOptionsInternal()
 						name = " ",
 					},	
 					---------------------------
-					font = {
+					fontNormal = {
+						type = 'select',
+						order = 1,						
+						name = L["|cff00B4FFBasic|rUI Normal Font"],
+						desc = L["The font that the core of the UI will use"],
+						dialogControl = 'LSM30_Font', --Select your widget here						
+						values = AceGUIWidgetLSMlists.font,	
+					},
+					fontBold = {
 						type = 'select',
 						order = 2,						
-						name = L["|cff00B4FFBasic|rUI Font"],
+						name = L["|cff00B4FFBasic|rUI Bold Font"],
+						desc = L["The font that the core of the UI will use"],
+						dialogControl = 'LSM30_Font', --Select your widget here						
+						values = AceGUIWidgetLSMlists.font,	
+					},
+					fontItalic = {
+						type = 'select',
+						order = 3,						
+						name = L["|cff00B4FFBasic|rUI Italic Font"],
+						desc = L["The font that the core of the UI will use"],
+						dialogControl = 'LSM30_Font', --Select your widget here						
+						values = AceGUIWidgetLSMlists.font,	
+					},
+					fontBoldItalic = {
+						type = 'select',
+						order = 2,						
+						name = L["|cff00B4FFBasic|rUI Bold Italic Font"],
+						desc = L["The font that the core of the UI will use"],
+						dialogControl = 'LSM30_Font', --Select your widget here						
+						values = AceGUIWidgetLSMlists.font,	
+					},
+					fontNumber = {
+						type = 'select',
+						order = 4,						
+						name = L["|cff00B4FFBasic|rUI Number Font"],
 						desc = L["The font that the core of the UI will use"],
 						dialogControl = 'LSM30_Font', --Select your widget here						
 						values = AceGUIWidgetLSMlists.font,	

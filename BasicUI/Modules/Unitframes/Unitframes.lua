@@ -186,19 +186,77 @@ hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", function(statusBar, f
 end)
 
 hooksecurefunc("UnitFrame_Update", function(self)
-	if not self.name then return end
+    if not self.name then return end
+	
+	function BasicUI_UnitColor(unit)
+		local r, g, b
 
-	if UnitIsPlayer(self.unit) then
-		-- Color by class:
-		local _, class = UnitClass(self.unit)
-		local color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
-		self.name:SetTextColor(color.r, color.g, color.b)
-	else
-		-- Not a player. Return to default color:
-		local reaction = UnitReaction(self.unit);
-		self.name:SetTextColor(FACTION_BAR_COLORS[reaction].r, FACTION_BAR_COLORS[reaction].g, FACTION_BAR_COLORS[reaction].b)
+		unit = "target"
+		
+		if (UnitIsDead(unit) or UnitIsGhost(unit) or UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then
+			r = 0.5
+			g = 0.5
+			b = 0.5 
+		elseif (UnitIsPlayer(unit)) then
+			if (UnitIsFriend(unit, 'player')) then
+				local _, class = UnitClass(unit)
+				r = RAID_CLASS_COLORS[class].r
+				g = RAID_CLASS_COLORS[class].g
+				b = RAID_CLASS_COLORS[class].b
+			elseif (not UnitIsFriend(unit, 'player')) then
+				r = 1
+				g = 0
+				b = 0
+			end
+		elseif (UnitPlayerControlled(unit)) then
+			if (UnitCanAttack(unit, 'player')) then
+				if (not UnitCanAttack('player', unit)) then
+					r = 157/255
+					g = 197/255
+					b = 255/255
+				else
+					r = 1
+					g = 0
+					b = 0
+				end
+			elseif (UnitCanAttack('player', unit)) then
+				r = 1
+				g = 1
+				b = 0
+			elseif (UnitIsPVP(unit)) then
+				r = 0
+				g = 1
+				b = 0
+			else
+				r = 157/255
+				g = 197/255
+				b = 255/255
+			end
+		else
+			local reaction = UnitReaction(unit, 'player')
+
+			if (reaction) then
+				r = FACTION_BAR_COLORS[reaction].r
+				g = FACTION_BAR_COLORS[reaction].g
+				b = FACTION_BAR_COLORS[reaction].b
+			else
+				r = 157/255
+				g = 197/255
+				b = 255/255
+			end
+		end
+
+		return r, g, b
 	end
+	
+	local r, g, b = BasicUI_UnitColor(unit)	
+ 
+    self.name:SetTextColor(r, g, b)
 end)
+
+
+
+
 
 -- Disable healing/damage spam over player/pet frame:
 PlayerHitIndicator:SetText(nil)
