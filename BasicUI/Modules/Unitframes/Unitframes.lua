@@ -156,12 +156,12 @@ end;
 
 -- Font Style thanks to Phanx from WoWinterface.
 local shorts = {
-	{ 1e10, 1e9, "%.0fb" }, --  10b+ as  12b
-	{  1e9, 1e9, "%.1fb" }, --   1b+ as 8.3b
-	{  1e7, 1e6, "%.0fm" }, --  10m+ as  14m
-	{  1e6, 1e6, "%.1fm" }, --   1m+ as 7.4m
-	{  1e5, 1e3, "%.0fk" }, -- 100k+ as 840k
-	{  1e3, 1e3, "%.1fk" }, --   1k+ as 2.5k
+	{ 1e10, 1e9, "%.0fB" }, --  10b+ as  12b
+	{  1e9, 1e9, "%.1fB" }, --   1b+ as 8.3b
+	{  1e7, 1e6, "%.0fM" }, --  10m+ as  14m
+	{  1e6, 1e6, "%.1fM" }, --   1m+ as 7.4m
+	{  1e5, 1e3, "%.0fK" }, -- 100k+ as 840k
+	{  1e3, 1e3, "%.1fK" }, --   1k+ as 2.5k
 	{    0,   1,    "%d" }, -- < 1k  as  974
 }
 for i = 1, #shorts do
@@ -190,27 +190,27 @@ hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", function(statusBar, f
 end)
 
 hooksecurefunc("UnitFrame_Update", function(self)
-	if not self.name then return end
-	local unit = self.unit -- THIS WAS MISSING
+    if not self.name then return end
 
-	local color
-	if UnitIsPlayer(unit) then
-		local _, class = UnitClass(unit)
-		color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
-	elseif UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) then
-		color = GRAY_FONT_COLOR
-	elseif UnitIsEnemy(unit, "player") then
-		color = FACTION_BAR_COLORS[1]
-	else
-		local reaction = UnitReaction(unit, "player")
-		color = reaction and FACTION_BAR_COLORS[reaction] or FACTION_BAR_COLORS[5]
-	end
-
-	if not color then
-		color = NORMAL_FONT_COLOR
-	end
-
-	self.name:SetTextColor(color.r, color.g, color.b)
+    local unit, color = self.unit
+    if UnitPlayerControlled(unit) then
+        if UnitIsPlayer(unit) then
+            local _, class = UnitClass(unit)
+            color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
+        else
+            color = HIGHLIGHT_FONT_COLOR
+        end
+    elseif UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) then
+        color = GRAY_FONT_COLOR
+    else
+        color = FACTION_BAR_COLORS[UnitIsEnemy(unit, "player") and 1 or UnitReaction(unit, "player") or 5]
+    end
+ 
+    if not color then
+        color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)["PRIEST"]
+    end
+ 
+    self.name:SetTextColor(color.r, color.g, color.b)
 end)
 
 
