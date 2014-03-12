@@ -169,6 +169,10 @@ for i = 1, #shorts do
 end
 
 hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", function(statusBar, fontString, value, valueMin, valueMax)
+	if value == 0 then
+		return fontString:SetText("")
+	end
+
 	local style = GetCVar("statusTextDisplay")
 	if style == "PERCENT" then
 		return fontString:SetFormattedText("%.0f%%", value / valueMax * 100)
@@ -186,76 +190,28 @@ hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", function(statusBar, f
 end)
 
 hooksecurefunc("UnitFrame_Update", function(self)
-    if not self.name then return end
-	
-	function BasicUI_UnitColor(unit)
-		local r, g, b
+	if not self.name then return end
+	local unit = self.unit -- THIS WAS MISSING
 
-		unit = "target"
-		
-		if (UnitIsDead(unit) or UnitIsGhost(unit) or UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then
-			r = 0.5
-			g = 0.5
-			b = 0.5 
-		elseif (UnitIsPlayer(unit)) then
-			if (UnitIsFriend(unit, 'player')) then
-				local _, class = UnitClass(unit)
-				r = RAID_CLASS_COLORS[class].r
-				g = RAID_CLASS_COLORS[class].g
-				b = RAID_CLASS_COLORS[class].b
-			elseif (not UnitIsFriend(unit, 'player')) then
-				r = 1
-				g = 0
-				b = 0
-			end
-		elseif (UnitPlayerControlled(unit)) then
-			if (UnitCanAttack(unit, 'player')) then
-				if (not UnitCanAttack('player', unit)) then
-					r = 157/255
-					g = 197/255
-					b = 255/255
-				else
-					r = 1
-					g = 0
-					b = 0
-				end
-			elseif (UnitCanAttack('player', unit)) then
-				r = 1
-				g = 1
-				b = 0
-			elseif (UnitIsPVP(unit)) then
-				r = 0
-				g = 1
-				b = 0
-			else
-				r = 157/255
-				g = 197/255
-				b = 255/255
-			end
-		else
-			local reaction = UnitReaction(unit, 'player')
-
-			if (reaction) then
-				r = FACTION_BAR_COLORS[reaction].r
-				g = FACTION_BAR_COLORS[reaction].g
-				b = FACTION_BAR_COLORS[reaction].b
-			else
-				r = 157/255
-				g = 197/255
-				b = 255/255
-			end
-		end
-
-		return r, g, b
+	local color
+	if UnitIsPlayer(unit) then
+		local _, class = UnitClass(unit)
+		color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
+	elseif UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) then
+		color = GRAY_FONT_COLOR
+	elseif UnitIsEnemy(unit, "player") then
+		color = FACTION_BAR_COLORS[1]
+	else
+		local reaction = UnitReaction(unit, "player")
+		color = reaction and FACTION_BAR_COLORS[reaction] or FACTION_BAR_COLORS[5]
 	end
-	
-	local r, g, b = BasicUI_UnitColor(unit)	
- 
-    self.name:SetTextColor(r, g, b)
+
+	if not color then
+		color = NORMAL_FONT_COLOR
+	end
+
+	self.name:SetTextColor(color.r, color.g, color.b)
 end)
-
-
-
 
 
 -- Disable healing/damage spam over player/pet frame:

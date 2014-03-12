@@ -228,7 +228,7 @@ function BasicUIConfig.GenerateOptionsInternal()
 					},
 					fontSize = {
 						type = "range",
-						order = 4,						
+						order = 5,						
 						name = L["Game Font Size"],
 						desc = L["Controls the Size of the Game Font"],
 						min = 0, max = 30, step = 1,

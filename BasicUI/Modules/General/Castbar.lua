@@ -102,12 +102,14 @@ for k, _ in pairs(C['castbar']) do
             _G[k]:HookScript("OnSizeChanged", function() 
                 _G[k].reset = true;
             end);
-            _G[k]:HookScript("OnValueChanged", function()
-                if _G[k].reset then
-                    Set(a, k);
-                    _G[k].reset = false;
-                end;
-            end);
+            _G[k]:HookScript("OnValueChanged", function(self)
+                if self.reset and not self.reseting then
+                    self.reseting = true
+                    Set(a, k)
+                    self.reseting = nil
+                    self.reset = nil
+                end
+            end)
             
             if C['castbar'][k].enableLag then
                 _G[k].lag = _G[k]:CreateTexture(nil, "BACKGROUND")
