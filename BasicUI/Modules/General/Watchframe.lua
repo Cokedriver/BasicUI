@@ -1,6 +1,8 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["general"]
+local cfgm = C["media"]
 
-if C['general'].watchframe ~= true then return end
+if cfg.watchframe ~= true then return end
 
 --[[
 
@@ -45,9 +47,9 @@ end)
 watchHead:SetScript('OnLeave', function() GameTooltip:Hide() end)
 
 local watchHeadTitle = _G['WatchFrameTitle']
-watchHeadTitle:SetFont(C['media'].fontBold, 15)
-if C['general'].classcolor ~= true then
-	watchHeadTitle:SetTextColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+watchHeadTitle:SetFont(cfgm.fontBold, 15)
+if cfg.classcolor ~= true then
+	watchHeadTitle:SetTextColor(cfg.color.r,cfg.color.g,cfg.color.b)
 else
 	watchHeadTitle:SetTextColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 end

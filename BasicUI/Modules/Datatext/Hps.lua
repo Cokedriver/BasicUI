@@ -1,4 +1,6 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["datatext"]
+local cfgm = C["media"]
 
 --[[
 
@@ -8,19 +10,19 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 	
 ]]
 
-if C['datatext'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
-if C['datatext'].hps_text and C['datatext'].hps_text > 0 then
+if cfg.hps_text and cfg.hps_text > 0 then
 	local events = {SPELL_HEAL = true, SPELL_PERIODIC_HEAL = true}
 	local HPS_FEED = CreateFrame('Frame')
 	local player_id = UnitGUID('player')
 	local actual_heals_total, cmbt_time = 0
  
 	local hText = DataPanel:CreateFontString(nil, 'OVERLAY')
-	hText:SetFont(C['media'].fontNormal, C['datatext'].fontsize,'THINOUTLINE')
+	hText:SetFont(cfgm.fontNormal, cfg.fontsize,'THINOUTLINE')
 	hText:SetText("HPS: ", '0')
  
-	B.PP(C['datatext'].hps_text, hText)
+	B.PP(cfg.hps_text, hText)
  
 	HPS_FEED:EnableMouse(true)
 	HPS_FEED:SetFrameStrata('BACKGROUND')

@@ -1,6 +1,8 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["nameplates"]
+local cfgm = C["media"]
 
-if C['nameplates'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
     -- Local stuff
 
@@ -167,7 +169,7 @@ local function UpdateThreatColor(self)
     local lowThreat = unitInfight and playerInfight
     local isEnemy = GetUnitReaction(self.Health:GetStatusBarColor())
 
-    if (lowThreat and not self.Glow:IsVisible() and isEnemy and C['nameplates'].enableTankMode) then
+    if (lowThreat and not self.Glow:IsVisible() and isEnemy and cfg.enableTankMode) then
         r, g, b = unpack(noThreatColor)
         self.NewGlow:SetVertexColor(r, g, b)
 
@@ -175,7 +177,7 @@ local function UpdateThreatColor(self)
             self.NewGlow:Show()
         end
 
-        if (C['nameplates'].colorNameWithThreat) then
+        if (cfg.colorNameWithThreat) then
             self.NewName:SetTextColor(r * 0.7, g * 0.7, b * 0.7)
         end
     elseif (self.Glow:IsVisible()) then
@@ -186,14 +188,14 @@ local function UpdateThreatColor(self)
             self.NewGlow:Show()
         end
 
-        if (C['nameplates'].colorNameWithThreat) then
+        if (cfg.colorNameWithThreat) then
             self.NewName:SetTextColor(r, g, b)
         end
     else
         if (self.NewGlow:IsVisible()) then
             self.NewGlow:Hide()
 
-            if (C['nameplates'].colorNameWithThreat) then
+            if (cfg.colorNameWithThreat) then
                 self.NewName:SetTextColor(1, 1, 1)
             end
         end
@@ -205,7 +207,7 @@ local function UpdateHealthText(self)
     local currentValue = self.Health:GetValue()
     local perc = (currentValue/max)*100
 
-    if (perc >= 100 and currentValue > 5 and C['nameplates'].showFullHP) then
+    if (perc >= 100 and currentValue > 5 and cfg.showFullHP) then
         self.Health.Value:SetFormattedText('%s', FormatValue(currentValue))
     elseif (perc < 100 and currentValue > 5) then
         self.Health.Value:SetFormattedText('%s - %.0f%%', FormatValue(currentValue), perc-0.5)
@@ -246,12 +248,12 @@ end
 
 local function UpdateNameL(self)
     local newName = self.Name:GetText()
-    if (C['nameplates'].abbrevLongNames) then
+    if (cfg.abbrevLongNames) then
         newName = (len(newName) > 20) and gsub(newName, '%s?(.[\128-\191]*)%S+%s', '%1. ') or newName
     end
 
     self.NewName:SetTextColor(1, 1, 1)
-    if (C['nameplates'].showLevel) then
+    if (cfg.showLevel) then
         local levelText = self.Level:GetText() or ''
         local levelColor = RGBHex(self.Level:GetTextColor())
         local eliteTexture = self.EliteIcon:IsVisible()
@@ -282,14 +284,14 @@ local function UpdatePlate(self)
         UpdateNameL(self)
     end
 
-    if (C['nameplates'].showEliteBorder) then
+    if (cfg.showEliteBorder) then
         UpdateEliteTexture(self)
     else
         local r, g, b = unpack(borderColor)
         self.Overlay:SetVertexColor(r, g, b, 1)
     end
 
-    if (C['nameplates'].showTotemIcon) then
+    if (cfg.showTotemIcon) then
         UpdateTotemIcon(self)
     end
 
@@ -353,13 +355,13 @@ local function SkinPlate(self, nameFrame)
     if (not self.Health.Value) then
         self.Health.Value = self.Health:CreateFontString(nil, 'OVERLAY')
         self.Health.Value:SetPoint('CENTER', self.Health, 0, 0)
-        self.Health.Value:SetFont('Fonts\\ARIALN.ttf', 12)
+        self.Health.Value:SetFont(cfgm.fontNormal, 12)
         self.Health.Value:SetShadowOffset(1, -1)
     end
 
     if (not self.NewName) then
         self.NewName = self:CreateFontString(nil, 'ARTWORK')
-        self.NewName:SetFont('Fonts\\ARIALN.ttf', 15, 'THINOUTLINE')
+        self.NewName:SetFont(cfgm.fontNormal, 15, 'THINOUTLINE')
         self.NewName:SetShadowOffset(0, 0)
         -- self.NewName:SetPoint('CENTER', self.Health, 'CENTER', 0, 9)
         self.NewName:SetPoint('BOTTOM', self.Health, 'TOP', 0, 2)
@@ -399,7 +401,7 @@ local function SkinPlate(self, nameFrame)
     if (not self.Castbar.CastTime) then
         self.Castbar.CastTime = self.Castbar:CreateFontString(nil, 'OVERLAY')
         self.Castbar.CastTime:SetPoint('RIGHT', self.Castbar, 1.6666667, 0)
-        self.Castbar.CastTime:SetFont('Fonts\\ARIALN.ttf', 16)   -- , 'THINOUTLINE')
+        self.Castbar.CastTime:SetFont(cfgm.fontNormal, 16)   -- , 'THINOUTLINE')
         self.Castbar.CastTime:SetTextColor(1, 1, 1)
         self.Castbar.CastTime:SetShadowOffset(1, -1)
     end
@@ -410,7 +412,7 @@ local function SkinPlate(self, nameFrame)
         self.Castbar.Name = self.Castbar:CreateFontString(nil, 'OVERLAY')
         self.Castbar.Name:SetPoint('LEFT', self.Castbar, 1.5, 0)
         self.Castbar.Name:SetPoint('RIGHT', self.Castbar.CastTime, 'LEFT', -6, 0)
-        self.Castbar.Name:SetFont('Fonts\\ARIALN.ttf', 10)
+        self.Castbar.Name:SetFont(cfgm.fontNormal, 10)
         self.Castbar.Name:SetTextColor(1, 1, 1)
         self.Castbar.Name:SetShadowOffset(1, -1)
         self.Castbar.Name:SetJustifyH('LEFT')
@@ -461,7 +463,7 @@ local function SkinPlate(self, nameFrame)
                 UpdateThreatColor(self)
             end
 
-            if (C['nameplates'].showTargetBorder) then
+            if (cfg.showTargetBorder) then
                 if (IsTarget(self)) then
                     if (not self.TargetHighlight) then
                         self.TargetHighlight = self:CreateTexture(nil, 'ARTWORK')

@@ -1,4 +1,6 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["datatext"]
+local cfgm = C["media"]
 
 --[[
 
@@ -8,17 +10,17 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 	
 ]]
 
-if C['datatext'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
-if C['datatext'].zone and C['datatext'].zone > 0 then
+if cfg.zone and cfg.zone > 0 then
 	local Stat = CreateFrame("Frame")
 	Stat:EnableMouse(true)
 	Stat:SetFrameStrata('BACKGROUND')
 	Stat:SetFrameLevel(3)
 
 	local Text = DataPanel:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C['media'].fontNormal, C['datatext'].fontsize,'THINOUTLINE')
-	B.PP(C['datatext'].zone, Text)
+	Text:SetFont(cfgm.fontNormal, cfg.fontsize,'THINOUTLINE')
+	B.PP(cfg.zone, Text)
 
 	local function Update(self)
 		if GetMinimapZoneText() == "Putricide's Laboratory of Alchemical Horrors and Fun" then

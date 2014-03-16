@@ -1,4 +1,6 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  F - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["datatext"]
+local cfgm = C["media"]
 
 --[[
 
@@ -8,11 +10,11 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  F - function; C - config; DB
 	
 ]]
 
-if C['datatext'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
 local currentFightDPS
 
-if C['datatext'].recount and C['datatext'].recount > 0 then 
+if cfg.recount and cfg.recount > 0 then 
 
 	local RecountDPS = CreateFrame("Frame")
 	RecountDPS:EnableMouse(true)
@@ -20,8 +22,8 @@ if C['datatext'].recount and C['datatext'].recount > 0 then
 	RecountDPS:SetFrameLevel(3)
 
 	local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C['media'].fontNormal, C['datatext'].fontsize,'THINOUTLINE')
-	B.PP(C['datatext'].recount, Text)
+	Text:SetFont(cfgm.fontNormal, cfg.fontsize,'THINOUTLINE')
+	B.PP(cfg.recount, Text)
 	RecountDPS:SetAllPoints(Text)
 
 	function OnEvent(self, event, ...)
@@ -51,7 +53,7 @@ if C['datatext'].recount and C['datatext'].recount > 0 then
 
 	function RecountDPS:getDPS()
 		if not IsAddOnLoaded("Recount") then return "N/A" end
-		if C['datatext'].recountraiddps == true then
+		if cfg.recountraiddps == true then
 			-- show raid dps
 			_, dps = RecountDPS:getRaidValuePerSecond(Recount.db.profile.CurDataSet)
 			return dps

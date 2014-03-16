@@ -1,4 +1,6 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["datatext"]
+local cfgm = C["media"]
 
 --[[
 
@@ -8,9 +10,9 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 	
 ]]
 
-if C["datatext"].enable ~= true then return end
+if cfg.enable ~= true then return end
 
-if C["datatext"].dur and C["datatext"].dur > 0 then
+if cfg.dur and cfg.dur > 0 then
 
 	Slots = {
 		[1] = {1, "Head", 1000},
@@ -33,8 +35,8 @@ if C["datatext"].dur and C["datatext"].dur > 0 then
 	Stat:SetFrameLevel(3)
 
 	local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C['media'].fontNormal, C["datatext"].fontsize,'THINOUTLINE')
-	B.PP(C["datatext"].dur, Text)
+	Text:SetFont(cfgm.fontNormal, cfg.fontsize,'THINOUTLINE')
+	B.PP(cfg.dur, Text)
 
 	local function OnEvent(self)
 		local Total = 0

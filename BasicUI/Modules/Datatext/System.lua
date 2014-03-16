@@ -1,4 +1,6 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["datatext"]
+local cfgm = C["media"]
 
 --[[
 
@@ -8,9 +10,9 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 	
 ]]
 
-if C['datatext'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
-if C['datatext'].system and C['datatext'].system > 0 then
+if cfg.system and cfg.system > 0 then
 
 	local Stat = CreateFrame("Frame")
 	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -20,8 +22,8 @@ if C['datatext'].system and C['datatext'].system > 0 then
 	Stat.tooltip = false
 
 	local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C['media'].fontNormal, C['datatext'].fontsize,'THINOUTLINE')
-	B.PP(C['datatext'].system, Text)
+	Text:SetFont(cfgm.fontNormal, cfg.fontsize,'THINOUTLINE')
+	B.PP(cfg.system, Text)
 
 	local bandwidthString = "%.2f Mbps"
 	local percentageString = "%.2f%%"
@@ -128,12 +130,12 @@ if C['datatext'].system and C['datatext'].system > 0 then
 		GameTooltip:ClearLines()
 		GameTooltip:AddLine(hexa..B.myname.."'s"..hexb.." Latency")
 		GameTooltip:AddLine' '			
-		if C['datatext'].fps.enable == true then 
-			if C['datatext'].fps.home == true then
+		if cfg.fps.enable == true then 
+			if cfg.fps.home == true then
 				GameTooltip:AddDoubleLine("Home Latency: ", string.format(homeLatencyString, latencyHome), 0.80, 0.31, 0.31,0.84, 0.75, 0.65)
-			elseif C['datatext'].fps.world == true then
+			elseif cfg.fps.world == true then
 				GameTooltip:AddDoubleLine("World Latency: ", string.format(worldLatencyString, latencyWorld), 0.80, 0.31, 0.31,0.84, 0.75, 0.65)
-			elseif C['datatext'].fps.both == true then
+			elseif cfg.fps.both == true then
 				GameTooltip:AddDoubleLine("Home Latency: ", string.format(homeLatencyString, latencyHome), 0.80, 0.31, 0.31,0.84, 0.75, 0.65)
 				GameTooltip:AddDoubleLine("World Latency: ", string.format(worldLatencyString, latencyWorld), 0.80, 0.31, 0.31,0.84, 0.75, 0.65)
 			end

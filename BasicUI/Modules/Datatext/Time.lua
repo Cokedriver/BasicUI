@@ -1,4 +1,6 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["datatext"]
+local cfgm = C["media"]
 
 --[[
 
@@ -8,9 +10,9 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 	
 ]]
 
-if C['datatext'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
-if C['datatext'].wowtime and C['datatext'].wowtime > 0 then
+if cfg.wowtime and cfg.wowtime > 0 then
 
 	local europeDisplayFormat = string.join("", "%02d", ":|r%02d")
 	local ukDisplayFormat = string.join("", "", "%d", ":|r%02d", " %s|r")
@@ -28,8 +30,8 @@ if C['datatext'].wowtime and C['datatext'].wowtime > 0 then
 	Stat:SetFrameLevel(3)
 
 	local Text  = DataPanel:CreateFontString(nil, 'OVERLAY')
-	Text:SetFont(C['media'].fontNormal, C['datatext'].fontsize,'THINOUTLINE')
-	B.PP(C['datatext'].wowtime, Text)
+	Text:SetFont(cfgm.fontNormal, cfg.fontsize,'THINOUTLINE')
+	B.PP(cfg.wowtime, Text)
 
 	local APM = { TIMEMANAGER_PM, TIMEMANAGER_AM }
 
@@ -37,9 +39,9 @@ if C['datatext'].wowtime and C['datatext'].wowtime > 0 then
 		if tt == nil then tt = false end
 		local Hr, Min, AmPm
 		if tt == true then
-			if C['datatext'].localtime == true then
+			if cfg.localtime == true then
 				Hr, Min = GetGameTime()
-				if C['datatext'].time24 == true then
+				if cfg.time24 == true then
 					return Hr, Min, -1
 				else
 					if Hr>=12 then
@@ -55,7 +57,7 @@ if C['datatext'].wowtime and C['datatext'].wowtime > 0 then
 				local Hr24 = tonumber(date("%H"))
 				Hr = tonumber(date("%I"))
 				Min = tonumber(date("%M"))
-				if C['datatext'].time24 == true then
+				if cfg.time24 == true then
 					return Hr24, Min, -1
 				else
 					if Hr24>=12 then AmPm = 1 else AmPm = 2 end
@@ -63,11 +65,11 @@ if C['datatext'].wowtime and C['datatext'].wowtime > 0 then
 				end
 			end
 		else
-			if C['datatext'].localtime == true then
+			if cfg.localtime == true then
 				local Hr24 = tonumber(date("%H"))
 				Hr = tonumber(date("%I"))
 				Min = tonumber(date("%M"))
-				if C['datatext'].time24 == true then
+				if cfg.time24 == true then
 					return Hr24, Min, -1
 				else
 					if Hr24>=12 then AmPm = 1 else AmPm = 2 end
@@ -75,7 +77,7 @@ if C['datatext'].wowtime and C['datatext'].wowtime > 0 then
 				end
 			else
 				Hr, Min = GetGameTime()
-				if C['datatext'].time24 == true then
+				if cfg.time24 == true then
 					return Hr, Min, -1
 				else
 					if Hr>=12 then
@@ -172,7 +174,7 @@ if C['datatext'].wowtime and C['datatext'].wowtime > 0 then
 		local timeText
 		local Hr, Min, AmPm = CalculateTimeValues(true)
 
-		if C['datatext'].localtime == true then
+		if cfg.localtime == true then
 			timeText = "Server Time: "
 		else
 			timeText = "Local Time: "

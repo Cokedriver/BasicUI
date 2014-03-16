@@ -1,4 +1,4 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
 
 if C['general'].cooldown ~= true then return end
 

@@ -1,4 +1,4 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
 
 -- Below are the Default Settings for BasicUI
 
@@ -6,7 +6,7 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 -----------------
 -- Media Options
 -----------------
-DB["media"] = {
+C["media"] = {
 	["fontNormal"] = "BasicUI NORMAL",
 	["fontBold"] = "BasicUI BOLD",
 	["fontItalic"] = "BasicUI ITALIC",
@@ -18,13 +18,10 @@ DB["media"] = {
 -------------------
 -- General Options
 -------------------
-DB["general"] = {
+C["general"] = {
 	["color"] = { r = 1, g = 1, b = 1},
 	["classcolor"] = true,
 	["cooldown"] = true,
-	["slidebar"] = true,
-	["btsw"] = true,
-	["cbop"] = true,
 	["quicky"] = true,
 	["vellum"] = true,
 	["mail"] = false,
@@ -34,39 +31,6 @@ DB["general"] = {
 		["enable"] = true,
 		["disenchant"] = false,
 	},	
-	["BlackBook"] = {
-		["enable"] = true,
-		["AutoFill"] = true,
-		["contacts"] = {},
-		["recent"] = {},
-		["AutoCompleteAlts"] = true,
-		["AutoCompleteRecent"] = true,
-		["AutoCompleteContacts"] = true,
-		["AutoCompleteFriends"] = true,
-		["AutoCompleteGuild"] = true,
-		["ExcludeRandoms"] = true,
-		["DisableBlizzardAutoComplete"] = false,
-		["UseAutoComplete"] = true,
-	},
-	["OpenAll"] = {
-		["enable"] = true,
-		["collected"] = true,
-		["OpenSpeed"] = 0.50,
-		["ChatOutput"] = 1,
-		["AHCancelled"] = true,
-		["AHExpired"] = true,
-		["AHOutbid"] = true,
-		["AHSuccess"] = true,
-		["AHWon"] = true,
-		["NeutralAHCancelled"] = true,
-		["NeutralAHExpired"] = true,
-		["NeutralAHOutbid"] = true,
-		["NeutralAHSuccess"] = true,
-		["NeutralAHWon"] = true,
-		["Attachments"] = true,
-		["SpamChat"] = true,
-		["KeepFreeSpace"] = 1,
-	},
 	["buttons"] = {	
 		["enable"] = true,
 		["showHotKeys"] = false,
@@ -87,7 +51,7 @@ DB["general"] = {
 ---------------
 -- Buff Options
 ----------------
-DB["buff"] = {
+C["buff"] = {
 	["enable"] = true,
     ["buffScale"] = 1.19,
 }	
@@ -95,7 +59,7 @@ DB["buff"] = {
 ------------------
 --Castbar Options
 ------------------
-DB["castbar"] = {	
+C["castbar"] = {	
 	["enable"] = true,
 	["border"] = "Blizzard Tooltip",
 	["background"] = "Blizzard Dialog Background Dark",
@@ -159,7 +123,7 @@ DB["castbar"] = {
 ----------------
 -- Chat Options
 ----------------
-DB["chat"] = {
+C["chat"] = {
 	["enable"] = true,
 	["disableFade"] = false,
 	["chatOutline"] = false,
@@ -189,7 +153,7 @@ DB["chat"] = {
 ---------------------
 -- Datatext Options
 ---------------------
-DB["datatext"] = {	
+C["datatext"] = {	
 	["enable"] = true,
 	["tooltipadjust"] = true,
 
@@ -246,7 +210,7 @@ DB["datatext"] = {
 -- Merchant Options
 --------------------
 
-DB["merchant"] = {
+C["merchant"] = {
 	["enable"] = true,										-- enable merchant module.
 	["sellMisc"] = true, 									-- allows the user to add spacific items to sell at merchant (please see the local filter in merchant.lua)
 	["autoSellGrey"] = true,								-- autosell grey items at merchant.
@@ -256,7 +220,7 @@ DB["merchant"] = {
 --------------------
 -- Minimap Options
 --------------------
-DB["minimap"] = {
+C["minimap"] = {
 	["enable"] = true,
 	["gameclock"] = true,
 	["farm"] = false,
@@ -266,7 +230,7 @@ DB["minimap"] = {
 ---------------------
 -- Nameplates Options
 ---------------------
-DB["nameplates"] = {
+C["nameplates"] = {
 	["enable"] = true,
     ["enableTankMode"] = true,              -- Color the nameplate threat border green, if you have no aggro
     ["colorNameWithThreat"] = true,         -- The name has the same color as the threat of the unit (better visibility)
@@ -282,7 +246,7 @@ DB["nameplates"] = {
 --------------------
 -- Powerbar Options 
 --------------------
-DB["powerbar"] = {
+C["powerbar"] = {
 	["enable"] = true,
 	["background"] = "Blizzard Dialog Background Dark",
 	["statusbar"] = "Blizzard",	
@@ -338,7 +302,7 @@ DB["powerbar"] = {
 -----------------
 -- Quest Options
 -----------------
-DB["quest"] = {
+C["quest"] = {
 	["enable"] = true,									-- enable quest module.
 	["autocomplete"] = false,							-- enable the autoaccept quest and autocomplete quest if no reward.	
 }
@@ -346,7 +310,7 @@ DB["quest"] = {
 -------------------------
 -- Skinning Options
 -------------------------
-DB["skin"] = {
+C["skin"] = {
 	["enable"] = true,
 	["border"] = "Blizzard Tooltip",
 	["statusbar"] = "Blizzard",
@@ -358,7 +322,7 @@ DB["skin"] = {
 -------------------
 -- Tooltip Options
 -------------------
-DB["tooltip"] = {											
+C["tooltip"] = {											
 	["enable"] = true,									-- Move the tooltip up so its not overlapping the MainMenubar
 	["fontSize"] = 15,
 	["fontOutline"] = true,
@@ -406,7 +370,7 @@ DB["tooltip"] = {
 --------------
 -- Unitframes
 --------------
-DB["unitframes"] = {
+C["unitframes"] = {
 	
 	["enable"] = true,
 	["player"] = {

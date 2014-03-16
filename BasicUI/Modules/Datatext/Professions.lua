@@ -1,4 +1,6 @@
-﻿local B, C, DB = unpack(select(2, ...)) -- Import:  F - function; C - config; DB - Database
+﻿local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["datatext"]
+local cfgm = C["media"]
 
 
 --[[
@@ -9,9 +11,9 @@
 	
 ]]
 
-if C['datatext'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
-if C['datatext'].pro and C['datatext'].pro > 0 then
+if cfg.pro and cfg.pro > 0 then
 
 	local Stat = CreateFrame('Button')
 	Stat:RegisterEvent('PLAYER_ENTERING_WORLD')
@@ -21,8 +23,8 @@ if C['datatext'].pro and C['datatext'].pro > 0 then
 	Stat.tooltip = false
 
 	local Text = DataPanel:CreateFontString(nil, 'OVERLAY')
-	Text:SetFont(C['media'].fontNormal, C['datatext'].fontsize,'THINOUTLINE')
-	B.PP(C['datatext'].pro, Text)
+	Text:SetFont(cfgm.fontNormal, cfg.fontsize,'THINOUTLINE')
+	B.PP(cfg.pro, Text)
 
 	local function Update(self)
 		for i = 1, select("#", GetProfessions()) do

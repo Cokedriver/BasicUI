@@ -1,7 +1,9 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["tooltip"]
+local cfgm = C["media"]
 
-if C['tooltip'].enable ~= true then return end
-local cfg = C['tooltip']
+if cfg.enable ~= true then return end
+
 
 if (not cfg.healthbar.showHealthValue) then
     return
@@ -19,10 +21,10 @@ bar.Text = bar:CreateFontString(nil, 'OVERLAY')
 bar.Text:SetPoint('CENTER', bar, cfg.healthbar.textPos, 0, 1)
 
 if (cfg.healthbar.showOutline) then
-    bar.Text:SetFont(C['media'].fontNormal, cfg.healthbar.fontSize, 'THINOUTLINE')
+    bar.Text:SetFont(cfgm.fontNormal, cfg.healthbar.fontSize, 'THINOUTLINE')
     bar.Text:SetShadowOffset(0, 0)
 else
-    bar.Text:SetFont(C['media'].fontNormal, cfg.healthbar.fontSize)
+    bar.Text:SetFont(cfgm.fontNormal, cfg.healthbar.fontSize)
     bar.Text:SetShadowOffset(1, -1)
 end
 

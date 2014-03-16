@@ -1,11 +1,10 @@
 ## Interface: 50400
 ## Author: Cokedriver
-## Version: 5.4.4
+## Version: 5.4.5
 ## Title: |cff00B4FFBasic|rUI
 ## SavedVariables: BasicDB
 ## SavedVariablesPerCharacter: BasicDBPerCharacter
 ## OptionalDeps: SharedMedia, SharedMediaAdditionalFonts, DBM-Core, Recount, Blizzard_TimeManager, Blizzard_TradeSkillUI
-## RequiredDeps: BasicUI_Config
 
 
 <!-- Libs --!>
@@ -26,24 +25,20 @@ Media\LSMLaunch.lua
 <!-- General --!>
 Modules\General\Font.lua
 Modules\General\Autogreed.lua
-Modules\General\CBOP.lua
-Modules\General\BiggerTradeskill.lua
-Modules\General\BlackBook.lua
 Modules\General\Buttons.lua
 Modules\General\Castbar.lua
 Modules\General\Cooldown.lua
 Modules\General\Merchant.lua
 Modules\General\Minimap.lua
 Modules\General\Nameplates.lua
-Modules\General\OpenAll.lua
 Modules\General\Powerbar.lua
-Modules\General\Quest.lua
 Modules\General\Quicky.lua
+Modules\General\Quest.lua
 Modules\General\Skinning.lua
 Modules\General\Vellum.lua
 Modules\General\Watchframe.lua
 Modules\General\FlashGatherNodes.lua
-Modules\Unitframes\Unitframes.lua
+
 
 <!-- Buffs --!>
 Modules\Buffs\Buff.lua
@@ -79,5 +74,5 @@ Modules\Tooltip\Fade.lua
 Modules\Tooltip\Health.lua
 
 
-<!-- Options --!>
-
+<!-- Unitframes --!>
+Modules\Unitframes\Unitframes.lua

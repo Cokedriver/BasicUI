@@ -1,4 +1,6 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["datatext"]
+local cfgm = C["media"]
 
 --[[
 
@@ -8,9 +10,9 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 	
 ]]
 
-if C['datatext'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
-if C['datatext'].dps_text and C['datatext'].dps_text > 0 then
+if cfg.dps_text and cfg.dps_text > 0 then
 	local events = {SWING_DAMAGE = true, RANGE_DAMAGE = true, SPELL_DAMAGE = true, SPELL_PERIODIC_DAMAGE = true, DAMAGE_SHIELD = true, DAMAGE_SPLIT = true, SPELL_EXTRA_ATTACKS = true}
 	local DPS_FEED = CreateFrame('Frame')
 	local player_id = UnitGUID('player')
@@ -20,10 +22,10 @@ if C['datatext'].dps_text and C['datatext'].dps_text > 0 then
 	local pet_id = UnitGUID('pet')
      
 	local dText = DataPanel:CreateFontString(nil, 'OVERLAY')
-	dText:SetFont(C['media'].fontNormal, C['datatext'].fontsize,'THINOUTLINE')
+	dText:SetFont(cfgm.fontNormal, cfg.fontsize,'THINOUTLINE')
 	dText:SetText("DPS: ", '0')
 
-	B.PP(C['datatext'].dps_text, dText)
+	B.PP(cfg.dps_text, dText)
 
 	DPS_FEED:EnableMouse(true)
 	DPS_FEED:SetFrameStrata('BACKGROUND')

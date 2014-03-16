@@ -1,6 +1,7 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["general"]
 
-if C['general'].quicky ~= true then return end
+if cfg.quicky ~= true then return end
 
 local f = CreateFrame('Frame')
 

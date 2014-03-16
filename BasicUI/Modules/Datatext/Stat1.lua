@@ -1,4 +1,6 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  F - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["datatext"]
+local cfgm = C["media"]
 
 
 --[[
@@ -9,9 +11,9 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  F - function; C - config; DB
 	
 ]]
 
-if C['datatext'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
-if C['datatext'].stat1 and C['datatext'].stat1 > 0 then
+if cfg.stat1 and cfg.stat1 > 0 then
 
 	local Stat = CreateFrame("Frame")
 	Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -20,8 +22,8 @@ if C['datatext'].stat1 and C['datatext'].stat1 > 0 then
 	Stat:EnableMouse(true)
 
 	local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-	Text:SetFont(C['media'].fontNormal, C['datatext'].fontsize,'THINOUTLINE')
-	B.PP(C['datatext'].stat1, Text)
+	Text:SetFont(cfgm.fontNormal, cfg.fontsize,'THINOUTLINE')
+	B.PP(cfg.stat1, Text)
 
 	local format = string.format
 	local targetlv, playerlv = UnitLevel("target"), UnitLevel("player")

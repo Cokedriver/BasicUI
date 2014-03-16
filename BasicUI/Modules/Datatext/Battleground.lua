@@ -1,4 +1,6 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["datatext"]
+local cfgm = C["media"]
 
 --[[
 
@@ -8,9 +10,9 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 	
 ]]
 
-if C['datatext'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
-if C['datatext'].battleground == true then 
+if cfg.battleground == true then 
 
 	--Map IDs
 	local WSG = 443
@@ -70,17 +72,17 @@ if C['datatext'].battleground == true then
 	Stat:EnableMouse(true)
 
 	local Text1  = BattleGroundPanel:CreateFontString(nil, 'OVERLAY')
-	Text1:SetFont(C['media'].fontNormal, C['datatext'].fontsize,'THINOUTLINE')
+	Text1:SetFont(cfgm.fontNormal, cfg.fontsize,'THINOUTLINE')
 	Text1:SetPoint('LEFT', BattleGroundPanel, 30, 0)
 	Text1:SetHeight(DataPanel:GetHeight())
 
 	local Text2  = BattleGroundPanel:CreateFontString(nil, 'OVERLAY')
-	Text2:SetFont(C['media'].fontNormal, C['datatext'].fontsize,'THINOUTLINE')
+	Text2:SetFont(cfgm.fontNormal, cfg.fontsize,'THINOUTLINE')
 	Text2:SetPoint('CENTER', BattleGroundPanel, 0, 0)
 	Text2:SetHeight(DataPanel:GetHeight())
 
 	local Text3  = BattleGroundPanel:CreateFontString(nil, 'OVERLAY')
-	Text3:SetFont(C['media'].fontNormal, C['datatext'].fontsize,'THINOUTLINE')
+	Text3:SetFont(cfgm.fontNormal, cfg.fontsize,'THINOUTLINE')
 	Text3:SetPoint('RIGHT', BattleGroundPanel, -30, 0)
 	Text3:SetHeight(DataPanel:GetHeight())
 

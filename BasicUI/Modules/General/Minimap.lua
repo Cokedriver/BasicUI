@@ -1,5 +1,5 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
-
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["minimap"]
 
 
 --[[
@@ -10,7 +10,7 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 
 ]]
 
-if C['minimap'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
 
 -- Minimap tweaks:
@@ -32,16 +32,16 @@ MiniMapTracking:ClearAllPoints()
 MiniMapTracking:SetPoint("TOPRIGHT", -26, 7)
 
 -- Hide Minimap Clock
-if C['minimap'].gameclock == true then
+if cfg.gameclock == true then
 	TimeManagerClockButton:Show()
 else
 	TimeManagerClockButton:Hide()
 end
 
 -- Bigger minimap
-if C['minimap'].farm == true then
+if cfg.farm == true then
 
-	MinimapCluster:SetScale(C['minimap'].farmscale)
+	MinimapCluster:SetScale(cfg.farmscale)
 	MinimapCluster:EnableMouse(false)
 else
 	MinimapCluster:SetScale(1.1)

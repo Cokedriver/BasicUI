@@ -1,4 +1,6 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["datatext"]
+local cfgm = C["media"]
 
 --[[
 
@@ -8,17 +10,17 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 	
 ]]
 
-if C['datatext'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
-if C['datatext'].bags and C['datatext'].bags > 0 then
+if cfg.bags and cfg.bags > 0 then
 	local Stat = CreateFrame('Frame')
 	Stat:EnableMouse(true)
 	Stat:SetFrameStrata('BACKGROUND')
 	Stat:SetFrameLevel(3)
 
 	local Text  = DataPanel:CreateFontString(nil, 'OVERLAY')
-	Text:SetFont(C['media'].fontNormal, C['datatext'].fontsize,'THINOUTLINE')
-	B.PP(C['datatext'].bags, Text)
+	Text:SetFont(cfgm.fontNormal, cfg.fontsize,'THINOUTLINE')
+	B.PP(cfg.bags, Text)
 
 	local Profit	= 0
 	local Spent		= 0

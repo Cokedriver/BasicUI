@@ -1,7 +1,9 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["tooltip"]
+local cfgm = C["media"]
 
-if C['tooltip'].enable ~= true then return end
-local cfg = C['tooltip']
+if cfg.enable ~= true then return end
+
 
 --[[
 
@@ -61,18 +63,18 @@ local symbiosis = {
     -- Some tooltip changes
 
 if (cfg.fontOutline) then
-    GameTooltipHeaderText:SetFont(C['media'].fontBold, (cfg.fontSize + 2), 'THINOUTLINE')
+    GameTooltipHeaderText:SetFont(cfgm.fontBold, (cfg.fontSize + 2), 'THINOUTLINE')
     GameTooltipHeaderText:SetShadowOffset(0, 0)
 
-    GameTooltipText:SetFont(C['media'].fontNormal, (cfg.fontSize), 'THINOUTLINE')
+    GameTooltipText:SetFont(cfgm.fontNormal, (cfg.fontSize), 'THINOUTLINE')
     GameTooltipText:SetShadowOffset(0, 0)
 
-    GameTooltipTextSmall:SetFont(C['media'].fontNormal, (cfg.fontSize), 'THINOUTLINE')
+    GameTooltipTextSmall:SetFont(cfgm.fontNormal, (cfg.fontSize), 'THINOUTLINE')
     GameTooltipTextSmall:SetShadowOffset(0, 0)
 else
-    GameTooltipHeaderText:SetFont(C['media'].fontBold, (cfg.fontSize + 2))
-    GameTooltipText:SetFont(C['media'].fontNormal, (cfg.fontSize))
-    GameTooltipTextSmall:SetFont(C['media'].fontNormal, (cfg.fontSize))
+    GameTooltipHeaderText:SetFont(cfgm.fontBold, (cfg.fontSize + 2))
+    GameTooltipText:SetFont(cfgm.fontNormal, (cfg.fontSize))
+    GameTooltipTextSmall:SetFont(cfgm.fontNormal, (cfg.fontSize))
 end
 
 GameTooltipStatusBar:SetHeight(7)
@@ -342,9 +344,9 @@ end
 
 local function SetHealthBarColor(unit)
     local r, g, b
-    if (C['tooltip'].healthbar.custom.apply and not C['tooltip'].healthbar.reactionColoring) then
-        r, g, b = C['tooltip'].healthbar.custom.color.r, C['tooltip'].healthbar.custom.color.g, C['tooltip'].healthbar.custom.color.b
-    elseif (C['tooltip'].healthbar.reactionColoring and unit) then
+    if (cfg.healthbar.custom.apply and not cfg.healthbar.reactionColoring) then
+        r, g, b = cfg.healthbar.custom.color.r, cfg.healthbar.custom.color.g, cfg.healthbar.custom.color.b
+    elseif (cfg.healthbar.reactionColoring and unit) then
         r, g, b = UnitSelectionColor(unit)
     else
         r, g, b = 0, 1, 0
@@ -715,6 +717,6 @@ end)
 if C["datatext"].tooltipadjust ~= true then
 	hooksecurefunc('GameTooltip_SetDefaultAnchor', function(self)
 		self:ClearAllPoints()
-		self:SetPoint(C['tooltip'].position.relAnchor, "UIParent", C['tooltip'].position.selfAnchor,(C['tooltip'].position.offSetX),(C['tooltip'].position.offSetY))
+		self:SetPoint(cfg.position.relAnchor, "UIParent", cfg.position.selfAnchor,(cfg.position.offSetX),(cfg.position.offSetY))
 	end)
 end 

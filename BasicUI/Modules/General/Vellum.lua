@@ -1,39 +1,40 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
-
-if C["general"].vellum then
-	if not TradeSkillFrame then
-		print("What the fuck?  Velluminous cannot initialize.  BAIL!  BAIL!  BAIL!")
-		return
-	end
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["general"]
 
 
-	local butt = CreateFrame("Button", nil, TradeSkillCreateButton, "SecureActionButtonTemplate")
-	butt:SetAttribute("type", "macro")
-	butt:SetAttribute("macrotext", "/click TradeSkillCreateButton\n/use item:38682")
+if cfg.vellum ~= true then return end
 
-	butt:SetText("Vellum")
-
-	butt:SetPoint("RIGHT", TradeSkillCreateButton, "LEFT")
-
-	butt:SetWidth(80) butt:SetHeight(22)
-
-	-- Fonts --
-	butt:SetDisabledFontObject(GameFontDisable)
-	butt:SetHighlightFontObject(GameFontHighlight)
-	butt:SetNormalFontObject(GameFontNormal)
-
-	-- Textures --
-	butt:SetNormalTexture("Interface\\Buttons\\UI-Panel-Button-Up")
-	butt:SetPushedTexture("Interface\\Buttons\\UI-Panel-Button-Down")
-	butt:SetHighlightTexture("Interface\\Buttons\\UI-Panel-Button-Highlight")
-	butt:SetDisabledTexture("Interface\\Buttons\\UI-Panel-Button-Disabled")
-	butt:GetNormalTexture():SetTexCoord(0, 0.625, 0, 0.6875)
-	butt:GetPushedTexture():SetTexCoord(0, 0.625, 0, 0.6875)
-	butt:GetHighlightTexture():SetTexCoord(0, 0.625, 0, 0.6875)
-	butt:GetDisabledTexture():SetTexCoord(0, 0.625, 0, 0.6875)
-	butt:GetHighlightTexture():SetBlendMode("ADD")
-
-	local hider = CreateFrame("Frame", nil, TradeSkillCreateAllButton)
-	hider:SetScript("OnShow", function() butt:Hide() end)
-	hider:SetScript("OnHide", function() butt:Show() end)
+if not TradeSkillFrame then
+	print("What the fuck?  Velluminous cannot initialize.  BAIL!  BAIL!  BAIL!")
+	return
 end
+
+local butt = CreateFrame("Button", nil, TradeSkillCreateButton, "SecureActionButtonTemplate")
+butt:SetAttribute("type", "macro")
+butt:SetAttribute("macrotext", "/click TradeSkillCreateButton\n/use item:38682")
+
+butt:SetText("Vellum")
+
+butt:SetPoint("RIGHT", TradeSkillCreateButton, "LEFT")
+
+butt:SetWidth(80) butt:SetHeight(22)
+
+-- Fonts --
+butt:SetDisabledFontObject(GameFontDisable)
+butt:SetHighlightFontObject(GameFontHighlight)
+butt:SetNormalFontObject(GameFontNormal)
+
+-- Textures --
+butt:SetNormalTexture("Interface\\Buttons\\UI-Panel-Button-Up")
+butt:SetPushedTexture("Interface\\Buttons\\UI-Panel-Button-Down")
+butt:SetHighlightTexture("Interface\\Buttons\\UI-Panel-Button-Highlight")
+butt:SetDisabledTexture("Interface\\Buttons\\UI-Panel-Button-Disabled")
+butt:GetNormalTexture():SetTexCoord(0, 0.625, 0, 0.6875)
+butt:GetPushedTexture():SetTexCoord(0, 0.625, 0, 0.6875)
+butt:GetHighlightTexture():SetTexCoord(0, 0.625, 0, 0.6875)
+butt:GetDisabledTexture():SetTexCoord(0, 0.625, 0, 0.6875)
+butt:GetHighlightTexture():SetBlendMode("ADD")
+
+local hider = CreateFrame("Frame", nil, TradeSkillCreateAllButton)
+hider:SetScript("OnShow", function() butt:Hide() end)
+hider:SetScript("OnHide", function() butt:Show() end)

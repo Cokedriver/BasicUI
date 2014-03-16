@@ -1,4 +1,4 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
 
 local L = setmetatable({}, { __index = function(t,k)
     local v = tostring(k)

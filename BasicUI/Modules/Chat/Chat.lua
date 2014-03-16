@@ -1,6 +1,9 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["chat"]
+local cfgm = C["media"]
+local gen = C["general"]
 
-if C['chat'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
 --[[
 
@@ -196,12 +199,12 @@ end
 
 ChatFrame1EditBox:SetAltArrowKeyMode(false)
 ChatFrame1EditBox:ClearAllPoints()
-ChatFrame1EditBox:SetFont(C['media'].fontNormal, C['media'].fontSize)
+ChatFrame1EditBox:SetFont(cfg.fontNormal, cfg.fontSize)
 ChatFrame1EditBox:SetPoint('BOTTOMLEFT', ChatFrame1, 'TOPLEFT', 2, 33)
 ChatFrame1EditBox:SetPoint('BOTTOMRIGHT', ChatFrame1, 'TOPRIGHT', 0, 33)
 ChatFrame1EditBox:SetBackdrop({
-    bgFile = C['chat'].editboxbackground,
-    edgeFile = C['chat'].editboxborder,
+    bgFile = cfg.editboxbackground,
+    edgeFile = cfg.editboxborder,
     tile = true, tileSize = 16, edgeSize = 18,
     insets = {left = 3, right = 3, top = 2, bottom = 3},
 })
@@ -209,7 +212,7 @@ ChatFrame1EditBox:SetBackdrop({
 
 ChatFrame1EditBox:SetBackdropColor(0, 0, 0, 0.5)
 
-if (C['chat'].enableBorderColoring) then
+if (cfg.enableBorderColoring) then
 
     hooksecurefunc('ChatEdit_UpdateHeader', function(editBox)
         local type = editBox:GetAttribute('chatType')
@@ -280,7 +283,7 @@ hooksecurefunc('FloatingChatFrame_OnMouseScroll', function(self, direction)
         end
     end
 
-    if (C['chat'].enableBottomButton) then
+    if (cfg.enableBottomButton) then
         local buttonBottom = _G[self:GetName() .. 'ButtonFrameBottomButton']
         if (self:AtBottom()) then
             buttonBottom:SetAlpha(0)
@@ -315,20 +318,20 @@ function SkinTab(self)
     local tabText = _G[self..'TabText']
     tabText:SetJustifyH('CENTER')
     tabText:SetWidth(60)
-    if (C['chat'].tab.fontOutline) then
-        tabText:SetFont(C['media'].fontBold, C['media'].fontSize, 'THINOUTLINE')
+    if (cfg.tab.fontOutline) then
+        tabText:SetFont(cfg.fontBold, cfg.fontSize, 'THINOUTLINE')
         tabText:SetShadowOffset(0, 0)
     else
-        tabText:SetFont(C['media'].fontBold, C['media'].fontLarge)
+        tabText:SetFont(cfg.fontBold, cfg.fontLarge)
         tabText:SetShadowOffset(1, -1)
     end
 
     local a1, a2, a3, a4, a5 = tabText:GetPoint()
     tabText:SetPoint(a1, a2, a3, a4, 1)
 
-    local s1, s2, s3 = C['chat'].tab.specialColor.r, C['chat'].tab.specialColor.g, C['chat'].tab.specialColor.b 
-    local e1, e2, e3 = C['chat'].tab.selectedColor.r, C['chat'].tab.selectedColor.g, C['chat'].tab.selectedColor.b
-    local n1, n2, n3 = C['chat'].tab.normalColor.r, C['chat'].tab.normalColor.g, C['chat'].tab.normalColor.b
+    local s1, s2, s3 = cfg.tab.specialColor.r, cfg.tab.specialColor.g, cfg.tab.specialColor.b 
+    local e1, e2, e3 = cfg.tab.selectedColor.r, cfg.tab.selectedColor.g, cfg.tab.selectedColor.b
+    local n1, n2, n3 = cfg.tab.normalColor.r, cfg.tab.normalColor.g, cfg.tab.normalColor.b
 
     local tabGlow = _G[self..'TabGlow']
     hooksecurefunc(tabGlow, 'Show', function()
@@ -387,18 +390,18 @@ end
 local function ModChat(self)
     local chat = _G[self]
 
-    if (not C['chat'].chatOutline) then
+    if (not cfg.chatOutline) then
         chat:SetShadowOffset(1, -1)
     end
 
-    if (C['chat'].disableFade) then
+    if (cfg.disableFade) then
         chat:SetFading(false)
     end
 
     SkinTab(self)
 
     local font, fontsize, fontflags = chat:GetFont()
-    chat:SetFont(C['media'].fontNormal, fontsize, C['chat'].chatOutline and 'THINOUTLINE' or fontflags)
+    chat:SetFont(cfg.fontNormal, fontsize, cfg.chatOutline and 'THINOUTLINE' or fontflags)
     chat:SetClampedToScreen(false)
 
     chat:SetClampRectInsets(0, 0, 0, 0)
@@ -421,7 +424,7 @@ local function ModChat(self)
 	buttonBottom:SetAlpha(0)
     buttonBottom:EnableMouse(false)
 	
-    if (C['chat'].enableBottomButton) then
+    if (cfg.enableBottomButton) then
         buttonBottom:ClearAllPoints()
         buttonBottom:SetPoint('BOTTOMRIGHT', chat, -1, -3)
         buttonBottom:HookScript('OnClick', function(self)
@@ -518,7 +521,7 @@ f:SetScript('OnEvent', function(_, event)
     end
 
     if (event == 'CHAT_MSG_WHISPER' or event == 'CHAT_MSG_BN_WHISPER') then
-        PlaySoundFile(C['chat'].sound)
+        PlaySoundFile(cfg.sound)
     end
 end)
 
@@ -592,8 +595,8 @@ f:SetPoint('BOTTOMLEFT', ChatFrame1EditBox, 'TOPLEFT', 3, 10)
 f:SetPoint('BOTTOMRIGHT', ChatFrame1EditBox, 'TOPRIGHT', -3, 10)
 f:SetFrameStrata('DIALOG')
 f:SetBackdrop({
-    bgFile = C['chat'].background,
-    edgeFile = C['chat'].border,
+    bgFile = cfg.background,
+    edgeFile = cfg.border,
     tile = true, tileSize = 16, edgeSize = 18,
     insets = {left = 3, right = 3, top = 3, bottom = 3
 }})
@@ -601,7 +604,7 @@ f:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 f:Hide()
 
 f.t = f:CreateFontString(nil, 'OVERLAY')
-f.t:SetFont(C['media'].fontNormal, C['media'].fontSize)
+f.t:SetFont(cfg.fontNormal, cfg.fontSize)
 f.t:SetPoint('TOPLEFT', f, 8, -8)
 f.t:SetTextColor(1, 1, 0)
 f.t:SetShadowOffset(1, -1)
@@ -777,7 +780,7 @@ StaticPopupDialogs['UrlCopyDialog'] = {
     maxLetters = 1024,
 }
 
-if C['chat'].enableHyperlinkTooltip ~= true then return end
+if cfg.enableHyperlinkTooltip ~= true then return end
 
 --[[
 
@@ -855,12 +858,12 @@ if C["chat"].windowborder == true then
 		end	
 		bg:SetPoint("BOTTOMRIGHT", 8, -12);
 		bg:SetBackdrop({
-			edgeFile = C['chat'].border,
+			edgeFile = cfg.border,
 			tile = true, tileSize = 16, edgeSize = 18,
 		})
 
-		if C['general'].classcolor ~= true then
-			bg:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+		if gen.classcolor ~= true then
+			bg:SetBackdropBorderColor(gen.color.r,gen.color.g,gen.color.b)
 		else
 			bg:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 		end

@@ -1,6 +1,7 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C['general']
 
-if C['general'].loot.enable ~= true then return end
+if cfg.loot.enable ~= true then return end
 
 --[[
 
@@ -16,7 +17,7 @@ AddOn:RegisterEvent('START_LOOT_ROLL')
 AddOn:SetScript('OnEvent', function(_, _, RollID)
     local texture, name, count, quality, bindOnPickUp , canNeed, canGreed, canDisenchant = GetLootRollItemInfo(RollID)
 	
-	if C['general'].loot.disenchant ~= true then
+	if cfg.loot.disenchant ~= true then
 	    if (quality == 2 and not bindOnPickUp) then
 			RollOnLoot(RollID, canGreed and 3 or 2)
 		end

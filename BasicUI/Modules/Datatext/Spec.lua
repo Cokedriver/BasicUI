@@ -1,4 +1,6 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["datatext"]
+local cfgm = C["media"]
 
 --[[
 
@@ -8,9 +10,9 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 	
 ]]
 
-if C['datatext'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
-if C['datatext'].spec and C['datatext'].spec > 0 then
+if cfg.spec and cfg.spec > 0 then
 
 	local Stat = CreateFrame('Frame')
 	Stat:EnableMouse(true)
@@ -18,8 +20,8 @@ if C['datatext'].spec and C['datatext'].spec > 0 then
 	Stat:SetFrameLevel(3)
 
 	local Text  = DataPanel:CreateFontString(nil, 'OVERLAY')
-	Text:SetFont(C['media'].fontNormal, C['datatext'].fontsize,'THINOUTLINE')
-	B.PP(C['datatext'].spec, Text)
+	Text:SetFont(cfgm.fontNormal, cfg.fontsize,'THINOUTLINE')
+	B.PP(cfg.spec, Text)
 
 	local talent = {}
 	local active

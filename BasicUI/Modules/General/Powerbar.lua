@@ -1,6 +1,8 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["powerbar"]
+local cfgm = C["media"]
 
-if C['powerbar'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
 local playerClass = select(2, UnitClass('player'))
 
@@ -46,7 +48,7 @@ local RuneColor = {
 local f = CreateFrame('Frame', nil, UIParent)
 f:SetScale(1.4)
 f:SetSize(18, 18)
-f:SetPoint(C['powerbar'].position.selfAnchor, C['powerbar'].position.frameParent, C['powerbar'].position.offSetX, C['powerbar'].position.offSetY)
+f:SetPoint(cfg.position.selfAnchor, cfg.position.frameParent, cfg.position.offSetX, cfg.position.offSetY)
 f:EnableMouse(false)
 
 f:RegisterEvent('PLAYER_REGEN_ENABLED')
@@ -55,7 +57,7 @@ f:RegisterEvent('PLAYER_ENTERING_WORLD')
 f:RegisterUnitEvent('UNIT_COMBO_POINTS', 'player')
 f:RegisterEvent('PLAYER_TARGET_CHANGED')
 
-if (C['powerbar'].rune.showRuneCooldown) then
+if (cfg.rune.showRuneCooldown) then
     f:RegisterEvent('RUNE_TYPE_UPDATE')
 end
 
@@ -63,7 +65,7 @@ f:RegisterUnitEvent('UNIT_DISPLAYPOWER', 'player')
 f:RegisterUnitEvent('UNIT_POWER_FREQUENT', 'player')
 f:RegisterEvent('UPDATE_SHAPESHIFT_FORM')
 
-if (C['powerbar'].showCombatRegen) then
+if (cfg.showCombatRegen) then
     f:RegisterUnitEvent('UNIT_AURA', 'player')
 end
 
@@ -72,17 +74,17 @@ f:RegisterUnitEvent('UNIT_ENTERING_VEHICLE', 'player')
 f:RegisterUnitEvent('UNIT_EXITED_VEHICLE', 'player')
 f:RegisterUnitEvent('UNIT_EXITING_VEHICLE', 'player')
 
-if (C['powerbar'].energy.showComboPoints) then
+if (cfg.energy.showComboPoints) then
     f.ComboPoints = {}
 
     for i = 1, 5 do
         f.ComboPoints[i] = f:CreateFontString(nil, 'ARTWORK')
 
-        if (C['powerbar'].energy.comboFontOutline) then
-            f.ComboPoints[i]:SetFont(C['media'].fontBold, C['powerbar'].energy.comboFontSize, 'THINOUTLINE')
+        if (cfg.energy.comboFontOutline) then
+            f.ComboPoints[i]:SetFont(cfgm.fontBold, cfg.energy.comboFontSize, 'THINOUTLINE')
             f.ComboPoints[i]:SetShadowOffset(0, 0)
         else
-            f.ComboPoints[i]:SetFont(C['media'].fontBold, C['powerbar'].energy.comboFontSize)
+            f.ComboPoints[i]:SetFont(cfgm.fontBold, cfg.energy.comboFontSize)
             f.ComboPoints[i]:SetShadowOffset(1, -1)
         end
 
@@ -91,7 +93,7 @@ if (C['powerbar'].energy.showComboPoints) then
         f.ComboPoints[i]:SetAlpha(0)
     end
 
-    local yOffset = C['powerbar'].energy.comboPointsBelow and -35 or 0
+    local yOffset = cfg.energy.comboPointsBelow and -35 or 0
     f.ComboPoints[1]:SetPoint('CENTER', -52, yOffset)
     f.ComboPoints[2]:SetPoint('CENTER', -26, yOffset)
     f.ComboPoints[3]:SetPoint('CENTER', 0, yOffset)
@@ -106,7 +108,7 @@ if (playerClass == 'MONK') then
     for i = 1, 5 do
         f.Chi[i] = f:CreateFontString(nil, 'ARTWORK')
 
-        f.Chi[i]:SetFont(C['media'].fontBold, C['powerbar'].energy.comboFontSize, 'THINOUTLINE')
+        f.Chi[i]:SetFont(cfgm.fontBold, cfg.energy.comboFontSize, 'THINOUTLINE')
         f.Chi[i]:SetShadowOffset(0, 0)
 
         f.Chi[i]:SetParent(f)
@@ -114,7 +116,7 @@ if (playerClass == 'MONK') then
         f.Chi[i]:SetAlpha(0)
     end
 
-    local yOffset = C['powerbar'].energy.comboPointsBelow and -35 or 0
+    local yOffset = cfg.energy.comboPointsBelow and -35 or 0
     f.Chi[1]:SetPoint('CENTER', -39, yOffset)
     f.Chi[2]:SetPoint('CENTER', -13, yOffset)
     f.Chi[3]:SetPoint('CENTER', 13, yOffset)
@@ -123,14 +125,14 @@ if (playerClass == 'MONK') then
     f.Chi[5]:Hide()
 end
 
-if (playerClass == 'WARLOCK' and C['powerbar'].showSoulshards or playerClass == 'PALADIN' and C['powerbar'].showHolypower or playerClass == 'PRIEST' and C['powerbar'].showShadowOrbs) then
+if (playerClass == 'WARLOCK' and cfg.showSoulshards or playerClass == 'PALADIN' and cfg.showHolypower or playerClass == 'PRIEST' and cfg.showShadowOrbs) then
     f.extraPoints = f:CreateFontString(nil, 'ARTWORK')
 
-    if (C['powerbar'].extraFontOutline) then
-        f.extraPoints:SetFont(C['media'].fontBold, C['powerbar'].extraFontSize, 'THINOUTLINE')
+    if (cfg.extraFontOutline) then
+        f.extraPoints:SetFont(cfgm.fontBold, cfg.extraFontSize, 'THINOUTLINE')
         f.extraPoints:SetShadowOffset(0, 0)
     else
-        f.extraPoints:SetFont(C['media'].fontBold, C['powerbar'].extraFontSize)
+        f.extraPoints:SetFont(cfgm.fontBold, cfg.extraFontSize)
         f.extraPoints:SetShadowOffset(1, -1)
     end
 
@@ -138,7 +140,7 @@ if (playerClass == 'WARLOCK' and C['powerbar'].showSoulshards or playerClass == 
     f.extraPoints:SetPoint('CENTER', 0, 0)
 end
 
-if (playerClass == 'DEATHKNIGHT' and C['powerbar'].rune.showRuneCooldown) then
+if (playerClass == 'DEATHKNIGHT' and cfg.rune.showRuneCooldown) then
     for i = 1, 6 do
         RuneFrame:UnregisterAllEvents()
         _G['RuneButtonIndividual'..i]:Hide()
@@ -149,11 +151,11 @@ if (playerClass == 'DEATHKNIGHT' and C['powerbar'].rune.showRuneCooldown) then
     for i = 1, 6 do
         f.Rune[i] = f:CreateFontString(nil, 'ARTWORK')
 
-        if (C['powerbar'].rune.runeFontOutline) then
-            f.Rune[i]:SetFont(C['media'].fontBold, C['powerbar'].rune.runeFontSize, 'THINOUTLINE')
+        if (cfg.rune.runeFontOutline) then
+            f.Rune[i]:SetFont(cfgm.fontBold, cfg.rune.runeFontSize, 'THINOUTLINE')
             f.Rune[i]:SetShadowOffset(0, 0)
         else
-            f.Rune[i]:SetFont(C['media'].fontBold, C['powerbar'].rune.runeFontSize)
+            f.Rune[i]:SetFont(cfgm.fontBold, cfg.rune.runeFontSize)
             f.Rune[i]:SetShadowOffset(1, -1)
         end
 
@@ -171,40 +173,28 @@ end
 
 f.Power = CreateFrame('StatusBar', nil, UIParent)
 f.Power:SetScale(UIParent:GetScale())
-f.Power:SetSize(C['powerbar'].sizeWidth, 5)
+f.Power:SetSize(cfg.sizeWidth, 5)
 f.Power:SetPoint('CENTER', f, 0, -23)
-f.Power:SetStatusBarTexture(C["powerbar"].statusbar)
+f.Power:SetStatusBarTexture(cfg.statusbar)
 f.Power:SetAlpha(0)
 
 f.Power.Value = f.Power:CreateFontString(nil, 'ARTWORK')
 
-if (C['powerbar'].valueFontOutline) then
-    f.Power.Value:SetFont(C['media'].fontNormal, C['powerbar'].valueFontSize, 'THINOUTLINE')
+if (cfg.valueFontOutline) then
+    f.Power.Value:SetFont(cfgm.fontNormal, cfg.valueFontSize, 'THINOUTLINE')
     f.Power.Value:SetShadowOffset(0, 0)
 else
-    f.Power.Value:SetFont(C['media'].fontNormal, C['powerbar'].valueFontSize)
+    f.Power.Value:SetFont(cfgm.fontNormal, cfg.valueFontSize)
     f.Power.Value:SetShadowOffset(1, -1)
 end
 
-f.Power.Value:SetPoint('CENTER', f.Power, 0, C['powerbar'].valueFontAdjustmentX)
+f.Power.Value:SetPoint('CENTER', f.Power, 0, cfg.valueFontAdjustmentX)
 f.Power.Value:SetVertexColor(1, 1, 1)
 
 f.Power.Background = f.Power:CreateTexture(nil, 'BACKGROUND')
 f.Power.Background:SetAllPoints(f.Power)
-f.Power.Background:SetTexture(C["powerbar"].statusbar)
+f.Power.Background:SetTexture(cfg.statusbar)
 f.Power.Background:SetVertexColor(0.25, 0.25, 0.25, 1)
-
---[[f.Power.BackgroundShadow = CreateFrame('Frame', nil, f.Power)
-f.Power.BackgroundShadow:SetFrameStrata('BACKGROUND')
-f.Power.BackgroundShadow:SetPoint('TOPLEFT', -4, 4)
-f.Power.BackgroundShadow:SetPoint('BOTTOMRIGHT', 4, -4)
-f.Power.BackgroundShadow:SetBackdrop({
-    BgFile = C["powerbar"].background,
-    edgeFile = 'Interface\\Addons\\BasicUI\\Media\\Textures\\textureGlow', edgeSize = 4,
-    insets = {left = 3, right = 3, top = 3, bottom = 3}
-})
-f.Power.BackgroundShadow:SetBackdropColor(0.15, 0.15, 0.15, 1)
-f.Power.BackgroundShadow:SetBackdropBorderColor(0, 0, 0)]]
 
 f.Power.Below = f.Power:CreateTexture(nil, 'BACKGROUND')
 f.Power.Below:SetHeight(14)
@@ -217,9 +207,9 @@ f.Power.Above:SetWidth(14)
 f.Power.Above:SetTexture('Interface\\AddOns\\BasicUI\\Media\\Textures\\textureArrowAbove')
 f.Power.Above:SetPoint('BOTTOM', f.Power.Below, 'TOP', 0, f.Power:GetHeight())
 
-if (C['powerbar'].showCombatRegen) then
+if (cfg.showCombatRegen) then
     f.mpreg = f.Power:CreateFontString(nil, 'ARTWORK')
-    f.mpreg:SetFont(C['media'].fontNormal, 12, 'THINOUTLINE')
+    f.mpreg:SetFont(cfgm.fontNormal, 12, 'THINOUTLINE')
     f.mpreg:SetShadowOffset(0, 0)
     f.mpreg:SetPoint('TOP', f.Power.Below, 'BOTTOM', 0, 4)
     f.mpreg:SetParent(f.Power)
@@ -280,7 +270,7 @@ end
 local function UpdateChi()
     local chi = UnitPower('player', SPELL_POWER_CHI)
     local maxChi = UnitPowerMax('player', SPELL_POWER_CHI)
-    local yOffset = C['powerbar'].energy.comboPointsBelow and -35 or 0
+    local yOffset = cfg.energy.comboPointsBelow and -35 or 0
 
     if (f.Chi.maxChi ~= maxChi) then
         if (maxChi == 4) then
@@ -338,14 +328,14 @@ local function UpdateBarVisibility()
     local _, powerType = UnitPowerType('player')
     local newAlpha = nil
 
-    if ((not C['powerbar'].energy.show and powerType == 'ENERGY') or (not C['powerbar'].showFocus and powerType == 'FOCUS') or (not C['powerbar'].showRage and powerType == 'RAGE') or (not C['powerbar'].showMana and powerType == 'MANA') or (not C['powerbar'].rune.show and powerType == 'RUNEPOWER') or UnitIsDeadOrGhost('player') or UnitHasVehicleUI('player')) then
+    if ((not cfg.energy.show and powerType == 'ENERGY') or (not cfg.showFocus and powerType == 'FOCUS') or (not cfg.showRage and powerType == 'RAGE') or (not cfg.showMana and powerType == 'MANA') or (not cfg.rune.show and powerType == 'RUNEPOWER') or UnitIsDeadOrGhost('player') or UnitHasVehicleUI('player')) then
         f.Power:SetAlpha(0)
     elseif (InCombatLockdown()) then
-        newAlpha = C['powerbar'].activeAlpha
+        newAlpha = cfg.activeAlpha
     elseif (not InCombatLockdown() and UnitPower('player') > 0) then
-        newAlpha = C['powerbar'].inactiveAlpha
+        newAlpha = cfg.inactiveAlpha
     else
-        newAlpha = C['powerbar'].emptyAlpha
+        newAlpha = cfg.emptyAlpha
     end
 
     if (newAlpha) then
@@ -371,7 +361,7 @@ local function UpdateBarValue()
     f.Power:SetMinMaxValues(0, UnitPowerMax('player', f))
     f.Power:SetValue(min)
 
-    if (C['powerbar'].valueAbbrev) then
+    if (cfg.valueAbbrev) then
         f.Power.Value:SetText(min > 0 and FormatValue(min) or '')
     else
         f.Power.Value:SetText(min > 0 and min or '')
@@ -405,7 +395,7 @@ f:SetScript('OnEvent', function(self, event, arg1)
         end
     end
 
-    if (event == 'RUNE_TYPE_UPDATE' and C['powerbar'].rune.showRuneCooldown) then
+    if (event == 'RUNE_TYPE_UPDATE' and cfg.rune.showRuneCooldown) then
         f.Rune[arg1].type = GetRuneType(arg1)
     end
 
@@ -447,7 +437,7 @@ f:SetScript('OnEvent', function(self, event, arg1)
         if (InCombatLockdown()) then
             securecall('UIFrameFadeIn', f, 0.35, f:GetAlpha(), 1)
         else
-            securecall('UIFrameFadeOut', f, 0.35, f:GetAlpha(), C['powerbar'].inactiveAlpha)
+            securecall('UIFrameFadeOut', f, 0.35, f:GetAlpha(), cfg.inactiveAlpha)
         end
     end
 
@@ -456,7 +446,7 @@ f:SetScript('OnEvent', function(self, event, arg1)
     end
 
     if (event == 'PLAYER_REGEN_ENABLED') then
-        securecall('UIFrameFadeOut', f, 0.35, f:GetAlpha(), C['powerbar'].inactiveAlpha)
+        securecall('UIFrameFadeOut', f, 0.35, f:GetAlpha(), cfg.inactiveAlpha)
     end
 end)
 

@@ -1,9 +1,0 @@
-## Interface: 50400
-## Title: |cff00B4FFBasic|rUI Config
-## Notes: Config for BasicUI
-## Author: Cokedrivers / Baine
-## SavedVariables: BasicUIConfig
-## RequiredDeps: BasicUI
-
-Libs\Libs.xml
-BasicUI_Config.lua

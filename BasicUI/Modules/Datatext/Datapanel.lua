@@ -1,6 +1,9 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["datatext"]
+local cfgm = C["media"]
+local gen = C["general"]
 
-if C['datatext'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
 --[[
 	All Credit for Datapanel.lua goes to Tuks.
@@ -14,23 +17,23 @@ local PanelCenter = CreateFrame('Frame', 'PanelCenter', UIParent)
 local PanelRight = CreateFrame('Frame', 'PanelRight', UIParent)
 local BattleGroundPanel = CreateFrame('Frame', 'BattleGroundPanel', UIParent)
 
-if C['datatext'].top == true then
+if cfg.top == true then
 	DataPanel:SetPoint('TOP', UIParent, 0, 0)
 	DataPanel:SetHeight(35)
 	DataPanel:SetWidth(B.getscreenwidth)
 	DataPanel:SetFrameStrata('LOW')
 	DataPanel:SetFrameLevel(0)
 	DataPanel:SetBackdrop({
-		bgFile = C['datatext'].background,
-		edgeFile = C['datatext'].border,							
+		bgFile = cfg.background,
+		edgeFile = cfg.border,							
 		tile = true, tileSize = 16, edgeSize = 18,
 		insets = {left = 3, right = 3, top = 3, bottom = 3},
 	})
 	DataPanel:SetBackdropColor(0, 0, 0, 1)
 
-	if C['datatext'].border == "BasicUI" then
-		if C['general'].classcolor ~= true then
-			DataPanel:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+	if cfg.border == "BasicUI" then
+		if gen.classcolor ~= true then
+			DataPanel:SetBackdropBorderColor(gen.color.r,gen.color.g,gen.color.b)
 		else
 			DataPanel:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 		end
@@ -71,16 +74,16 @@ else
 	DataPanel:SetFrameStrata('LOW')
 	DataPanel:SetFrameLevel(0)
 	DataPanel:SetBackdrop({
-		bgFile = C['datatext'].background,
-		edgeFile = C['datatext'].border,
+		bgFile = cfg.background,
+		edgeFile = cfg.border,
 		tile = true, tileSize = 16, edgeSize = 18,
 		insets = {left = 5, right = 5, top = 5, bottom = 5}
 	})
 	DataPanel:SetBackdropColor(0, 0, 0, 1)
 
-	if C['datatext'].border == "BasicUI" then
-		if C['general'].classcolor ~= true then
-			DataPanel:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+	if cfg.border == "BasicUI" then
+		if gen.classcolor ~= true then
+			DataPanel:SetBackdropBorderColor(gen.color.r,gen.color.g,gen.color.b)
 		else
 			DataPanel:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 		end
@@ -120,7 +123,7 @@ end
 
 
 	-- move some frames to make way for the datapanel
-if C['datatext'].top == true then
+if cfg.top == true then
 
 	local top = function() end
 	PlayerFrame:ClearAllPoints() PlayerFrame:SetPoint("TOPLEFT", -19, -20) PlayerFrame.ClearAllPoints = top PlayerFrame.SetPoint = top

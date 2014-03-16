@@ -1,4 +1,6 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["datatext"]
+local cfgm = C["media"]
 
 --[[
 
@@ -7,9 +9,9 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 	Edited by Cokedriver.
 	
 ]]
-if C["datatext"].enable ~=true then return end
+if cfg.enable ~=true then return end
 
-if not C["datatext"].friends or C["datatext"].friends == 0 then return end
+if not cfg.friends or cfg.friends == 0 then return end
 
 -- create a popup
 StaticPopupDialogs["SET_BN_BROADCAST"] = {
@@ -48,8 +50,8 @@ Stat:SetFrameStrata("MEDIUM")
 Stat:SetFrameLevel(3)
 
 local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-Text:SetFont(C['media'].fontNormal, C["datatext"].fontsize,'THINOUTLINE')
-B.PP(C["datatext"].friends, Text)
+Text:SetFont(cfgm.fontNormal, cfg.fontsize,'THINOUTLINE')
+B.PP(cfg.friends, Text)
 
 
 local menuFrame = CreateFrame("Frame", "FriendRightClickMenu", UIParent, "UIDropDownMenuTemplate")

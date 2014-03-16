@@ -1,6 +1,9 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["castbar"]
+local cfgm = C["media"]
+local gen = C["general"]
 
-if C['castbar'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
 --[[
 
@@ -31,7 +34,7 @@ local function Set(a, k)
         _G[k]:ClearAllPoints();
         _G[k]:SetPoint("TOPLEFT", a, "TOPLEFT", B.scale(_G[k].d.x), -B.scale(_G[k].d.y))
     end;
-    if C['castbar'][k].enableLag then
+    if cfg[k].enableLag then
         local d, u, l = GetNetStats();
 		local min, max = _G[k]:GetMinMaxValues();
 		local lv = ( l / 1000 ) / ( max - min );
@@ -47,25 +50,25 @@ local function Set(a, k)
     end
 end;
 
-if C['castbar']["TargetFrameSpellBar"].enable then
+if cfg["TargetFrameSpellBar"].enable then
     function Target_Spellbar_AdjustPosition()
         Set(_G["TargetFrameSpellBar"].df, "TargetFrameSpellBar");
     end;
 end;
-if C['castbar']["FocusFrameSpellBar"].enable then
+if cfg["FocusFrameSpellBar"].enable then
     function Focus_Spellbar_AdjustPosition()
         Set(_G["FocusFrameSpellBar"].df, "FocusFrameSpellBar");
     end;
 end
 
-for k, _ in pairs(C['castbar']) do
-    if (k ~="enable" and C['castbar'][k].enable) then
+for k, _ in pairs(cfg) do
+    if (k ~="enable" and cfg[k].enable) then
         local a = CreateFrame("Frame", "Castbar"..k, UIParent);
         d.w, d.h, d.x, d.y = nil, nil, nil, nil;
 
         _G[k.."Border"]:SetTexture("");
         _G[k.."Text"]:ClearAllPoints("");
-        _G[k.."Text"]:SetFont(C['media'].fontNormal, C["castbar"][k].fontSize, "");
+        _G[k.."Text"]:SetFont(cfgm.fontNormal, C["castbar"][k].fontSize, "");
 
         if find(k, "MirrorTimer") then
             d.w = 240 + (5 * 2);
@@ -74,15 +77,15 @@ for k, _ in pairs(C['castbar']) do
             d.y = 5;
             
 			_G[k.."Text"]:SetPoint("CENTER", k, -10, 2);
-            _G[k.."StatusBar"]:SetStatusBarTexture(C['castbar'].statusbar);
+            _G[k.."StatusBar"]:SetStatusBarTexture(cfg.statusbar);
         else
             d.w = 240 + 24 + (5 * 2) + 5;
             d.h = 24 + (5 * 2);
             d.x = 24 + 5 + 5;
             d.y = 5;
 			
-			_G[k.."Text"]:SetPoint(C['castbar'][k].textPosition);
-            _G[k]:SetStatusBarTexture(C['castbar'].statusbar);
+			_G[k.."Text"]:SetPoint(cfg[k].textPosition);
+            _G[k]:SetStatusBarTexture(cfg.statusbar);
             _G[k.."Flash"].Show = _G[k.."Flash"].Hide;
             _G[k.."Spark"].Show = _G[k.."Spark"].Hide;
             
@@ -111,7 +114,7 @@ for k, _ in pairs(C['castbar']) do
                 end
             end)
             
-            if C['castbar'][k].enableLag then
+            if cfg[k].enableLag then
                 _G[k].lag = _G[k]:CreateTexture(nil, "BACKGROUND")
                 _G[k].lag:SetHeight(24)
                 _G[k].lag:SetWidth(0)
@@ -120,25 +123,25 @@ for k, _ in pairs(C['castbar']) do
             end;
         end;    
              
-        if C['castbar'][k].enableTimer then
+        if cfg[k].enableTimer then
             _G[k].timer = _G[k]:CreateFontString(nil);
-            _G[k].timer:SetFont(C['media'].fontNormal, C['media'].fontSize, "");
+            _G[k].timer:SetFont(cfgm.fontNormal, cfgm.fontSize, "");
             _G[k].timer:SetPoint("RIGHT", _G[k], "RIGHT", -5, 0);
             _G[k].update = .1;
         end;
 		
-		a:SetPoint(C['castbar'][k].relAnchor,"UIParent",C['castbar'][k].selfAnchor, B.scale(C['castbar'][k].offSetX),B.scale(C['castbar'][k].offSetY))
+		a:SetPoint(cfg[k].relAnchor,"UIParent",cfg[k].selfAnchor, B.scale(cfg[k].offSetX),B.scale(cfg[k].offSetY))
             
         a:SetWidth(d.w); a:SetHeight(d.h);
         a:SetBackdropColor(.1, .1, .1, .95);
 		a:SetBackdrop({
-			bgFile = C['castbar'].background,
-			edgeFile = C['castbar'].border,
+			bgFile = cfg.background,
+			edgeFile = cfg.border,
 			tile = true, tileSize = 16, edgeSize = 15,
 			insets = {left = 3, right = 3, top = 3, bottom = 3}
 		})
-		if C['general'].classcolor ~= true then
-			a:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+		if gen.classcolor ~= true then
+			a:SetBackdropBorderColor(gen.color.r,gen.color.g,gen.color.b)
 		else
 			a:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 		end
@@ -149,7 +152,7 @@ for k, _ in pairs(C['castbar']) do
         a:SetScript("OnDragStart", function(self) self:StartMoving() end);
         a:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end);
         a.name = a:CreateFontString(nil, "OVERLAY");
-        a.name:SetFont(C['media'].fontNormal, C['media'].fontSize, "");
+        a.name:SetFont(cfgm.fontNormal, cfgm.fontSize, "");
         a.name:SetPoint("CENTER", a);
         _G[k].d = d; _G[k].df = a; _G[k].name = a.name; _G[k].l = true;
        

@@ -1,4 +1,6 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["datatext"]
+local cfgm = C["media"]
 
 --[[
 
@@ -8,9 +10,9 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 	
 ]]
 
-if C['datatext'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
-if not C["datatext"].guild or C["datatext"].guild == 0 then return end
+if not cfg.guild or cfg.guild == 0 then return end
 
 local Stat = CreateFrame("Frame")
 Stat:EnableMouse(true)
@@ -18,8 +20,8 @@ Stat:SetFrameStrata("MEDIUM")
 Stat:SetFrameLevel(3)
 
 local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-Text:SetFont(C['media'].fontNormal, C["datatext"].fontsize,'THINOUTLINE')
-B.PP(C["datatext"].guild, Text)
+Text:SetFont(cfgm.fontNormal, cfg.fontsize,'THINOUTLINE')
+B.PP(cfg.guild, Text)
 
 local tthead, ttsubh, ttoff = {r=0.4, g=0.78, b=1}, {r=0.75, g=0.9, b=1}, {r=.3,g=1,b=.3}
 local activezone, inactivezone = {r=0.3, g=1.0, b=0.3}, {r=0.65, g=0.65, b=0.65}

@@ -1,4 +1,7 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["skin"]
+local cfgm = C["media"]
+local gen = C["general"]
 
 --[[
 
@@ -8,7 +11,7 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 	
 ]]
 
-if C['skin'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
 local f = CreateFrame('Frame')
 f:RegisterEvent('VARIABLES_LOADED')
@@ -21,7 +24,7 @@ f:SetScript('OnEvent', function(self, ...)
 	-- DBM Skinning
 	---------------
 	
-    if (C['skin'].DBM == true and IsAddOnLoaded('DBM-Core')) then	
+    if (cfg.DBM == true and IsAddOnLoaded('DBM-Core')) then	
 		-- Normal Bars (Credit for DBM codeing goes to Elv from ElvUI)
         hooksecurefunc(DBT, 'CreateBar', function(self)
 			for bar in self:GetBarIterator() do
@@ -42,12 +45,12 @@ f:SetScript('OnEvent', function(self, ...)
 							icon1.overlay:SetFrameStrata("MEDIUM");
 							icon1.overlay:SetPoint("BOTTOMRIGHT", tbar, "BOTTOMLEFT", -22/4, -4);
 							icon1.overlay:SetBackdrop({
-								edgeFile = C['skin'].border,
+								edgeFile = cfg.border,
 								tile = true, tileSize = 16, edgeSize = 18,
 							})
 
-							if C['general'].classcolor ~= true then
-								icon1.overlay:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+							if gen.classcolor ~= true then
+								icon1.overlay:SetBackdropBorderColor(gen.color.r,gen.color.g,gen.color.b)
 							else
 								icon1.overlay:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 							end
@@ -61,12 +64,12 @@ f:SetScript('OnEvent', function(self, ...)
 							icon2.overlay:SetFrameStrata("MEDIUM");
 							icon2.overlay:SetPoint("BOTTOMLEFT", tbar, "BOTTOMRIGHT", 22/4, -4);
 							icon2.overlay:SetBackdrop({
-								edgeFile = C['skin'].border,
+								edgeFile = cfg.border,
 								tile = true, tileSize = 16, edgeSize = 18,
 							})
 
-							if C['general'].classcolor ~= true then
-								icon2.overlay:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+							if gen.classcolor ~= true then
+								icon2.overlay:SetBackdropBorderColor(gen.color.r,gen.color.g,gen.color.b)
 							else
 								icon2.overlay:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 							end
@@ -92,12 +95,12 @@ f:SetScript('OnEvent', function(self, ...)
 							border:SetPoint("TOPLEFT", -2, 2);
 							border:SetPoint("BOTTOMRIGHT", 2, -2);
 							border:SetBackdrop({
-								edgeFile = C['skin'].border,
+								edgeFile = cfg.border,
 								tile = true, tileSize = 16, edgeSize = 18,
 							})
 
-							if C['general'].classcolor ~= true then
-								border:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+							if gen.classcolor ~= true then
+								border:SetBackdropBorderColor(gen.color.r,gen.color.g,gen.color.b)
 							else
 								border:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 							end
@@ -128,11 +131,11 @@ f:SetScript('OnEvent', function(self, ...)
 						end
 
 						if not texture.styled then
-							texture:SetTexture(C['skin'].statusbar)
+							texture:SetTexture(cfg.statusbar)
 							texture.styled=true
 						end
 						
-						tbar:SetStatusBarTexture(C['skin'].statusbar)
+						tbar:SetStatusBarTexture(cfg.statusbar)
 						if not tbar.styled then
 							tbar:SetPoint("TOPLEFT", frame, "TOPLEFT", 2, -2)
 							tbar:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -2, 2)
@@ -145,7 +148,7 @@ f:SetScript('OnEvent', function(self, ...)
 							name:SetPoint("LEFT", frame, "LEFT", 4, 0)
 							name:SetWidth(165)
 							name:SetHeight(8)
-							name:SetFont(C['media'].fontNormal, C['media'].fontSize)
+							name:SetFont(cfgm.fontNormal, cfgm.fontSize)
 							name:SetJustifyH("LEFT")
 							name:SetShadowColor(0, 0, 0, 0)
 							name.SetFont = B.dummy
@@ -155,7 +158,7 @@ f:SetScript('OnEvent', function(self, ...)
 						if not timer.styled then	
 							timer:ClearAllPoints()
 							timer:SetPoint("RIGHT", frame, "RIGHT", -4, 0)
-							timer:SetFont(C['media'].fontNormal, C['media'].fontSize)
+							timer:SetFont(cfgm.fontNormal, cfgm.fontSize)
 							timer:SetJustifyH("RIGHT")
 							timer:SetShadowColor(0, 0, 0, 0)
 							timer.SetFont = B.dummy
@@ -183,7 +186,7 @@ f:SetScript('OnEvent', function(self, ...)
 			if not anchor.styled then
 				local header={anchor:GetRegions()}
 					if header[1]:IsObjectType("FontString") then
-						header[1]:SetFont(C['media'].fontNormal, C['media'].fontSize)
+						header[1]:SetFont(cfgm.fontNormal, cfgm.fontSize)
 						header[1]:SetTextColor(1,1,1,1)
 						header[1]:SetShadowColor(0, 0, 0, 0)
 						anchor.styled=true	
@@ -228,12 +231,12 @@ f:SetScript('OnEvent', function(self, ...)
 					barb:SetPoint("TOPLEFT", -2, 2);
 					barb:SetPoint("BOTTOMRIGHT", 2, -2);
 					barb:SetBackdrop({
-						edgeFile = C['skin'].border,
+						edgeFile = cfg.border,
 						tile = true, tileSize = 16, edgeSize = 18,
 					})
 
-					if C['general'].classcolor ~= true then
-						barb:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+					if gen.classcolor ~= true then
+						barb:SetBackdropBorderColor(gen.color.r,gen.color.g,gen.color.b)
 					else
 						barb:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 					end
@@ -242,7 +245,7 @@ f:SetScript('OnEvent', function(self, ...)
 				end	
 				
 				if not progress.styled then
-					progress:SetStatusBarTexture(C['skin'].statusbar)
+					progress:SetStatusBarTexture(cfg.statusbar)
 					progress:SetStatusBarColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 					progress.styled=true
 				end				
@@ -253,7 +256,7 @@ f:SetScript('OnEvent', function(self, ...)
 				if not name.styled then
 					name:ClearAllPoints()
 					name:SetPoint("LEFT", bar, "LEFT", 4, 0)
-					name:SetFont(C['media'].fontNormal, C['media'].fontSize)
+					name:SetFont(cfgm.fontNormal, cfgm.fontSize)
 					name:SetJustifyH("LEFT")
 					name:SetShadowColor(0, 0, 0, 0)
 					name.styled=true
@@ -262,7 +265,7 @@ f:SetScript('OnEvent', function(self, ...)
 				if not timer.styled then
 					timer:ClearAllPoints()
 					timer:SetPoint("RIGHT", bar, "RIGHT", -4, 0)
-					timer:SetFont(C['media'].fontNormal, C['media'].fontSize)
+					timer:SetFont(cfgm.fontNormal, cfgm.fontSize)
 					timer:SetJustifyH("RIGHT")
 					timer:SetShadowColor(0, 0, 0, 0)
 					timer.styled=true
@@ -276,9 +279,9 @@ f:SetScript('OnEvent', function(self, ...)
 	-- Recount Skinning
 	-------------------
 	
-    if (C['skin'].Recount == true and IsAddOnLoaded('Recount')) then
+    if (cfg.Recount == true and IsAddOnLoaded('Recount')) then
 		local rm = Recount.MainWindow
-		if C['skin'].RecountBackdrop == false then 
+		if cfg.RecountBackdrop == false then 
 			rm:SetBackdrop(nil)
 		end
 		local bgs = CreateFrame("Frame", nil, rm);
@@ -286,12 +289,12 @@ f:SetScript('OnEvent', function(self, ...)
 		bgs:SetPoint("TOPLEFT", -3, -8);
 		bgs:SetPoint("BOTTOMRIGHT", 1, 0);
 		bgs:SetBackdrop({
-			edgeFile = C['skin'].border,
+			edgeFile = cfg.border,
 			tile = true, tileSize = 16, edgeSize = 18,
 		})
 
-		if C['general'].classcolor ~= true then
-			bgs:SetBackdropBorderColor(C['general'].color.r,C['general'].color.g,C['general'].color.b)
+		if gen.classcolor ~= true then
+			bgs:SetBackdropBorderColor(gen.color.r,gen.color.g,gen.color.b)
 		else
 			bgs:SetBackdropBorderColor(B.ccolor.r, B.ccolor.g, B.ccolor.b)
 		end

@@ -1,6 +1,7 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["quest"]
 
-if C['quest'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
 --[[
 
@@ -56,7 +57,7 @@ local function MostValueable()
 end
 
 
-if C['quest'].autocomplete == true then
+if cfg.autocomplete == true then
 	QuestFrame:SetScript("OnEvent", function(self, event, ...)	
 		if (event == "QUEST_DETAIL") then
 			AcceptQuest()

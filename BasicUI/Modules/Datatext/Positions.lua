@@ -1,4 +1,6 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["datatext"]
+local cfgm = C["media"]
 
 --[[
 
@@ -8,7 +10,7 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 	
 ]]
 
-if C['datatext'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
 -- Datatext Positions
 B.PP = function(p, obj)
@@ -89,7 +91,7 @@ B.DataTextTooltipAnchor = function(self)
 		PanelCenter,
 		PanelRight,
 	})	do
-		if C['datatext'].top == true then
+		if cfg.top == true then
 			anchor = 'ANCHOR_BOTTOM'
 		else
 			anchor = 'ANCHOR_TOP'

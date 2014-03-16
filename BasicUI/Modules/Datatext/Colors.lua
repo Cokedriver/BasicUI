@@ -1,5 +1,7 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
-
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["datatext"]
+local cfgm = C["media"]
+local gen = C["general"]
 --[[
 
 	All Credit for Colors.lua goes to Tuks.
@@ -8,13 +10,13 @@ local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB
 	
 ]]
 
-if C['datatext'].enable ~= true then return end
+if cfg.enable ~= true then return end
 
 ---------------------------------------------------
 -- Color system for DataText Created by Hydra 
 ---------------------------------------------------
-if C["general"].classcolor ~= true then
-	local r, g, b = C["general"].color.r, C["general"].color.g, C["general"].color.b
+if gen.classcolor ~= true then
+	local r, g, b = gen.color.r, gen.color.g, gen.color.b
 	hexa = ("|cff%.2x%.2x%.2x"):format(r * 255, g * 255, b * 255)
 	hexb = "|r"
 else

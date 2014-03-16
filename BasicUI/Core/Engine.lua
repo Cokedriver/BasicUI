@@ -8,7 +8,6 @@
 local addon, engine = ...
 engine[1] = {} -- B, functions, constants
 engine[2] = {} -- C, config
-engine[3] = {} -- DB, database, post config load
 
 BasicUI = engine --Allow other addons to use Engine
 

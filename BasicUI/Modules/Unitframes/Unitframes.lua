@@ -1,160 +1,80 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
+local cfg = C["unitframes"]
+local cfgm = C["media"]
 
-if C["unitframes"].enable ~= true then return end
+if cfg.enable ~= true then return end
 
 
 -- Special Thanks to the guys over at Arena Junkies for most of these scripts
 -- http://www.arenajunkies.com/topic/222642-default-ui-scripts/
 
-local _G = _G
-
+if cfg.enable ~= true then return end
 
 -- Player Frame
-if C["unitframes"].player.enable then
-
-	-- Frame Scale
-	_G["PlayerFrame"]:SetScale(C["unitframes"].player.scale);	
-	PlayerFrameHealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].player.fontSize,"THINOUTLINE");
-	PlayerFrameManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].player.fontSize, "THINOUTLINE");
-	PlayerFrameAlternateManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].player.fontSize, "THINOUTLINE");
-	PetFrameHealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].player.fontSizepet,"THINOUTLINE");
-	PetFrameManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].player.fontSizepet, "THINOUTLINE");
-
+if cfg.player.enable then
+	if PlayerFrame then
+		PlayerFrame:SetScale(cfg.player.scale);
+		PlayerFrameHealthBarText:SetFont(cfgm.fontNormal, cfg.player.fontSize,"THINOUTLINE");
+		PlayerFrameManaBarText:SetFont(cfgm.fontNormal, cfg.player.fontSize, "THINOUTLINE");
+		PlayerFrameAlternateManaBarText:SetFont(cfgm.fontNormal, cfg.player.fontSize, "THINOUTLINE");
+		PetFrameHealthBarText:SetFont(cfgm.fontNormal, cfg.player.fontSizepet,"THINOUTLINE");
+		PetFrameManaBarText:SetFont(cfgm.fontNormal, cfg.player.fontSizepet, "THINOUTLINE");
+	end
 end
 
 -- Target Frame
-if C["unitframes"].target.enable then
-
-	-- Frame Scale
-	 _G["TargetFrame"]:SetScale(C["unitframes"].target.scale);
- 	TargetFrameTextureFrameHealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].target.fontSize, "THINOUTLINE");
-	TargetFrameTextureFrameManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].target.fontSize, "THINOUTLINE");
-
+if cfg.target.enable then
+	if TargetFrame then
+		TargetFrame:SetScale(cfg.target.scale);
+		TargetFrameTextureFrameHealthBarText:SetFont(cfgm.fontNormal, cfg.target.fontSize, "THINOUTLINE");
+		TargetFrameTextureFrameManaBarText:SetFont(cfgm.fontNormal, cfg.target.fontSize, "THINOUTLINE");		
+	end;
 end;
 
 -- Focus Frame
-if C["unitframes"].focus.enable then
-
-	-- Frame Scale
-	 _G["FocusFrame"]:SetScale(C["unitframes"].focus.scale)
-	FocusFrameTextureFrameHealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].focus.fontSize,"THINOUTLINE")
-	FocusFrameTextureFrameManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].focus.fontSize,"THINOUTLINE")
-
+if cfg.focus.enable then
+	if FocusFrame then
+		FocusFrame:SetScale(cfg.focus.scale)
+		FocusFrameTextureFrameHealthBarText:SetFont(cfgm.fontNormal, cfg.focus.fontSize,"THINOUTLINE")
+		FocusFrameTextureFrameManaBarText:SetFont(cfgm.fontNormal, cfg.focus.fontSize,"THINOUTLINE")		
+	end;
 end;
 
 
 -- Party Frames --
-if C["unitframes"].party.enable then
-
-	-- Clear all old settings
-	PartyMemberFrame1:ClearAllPoints();
-	PartyMemberFrame2:ClearAllPoints();
-	PartyMemberFrame3:ClearAllPoints();
-	PartyMemberFrame4:ClearAllPoints();
-
-	-- Create new locations
-	PartyMemberFrame1:SetPoint(C['unitframes'].party.position.relAnchor, UIParent, C['unitframes'].party.position.offSetX, C['unitframes'].party.position.offSetY);
-	PartyMemberFrame2:SetPoint("TOPLEFT", PartyMemberFrame1, 0, -75);
-	PartyMemberFrame3:SetPoint("TOPLEFT", PartyMemberFrame2, 0, -75);
-	PartyMemberFrame4:SetPoint("TOPLEFT", PartyMemberFrame3, 0, -75);
-
-	-- Make the new locations stay
-	PartyMemberFrame1.SetPoint = function() end;
-	PartyMemberFrame2.SetPoint = function() end;
-	PartyMemberFrame3.SetPoint = function() end;
-	PartyMemberFrame4.SetPoint = function() end;
-
-	-- Set the scale of all the frames
-	PartyMemberFrame1:SetScale(C["unitframes"].party.scale);
-	PartyMemberFrame2:SetScale(C["unitframes"].party.scale);
-	PartyMemberFrame3:SetScale(C["unitframes"].party.scale);
-	PartyMemberFrame4:SetScale(C["unitframes"].party.scale);
+if cfg.party.enable then
+	for i = 1, MAX_PARTY_MEMBERS do
+		local partyFrame = "PartyMemberFrame"..i
+		_G[partyFrame]:SetScale(cfg.party.scale);
+		_G[partyFrame.."HealthBarText"]:SetFont(cfgm.fontNormal, cfg.party.fontSize, "THINOUTLINE");
+		_G[partyFrame.."ManaBarText"]:SetFont(cfgm.fontNormal, cfg.party.fontSize, "THINOUTLINE");		
+	end
 	
-	-- Set Font Size
-	PartyMemberFrame1HealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].party.fontSize, "THINOUTLINE")
-	PartyMemberFrame1ManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].party.fontSize, "THINOUTLINE")
-	PartyMemberFrame2HealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].party.fontSize, "THINOUTLINE")
-	PartyMemberFrame2ManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].party.fontSize, "THINOUTLINE")
-	PartyMemberFrame3HealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].party.fontSize, "THINOUTLINE")
-	PartyMemberFrame3ManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].party.fontSize, "THINOUTLINE")
-	PartyMemberFrame4HealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].party.fontSize, "THINOUTLINE")
-	PartyMemberFrame4ManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].party.fontSize, "THINOUTLINE")
 end;
 
  -- Arena Frames
-if C["unitframes"].arena.enable then
-	LoadAddOn("Blizzard_ArenaUI"); -- You only need to run this once. You can safely delete any copies of this line.
-	 
-	ArenaEnemyFrames:SetScale(C["unitframes"].arena.scale);
-	
-	ArenaEnemyFrame1HealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize,"THINOUTLINE");
-	ArenaEnemyFrame1ManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize, "THINOUTLINE");
-	ArenaEnemyFrame2HealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize,"THINOUTLINE");
-	ArenaEnemyFrame2ManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize, "THINOUTLINE");
-	ArenaEnemyFrame3HealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize,"THINOUTLINE");
-	ArenaEnemyFrame3ManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize, "THINOUTLINE");
-	ArenaEnemyFrame4HealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize,"THINOUTLINE");
-	ArenaEnemyFrame4ManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize, "THINOUTLINE");
-	ArenaEnemyFrame5HealthBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize,"THINOUTLINE");
-	ArenaEnemyFrame5ManaBarText:SetFont(C['media'].fontNormal, C["unitframes"].arena.fontSize, "THINOUTLINE");
-
-
-	if C["unitframes"].arena.tracker == true then
-		trinkets = {};
-		local arenaFrame,trinket;
-		for i = 1, 5 do
-			arenaFrame = "ArenaEnemyFrame"..i;
-			trinket = CreateFrame("Cooldown", arenaFrame.."Trinket", ArenaEnemyFrames);
-			trinket:SetPoint("TOPRIGHT", arenaFrame, 30, -6);
-			trinket:SetSize(24, 24);
-			trinket.icon = trinket:CreateTexture(nil, "BACKGROUND");
-			trinket.icon:SetAllPoints();
-			trinket.icon:SetTexture("Interface\\Icons\\inv_jewelry_trinketpvp_01");
-			trinket:Hide();
-			trinkets["arena"..i] = trinket;
-		end;
-		local events = CreateFrame("Frame");
-		function events:UNIT_SPELLCAST_SUCCEEDED(unitID, spell, rank, lineID, spellID)
-			if not trinkets[unitID] then
-				return;
-			end ;       
-			if spellID == 59752 or spellID == 42292 then
-				CooldownFrame_SetTimer(trinkets[unitID], GetTime(), 120, 1);
-				SendChatMessage("Trinket used by: "..GetUnitName(unitID, true), "PARTY");
-			end;
-		end;
-		function events:PLAYER_ENTERING_WORLD()
-			local _, instanceType = IsInInstance();
-			if instanceType == "arena" then
-				self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED");
-			elseif self:IsEventRegistered("UNIT_SPELLCAST_SUCCEEDED") then
-				self:UnregisterEvent("UNIT_SPELLCAST_SUCCEEDED"); 
-				for _, trinket in pairs(trinkets) do
-					trinket:SetCooldown(0, 0);
-					trinket:Hide();
-				end;        
-			end;
-		end;
-		events:SetScript("OnEvent", function(self, event, ...) return self[event](self, ...) end);
-		events:RegisterEvent("PLAYER_ENTERING_WORLD");
-	end;
+if cfg.arena.enable then
+	hooksecurefunc("Arena_LoadUI", function()
+		for i = 1, MAX_ARENA_ENEMIES do
+			arenaFrame = "ArenaEnemyFrame"..i
+			_G[arenaFrame]:SetScale(cfg.arena.scale);
+			_G[arenaFrame.."HealthBarText"]:SetFont(cfgm.fontNormal, cfg.arena.fontSize,"THINOUTLINE");
+			_G[arenaFrame.."ManaBarText"]:SetFont(cfgm.fontNormal, cfg.arena.fontSize, "THINOUTLINE");
+		end
+	end)	
 end;
 
  -- Boss Frames
-if C["unitframes"].boss.enable then
-	for i = 1,4 do
-		local boss = _G["Boss"..i.."TargetFrame"];
-		if boss then
-			boss:SetScale(C["unitframes"].boss.scale)
-			boss:ClearAllPoints();
-			boss:SetPoint(C['unitframes'].boss.position.relAnchor, UIParent, C['unitframes'].boss.position.offSetX, C['unitframes'].boss.position.offSetY);
-			boss.ClearAllPoints = function() end;
-			boss.SetPoint = function() end;		
-		end;
-	end;
+if cfg.boss.enable then
+	for i = 1, MAX_BOSS_FRAMES do
+		local bossFrame = "Boss"..i.."TargetFrame"
+		_G[bossFrame]:SetScale(cfg.boss.scale);	
+	end;	
 end;
 
--- Font Style thanks to Phanx from WoWinterface.
+-- Font Style / Color thanks to Phanx from WoWinterface.
+
+	-- Font Style
 local shorts = {
 	{ 1e10, 1e9, "%.0fB" }, --  10b+ as  12b
 	{  1e9, 1e9, "%.1fB" }, --   1b+ as 8.3b
@@ -183,24 +103,33 @@ hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", function(statusBar, f
 			if style == "BOTH" then
 				return fontString:SetFormattedText(t[4], value / t[2], value / valueMax * 100)
 			else
-				return fontString:SetFormattedText(t[3], value / t[2])				
+				if value < valueMax then
+					for j = 1, #shorts do
+						local v = shorts[j]
+						if valueMax >= v[1] then
+							return fontString:SetFormattedText(t[3] .. " / " .. v[3], value / t[2], valueMax / v[2])
+						end
+					end
+				end
+				return fontString:SetFormattedText(t[3], value / t[2])
 			end
 		end
 	end
 end)
-
+	-- Font Color
 hooksecurefunc("UnitFrame_Update", function(self)
     if not self.name then return end
-
+	
+	local PET_COLOR = { r = 157/255, g = 197/255, b = 255/255 }
     local unit, color = self.unit
     if UnitPlayerControlled(unit) then
         if UnitIsPlayer(unit) then
             local _, class = UnitClass(unit)
             color = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
         else
-            color = HIGHLIGHT_FONT_COLOR
+            color = PET_COLOR
         end
-    elseif UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) then
+    elseif UnitIsDead(unit) or UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) then
         color = GRAY_FONT_COLOR
     else
         color = FACTION_BAR_COLORS[UnitIsEnemy(unit, "player") and 1 or UnitReaction(unit, "player") or 5]
@@ -213,6 +142,28 @@ hooksecurefunc("UnitFrame_Update", function(self)
     self.name:SetTextColor(color.r, color.g, color.b)
 end)
 
+local frame = CreateFrame("FRAME")
+frame:RegisterEvent("GROUP_ROSTER_UPDATE")
+frame:RegisterEvent("PLAYER_TARGET_CHANGED")
+frame:RegisterEvent("PLAYER_FOCUS_CHANGED")
+frame:RegisterEvent("UNIT_FACTION")
+
+local unitRegions = {
+	target = TargetFrameNameBackground,
+	focus = FocusFrameNameBackground,
+	boss1 = Boss1TargetFrameNameBackground,
+	boss2 = Boss2TargetFrameNameBackground,
+	boss3 = Boss3TargetFrameNameBackground,
+	boss4 = Boss4TargetFrameNameBackground,	
+}
+
+frame:SetScript("OnEvent", function(self, event, ...)
+	for unit, region in pairs(unitRegions) do
+		if UnitIsPlayer(unit) then
+			region:SetTexture([[Interface\DialogFrame\UI-DialogBox-Background]])
+		end
+	end
+end)
 
 -- Disable healing/damage spam over player/pet frame:
 PlayerHitIndicator:SetText(nil)

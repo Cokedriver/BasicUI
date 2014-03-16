@@ -1,7 +1,8 @@
-local B, C, DB = unpack(select(2, ...)) -- Import:  B - function; C - config; DB - Database
-
-if C['tooltip'].enable ~= true then return end
+local B, C = unpack(select(2, ...)) -- Import:  B - function; C - config
 local cfg = C['tooltip']
+
+if cfg.enable ~= true then return end
+
 
 if (not cfg.disableFade) then
     return
