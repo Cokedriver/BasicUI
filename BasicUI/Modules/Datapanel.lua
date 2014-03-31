@@ -6,6 +6,9 @@ local BasicUI_Datapanel = BasicUI:NewModule("Datapanel", "AceEvent-3.0")
 ---------------
 function BasicUI_Datapanel:OnEnable()
 	local db = BasicUI.db.profile
+	
+	if db.datapanel.enable ~= true then return end
+	
 	local ccolor = RAID_CLASS_COLORS[select(2, UnitClass("player"))]
 	local myclass = UnitClass("player")
 	local myname, _ = UnitName("player")
@@ -14,7 +17,7 @@ function BasicUI_Datapanel:OnEnable()
 	local toc = select(4, GetBuildInfo())
 	local locale = GetLocale()
 	local currentFightDPS
-
+	
 	PP = function(p, obj)
 
 		local left = PanelLeft
@@ -196,7 +199,7 @@ function BasicUI_Datapanel:OnEnable()
 	--------------
 	-- Data Panel
 	--------------
-	if db.datapanel.enable == true then
+	if db.datapanel.enablepanel == true then
 
 		--[[
 			All Credit for Datapanel.lua goes to Tuks.
@@ -451,25 +454,24 @@ function BasicUI_Datapanel:OnEnable()
 	----------------
 	-- Color System
 	----------------
-	if db.datapanel.color then
 
-		--[[
+	--[[
 
-			All Credit for Colors.lua goes to Tuks.
-			Tukui = http://www.tukui.org/download.php.
-			Edited by Cokedriver.
-			
-		]]
+		All Credit for Colors.lua goes to Tuks.
+		Tukui = http://www.tukui.org/download.php.
+		Edited by Cokedriver.
+		
+	]]
 
-		if db.datapanel.classcolor ~= true then
-			local r, g, b = db.datapanel.customcolor.r, db.datapanel.customcolor.g, db.datapanel.customcolor.b
-			hexa = ("|cff%.2x%.2x%.2x"):format(r * 255, g * 255, b * 255)
-			hexb = "|r"
-		else
-			hexa = ("|cff%.2x%.2x%.2x"):format(ccolor.r * 255, ccolor.g * 255, ccolor.b * 255)
-			hexb = "|r"
-		end
+	if db.general.classcolor ~= true then
+		local r, g, b = db.datapanel.customcolor.r, db.datapanel.customcolor.g, db.datapanel.customcolor.b
+		hexa = ("|cff%.2x%.2x%.2x"):format(r * 255, g * 255, b * 255)
+		hexb = "|r"
+	else
+		hexa = ("|cff%.2x%.2x%.2x"):format(ccolor.r * 255, ccolor.g * 255, ccolor.b * 255)
+		hexb = "|r"
 	end
+
 
 	----------------
 	-- Player Armor
@@ -483,7 +485,7 @@ function BasicUI_Datapanel:OnEnable()
 		Stat:SetFrameLevel(3)
 
 		local Text  = DataPanel:CreateFontString(nil, 'OVERLAY')
-		Text:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		Text:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		PP(db.datapanel.armor, Text)
 
 		local function Update(self)
@@ -537,7 +539,7 @@ function BasicUI_Datapanel:OnEnable()
 		Stat:SetFrameLevel(3)
 
 		local Text  = DataPanel:CreateFontString(nil, 'OVERLAY')
-		Text:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		Text:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		PP(db.datapanel.avd, Text)
 		
 		local targetlv, playerlv
@@ -622,7 +624,7 @@ function BasicUI_Datapanel:OnEnable()
 		Stat:SetFrameLevel(3)
 
 		local Text  = DataPanel:CreateFontString(nil, 'OVERLAY')
-		Text:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		Text:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		PP(db.datapanel.bags, Text)
 
 		local Profit	= 0
@@ -871,17 +873,17 @@ function BasicUI_Datapanel:OnEnable()
 		Stat:EnableMouse(true)
 
 		local Text1  = BattleGroundPanel:CreateFontString(nil, 'OVERLAY')
-		Text1:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		Text1:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		Text1:SetPoint('LEFT', BattleGroundPanel, 30, 0)
 		Text1:SetHeight(DataPanel:GetHeight())
 
 		local Text2  = BattleGroundPanel:CreateFontString(nil, 'OVERLAY')
-		Text2:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		Text2:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		Text2:SetPoint('CENTER', BattleGroundPanel, 0, 0)
 		Text2:SetHeight(DataPanel:GetHeight())
 
 		local Text3  = BattleGroundPanel:CreateFontString(nil, 'OVERLAY')
-		Text3:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		Text3:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		Text3:SetPoint('RIGHT', BattleGroundPanel, -30, 0)
 		Text3:SetHeight(DataPanel:GetHeight())
 
@@ -944,7 +946,7 @@ function BasicUI_Datapanel:OnEnable()
 		Stat:SetFrameLevel(3)
 
 		local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		Text:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		PP(db.datapanel.calltoarms, Text)
 		
 		local function MakeIconString(tank, healer, damage)
@@ -1071,7 +1073,7 @@ function BasicUI_Datapanel:OnEnable()
 		Stat:SetFrameLevel(3)
 
 		local Text = DataPanel:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		Text:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		PP(db.datapanel.coords, Text)
 
 		local function Update(self)
@@ -1096,7 +1098,7 @@ function BasicUI_Datapanel:OnEnable()
 		local pet_id = UnitGUID('pet')
 		 
 		local dText = DataPanel:CreateFontString(nil, 'OVERLAY')
-		dText:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		dText:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		dText:SetText("DPS: ", '0')
 
 		PP(db.datapanel.dps_text, dText)
@@ -1211,7 +1213,7 @@ function BasicUI_Datapanel:OnEnable()
 		Stat:SetFrameLevel(3)
 
 		local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		Text:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		PP(db.datapanel.dur, Text)
 
 		local function OnEvent(self)
@@ -1274,35 +1276,36 @@ function BasicUI_Datapanel:OnEnable()
 	if db.datapanel.friends and db.datapanel.friends > 0 then
 
 		-- create a popup
-		StaticPopupDialogs["SET_BN_BROADCAST"] = {
-			text = BN_BROADCAST_TOOLTIP,
-			button1 = ACCEPT,
-			button2 = CANCEL,
-			hasEditBox = 1,
-			editBoxWidth = 350,
-			maxLetters = 127,
-			OnAccept = function(self) BNSetCustomMessage(self.editBox:GetText()) end,
-			OnShow = function(self) self.editBox:SetText(select(3, BNGetInfo()) ) self.editBox:SetFocus() end,
-			OnHide = ChatEdit_FocusActiveWindow,
-			EditBoxOnEnterPressed = function(self) BNSetCustomMessage(self:GetText()) self:GetParent():Hide() end,
-			EditBoxOnEscapePressed = function(self) self:GetParent():Hide() end,
-			timeout = 0,
-			exclusive = 1,
-			whileDead = 1,
-			hideOnEscape = 1
-		}
-
-		--[[ localized references for global functions (about 50% faster)
-		local join 			= string.join
-		local find			= string.find
-		local format		= string.format
-		local split			= string.split
-		local sort			= table.sort
-		local insert		= table.insert
-		local sizeof		= table.getn
-
-		-- for datatext display
-		local displayString = join("", hexa.."%s: "..hexb, "|cffffffff", "%d|r")]]
+		local _, _, _, broadcastText = BNGetInfo();
+		
+			StaticPopupDialogs["SET_BN_BROADCAST"] = {
+				preferredIndex = STATICPOPUP_NUMDIALOGS,
+				text = BN_BROADCAST_TOOLTIP,
+				button1 = ACCEPT,
+				button2 = CANCEL,
+				hasEditBox = 1,
+				editBoxWidth = 350,
+				maxLetters = 127,
+				OnAccept = function(self)
+					BNSetCustomMessage(self.editBox:GetText())
+				end,
+				OnShow = function(self)
+					self.editBox:SetText(broadcastText)
+					self.editBox:SetFocus()
+				end,
+				OnHide = ChatEdit_FocusActiveWindow,
+				EditBoxOnEnterPressed = function(self)
+					BNSetCustomMessage(self:GetText())
+					self:GetParent():Hide()
+				end,
+				EditBoxOnEscapePressed = function(self)
+					self:GetParent():Hide()
+				end,
+				timeout = 0,
+				exclusive = 1,
+				whileDead = 1,
+				hideOnEscape = 1
+			}
 
 		local Stat = CreateFrame("Frame")
 		Stat:EnableMouse(true)
@@ -1310,7 +1313,7 @@ function BasicUI_Datapanel:OnEnable()
 		Stat:SetFrameLevel(3)
 
 		local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		Text:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		PP(db.datapanel.friends, Text)
 
 
@@ -1326,7 +1329,7 @@ function BasicUI_Datapanel:OnEnable()
 					{ text = "|cffFF0000"..AFK.."|r", notCheckable=true, func = function() if not IsChatAFK() then SendChatMessage("", "AFK") end end },
 				},
 			},
-			{ text = BN_BROADCAST_TOOLTIP, notCheckable=true, func = function() T.ShowPopup("TUKUI_SET_BN_BROADCAST") end },
+			{ text = BN_BROADCAST_TOOLTIP, notCheckable=true, func = function() StaticPopup_Show("SET_BN_BROADCAST") end },
 		}
 
 		local function GetTableIndex(table, fieldIndex, value)
@@ -1634,7 +1637,7 @@ function BasicUI_Datapanel:OnEnable()
 		Stat:SetFrameLevel(3)
 
 		local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		Text:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		PP(db.datapanel.guild, Text)
 
 		local tthead, ttsubh, ttoff = {r=0.4, g=0.78, b=1}, {r=0.75, g=0.9, b=1}, {r=.3,g=1,b=.3}
@@ -1882,7 +1885,7 @@ function BasicUI_Datapanel:OnEnable()
 		Stat:SetFrameLevel(3)
 
 		local Text  = DataPanel:CreateFontString(nil, 'OVERLAY')
-		Text:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		Text:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		PP(db.datapanel.haste, Text)
 
 		local int = 1
@@ -1921,7 +1924,7 @@ function BasicUI_Datapanel:OnEnable()
 		local actual_heals_total, cmbt_time = 0
 	 
 		local hText = DataPanel:CreateFontString(nil, 'OVERLAY')
-		hText:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		hText:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		hText:SetText("HPS: ", '0')
 	 
 		PP(db.datapanel.hps_text, hText)
@@ -2011,7 +2014,7 @@ function BasicUI_Datapanel:OnEnable()
 		Stat.tooltip = false
 
 		local Text = DataPanel:CreateFontString(nil, 'OVERLAY')
-		Text:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		Text:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		PP(db.datapanel.pro, Text)
 
 		local function Update(self)
@@ -2101,7 +2104,7 @@ function BasicUI_Datapanel:OnEnable()
 		RecountDPS:SetFrameLevel(3)
 
 		local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		Text:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		PP(db.datapanel.recount, Text)
 		RecountDPS:SetAllPoints(Text)
 
@@ -2234,7 +2237,7 @@ function BasicUI_Datapanel:OnEnable()
 		Stat:SetFrameLevel(3)
 
 		local Text  = DataPanel:CreateFontString(nil, 'OVERLAY')
-		Text:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		Text:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		PP(db.datapanel.spec, Text)
 
 		local talent = {}
@@ -2339,7 +2342,7 @@ function BasicUI_Datapanel:OnEnable()
 		Stat:EnableMouse(true)
 
 		local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		Text:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		PP(db.datapanel.stat1, Text)
 
 		local format = string.format
@@ -2527,7 +2530,7 @@ function BasicUI_Datapanel:OnEnable()
 		Stat:EnableMouse(true)
 
 		local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		Text:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		PP(db.datapanel.stat2, Text)
 
 		local _G = getfenv(0)
@@ -2669,7 +2672,7 @@ function BasicUI_Datapanel:OnEnable()
 		Stat.tooltip = false
 
 		local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(db.fontNormal, db.fontSize,'THINOUTLINE')
+		Text:SetFont(db.fontNormal, db.general.fontSize,'THINOUTLINE')
 		PP(db.datapanel.system, Text)
 
 		local bandwidthString = "%.2f Mbps"

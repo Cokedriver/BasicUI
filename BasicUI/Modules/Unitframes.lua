@@ -7,6 +7,8 @@ local BasicUI_Unitframes = BasicUI:NewModule("Unitframes", "AceEvent-3.0")
 function BasicUI_Unitframes:OnEnable()
 	local db = BasicUI.db.profile
 	
+	if db.unitframes.enable ~= true then return end
+	
 	-- Player Frame
 	if db.unitframes.player.enable then
 		if PlayerFrame then

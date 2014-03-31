@@ -6,6 +6,9 @@ local BasicUI_Buffs = BasicUI:NewModule("Buffs", "AceEvent-3.0")
 -----------
 function BasicUI_Buffs:OnEnable()	
 	local db = BasicUI.db.profile
+	
+	if db.buff.enable ~= true then return end
+	
 	BuffFrame:ClearAllPoints()
 	BuffFrame:SetScale(db.buff.scale)
 	BuffFrame:SetPoint('TOPRIGHT', Minimap, 'TOPLEFT', -25, 0)

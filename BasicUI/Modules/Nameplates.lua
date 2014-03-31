@@ -6,6 +6,8 @@ local BasicUI_Nameplates = BasicUI:NewModule("Nameplates", "AceEvent-3.0")
 ---------------
 function BasicUI_Nameplates:OnEnable()
 	local db = BasicUI.db.profile
+	
+	if db.nameplates.enable ~= true then return end
 
 	local len = string.len
 	local find = string.find
@@ -21,9 +23,9 @@ function BasicUI_Nameplates:OnEnable()
 	local borderColor = {0.47, 0.47, 0.47}
 	local noThreatColor = {0, 1, 0}
 
-	local glowTexture = 	'Interface\\AddOns\\BasicUI\\Media\\NameplateNewGlow_LessGlow'
-	local overlayTexture = 	'Interface\\AddOns\\BasicUI\\Media\\NameplateOverlay'
-	local whiteOverlay = 	'Interface\\AddOns\\BasicUI\\Media\\NameplateIconOverlay'
+	local glowTexture = 	[[Interface\AddOns\BasicUI\Media\NameplateNewGlow_LessGlow]]
+	local overlayTexture = 	[[Interface\AddOns\BasicUI\Media\NameplateOverlay]]
+	local whiteOverlay = 	[[Interface\AddOns\BasicUI\Media\NameplateIconOverlay]]
 
 	local f = CreateFrame('Frame', nil, UIParent)
 

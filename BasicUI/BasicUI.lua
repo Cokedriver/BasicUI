@@ -1,5 +1,6 @@
 local BasicUI = LibStub("AceAddon-3.0"):NewAddon("BasicUI")
-local LSM = LibStub("LibSharedMedia-3.0")
+
+-- Media --
 local BASIC_BORDER = [[Interface\Tooltips\UI-Tooltip-Border]]
 local BASIC_BACKGROUND = [[Interface\DialogFrame\UI-DialogBox-Background-Dark]]
 local BASIC_STATUSBAR = [[Interface\TargetingFrame\UI-StatusBar]]
@@ -23,10 +24,18 @@ local defaults = {
 		fontItalic = 		[[Interface\Addons\BasicUI\Media\ITALIC.ttf]],
 		fontBoldItalic = 	[[Interface\Addons\BasicUI\Media\BOLDITALIC.ttf]],
 		fontNumber = 		[[Interface\Addons\BasicUI\Media\NUMBER.ttf]],
-		fontSize = 15,
-		classcolor = true,
 		
-		actionbar = {	
+		general = {
+			fontSize = 15,
+			classcolor = true,
+			flashmapnodes = true,
+			cooldown = true,
+			quicky = true,
+			vellum = true,
+		},
+		
+		actionbar = {
+			enable = true,
 			showHotKeys = false,
 			showMacronames = false,
 			auraborder = false,
@@ -41,10 +50,12 @@ local defaults = {
 		},
 		
 		buff = {
+			enable = true,
 			scale = 1.19,
 		},
 		
 		castbar = {	
+			enable = true,
 			border = BASIC_BORDER,
 			background = BASIC_BACKGROUND,
 			statusbar = BASIC_STATUSBAR,
@@ -104,6 +115,7 @@ local defaults = {
 			},
 		},		
 		chat = {
+			enable = true,
 			disableFade = false,
 			chatOutline = false,
 			windowborder = false,
@@ -129,7 +141,9 @@ local defaults = {
 			},		
 		},	
 		datapanel = {
+			
 			enable = true,
+			enablepanel = true,
 			battleground = true,                            	-- enable 3 stats in battleground only that replace stat1,stat2,stat3.
 			bag = false,										-- True = Open Backpack; False = Open All bags			
 
@@ -137,10 +151,8 @@ local defaults = {
 			border = BASIC_BORDERPANEL,							-- Border for Datapanel ( Choose either Datapanel or Neav for border choice)
 			background = BASIC_BACKGROUND,						-- Background for Datapanel	
 			
-			-- Color Datatext
-			color = true,										-- Enable Datatext Coloring		
+			-- Color Datatext	
 			customcolor = { r = 1, g = 1, b = 1},				-- Color of Text for Datapanel
-			classcolor = true,									-- Enable Classcolor for Text
 			
 			panel = "bottom",									-- 3 Choices for panel placement = "top", "bottom", or "shortbar". Shortbar is to match nMainbar shortbar.
 			armor = 0,                                     		-- show your armor value against the level mob you are currently targeting.
@@ -165,12 +177,22 @@ local defaults = {
 		},
 		-- Merchant Options
 		merchant = {
+			enable = true,
 			sellMisc = true, 		-- allows the user to add spacific items to sell at merchant (please see the local filter in merchant.lua)
 			autoSellGrey = true,	-- autosell grey items at merchant.
 			autoRepair = true,		-- autorepair at merchant.
 			gpay = false,			-- let your guild pay for your repairs if they allow.
+			disenchant = true,		-- Disenchant Green Item's on Roll
 		},
+		minimap = {
+			enable = true,
+			gameclock = true,
+			farm = false,
+			farmscale = 1.5,
+			coords = true,
+		},	
 		nameplates = {
+			enable = true,
 			enableTankMode = true,              -- Color the nameplate threat border green, if you have no aggro
 			colorNameWithThreat = true,         -- The name has the same color as the threat of the unit (better visibility)
 
@@ -181,23 +203,75 @@ local defaults = {
 			showTotemIcon = true,
 			abbrevLongNames = true,
 		},
-		
+		powerbar = {
+			enable = true,
+			background = BASIC_BACKGROUND,
+			statusbar = BASIC_STATUSBAR,	
+			position = {
+				selfAnchor = "CENTER",
+				frameParent = "UIParent",
+				offSetX = 0,
+				offSetY = -100
+			},
+			sizeWidth = 200,
+			
+			showCombatRegen = true, 
+
+			activeAlpha = 1,
+			inactiveAlpha = 0.5,
+			emptyAlpha = 0,
+			
+			valueAbbrev = true,
+				
+			valueFontSize = 20,
+			valueFontOutline = true,
+			valueFontAdjustmentX = 0,
+
+			showSoulshards = true,
+			showHolypower = true,
+			showMana = true,
+			showFocus = true,
+			showRage = true,
+			
+			extraFontSize = 16,                             -- The fontsize for the holypower and soulshard number
+			extraFontOutline = true,                        
+				
+			
+			energy = {
+				show = true,
+				showComboPoints = true,
+				comboPointsBelow = false,
+				
+				comboFontSize = 16,
+				comboFontOutline = true,
+			},
+			
+			
+			rune = {
+				show = true,
+				showRuneCooldown = true,
+			   
+				runeFontSize = 16,
+				runeFontOutline = true,
+			},
+		},		
 		-- Quest Options
 		quest = {
 			enable = true,			-- enable quest module.
+			tekvendor = true,		-- Tek's best quest item by vendor price.			
 			autocomplete = false,	-- enable the autoaccept quest and autocomplete quest if no reward.
 		},
-		
-		vendor = {
+		skin = {
 			enable = true,
-		},
-		
-		vellum = {
-			enable = true,
-		},
-		
+			border = BASIC_BORDER,
+			statusbar = BASIC_STATUSBAR,
+			DBM = true,
+			Recount = true,
+			RecountBackdrop = true,
+		},		
 		-- Tooltip
-		tooltip = {											
+		tooltip = {
+			enable = true,
 			fontSize = 15,
 			fontOutline = true,
 			disableFade = false,                     		-- Can cause errors or a buggy tooltip!
@@ -217,13 +291,6 @@ local defaults = {
 			showUnitRole = true,
 			showItemLevel = true,
 			showSpecializationIcon = false,
-
-			position = {
-				selfAnchor = "BOTTOM",
-				relAnchor = "BOTTOM",
-				offSetX	= 0,
-				offSetY	= 200,
-			},	
 			
 			healthbar = {
 				showHealthValue = true,
@@ -242,6 +309,7 @@ local defaults = {
 		
 		-- Unitframes
 		unitframes = {
+			enable = true,
 			player = {
 				enable = true,			-- Enable Player Frame Adjustments
 				scale = 1.15,			-- Player Frame Scale
@@ -300,7 +368,7 @@ function BasicUI:OnInitialize()
 		module:SetEnabledState(self.db.profile.ModuleEnabledState[name] or false)
 	end
 	
-	--self:SetUpOptions();
+	self:SetUpOptions();
 	
 	self.OnInitialize = nil
 end

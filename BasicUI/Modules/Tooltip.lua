@@ -6,6 +6,8 @@ local BasicUI_Tooltip = BasicUI:NewModule("Tooltip", "AceEvent-3.0")
 -------------
 function BasicUI_Tooltip:OnEnable()
 	local db = BasicUI.db.profile
+	
+	if db.tooltip.enable ~= true then return end
 
 	--[[
 
@@ -857,7 +859,7 @@ function BasicUI_Tooltip:OnEnable()
 
 	local watchHeadTitle = _G['WatchFrameTitle']
 	watchHeadTitle:SetFont(db.fontBold, 15)
-	if db.classcolor == true then
+	if db.general.classcolor == true then
 		watchHeadTitle:SetTextColor(ccolor.r, ccolor.g, ccolor.b)
 	end		
 	

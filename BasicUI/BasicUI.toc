@@ -1,7 +1,7 @@
 ## Interface: 50400
 ## Title: |cff00B4FFBasic|rUI
 ## Author: Cokedriver 
-## Version: 5.4.1
+## Version: 5.4.7
 ## SavedVariables: BasicDB
 ## SavedVariablesPerCharacter: BasicDBPerCharacter
 ## URL: http://www.wowinterface.com/downloads/info20966-BasicUI.html
@@ -10,16 +10,23 @@
 Libs\Libs.xml
 
 BasicUI.lua
+Options.lua
 
 Modules\Actionbars.lua
 Modules\Buffs.lua
 Modules\Castbars.lua
 Modules\Chat.lua
+Modules\Cooldown.lua
 Modules\Datapanel.lua
+Modules\FlashGatherNodes.lua
 Modules\Fonts.lua
 Modules\Merchant.lua
+Modules\Minimap.lua
 Modules\Nameplates.lua
+Modules\Powerbar.lua
 Modules\Quest.lua
+Modules\Quicky.lua
+Modules\Skinning.lua
 Modules\Tooltip.lua
 Modules\Unitframes.lua
 Modules\Velluminous.lua

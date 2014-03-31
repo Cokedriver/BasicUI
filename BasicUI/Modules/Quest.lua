@@ -6,6 +6,8 @@ local BasicUI_Quest = BasicUI:NewModule("Quest", "AceEvent-3.0")
 -----------
 function BasicUI_Quest:OnEnable()
 	local db = BasicUI.db.profile
+	
+	
 	-- Credit for Quest goes to nightcracker for his ncQuest addon.
 	-- You can find his addon at http://www.wowinterface.com/downloads/info14972-ncQuest.html
 	-- Editied by Cokedriver
@@ -66,7 +68,7 @@ function BasicUI_Quest:OnEnable()
 	end
 
 
-	if db.vendor.enable then
+	if db.quest.tekvendor then
 
 		local timeout = CreateFrame("Frame")
 		timeout:Hide()

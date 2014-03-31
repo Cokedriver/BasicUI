@@ -6,6 +6,9 @@ local BasicUI_Castbars = BasicUI:NewModule("Castbars", "AceEvent-3.0")
 --------------
 function BasicUI_Castbars:OnEnable()
 	local db = BasicUI.db.profile
+	
+	if db.castbar.enable ~= true then return end
+	
 	local ccolor = RAID_CLASS_COLORS[select(2, UnitClass("player"))]
 	local m = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/min(2, max(.64, 768/string.match(({GetScreenResolutions()})[GetCurrentResolution()], "%d+x(%d+)")));
 	local scale = function(v) return m * floor(v/m+.5) end;
@@ -130,7 +133,7 @@ function BasicUI_Castbars:OnEnable()
 				 
 			if db.castbar[k].enableTimer then
 				_G[k].timer = _G[k]:CreateFontString(nil);
-				_G[k].timer:SetFont(db.fontNormal, db.fontSize, "");
+				_G[k].timer:SetFont(db.fontNormal, db.general.fontSize, "");
 				_G[k].timer:SetPoint("RIGHT", _G[k], "RIGHT", -5, 0);
 				_G[k].update = .1;
 			end;
@@ -145,7 +148,7 @@ function BasicUI_Castbars:OnEnable()
 				tile = true, tileSize = 16, edgeSize = 15,
 				insets = {left = 3, right = 3, top = 3, bottom = 3}
 			})
-			if db.classcolor == true then
+			if db.general.classcolor == true then
 				a:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b)
 			end
 			a:SetParent(_G[k]);
@@ -155,7 +158,7 @@ function BasicUI_Castbars:OnEnable()
 			a:SetScript("OnDragStart", function(self) self:StartMoving() end);
 			a:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end);
 			a.name = a:CreateFontString(nil, "OVERLAY");
-			a.name:SetFont(db.fontNormal, db.fontSize, "");
+			a.name:SetFont(db.fontNormal, db.general.fontSize, "");
 			a.name:SetPoint("CENTER", a);
 			_G[k].d = d; _G[k].df = a; _G[k].name = a.name; _G[k].l = true;
 		   

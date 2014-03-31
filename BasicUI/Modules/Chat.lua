@@ -6,6 +6,9 @@ local BasicUI_Chat = BasicUI:NewModule("Chat", "AceEvent-3.0")
 ----------
 function BasicUI_Chat:OnEnable()
 	local db = BasicUI.db.profile
+	
+	if db.chat.enable ~= true then return end
+	
 	local ccolor = RAID_CLASS_COLORS[select(2, UnitClass("player"))]
 	-- Chat Message Groups
 	ChatFrame_RemoveAllMessageGroups(ChatFrame1)
@@ -193,7 +196,7 @@ function BasicUI_Chat:OnEnable()
 
 	ChatFrame1EditBox:SetAltArrowKeyMode(false)
 	ChatFrame1EditBox:ClearAllPoints()
-	ChatFrame1EditBox:SetFont(db.fontNormal, db.fontSize)
+	ChatFrame1EditBox:SetFont(db.fontNormal, db.general.fontSize)
 	ChatFrame1EditBox:SetPoint('BOTTOMLEFT', ChatFrame1, 'TOPLEFT', 2, 33)
 	ChatFrame1EditBox:SetPoint('BOTTOMRIGHT', ChatFrame1, 'TOPRIGHT', 0, 33)
 	ChatFrame1EditBox:SetBackdrop({
@@ -313,7 +316,7 @@ function BasicUI_Chat:OnEnable()
 		tabText:SetJustifyH('CENTER')
 		tabText:SetWidth(60)
 		if (db.chat.tab.fontOutline) then
-			tabText:SetFont(db.fontBold, db.fontSize, 'THINOUTLINE')
+			tabText:SetFont(db.fontBold, db.general.fontSize, 'THINOUTLINE')
 			tabText:SetShadowOffset(0, 0)
 		else
 			tabText:SetFont(db.fontBold, db.fontLarge)
@@ -598,7 +601,7 @@ function BasicUI_Chat:OnEnable()
 	f:Hide()
 
 	f.t = f:CreateFontString(nil, 'OVERLAY')
-	f.t:SetFont(db.fontNormal, db.fontSize)
+	f.t:SetFont(db.fontNormal, db.general.fontSize)
 	f.t:SetPoint('TOPLEFT', f, 8, -8)
 	f.t:SetTextColor(1, 1, 0)
 	f.t:SetShadowOffset(1, -1)
