@@ -29,4 +29,4 @@ I would just like to thank all those who created the addons I have used to creat
 ##Special Thanks goes to:
 Phanx - WoWInterface, Neal - NeavUI, Tuks and Programers - Tukui, Nightcracker - ncQuest and all the others.
 
-!(url://imageshack.com/a/img18/955/ani0.png)
+!(http://imagizer.imageshack.us/a/img18/955/ani0.png)
