@@ -55,7 +55,7 @@ function BasicUI_Skinning:OnEnable()
 									tile = true, tileSize = 16, edgeSize = 18,
 								})
 
-								if db.general.classcolor then
+								if db.misc.classcolor then
 									icon1.overlay:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b)
 								end
 
@@ -72,7 +72,7 @@ function BasicUI_Skinning:OnEnable()
 									tile = true, tileSize = 16, edgeSize = 18,
 								})
 
-								if db.general.classcolor then
+								if db.misc.classcolor then
 									icon2.overlay:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b)
 								end
 
@@ -101,7 +101,7 @@ function BasicUI_Skinning:OnEnable()
 									tile = true, tileSize = 16, edgeSize = 18,
 								})
 
-								if db.general.classcolor then
+								if db.misc.classcolor then
 									border:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b)
 								end
 
@@ -148,7 +148,7 @@ function BasicUI_Skinning:OnEnable()
 								name:SetPoint("LEFT", frame, "LEFT", 4, 0)
 								name:SetWidth(165)
 								name:SetHeight(8)
-								name:SetFont(db.fontNormal, db.general.fontSize)
+								name:SetFont(db.media.fontNormal, db.media.fontSize)
 								name:SetJustifyH("LEFT")
 								name:SetShadowColor(0, 0, 0, 0)
 								name.SetFont = B.dummy
@@ -158,7 +158,7 @@ function BasicUI_Skinning:OnEnable()
 							if not timer.styled then	
 								timer:ClearAllPoints()
 								timer:SetPoint("RIGHT", frame, "RIGHT", -4, 0)
-								timer:SetFont(db.fontNormal, db.general.fontSize)
+								timer:SetFont(db.media.fontNormal, db.media.fontSize)
 								timer:SetJustifyH("RIGHT")
 								timer:SetShadowColor(0, 0, 0, 0)
 								timer.SetFont = B.dummy
@@ -186,7 +186,7 @@ function BasicUI_Skinning:OnEnable()
 				if not anchor.styled then
 					local header={anchor:GetRegions()}
 						if header[1]:IsObjectType("FontString") then
-							header[1]:SetFont(db.fontNormal, db.general.fontSize)
+							header[1]:SetFont(db.media.fontNormal, db.media.fontSize)
 							header[1]:SetTextColor(1,1,1,1)
 							header[1]:SetShadowColor(0, 0, 0, 0)
 							anchor.styled=true	
@@ -235,7 +235,7 @@ function BasicUI_Skinning:OnEnable()
 							tile = true, tileSize = 16, edgeSize = 18,
 						})
 
-						if db.general.classcolor then
+						if db.misc.classcolor then
 							barb:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b)
 						end
 
@@ -254,7 +254,7 @@ function BasicUI_Skinning:OnEnable()
 					if not name.styled then
 						name:ClearAllPoints()
 						name:SetPoint("LEFT", bar, "LEFT", 4, 0)
-						name:SetFont(db.fontNormal, db.general.fontSize)
+						name:SetFont(db.media.fontNormal, db.media.fontSize)
 						name:SetJustifyH("LEFT")
 						name:SetShadowColor(0, 0, 0, 0)
 						name.styled=true
@@ -263,7 +263,7 @@ function BasicUI_Skinning:OnEnable()
 					if not timer.styled then
 						timer:ClearAllPoints()
 						timer:SetPoint("RIGHT", bar, "RIGHT", -4, 0)
-						timer:SetFont(db.fontNormal, db.general.fontSize)
+						timer:SetFont(db.media.fontNormal, db.media.fontSize)
 						timer:SetJustifyH("RIGHT")
 						timer:SetShadowColor(0, 0, 0, 0)
 						timer.styled=true
@@ -291,7 +291,7 @@ function BasicUI_Skinning:OnEnable()
 				tile = true, tileSize = 16, edgeSize = 18,
 			})
 
-			if db.general.classcolor then
+			if db.misc.classcolor then
 				bgs:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b)
 			end
 			

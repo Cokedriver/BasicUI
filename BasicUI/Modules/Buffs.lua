@@ -1,15 +1,23 @@
 local BasicUI = LibStub("AceAddon-3.0"):GetAddon("BasicUI")
-local BasicUI_Buffs = BasicUI:NewModule("Buffs", "AceEvent-3.0")
+local BasicBuffs = BasicUI:NewModule("Buffs", "AceEvent-3.0")
 
 -----------
 -- Buffs --
 -----------
-function BasicUI_Buffs:OnEnable()	
-	local db = BasicUI.db.profile
-	
-	if db.buff.enable ~= true then return end
-	
+
+function BasicBuffs:UpdatePoint()
 	BuffFrame:ClearAllPoints()
-	BuffFrame:SetScale(db.buff.scale)
 	BuffFrame:SetPoint('TOPRIGHT', Minimap, 'TOPLEFT', -25, 0)
+end
+
+function BasicBuffs:UpdateScale()
+	local db = BasicUI.db.profile
+	BuffFrame:SetScale(db.buff.scale)
+end
+
+function BasicBuffs:OnEnable()	
+	local db = BasicUI.db.profile	
+	if db.buff.enable ~= true then return end
+	self:UpdatePoint()
+	self:UpdateScale()
 end

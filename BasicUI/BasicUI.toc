@@ -4,10 +4,12 @@
 ## Version: 5.4.7
 ## SavedVariables: BasicDB
 ## SavedVariablesPerCharacter: BasicDBPerCharacter
-## URL: http://www.wowinterface.com/downloads/info20966-BasicUI.html
+## X-credits: Phanx, Neav, Tuks, Elv, Baine, Treeston, and many more.
+## X-Website: http://www.wowinterface.com/downloads/info20966-BasicUI.html
 ## OptionalDeps: Blizzard_TradeSkillUI
 
 Libs\Libs.xml
+Media\SharedMedia.lua
 
 BasicUI.lua
 Options.lua

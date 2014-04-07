@@ -87,7 +87,6 @@ function BasicUI_Chat:OnEnable()
 	ToggleChatColorNamesByClassGroup(true, "CHANNEL10")
 	ToggleChatColorNamesByClassGroup(true, "CHANNEL11")
 
-	local _G = _G
 	local type = type
 	local select = select
 	local unpack = unpack
@@ -99,14 +98,14 @@ function BasicUI_Chat:OnEnable()
 	local format = string.format
 
 
-	_G.CHAT_FRAME_TAB_SELECTED_MOUSEOVER_ALPHA = 1
-	_G.CHAT_FRAME_TAB_SELECTED_NOMOUSE_ALPHA = 0
+	CHAT_FRAME_TAB_SELECTED_MOUSEOVER_ALPHA = 1
+	CHAT_FRAME_TAB_SELECTED_NOMOUSE_ALPHA = 0
 
-	_G.CHAT_FRAME_TAB_NORMAL_MOUSEOVER_ALPHA = 0.5
-	_G.CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA = 0
+	CHAT_FRAME_TAB_NORMAL_MOUSEOVER_ALPHA = 0.5
+	CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA = 0
 
 
-	_G.CHAT_FONT_HEIGHTS = {
+	CHAT_FONT_HEIGHTS = {
 		[1] = 8,
 		[2] = 9,
 		[3] = 10,
@@ -123,27 +122,27 @@ function BasicUI_Chat:OnEnable()
 	}
 
 
-	_G.CHAT_FLAG_AFK = '[AFK] '
-	_G.CHAT_FLAG_DND = '[DND] '
-	_G.CHAT_FLAG_GM = '[GM] '
+	CHAT_FLAG_AFK = '[AFK] '
+	CHAT_FLAG_DND = '[DND] '
+	CHAT_FLAG_GM = '[GM] '
 
-	_G.CHAT_GUILD_GET = '(|Hchannel:Guild|hG|h) %s:\32'
-	_G.CHAT_OFFICER_GET = '(|Hchannel:o|hO|h) %s:\32'
+	CHAT_GUILD_GET = '(|Hchannel:Guild|hG|h) %s:\32'
+	CHAT_OFFICER_GET = '(|Hchannel:o|hO|h) %s:\32'
 
-	_G.CHAT_PARTY_GET = '(|Hchannel:party|hP|h) %s:\32'
-	_G.CHAT_PARTY_LEADER_GET = '(|Hchannel:party|hPL|h) %s:\32'
-	_G.CHAT_PARTY_GUIDE_GET = '(|Hchannel:party|hDG|h) %s:\32'
-	_G.CHAT_MONSTER_PARTY_GET = '(|Hchannel:raid|hR|h) %s:\32'
+	CHAT_PARTY_GET = '(|Hchannel:party|hP|h) %s:\32'
+	CHAT_PARTY_LEADER_GET = '(|Hchannel:party|hPL|h) %s:\32'
+	CHAT_PARTY_GUIDE_GET = '(|Hchannel:party|hDG|h) %s:\32'
+	CHAT_MONSTER_PARTY_GET = '(|Hchannel:raid|hR|h) %s:\32'
 
-	_G.CHAT_RAID_GET = '(|Hchannel:raid|hR|h) %s:\32'
-	_G.CHAT_RAID_WARNING_GET = '(RW!) %s:\32'
-	_G.CHAT_RAID_LEADER_GET = '(|Hchannel:raid|hL|h) %s:\32'
+	CHAT_RAID_GET = '(|Hchannel:raid|hR|h) %s:\32'
+	CHAT_RAID_WARNING_GET = '(RW!) %s:\32'
+	CHAT_RAID_LEADER_GET = '(|Hchannel:raid|hL|h) %s:\32'
 
-	_G.CHAT_BATTLEGROUND_GET = '(|Hchannel:Battleground|hBG|h) %s:\32'
-	_G.CHAT_BATTLEGROUND_LEADER_GET = '(|Hchannel:Battleground|hBL|h) %s:\32'
+	CHAT_BATTLEGROUND_GET = '(|Hchannel:Battleground|hBG|h) %s:\32'
+	CHAT_BATTLEGROUND_LEADER_GET = '(|Hchannel:Battleground|hBL|h) %s:\32'
 
-	_G.CHAT_INSTANCE_CHAT_GET = '|Hchannel:INSTANCE_CHAT|h[I]|h %s:\32';
-	_G.CHAT_INSTANCE_CHAT_LEADER_GET = '|Hchannel:INSTANCE_CHAT|h[IL]|h %s:\32';
+	CHAT_INSTANCE_CHAT_GET = '|Hchannel:INSTANCE_CHAT|h[I]|h %s:\32';
+	CHAT_INSTANCE_CHAT_LEADER_GET = '|Hchannel:INSTANCE_CHAT|h[IL]|h %s:\32';
 
 
 	local channelFormat 
@@ -196,7 +195,7 @@ function BasicUI_Chat:OnEnable()
 
 	ChatFrame1EditBox:SetAltArrowKeyMode(false)
 	ChatFrame1EditBox:ClearAllPoints()
-	ChatFrame1EditBox:SetFont(db.fontNormal, db.general.fontSize)
+	ChatFrame1EditBox:SetFont(db.media.fontNormal, db.media.fontSize)
 	ChatFrame1EditBox:SetPoint('BOTTOMLEFT', ChatFrame1, 'TOPLEFT', 2, 33)
 	ChatFrame1EditBox:SetPoint('BOTTOMRIGHT', ChatFrame1, 'TOPRIGHT', 0, 33)
 	ChatFrame1EditBox:SetBackdrop({
@@ -243,7 +242,7 @@ function BasicUI_Chat:OnEnable()
 
 		-- Tab text fadeout
 
-	local origFCF_FadeOutChatFrame = _G.FCF_FadeOutChatFrame
+	local origFCF_FadeOutChatFrame = FCF_FadeOutChatFrame
 	local function FCF_FadeOutChatFrameHook(chatFrame)
 		origFCF_FadeOutChatFrame(chatFrame)
 
@@ -316,10 +315,10 @@ function BasicUI_Chat:OnEnable()
 		tabText:SetJustifyH('CENTER')
 		tabText:SetWidth(60)
 		if (db.chat.tab.fontOutline) then
-			tabText:SetFont(db.fontBold, db.general.fontSize, 'THINOUTLINE')
+			tabText:SetFont(db.media.fontBold, db.media.fontSize, 'THINOUTLINE')
 			tabText:SetShadowOffset(0, 0)
 		else
-			tabText:SetFont(db.fontBold, db.fontLarge)
+			tabText:SetFont(db.media.fontBold, db.fontLarge)
 			tabText:SetShadowOffset(1, -1)
 		end
 
@@ -398,7 +397,7 @@ function BasicUI_Chat:OnEnable()
 		SkinTab(self)
 
 		local font, fontsize, fontflags = chat:GetFont()
-		chat:SetFont(db.fontNormal, fontsize, db.chat.chatOutline and 'THINOUTLINE' or fontflags)
+		chat:SetFont(db.media.fontNormal, fontsize, db.chat.chatOutline and 'THINOUTLINE' or fontflags)
 		chat:SetClampedToScreen(false)
 
 		chat:SetClampRectInsets(0, 0, 0, 0)
@@ -570,7 +569,7 @@ function BasicUI_Chat:OnEnable()
 		end
 	}
 
-	local origFCF_Tab_OnClick = _G.FCF_Tab_OnClick
+	local origFCF_Tab_OnClick = FCF_Tab_OnClick
 	local function FCF_Tab_OnClickHook(chatTab, ...)
 		origFCF_Tab_OnClick(chatTab, ...)
 
@@ -601,7 +600,7 @@ function BasicUI_Chat:OnEnable()
 	f:Hide()
 
 	f.t = f:CreateFontString(nil, 'OVERLAY')
-	f.t:SetFont(db.fontNormal, db.general.fontSize)
+	f.t:SetFont(db.media.fontNormal, db.media.fontSize)
 	f.t:SetPoint('TOPLEFT', f, 8, -8)
 	f.t:SetTextColor(1, 1, 0)
 	f.t:SetShadowOffset(1, -1)
@@ -731,7 +730,7 @@ function BasicUI_Chat:OnEnable()
 		ChatFrame_AddMessageEventFilter(event, urlFilter)
 	end
 
-	local origSetItemRef = _G.SetItemRef
+	local origSetItemRef = SetItemRef
 	local currentLink
 	local SetItemRefHook = function(link, text, button)
 		if (link:sub(0, 3) == 'url') then

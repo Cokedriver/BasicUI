@@ -7,7 +7,7 @@ local BasicUI_Velluminous = BasicUI:NewModule("Velluminous", "AceEvent-3.0")
 function BasicUI_Velluminous:OnEnable()
 	local db = BasicUI.db.profile
 	
-	if db.general.vellum then
+	if db.misc.vellum then
 		if not TradeSkillFrame then
 			print("What the fuck?  Velluminous cannot initialize.  BAIL!  BAIL!  BAIL!")
 			return

@@ -82,6 +82,7 @@ lib.MediaTable.border["Blizzard Dialog"]					= [[Interface\DialogFrame\UI-Dialog
 lib.MediaTable.border["Blizzard Dialog Gold"]				= [[Interface\DialogFrame\UI-DialogBox-Gold-Border]]
 lib.MediaTable.border["Blizzard Party"]						= [[Interface\CHARACTERFRAME\UI-Party-Border]]
 lib.MediaTable.border["Blizzard Tooltip"]					= [[Interface\Tooltips\UI-Tooltip-Border]]
+lib.MediaTable.border["BasicUI Border"] 					= [[Interface\AddOns\BasicUI\Media\UI-DialogBox-Border.blp]]
 
 -- FONT
 if not lib.MediaTable.font then lib.MediaTable.font = {} end
@@ -134,6 +135,11 @@ else
 	SML_MT_font["Friz Quadrata TT"]		= [[Fonts\FRIZQT__.TTF]]
 	SML_MT_font["Morpheus"]				= [[Fonts\MORPHEUS.TTF]]
 	SML_MT_font["Skurri"]				= [[Fonts\SKURRI.TTF]]
+	SML_MT_font["BasicUI Normal"] 		= [[Interface\Addons\BasicUI\Media\NORMAL.ttf]]
+	SML_MT_font["BasicUI Bold"] 		= [[Interface\Addons\BasicUI\Media\BOLD.ttf]]
+	SML_MT_font["BasicUI Italic"] 		= [[Interface\Addons\BasicUI\Media\ITALIC.ttf]]
+	SML_MT_font["BasicUI Bold Italic"] 	= [[Interface\Addons\BasicUI\Media\BOLDITALIC.ttf]]
+	SML_MT_font["BasicUI Number"] 		= [[Interface\Addons\BasicUI\Media\NUMBER.ttf]]
 --
 	lib.DefaultMedia.font = "Friz Quadrata TT"
 --
@@ -147,7 +153,8 @@ lib.DefaultMedia.statusbar = "Blizzard"
 
 -- SOUND
 if not lib.MediaTable.sound then lib.MediaTable.sound = {} end
-lib.MediaTable.sound["None"]								= [[Interface\Quiet.ogg]]	-- Relies on the fact that PlaySound[File] doesn't error on non-existing input.
+lib.MediaTable.sound["None"]		= [[Interface\Quiet.ogg]]	-- Relies on the fact that PlaySound[File] doesn't error on non-existing input.
+lib.MediaTable.sound["Whisper"]		= [[Interface\Addons\BasicUI\Media\Whisper.mp3]]
 lib.DefaultMedia.sound = "None"
 
 local function rebuildMediaList(mediatype)

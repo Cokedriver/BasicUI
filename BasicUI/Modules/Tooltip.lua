@@ -66,25 +66,34 @@ function BasicUI_Tooltip:OnEnable()
 		-- Some tooltip changes
 
 	if (db.tooltip.fontOutline) then
-		GameTooltipHeaderText:SetFont(db.fontBold, (db.tooltip.fontSize + 2), 'THINOUTLINE')
+		GameTooltipHeaderText:SetFont(db.media.fontBold, (db.tooltip.fontSize + 2), 'THINOUTLINE')
 		GameTooltipHeaderText:SetShadowOffset(0, 0)
 
-		GameTooltipText:SetFont(db.fontNormal, (db.tooltip.fontSize), 'THINOUTLINE')
+		GameTooltipText:SetFont(db.media.fontNormal, (db.tooltip.fontSize), 'THINOUTLINE')
 		GameTooltipText:SetShadowOffset(0, 0)
 
-		GameTooltipTextSmall:SetFont(db.fontNormal, (db.tooltip.fontSize), 'THINOUTLINE')
+		GameTooltipTextSmall:SetFont(db.media.fontNormal, (db.tooltip.fontSize), 'THINOUTLINE')
 		GameTooltipTextSmall:SetShadowOffset(0, 0)
 	else
-		GameTooltipHeaderText:SetFont(db.fontBold, (db.tooltip.fontSize + 2))
-		GameTooltipText:SetFont(db.fontNormal, (db.tooltip.fontSize))
-		GameTooltipTextSmall:SetFont(db.fontNormal, (db.tooltip.fontSize))
+		GameTooltipHeaderText:SetFont(db.media.fontBold, (db.tooltip.fontSize + 2))
+		GameTooltipText:SetFont(db.media.fontNormal, (db.tooltip.fontSize))
+		GameTooltipTextSmall:SetFont(db.media.fontNormal, (db.tooltip.fontSize))
 	end
 
 	GameTooltipStatusBar:SetHeight(7)
 	GameTooltipStatusBar:SetBackdrop({bgFile = 'Interface\\Buttons\\WHITE8x8'})
 	GameTooltipStatusBar:SetBackdropColor(0, 1, 0, 0.3)
 
-
+	CUSTOM_FACTION_BAR_COLORS = {
+		[1] = {r = 1, g = 0, b = 0},
+		[2] = {r = 1, g = 0, b = 0},
+		[3] = {r = 1, g = 1, b = 0},
+		[4] = {r = 1, g = 1, b = 0},
+		[5] = {r = 0, g = 1, b = 0},
+		[6] = {r = 0, g = 1, b = 0},
+		[7] = {r = 0, g = 1, b = 0},
+		[8] = {r = 0, g = 1, b = 0},
+	}
 	function GameTooltip_UnitColor(unit)
 		local r, g, b
 
@@ -131,9 +140,9 @@ function BasicUI_Tooltip:OnEnable()
 			local reaction = UnitReaction(unit, 'player')
 
 			if (reaction) then
-				r = FACTION_BAR_COLORS[reaction].r
-				g = FACTION_BAR_COLORS[reaction].g
-				b = FACTION_BAR_COLORS[reaction].b
+				r = CUSTOM_FACTION_BAR_COLORS[reaction].r
+				g = CUSTOM_FACTION_BAR_COLORS[reaction].g
+				b = CUSTOM_FACTION_BAR_COLORS[reaction].b
 			else
 				r = 157/255
 				g = 197/255
@@ -729,10 +738,10 @@ function BasicUI_Tooltip:OnEnable()
 	bar.Text:SetPoint('CENTER', bar, db.tooltip.healthbar.textPos, 0, 1)
 
 	if (db.tooltip.healthbar.showOutline) then
-		bar.Text:SetFont(db.fontNormal, db.tooltip.healthbar.fontSize, 'THINOUTLINE')
+		bar.Text:SetFont(db.media.fontNormal, db.tooltip.healthbar.fontSize, 'THINOUTLINE')
 		bar.Text:SetShadowOffset(0, 0)
 	else
-		bar.Text:SetFont(db.fontNormal, db.tooltip.healthbar.fontSize)
+		bar.Text:SetFont(db.media.fontNormal, db.tooltip.healthbar.fontSize)
 		bar.Text:SetShadowOffset(1, -1)
 	end
 
@@ -858,8 +867,8 @@ function BasicUI_Tooltip:OnEnable()
 	watchHead:SetScript('OnLeave', function() GameTooltip:Hide() end)
 
 	local watchHeadTitle = _G['WatchFrameTitle']
-	watchHeadTitle:SetFont(db.fontBold, 15)
-	if db.general.classcolor == true then
+	watchHeadTitle:SetFont(db.media.fontBold, 15)
+	if db.misc.classcolor == true then
 		watchHeadTitle:SetTextColor(ccolor.r, ccolor.g, ccolor.b)
 	end		
 	

@@ -18,15 +18,17 @@ local defaults = {
 		ModuleEnabledState = {
 			["*"] = true
 		},
-		
-		fontNormal = 		[[Interface\Addons\BasicUI\Media\NORMAL.ttf]],
-		fontBold = 			[[Interface\Addons\BasicUI\Media\BOLD.ttf]],
-		fontItalic = 		[[Interface\Addons\BasicUI\Media\ITALIC.ttf]],
-		fontBoldItalic = 	[[Interface\Addons\BasicUI\Media\BOLDITALIC.ttf]],
-		fontNumber = 		[[Interface\Addons\BasicUI\Media\NUMBER.ttf]],
-		
-		general = {
+
+		media = {
+			fontNormal = 		[[Interface\Addons\BasicUI\Media\NORMAL.ttf]],
+			fontBold = 			[[Interface\Addons\BasicUI\Media\BOLD.ttf]],
+			fontItalic = 		[[Interface\Addons\BasicUI\Media\ITALIC.ttf]],
+			fontBoldItalic = 	[[Interface\Addons\BasicUI\Media\BOLDITALIC.ttf]],
+			fontNumber = 		[[Interface\Addons\BasicUI\Media\NUMBER.ttf]],
 			fontSize = 15,
+		},
+		
+		misc = {
 			classcolor = true,
 			flashmapnodes = true,
 			cooldown = true,
@@ -36,8 +38,8 @@ local defaults = {
 		
 		actionbar = {
 			enable = true,
-			showHotKeys = false,
-			showMacronames = false,
+			showHotKeys = false,		-- Set the Alpha 
+			showMacronames = false,		-- Set the Alpha 
 			auraborder = false,
 			
 			-- Button Colors
@@ -310,6 +312,7 @@ local defaults = {
 		-- Unitframes
 		unitframes = {
 			enable = true,
+			abbrevRealmNames = true,
 			player = {
 				enable = true,			-- Enable Player Frame Adjustments
 				scale = 1.15,			-- Player Frame Scale
@@ -369,6 +372,7 @@ function BasicUI:OnInitialize()
 	end
 	
 	self:SetUpOptions();
+	self:Greeting()
 	
 	self.OnInitialize = nil
 end
@@ -381,4 +385,27 @@ function BasicUI:OnProfileChanged(event, database, newProfileKey)
 			module:Disable()
 		end
 	end
+end
+
+function BasicUI:Greeting()
+	-- Greeting
+	local addonversion = GetAddOnMetadata("BasicUI", "Version")
+	local ccolor = RAID_CLASS_COLORS[select(2, UnitClass("player"))]
+	local EventFrame = CreateFrame("Frame")
+	EventFrame:RegisterEvent("PLAYER_LOGIN")
+	EventFrame:SetScript("OnEvent", function(self,event,...) 
+		hexa = ("|cff%.2x%.2x%.2x"):format(ccolor.r * 255, ccolor.g * 255, ccolor.b * 255)
+		hexb = "|r"
+		if type(BasicDBPerCharacter) ~= "number" then
+			BasicDBPerCharacter = 1
+			ChatFrame1:AddMessage('Welcome to Azeroth '..hexa..UnitName("Player")..hexb..". I do believe this is the first time we've met. Nice to meet you! You're using |cff00B4FFBasic|rUI v"..addonversion..'.',255,255,0)
+		else
+			if BasicDBPerCharacter == 1 then
+				ChatFrame1:AddMessage('Welcome to Azeroth '..hexa..UnitName("Player")..hexb..". How nice to see you again. You're using |cff00B4FFBasic|r".."|cffffffffUI|r".." v"..addonversion..'.',255,255,0)
+			else
+				ChatFrame1:AddMessage('Welcome to Azeroth '..hexa..UnitName("Player")..hexb..". How nice to see you again. You're using |cff00B4FFBasic|r".."|cffffffffUI|r".." v"..addonversion..'.',255,255,0)
+			end
+			BasicDBPerCharacter = BasicDBPerCharacter + 1
+		end
+	end)
 end

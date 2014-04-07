@@ -86,10 +86,10 @@ function BasicUI_Powerbar:OnEnable()
 			f.ComboPoints[i] = f:CreateFontString(nil, 'ARTWORK')
 
 			if (db.powerbar.energy.comboFontOutline) then
-				f.ComboPoints[i]:SetFont(db.fontBold, db.powerbar.energy.comboFontSize, 'THINOUTLINE')
+				f.ComboPoints[i]:SetFont(db.media.fontBold, db.powerbar.energy.comboFontSize, 'THINOUTLINE')
 				f.ComboPoints[i]:SetShadowOffset(0, 0)
 			else
-				f.ComboPoints[i]:SetFont(db.fontBold, db.powerbar.energy.comboFontSize)
+				f.ComboPoints[i]:SetFont(db.media.fontBold, db.powerbar.energy.comboFontSize)
 				f.ComboPoints[i]:SetShadowOffset(1, -1)
 			end
 
@@ -113,7 +113,7 @@ function BasicUI_Powerbar:OnEnable()
 		for i = 1, 5 do
 			f.Chi[i] = f:CreateFontString(nil, 'ARTWORK')
 
-			f.Chi[i]:SetFont(db.fontBold, db.powerbar.energy.comboFontSize, 'THINOUTLINE')
+			f.Chi[i]:SetFont(db.media.fontBold, db.powerbar.energy.comboFontSize, 'THINOUTLINE')
 			f.Chi[i]:SetShadowOffset(0, 0)
 
 			f.Chi[i]:SetParent(f)
@@ -134,10 +134,10 @@ function BasicUI_Powerbar:OnEnable()
 		f.extraPoints = f:CreateFontString(nil, 'ARTWORK')
 
 		if (db.powerbar.extraFontOutline) then
-			f.extraPoints:SetFont(db.fontBold, db.powerbar.extraFontSize, 'THINOUTLINE')
+			f.extraPoints:SetFont(db.media.fontBold, db.powerbar.extraFontSize, 'THINOUTLINE')
 			f.extraPoints:SetShadowOffset(0, 0)
 		else
-			f.extraPoints:SetFont(db.fontBold, db.powerbar.extraFontSize)
+			f.extraPoints:SetFont(db.media.fontBold, db.powerbar.extraFontSize)
 			f.extraPoints:SetShadowOffset(1, -1)
 		end
 
@@ -157,10 +157,10 @@ function BasicUI_Powerbar:OnEnable()
 			f.Rune[i] = f:CreateFontString(nil, 'ARTWORK')
 
 			if (db.powerbar.rune.runeFontOutline) then
-				f.Rune[i]:SetFont(db.fontBold, db.powerbar.rune.runeFontSize, 'THINOUTLINE')
+				f.Rune[i]:SetFont(db.media.fontBold, db.powerbar.rune.runeFontSize, 'THINOUTLINE')
 				f.Rune[i]:SetShadowOffset(0, 0)
 			else
-				f.Rune[i]:SetFont(db.fontBold, db.powerbar.rune.runeFontSize)
+				f.Rune[i]:SetFont(db.media.fontBold, db.powerbar.rune.runeFontSize)
 				f.Rune[i]:SetShadowOffset(1, -1)
 			end
 
@@ -186,10 +186,10 @@ function BasicUI_Powerbar:OnEnable()
 	f.Power.Value = f.Power:CreateFontString(nil, 'ARTWORK')
 
 	if (db.powerbar.valueFontOutline) then
-		f.Power.Value:SetFont(db.fontNormal, db.powerbar.valueFontSize, 'THINOUTLINE')
+		f.Power.Value:SetFont(db.media.fontNormal, db.powerbar.valueFontSize, 'THINOUTLINE')
 		f.Power.Value:SetShadowOffset(0, 0)
 	else
-		f.Power.Value:SetFont(db.fontNormal, db.powerbar.valueFontSize)
+		f.Power.Value:SetFont(db.media.fontNormal, db.powerbar.valueFontSize)
 		f.Power.Value:SetShadowOffset(1, -1)
 	end
 
@@ -214,7 +214,7 @@ function BasicUI_Powerbar:OnEnable()
 
 	if (db.powerbar.showCombatRegen) then
 		f.mpreg = f.Power:CreateFontString(nil, 'ARTWORK')
-		f.mpreg:SetFont(db.fontNormal, 12, 'THINOUTLINE')
+		f.mpreg:SetFont(db.media.fontNormal, 12, 'THINOUTLINE')
 		f.mpreg:SetShadowOffset(0, 0)
 		f.mpreg:SetPoint('TOP', f.Power.Below, 'BOTTOM', 0, 4)
 		f.mpreg:SetParent(f.Power)

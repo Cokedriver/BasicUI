@@ -5,6 +5,8 @@ local BasicUI_FGN = BasicUI:NewModule("FGN", "AceEvent-3.0")
 function BasicUI_FGN:OnEnable()
 	if (IsAddOnLoaded('Zygor Guides Viewer 4')) then return end
 
+	local db = BasicUI.db.profile
+	
 	function AssignButtonTexture(obj,tx,num,total)
 		self.ChainCall(obj):SetNormalTexture(CreateTexWithCoordsNum(obj,tx,num,total,1,4))
 			:SetPushedTexture(CreateTexWithCoordsNum(obj,tx,num,total,2,4))
@@ -31,7 +33,7 @@ function BasicUI_FGN:OnEnable()
 			local t=GetTime()
 
 			-- Flashing node dots. Prettier than the standard, too. And slightly bigger.
-			if db.general.flashmapnodes then
+			if db.misc.flashmapnodes then
 				if t-flash_last>=flash_interval then
 					MinimapNodeFlash()
 					flash_last=t-(t-flash_last)%flash_interval

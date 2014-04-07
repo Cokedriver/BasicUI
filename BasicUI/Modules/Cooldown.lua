@@ -7,7 +7,7 @@ local BasicUI_Cooldown = BasicUI:NewModule("Cooldown", "AceEvent-3.0")
 function BasicUI_Cooldown:OnEnable()
 	local db = BasicUI.db.profile
 
-	if db.general.cooldown ~= true then return end
+	if db.misc.cooldown ~= true then return end
 
 	--[[
 
@@ -20,7 +20,7 @@ function BasicUI_Cooldown:OnEnable()
 	OmniCC = true                               -- hack to work around detection from other addons for OmniCC
 
 	local FONT_COLOR = {1, 1, 1}
-	local FONT_FACE, FONT_SIZE = db.fontNormal, 20
+	local FONT_FACE, FONT_SIZE = db.media.fontNormal, 20
 
 	local MIN_DURATION = 2.5                    -- the minimum duration to show cooldown text for
 	local DECIMAL_THRESHOLD = 2                 -- threshold in seconds to start showing decimals

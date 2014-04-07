@@ -64,7 +64,7 @@ function BasicUI_Actionbar:OnEnable()
 		bo:ClearAllPoints()
 		bo:SetPoint("TOPLEFT", bu, -14, 14)
 		bo:SetPoint("BOTTOMRIGHT", bu, 14, -14)
-		if db.general.classcolor ~= true then
+		if db.misc.classcolor ~= true then
 			bo:SetVertexColor(db.actionbar.color.r, db.actionbar.color.g, db.actionbar.color.b)
 		else
 			bo:SetVertexColor((ccolor.r * 1.2), (ccolor.g * 1.2), (ccolor.b * 1.2))
@@ -73,7 +73,7 @@ function BasicUI_Actionbar:OnEnable()
 
 	hooksecurefunc("ActionButton_UpdateUsable", function(self)
 	if self:GetName():match("ExtraActionButton") then return end
-		if db.general.classcolor ~= true then
+		if db.misc.classcolor ~= true then
 			(_G[self:GetName().."NormalTexture"]):SetVertexColor(db.actionbar.color.r, db.actionbar.color.g, db.actionbar.color.b)
 		else
 			(_G[self:GetName().."NormalTexture"]):SetVertexColor((ccolor.r * 1.2), (ccolor.g * 1.2), (ccolor.b * 1.2))
@@ -82,7 +82,7 @@ function BasicUI_Actionbar:OnEnable()
 
 	hooksecurefunc("ActionButton_ShowGrid", function(self)
 	if self:GetName():match("ExtraActionButton") then return end
-		if db.general.classcolor ~= true then
+		if db.misc.classcolor ~= true then
 			(_G[self:GetName().."NormalTexture"]):SetVertexColor(db.actionbar.color.r, db.actionbar.color.g, db.actionbar.color.b)
 		else
 			(_G[self:GetName().."NormalTexture"]):SetVertexColor((ccolor.r * 1.2), (ccolor.g * 1.2), (ccolor.b * 1.2))
@@ -103,7 +103,7 @@ function BasicUI_Actionbar:OnEnable()
 					bo:ClearAllPoints()
 					bo:SetPoint("TOPLEFT", bu, -15, 15)
 					bo:SetPoint("BOTTOMRIGHT", bu, 15, -15)
-					if db.general.classcolor ~= true then
+					if db.misc.classcolor ~= true then
 						bo:SetVertexColor(db.actionbar.color.r, db.actionbar.color.g, db.actionbar.color.b)
 					else
 						bo:SetVertexColor((ccolor.r * 1.2), (ccolor.g * 1.2), (ccolor.b * 1.2))
@@ -127,7 +127,7 @@ function BasicUI_Actionbar:OnEnable()
 				bo:SetPoint("TOPLEFT", bu, -12, 12)
 				bo:SetPoint("BOTTOMRIGHT", bu, 12, -12)
 				bo:SetTexCoord(0, 1, 0, 1)
-				if db.general.classcolor ~= true then
+				if db.misc.classcolor ~= true then
 					bo:SetVertexColor(db.color.r, db.color.g, db.color.b)
 				else
 					bo:SetVertexColor((ccolor.r * 1.2), (ccolor.g * 1.2), (ccolor.b * 1.2))
@@ -139,7 +139,7 @@ function BasicUI_Actionbar:OnEnable()
 				nbo:SetTexture("Interface\\BUTTONS\\UI-Quickslot2")
 				nbo:SetPoint("TOPLEFT", bu, -12, 12)
 				nbo:SetPoint("BOTTOMRIGHT", bu, 12, -12)
-				if db.general.classcolor ~= true then
+				if db.misc.classcolor ~= true then
 					nbo:SetVertexColor(db.actionbar.color.r, db.actionbar.color.g, db.actionbar.color.b)
 				else
 					nbo:SetVertexColor((ccolor.r * 1.2), (ccolor.g * 1.2), (ccolor.b * 1.2))

@@ -358,13 +358,13 @@ function BasicUI_Nameplates:OnEnable()
 		if (not self.Health.Value) then
 			self.Health.Value = self.Health:CreateFontString(nil, 'OVERLAY')
 			self.Health.Value:SetPoint('CENTER', self.Health, 0, 0)
-			self.Health.Value:SetFont(db.fontNormal, 12)
+			self.Health.Value:SetFont(db.media.fontNormal, 12)
 			self.Health.Value:SetShadowOffset(1, -1)
 		end
 
 		if (not self.NewName) then
 			self.NewName = self:CreateFontString(nil, 'ARTWORK')
-			self.NewName:SetFont(db.fontNormal, 15, 'THINOUTLINE')
+			self.NewName:SetFont(db.media.fontNormal, 15, 'THINOUTLINE')
 			self.NewName:SetShadowOffset(0, 0)
 			-- self.NewName:SetPoint('CENTER', self.Health, 'CENTER', 0, 9)
 			self.NewName:SetPoint('BOTTOM', self.Health, 'TOP', 0, 2)
@@ -404,7 +404,7 @@ function BasicUI_Nameplates:OnEnable()
 		if (not self.Castbar.CastTime) then
 			self.Castbar.CastTime = self.Castbar:CreateFontString(nil, 'OVERLAY')
 			self.Castbar.CastTime:SetPoint('RIGHT', self.Castbar, 1.6666667, 0)
-			self.Castbar.CastTime:SetFont(db.fontNormal, 16)   -- , 'THINOUTLINE')
+			self.Castbar.CastTime:SetFont(db.media.fontNormal, 16)   -- , 'THINOUTLINE')
 			self.Castbar.CastTime:SetTextColor(1, 1, 1)
 			self.Castbar.CastTime:SetShadowOffset(1, -1)
 		end
@@ -415,7 +415,7 @@ function BasicUI_Nameplates:OnEnable()
 			self.Castbar.Name = self.Castbar:CreateFontString(nil, 'OVERLAY')
 			self.Castbar.Name:SetPoint('LEFT', self.Castbar, 1.5, 0)
 			self.Castbar.Name:SetPoint('RIGHT', self.Castbar.CastTime, 'LEFT', -6, 0)
-			self.Castbar.Name:SetFont(db.fontNormal, 10)
+			self.Castbar.Name:SetFont(db.media.fontNormal, 10)
 			self.Castbar.Name:SetTextColor(1, 1, 1)
 			self.Castbar.Name:SetShadowOffset(1, -1)
 			self.Castbar.Name:SetJustifyH('LEFT')

@@ -9,15 +9,27 @@ function BasicUI_Unitframes:OnEnable()
 	
 	if db.unitframes.enable ~= true then return end
 	
+	CUSTOM_FACTION_BAR_COLORS = {
+		[1] = {r = 1, g = 0, b = 0},
+		[2] = {r = 1, g = 0, b = 0},
+		[3] = {r = 1, g = 1, b = 0},
+		[4] = {r = 1, g = 1, b = 0},
+		[5] = {r = 0, g = 1, b = 0},
+		[6] = {r = 0, g = 1, b = 0},
+		[7] = {r = 0, g = 1, b = 0},
+		[8] = {r = 0, g = 1, b = 0},
+	}
+	
+	
 	-- Player Frame
 	if db.unitframes.player.enable then
 		if PlayerFrame then
 			PlayerFrame:SetScale(db.unitframes.player.scale);
-			PlayerFrameHealthBarText:SetFont(db.fontNormal, db.unitframes.player.fontSize,"THINOUTLINE");
-			PlayerFrameManaBarText:SetFont(db.fontNormal, db.unitframes.player.fontSize, "THINOUTLINE");
-			PlayerFrameAlternateManaBarText:SetFont(db.fontNormal, db.unitframes.player.fontSize, "THINOUTLINE");
-			PetFrameHealthBarText:SetFont(db.fontNormal, db.unitframes.player.fontSizepet,"THINOUTLINE");
-			PetFrameManaBarText:SetFont(db.fontNormal, db.unitframes.player.fontSizepet, "THINOUTLINE");
+			PlayerFrameHealthBarText:SetFont(db.media.fontNormal, db.unitframes.player.fontSize,"THINOUTLINE");
+			PlayerFrameManaBarText:SetFont(db.media.fontNormal, db.unitframes.player.fontSize, "THINOUTLINE");
+			PlayerFrameAlternateManaBarText:SetFont(db.media.fontNormal, db.unitframes.player.fontSize, "THINOUTLINE");
+			PetFrameHealthBarText:SetFont(db.media.fontNormal, db.unitframes.player.fontSizepet,"THINOUTLINE");
+			PetFrameManaBarText:SetFont(db.media.fontNormal, db.unitframes.player.fontSizepet, "THINOUTLINE");
 		end
 	end
 
@@ -25,8 +37,8 @@ function BasicUI_Unitframes:OnEnable()
 	if db.unitframes.target.enable then
 		if TargetFrame then
 			TargetFrame:SetScale(db.unitframes.target.scale);
-			TargetFrameTextureFrameHealthBarText:SetFont(db.fontNormal, db.unitframes.target.fontSize, "THINOUTLINE");
-			TargetFrameTextureFrameManaBarText:SetFont(db.fontNormal, db.unitframes.target.fontSize, "THINOUTLINE");		
+			TargetFrameTextureFrameHealthBarText:SetFont(db.media.fontNormal, db.unitframes.target.fontSize, "THINOUTLINE");
+			TargetFrameTextureFrameManaBarText:SetFont(db.media.fontNormal, db.unitframes.target.fontSize, "THINOUTLINE");		
 		end;
 	end;
 
@@ -34,21 +46,20 @@ function BasicUI_Unitframes:OnEnable()
 	if db.unitframes.focus.enable then
 		if FocusFrame then
 			FocusFrame:SetScale(db.unitframes.focus.scale)
-			FocusFrameTextureFrameHealthBarText:SetFont(db.fontNormal, db.unitframes.focus.fontSize,"THINOUTLINE")
-			FocusFrameTextureFrameManaBarText:SetFont(db.fontNormal, db.unitframes.focus.fontSize,"THINOUTLINE")		
+			FocusFrameTextureFrameHealthBarText:SetFont(db.media.fontNormal, db.unitframes.focus.fontSize,"THINOUTLINE")
+			FocusFrameTextureFrameManaBarText:SetFont(db.media.fontNormal, db.unitframes.focus.fontSize,"THINOUTLINE")		
 		end;
 	end;
 
 
 	-- Party Frames --
-	if db.unitframes.party.enable then
-		for i = 1, MAX_PARTY_MEMBERS do
-			local partyFrame = "PartyMemberFrame"..i
+	if db.unitframes.party.enable then	
+		for i = 1, MAX_PARTY_MEMBERS do	
+			local partyFrame = "PartyMemberFrame"..i			
 			_G[partyFrame]:SetScale(db.unitframes.party.scale);
-			_G[partyFrame.."HealthBarText"]:SetFont(db.fontNormal, db.unitframes.party.fontSize, "THINOUTLINE");
-			_G[partyFrame.."ManaBarText"]:SetFont(db.fontNormal, db.unitframes.party.fontSize, "THINOUTLINE");		
-		end
-		
+			_G[partyFrame.."HealthBarText"]:SetFont(db.media.fontNormal, db.unitframes.party.fontSize, "THINOUTLINE");
+			_G[partyFrame.."ManaBarText"]:SetFont(db.media.fontNormal, db.unitframes.party.fontSize, "THINOUTLINE");
+		end	
 	end;
 
 	 -- Arena Frames
@@ -57,8 +68,8 @@ function BasicUI_Unitframes:OnEnable()
 			for i = 1, MAX_ARENA_ENEMIES do
 				arenaFrame = "ArenaEnemyFrame"..i
 				_G[arenaFrame]:SetScale(db.unitframes.arena.scale);
-				_G[arenaFrame.."HealthBarText"]:SetFont(db.fontNormal, db.unitframes.arena.fontSize,"THINOUTLINE");
-				_G[arenaFrame.."ManaBarText"]:SetFont(db.fontNormal, db.unitframes.arena.fontSize, "THINOUTLINE");
+				_G[arenaFrame.."HealthBarText"]:SetFont(db.media.fontNormal, db.unitframes.arena.fontSize,"THINOUTLINE");
+				_G[arenaFrame.."ManaBarText"]:SetFont(db.media.fontNormal, db.unitframes.arena.fontSize, "THINOUTLINE");
 			end
 		end)	
 	end;
@@ -116,8 +127,8 @@ function BasicUI_Unitframes:OnEnable()
 		end
 	end)
 		-- Font Color
-	hooksecurefunc("UnitFrame_Update", function(self)
-		if not self.name then return end
+	hooksecurefunc("UnitFrame_Update", function(self, isParty)
+		if not self.name or not self:IsShown() then return end
 		
 		local PET_COLOR = { r = 157/255, g = 197/255, b = 255/255 }
 		local unit, color = self.unit
@@ -128,10 +139,10 @@ function BasicUI_Unitframes:OnEnable()
 			else
 				color = PET_COLOR
 			end
-		elseif UnitIsDead(unit) or UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) then
+		elseif UnitIsDeadOrGhost(unit) or UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) then
 			color = GRAY_FONT_COLOR
 		else
-			color = FACTION_BAR_COLORS[UnitIsEnemy(unit, "player") and 1 or UnitReaction(unit, "player") or 5]
+			color = CUSTOM_FACTION_BAR_COLORS[UnitIsEnemy(unit, "player") and 1 or UnitReaction(unit, "player") or 5]
 		end
 	 
 		if not color then
@@ -139,6 +150,9 @@ function BasicUI_Unitframes:OnEnable()
 		end
 	 
 		self.name:SetTextColor(color.r, color.g, color.b)
+		if isParty then
+			self.name:SetText(GetUnitName(self.overrideName or unit))
+		end
 	end)
 
 	local frame = CreateFrame("FRAME")

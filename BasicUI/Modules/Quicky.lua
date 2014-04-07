@@ -7,7 +7,7 @@ local BasicUI_Quicky = BasicUI:NewModule("Quicky", "AceEvent-3.0")
 function BasicUI_Quicky:OnEnable()
 	local db = BasicUI.db.profile
 
-	if db.general.quicky ~= true then return end
+	if db.misc.quicky ~= true then return end
 
 	local f = CreateFrame('Frame')
 
