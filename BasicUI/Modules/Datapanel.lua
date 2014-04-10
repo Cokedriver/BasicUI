@@ -1270,42 +1270,43 @@ function BasicUI_Datapanel:OnEnable()
 
 	end
 
-	------------
-	-- Friends
-	------------
-	if db.datapanel.friends and db.datapanel.friends > 0 then
+	--------------------------------------------------------------------
+	-- FRIEND
+	--------------------------------------------------------------------
 
-		-- create a popup
+	if db.datapanel.friends or db.datapanel.friends > 0 then
+
+
 		local _, _, _, broadcastText = BNGetInfo();
 		
-			StaticPopupDialogs["SET_BN_BROADCAST"] = {
-				preferredIndex = STATICPOPUP_NUMDIALOGS,
-				text = BN_BROADCAST_TOOLTIP,
-				button1 = ACCEPT,
-				button2 = CANCEL,
-				hasEditBox = 1,
-				editBoxWidth = 350,
-				maxLetters = 127,
-				OnAccept = function(self)
-					BNSetCustomMessage(self.editBox:GetText())
-				end,
-				OnShow = function(self)
-					self.editBox:SetText(broadcastText)
-					self.editBox:SetFocus()
-				end,
-				OnHide = ChatEdit_FocusActiveWindow,
-				EditBoxOnEnterPressed = function(self)
-					BNSetCustomMessage(self:GetText())
-					self:GetParent():Hide()
-				end,
-				EditBoxOnEscapePressed = function(self)
-					self:GetParent():Hide()
-				end,
-				timeout = 0,
-				exclusive = 1,
-				whileDead = 1,
-				hideOnEscape = 1
-			}
+		StaticPopupDialogs["SET_BN_BROADCAST"] = {
+			preferredIndex = STATICPOPUP_NUMDIALOGS,
+			text = BN_BROADCAST_TOOLTIP,
+			button1 = ACCEPT,
+			button2 = CANCEL,
+			hasEditBox = 1,
+			editBoxWidth = 350,
+			maxLetters = 127,
+			OnAccept = function(self)
+				BNSetCustomMessage(self.editBox:GetText())
+			end,
+			OnShow = function(self)
+				self.editBox:SetText(broadcastText)
+				self.editBox:SetFocus()
+			end,
+			OnHide = ChatEdit_FocusActiveWindow,
+			EditBoxOnEnterPressed = function(self)
+				BNSetCustomMessage(self:GetText())
+				self:GetParent():Hide()
+			end,
+			EditBoxOnEscapePressed = function(self)
+				self:GetParent():Hide()
+			end,
+			timeout = 0,
+			exclusive = 1,
+			whileDead = 1,
+			hideOnEscape = 1
+		}
 
 		local Stat = CreateFrame("Frame")
 		Stat:EnableMouse(true)
@@ -1316,8 +1317,7 @@ function BasicUI_Datapanel:OnEnable()
 		Text:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
 		PP(db.datapanel.friends, Text)
 
-
-		local menuFrame = CreateFrame("Frame", "TukuiFriendRightClickMenu", UIParent, "UIDropDownMenuTemplate")
+		local menuFrame = CreateFrame("Frame", "FriendRightClickMenu", UIParent, "UIDropDownMenuTemplate")
 		local menuList = {
 			{ text = OPTIONS_MENU, isTitle = true,notCheckable=true},
 			{ text = INVITE, hasArrow = true,notCheckable=true, },
@@ -1357,6 +1357,7 @@ function BasicUI_Datapanel:OnEnable()
 			end
 		end
 
+		
 		local levelNameString = "|cff%02x%02x%02x%d|r |cff%02x%02x%02x%s|r"
 		local clientLevelNameString = "%s (|cff%02x%02x%02x%d|r |cff%02x%02x%02x%s|r%s) |cff%02x%02x%02x%s|r"
 		local levelNameClassString = "|cff%02x%02x%02x%d|r %s%s%s"
@@ -1366,11 +1367,11 @@ function BasicUI_Datapanel:OnEnable()
 		local totalOnlineString = "Online: " .. "%s/%s"
 		local tthead, ttsubh, ttoff = {r=0.4, g=0.78, b=1}, {r=0.75, g=0.9, b=1}, {r=.3,g=1,b=.3}
 		local activezone, inactivezone = {r=0.3, g=1.0, b=0.3}, {r=0.65, g=0.65, b=0.65}
-		local displayString = string.join("", hexa.."%s: "..hexb, "|cffffffff", "%d|r")
+		local displayString = string.join("", hexa.."%s "..hexb, "|cffffffff", "%d|r")
 		local statusTable = { "|cffff0000[AFK]|r", "|cffff0000[DND]|r", "" }
 		local groupedTable = { "|cffaaaaaa*|r", "" } 
 		local friendTable, BNTable = {}, {}
-		local totalOnline, BNTotalOnline = 0, 0
+		local totalOnline, BNTotalOnline = 0, 0		
 
 		local function BuildFriendTable(total)
 			totalOnline = 0
@@ -1544,7 +1545,7 @@ function BasicUI_Datapanel:OnEnable()
 				end
 			end
 
-			Text:SetFormattedText(displayString, "Friends", totalOnline + BNTotalOnline)
+			Text:SetFormattedText(displayString, "Friends: ", totalOnline + BNTotalOnline)
 			self:SetAllPoints(Text)
 		end
 
@@ -1558,8 +1559,8 @@ function BasicUI_Datapanel:OnEnable()
 			if totalonline > 0 then
 				local anchor, panel, xoff, yoff = DataTextTooltipAnchor(Text)
 				GameTooltip:SetOwner(panel, anchor, xoff, yoff)
-				GameTooltip:ClearLines()
-				GameTooltip:AddDoubleLine("Friends list:", format(totalOnlineString, totalonline, totalfriends),tthead.r,tthead.g,tthead.b,tthead.r,tthead.g,tthead.b)
+				GameTooltip:ClearLines()	
+				GameTooltip:AddDoubleLine(hexa..myname.."'s"..hexb.." Friends", format(totalOnlineString, totalonline, totalfriends))
 				if totalOnline > 0 then
 					GameTooltip:AddLine(' ')
 					GameTooltip:AddLine(worldOfWarcraftString)
@@ -1623,8 +1624,9 @@ function BasicUI_Datapanel:OnEnable()
 		Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
 
 		Stat:SetScript("OnLeave", function() GameTooltip:Hide() end)
-		Stat:SetScript("OnEvent", Update)
+		Stat:SetScript("OnEvent", Update)	
 	end
+	
 
 	---------
 	-- Guild

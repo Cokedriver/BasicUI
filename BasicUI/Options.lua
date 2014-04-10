@@ -31,73 +31,54 @@ local function GetOptions()
 	-----------------------
 	-- Options Order Chart
 	-----------------------
-	-- toggle = 1
-	-- select = 2
-	-- color = 3
-	-- range = 4
-	-- group = 5
+	-- ReloadUI = 0
+	-- Enable = 1
+	-- toggle = 2
+	-- select = 3
+	-- color = 4
+	-- range = 5
+	-- group = 6
 
 	options = {
 		type = "group",
 		name = "BasicUI", -- @PHANX: don't use colors here, it will screw up alphabetizing
 		handler = BasicUI,
-		childGroups = "tab", 
+		--childGroups = "tab", -- @PHANX: this is the default, you don't need to specify it, you can delete this line
 		args = {
-			Header = {
-				type = "header",
+			welcome = { -- @PHANX: moved all the "welcome" text into a group, you'll see why later
+				type = "group",
 				order = 1,
-				name = L["Welcome to BasicUI Config Area!"],
-				width = "full",
-			},
-			sep1 = {
-				type = "description",
-				order = 2,
-				name = " ",
-				width = "full",
-			},
-			Text2 = {
-				type = "description",
-				order = 3,
-				name = L["Special Thanks for BasicUI goes out to: Phanx, Neav, Tuks, Elv, Baine, Treeston, and many more."],
-				fontSize = "medium",
-			},
-			sep2 = {
-				type = "description",
-				order = 4,
-				name = " ",
-				width = "full",
-			},
-			Text3 = {
-				type = "description",
-				order = 5,
-				name = L["Thank you all for your AddOns, coding help, and support in creating BasicUI."],
-				fontSize = "medium",
-			},
-			sep3 = {
-				type = "description",
-				order = 6,
-				name = " ",
-				width = "full",
-			},
-			sep3 = {
-				type = "description",
-				order = 6,
-				name = "You Must Reload the UI to Apply Your Changes made.",
-			},
-			reloadUI = {
-				type = "execute",
-				name = "APPLY CHANGES",
-				desc = "Reload the UI and save changes.",
-				order = 7,
-				func = 	function()
-					ReloadUI()
-				end,
-			},
-			sep4 = {
-				type = "description",
-				order = 8,
-				name = " ",
-				width = "full",
+				name = "BasicUI",
+				args = {
+					Text = {
+						type = "description",
+						order = 1,
+						name = L["Welcome to |cff00B4FFBasic|rUI Config Area!"],
+						width = "full",
+						fontSize = "medium",
+					},
+					Text2 = {
+						type = "description",
+						order = 2,
+						name = L["When changes are made a reload of the UI is needed."],
+						width = "full",
+						fontSize = "medium",
+					},
+					Text3 = {
+						type = "description",
+						order = 3,
+						name = L["Special Thanks for |cff00B4FFBasic|rUI goes out to: Phanx, Neav, Tuks, Elv, Baine, Treeston, and many more."],
+						width = "full",
+						fontSize = "medium",
+					},
+					Text4 = {
+						type = "description",
+						order = 4,
+						name = L["Thank you all for your AddOns, coding help, and support in creating |cff00B4FFBasic|rUI."],
+						width = "full",
+						fontSize = "medium",
+					},
+				},
 			},			
 			media = {
 				type = "group",	
@@ -129,10 +110,31 @@ local function GetOptions()
 						order = 5,						
 						name = " ",
 					},	
-					---------------------------										
+					---------------------------	
+					reloadUI = {
+						type = "execute",
+						name = "Reload UI",
+						desc = " ",
+						order = 0,
+						func = 	function()
+							ReloadUI()
+						end,
+					},
+					Text = {
+						type = "description",
+						order = 0,
+						name = "When changes are made a reload of the UI is needed.",
+						width = "full",
+					},
+					Text1 = {
+						type = "description",
+						order = 1,
+						name = " ",
+						width = "full",
+					},					
 					fontSize = {
 						type = "range",
-						order = 1,						
+						order = 5,						
 						name = L["Game Font Size"],
 						desc = L["Controls the Size of the Game Font"],
 						min = 0,
@@ -150,33 +152,77 @@ local function GetOptions()
 				get = function(info) return db.misc[ info[#info] ] end,
 				set = function(info, value) db.misc[ info[#info] ] = value;   end,
 				args = {
+					---------------------------
+					--Option Type Seperators
+					sep1 = {
+						type = "description",
+						order = 2,						
+						name = " ",
+					},
+					sep2 = {
+						type = "description",
+						order = 3,						
+						name = " ",
+					},
+					sep3 = {
+						type = "description",
+						order = 4,						
+						name = " ",
+					},
+					sep4 = {
+						type = "description",
+						order = 5,						
+						name = " ",
+					},	
+					---------------------------	
+					reloadUI = {
+						type = "execute",
+						name = "Reload UI",
+						desc = " ",
+						order = 0,
+						func = 	function()
+							ReloadUI()
+						end,
+					},
+					Text = {
+						type = "description",
+						order = 0,
+						name = "When changes are made a reload of the UI is needed.",
+						width = "full",
+					},
+					Text1 = {
+						type = "description",
+						order = 1,
+						name = " ",
+						width = "full",
+					},					
 					classcolor = {
 						type = "toggle",					
-						order = 1,
+						order = 2,
 						name = L["Class Color"],
 						desc = L["Use your classcolor for border and some text color."],
 					},				
 					vellum = {
 						type = "toggle",
-						order = 1,						
+						order = 2,						
 						name = L["Vellum"],
 						desc = L["Enables a vellum button for Enchanters to click."],							
 					},
 					flashmapnodes = {
 						type = "toggle",
-						order = 1,						
+						order = 2,						
 						name = L["Flashing Map Nodes"],
 						desc = L["Enables flashing map nodes for tracking herbs and ore."],							
 					},
 					cooldown = {
 						type = "toggle",
-						order = 1,						
+						order = 2,						
 						name = L["Cooldown"],
 						desc = L["Enables a version of OmniCC."],							
 					},
 					quicky = {
 						type = "toggle",
-						order = 1,						
+						order = 2,						
 						name = L["Quicky"],
 						desc = L["Enables a quick hide show for your helm and cloak on your character page."],							
 					},
@@ -214,37 +260,58 @@ local function GetOptions()
 						name = " ",
 					},
 					---------------------------
+					reloadUI = {
+						type = "execute",
+						name = "Reload UI",
+						desc = " ",
+						order = 0,
+						func = 	function()
+							ReloadUI()
+						end,
+					},
+					Text = {
+						type = "description",
+						order = 0,
+						name = "When changes are made a reload of the UI is needed.",
+						width = "full",
+					},
+					Text1 = {
+						type = "description",
+						order = 1,
+						name = " ",
+						width = "full",
+					},
 					enable = {
 						type = "toggle",
-						order = 0,
+						order = 1,
 						name = L["Enable"],
 						desc = L["Enables Actionbar Button Module"],
 						width = "full",
 					},
 					auraborder = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Aura Border"],
 						desc = L["Make & Color Aura Borders."],
 						disabled = function() return not db.actionbar.enable end,
 					},
 					showHotKeys = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Show Hot Keys"],
 						desc = L["If Checked Hot Keys will Show."],
 						disabled = function() return not db.actionbar.enable end,
 					},
 					showMacronames = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Show Macro Names"],
 						desc = L["If Checked Macros Will Show."],
 						disabled = function() return not db.actionbar.enable end,
 					},
 					color = {
 						type = "group",
-						order = 5,
+						order = 6,
 						name = L["Actionbar Button Color"],
 						desc = L["Enables Actionbar Button Color Modifications."],
 						guiInline  = true,
@@ -276,14 +343,14 @@ local function GetOptions()
 							---------------------------
 							enable = {
 								type = "toggle",
-								order = 0,
+								order = 1,
 								name = L["Enable"],
 								desc = L["Enables Coloring"],
 								width = "full",
 							},
 							OutOfRange = {
 								type = "color",
-								order = 3,
+								order = 4,
 								name = L["Out of Range"],
 								desc = L["Picks the Out of Range Button Fade Color."],
 								disabled = function() return not db.actionbar.enable or not db.actionbar.color.enable end,
@@ -299,7 +366,7 @@ local function GetOptions()
 							},
 							OutOfMana = {
 								type = "color",
-								order = 3,
+								order = 4,
 								name = L["Out of Mana"],
 								desc = L["Picks the Out of Mana Button Fade Color."],
 								disabled = function() return not db.actionbar.enable or not db.actionbar.color.enable end,
@@ -315,7 +382,7 @@ local function GetOptions()
 							},
 							NotUsable = {
 								type = "color",
-								order = 3,
+								order = 4,
 								name = L["Not Usable"],
 								desc = L["Picks the Not Usable Button Fade Color."],
 								disabled = function() return not db.actionbar.enable or not db.actionbar.color.enable end,
@@ -364,16 +431,37 @@ local function GetOptions()
 						name = " ",
 					},
 					---------------------------
+					reloadUI = {
+						type = "execute",
+						name = "Reload UI",
+						desc = " ",
+						order = 0,
+						func = 	function()
+							ReloadUI()
+						end,
+					},
+					Text = {
+						type = "description",
+						order = 0,
+						name = "When changes are made a reload of the UI is needed.",
+						width = "full",
+					},
+					Text1 = {
+						type = "description",
+						order = 1,
+						name = " ",
+						width = "full",
+					},
 					enable = {
 						type = "toggle",
-						order = 0,
+						order = 1,
 						name = L["Enable"],
 						desc = L["Enables Buff Module."],
 						width = "full",
 					},
 					scale = {
 						type = "range",
-						order = 4,
+						order = 5,
 						name = L["Buff Scale"],
 						--desc = L["Controls the scaling of the Buff Frames"],
 						min = 0.05, max = 5, step = 0.05,
@@ -418,9 +506,30 @@ local function GetOptions()
 						name = " ",
 					},
 					---------------------------
+					reloadUI = {
+						type = "execute",
+						name = "Reload UI",
+						desc = " ",
+						order = 0,
+						func = 	function()
+							ReloadUI()
+						end,
+					},
+					Text = {
+						type = "description",
+						order = 0,
+						name = "When changes are made a reload of the UI is needed.",
+						width = "full",
+					},
+					Text1 = {
+						type = "description",
+						order = 1,
+						name = " ",
+						width = "full",
+					},
 					enable = {
 						type = "toggle",
-						order = 0,
+						order = 1,
 						name = L["Enable"],
 						desc = L["Enables Buff Module"],
 						width = "full",
@@ -460,7 +569,7 @@ local function GetOptions()
 							---------------------------
 							enable = {
 								type = "toggle",
-								order = 0,
+								order = 1,
 								name = L["Enable"],
 								desc = L["Enables Player's Castbar."],
 								disabled = function() return not db.castbar.enable end,
@@ -468,14 +577,14 @@ local function GetOptions()
 							},
 							fontSize = {
 								type = "range",
-								order = 0,
+								order = 5,
 								name = L["Font Size"],
 								desc = L["Controls the Size of the Font"],
 								min = 0, max = 30, step = 1,
 							},
 							textPosition = {
 								type = "select",
-								order = 2,
+								order = 3,
 								name = L["Text Position"],
 								desc = L["Spell Text Position."],
 								disabled = function() return not db.castbar.enable or not db.castbar.CastingBarFrame.enable end,
@@ -483,21 +592,21 @@ local function GetOptions()
 							},
 							enableLag = {
 								type = "toggle",
-								order = 1,
+								order = 2,
 								name = L["Enable Lag"],
 								desc = L["Enables lag to show on castbar."],
 								disabled = function() return not db.castbar.enable or not db.castbar.CastingBarFrame.enable end,
 							},
 							enableTimer = {
 								type = "toggle",
-								order = 1,
+								order = 2,
 								name = L["Show Timer"],
 								desc = L["Enables timer to show on castbar."],
 								disabled = function() return not db.castbar.enable or not db.castbar.CastingBarFrame.enable end,
 							},
 							selfAnchor = {
 								type = "select",
-								order = 2,
+								order = 3,
 								name = L["Self Anchor"],
 								desc = L["Self Anchor Position."],
 								disabled = function() return not db.castbar.enable or not db.castbar.CastingBarFrame.enable end,
@@ -505,7 +614,7 @@ local function GetOptions()
 							},
 							relAnchor = {
 								type = "select",
-								order = 2,
+								order = 3,
 								name = L["Relative Anchor"],
 								desc = L["Relative Anchor Position."],
 								disabled = function() return not db.castbar.enable or not db.castbar.CastingBarFrame.enable end,
@@ -513,7 +622,7 @@ local function GetOptions()
 							},
 							offSetX = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["X Offset"],
 								desc = L["Controls the X offset. (Left - Right)"],
 								min = -250, max = 250, step = 5,
@@ -521,7 +630,7 @@ local function GetOptions()
 							},
 							offSetY = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Y Offset"],
 								desc = L["Controls the Y offset. (Up - Down)"],
 								min = -250, max = 250, step = 5,
@@ -564,7 +673,7 @@ local function GetOptions()
 							---------------------------
 							enable = {
 								type = "toggle",
-								order = 0,
+								order = 1,
 								name = L["Enable"],
 								desc = L["Enables Pet's Castbar."],
 								disabled = function() return not db.castbar.enable end,
@@ -572,14 +681,14 @@ local function GetOptions()
 							},
 							fontSize = {
 								type = "range",
-								order = 0,
+								order = 5,
 								name = L["Font Size"],
 								desc = L["Controls the Size of the Font"],
 								min = 0, max = 30, step = 1,
 							},
 							textPosition = {
 								type = "select",
-								order = 2,
+								order = 3,
 								name = L["Text Position"],
 								desc = L["Spell Text Position."],
 								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
@@ -587,14 +696,14 @@ local function GetOptions()
 							},
 							enableTimer = {
 								type = "toggle",
-								order = 1,
+								order = 2,
 								name = L["Show Timer"],
 								desc = L["Enables timer to show on castbar."],
 								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
 							},
 							selfAnchor = {
 								type = "select",
-								order = 2,
+								order = 3,
 								name = L["Self Anchor"],
 								desc = L["Self Anchor Position."],
 								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
@@ -602,7 +711,7 @@ local function GetOptions()
 							},
 							relAnchor = {
 								type = "select",
-								order = 2,
+								order = 3,
 								name = L["Relative Anchor"],
 								desc = L["Relative Anchor Position."],
 								disabled = function() return not db.castbar.enable or not db.castbar.PetCastingBarFrame.enable end,
@@ -610,7 +719,7 @@ local function GetOptions()
 							},
 							offSetX = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["X Offset."],
 								desc = L["Controls the X offset. (Left - Right)"],
 								min = -250, max = 250, step = 5,
@@ -618,7 +727,7 @@ local function GetOptions()
 							},
 							offSetY = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Y Offset."],
 								desc = L["Controls the Y offset. (Up - Down)"],
 								min = -250, max = 250, step = 5,
@@ -661,7 +770,7 @@ local function GetOptions()
 							---------------------------
 							enable = {
 								type = "toggle",
-								order = 0,
+								order = 1,
 								name = L["Enable"],
 								desc = L["Enables Target's Castbar."],
 								disabled = function() return not db.castbar.enable end,
@@ -669,14 +778,14 @@ local function GetOptions()
 							},
 							fontSize = {
 								type = "range",
-								order = 0,
+								order = 5,
 								name = L["Font Size"],
 								desc = L["Controls the Size of the Font"],
 								min = 0, max = 30, step = 1,
 							},
 							textPosition = {
 								type = "select",
-								order = 2,
+								order = 3,
 								name = L["Text Position"],
 								desc = L["Spell Text Position."],
 								disabled = function() return not db.castbar.enable or not db.castbar.TargetFrameSpellBar.enable end,
@@ -684,21 +793,21 @@ local function GetOptions()
 							},
 							enableLag = {
 								type = "toggle",
-								order = 1,
+								order = 2,
 								name = L["Enable Lag"],
 								desc = L["Enables lag to show on castbar."],
 								disabled = function() return not db.castbar.enable or not db.castbar.TargetFrameSpellBar.enable end,
 							},
 							enableTimer = {
 								type = "toggle",
-								order = 1,
+								order = 2,
 								name = L["Show Timer"],
 								desc = L["Enables timer to show on castbar."],
 								disabled = function() return not db.castbar.enable or not db.castbar.TargetFrameSpellBar.enable end,
 							},
 							selfAnchor = {
 								type = "select",
-								order = 2,
+								order = 3,
 								name = L["Self Anchor"],
 								desc = L["Self Anchor Position."],
 								disabled = function() return not db.castbar.enable or not db.castbar.TargetFrameSpellBar.enable end,
@@ -706,7 +815,7 @@ local function GetOptions()
 							},
 							relAnchor = {
 								type = "select",
-								order = 2,
+								order = 3,
 								name = L["Relative Anchor"],
 								desc = L["Relative Anchor Position."],
 								disabled = function() return not db.castbar.enable or not db.castbar.TargetFrameSpellBar.enable end,
@@ -714,7 +823,7 @@ local function GetOptions()
 							},
 							offSetX = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["X Offset"],
 								desc = L["Controls the X offset. (Left - Right)"],
 								min = -250, max = 250, step = 5,
@@ -722,7 +831,7 @@ local function GetOptions()
 							},
 							offSetY = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Y Offset"],
 								desc = L["Controls the Y offset. (Up - Down)"],
 								min = -250, max = 250, step = 5,
@@ -765,7 +874,7 @@ local function GetOptions()
 							---------------------------
 							enable = {
 								type = "toggle",
-								order = 0,
+								order = 1,
 								name = L["Enable"],
 								desc = L["Enables Focus' Castbar."],
 								disabled = function() return not db.castbar.enable end,
@@ -773,14 +882,14 @@ local function GetOptions()
 							},
 							fontSize = {
 								type = "range",
-								order = 0,
+								order = 5,
 								name = L["Font Size"],
 								desc = L["Controls the Size of the Font"],
 								min = 0, max = 30, step = 1,
 							},
 							textPosition = {
 								type = "select",
-								order = 2,
+								order = 3,
 								name = L["Text Position"],
 								desc = L["Spell Text Position."],
 								disabled = function() return not db.castbar.enable or not db.castbar.FocusFrameSpellBar.enable end,
@@ -788,21 +897,21 @@ local function GetOptions()
 							},
 							enableLag = {
 								type = "toggle",
-								order = 1,
+								order = 2,
 								name = L["Enable Lag"],
 								desc = L["Enables lag to show on castbar."],
 								disabled = function() return not db.castbar.enable or not db.castbar.FocusFrameSpellBar.enable end,
 							},
 							enableTimer = {
 								type = "toggle",
-								order = 1,
+								order = 2,
 								name = L["Show Timer"],
 								desc = L["Enables timer to show on castbar."],
 								disabled = function() return not db.castbar.enable or not db.castbar.FocusFrameSpellBar.enable end,
 							},
 							selfAnchor = {
 								type = "select",
-								order = 2,
+								order = 3,
 								name = L["Self Anchor"],
 								desc = L["Self Anchor Position."],
 								disabled = function() return not db.castbar.enable or not db.castbar.FocusFrameSpellBar.enable end,
@@ -810,7 +919,7 @@ local function GetOptions()
 							},
 							relAnchor = {
 								type = "select",
-								order = 2,
+								order = 3,
 								name = L["Relative Anchor"],
 								desc = L["Relative Anchor Position."],
 								disabled = function() return not db.castbar.enable or not db.castbar.FocusFrameSpellBar.enable end,
@@ -818,7 +927,7 @@ local function GetOptions()
 							},
 							offSetX = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["X Offset"],
 								desc = L["Controls the X offset. (Left - Right)"],
 								min = -250, max = 250, step = 5,
@@ -826,7 +935,7 @@ local function GetOptions()
 							},
 							offSetY = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Y Offset"],
 								desc = L["Controls the Y offset. (Up - Down)"],
 								min = -250, max = 250, step = 5,
@@ -869,7 +978,7 @@ local function GetOptions()
 							---------------------------
 							enable = {
 								type = "toggle",
-								order = 0,
+								order = 1,
 								name = L["Enable"],
 								desc = L["Enables Mirror Timer."],
 								disabled = function() return not db.castbar.enable end,
@@ -877,21 +986,21 @@ local function GetOptions()
 							},
 							fontSize = {
 								type = "range",
-								order = 0,
+								order = 5,
 								name = L["Font Size"],
 								desc = L["Controls the Size of the Font"],
 								min = 0, max = 30, step = 1,
 							},
 							enableTimer = {
 								type = "toggle",
-								order = 1,
+								order = 2,
 								name = L["Show Timer"],
 								desc = L["Enables timer to show on castbar."],
 								disabled = function() return not db.castbar.enable or not db.castbar.MirrorTimer1.enable end,
 							},
 							selfAnchor = {
 								type = "select",
-								order = 2,
+								order = 3,
 								name = L["Self Anchor"],
 								desc = L["Self Anchor Position."],
 								disabled = function() return not db.castbar.enable or not db.castbar.MirrorTimer1.enable end,
@@ -899,7 +1008,7 @@ local function GetOptions()
 							},
 							relAnchor = {
 								type = "select",
-								order = 2,
+								order = 3,
 								name = L["Relative Anchor"],
 								desc = L["Relative Anchor Position."],
 								disabled = function() return not db.castbar.enable or not db.castbar.MirrorTimer1.enable end,
@@ -907,7 +1016,7 @@ local function GetOptions()
 							},
 							offSetX = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["X Offset"],
 								desc = L["Controls the X offset. (Left - Right)"],
 								min = -250, max = 250, step = 5,
@@ -915,7 +1024,7 @@ local function GetOptions()
 							},
 							offSetY = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Y Offset"],
 								desc = L["Controls the Y offset. (Up - Down)"],
 								min = -250, max = 250, step = 5,
@@ -957,58 +1066,79 @@ local function GetOptions()
 						name = " ",
 					},
 					---------------------------
+					reloadUI = {
+						type = "execute",
+						name = "Reload UI",
+						desc = " ",
+						order = 0,
+						func = 	function()
+							ReloadUI()
+						end,
+					},
+					Text = {
+						type = "description",
+						order = 0,
+						name = "When changes are made a reload of the UI is needed.",
+						width = "full",
+					},
+					Text1 = {
+						type = "description",
+						order = 1,
+						name = " ",
+						width = "full",
+					},
 					enable = {
 						type = "toggle",
-						order = 0,
+						order = 1,
 						name = L["Enable"],
 						desc = L["Enables Chat Module."],
 						width = "full",
 					},
 					windowborder = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Window Border"],
 						desc = L["Enables Chat Window Border."],
 						disabled = function() return not db.chat.enable end,
 					},
 					disableFade = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Disable Fade"],
 						desc = L["Disables Chat Fading."],
 						disabled = function() return not db.chat.enable end,
 					},
 					chatOutline = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Chat Outline"],
 						desc = L["Outlines the chat Text."],
 						disabled = function() return not db.chat.enable end,
 					},
 					enableBottomButton = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Enable Bottom Button"],
 						desc = L["Enables the scroll down button in the lower right hand corner."],
 						disabled = function() return not db.chat.enable end,
 					},
 					enableHyperlinkTooltip = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Enable Hyplerlink Tooltip"],
 						desc = L["Enables the mouseover items in chat tooltip."],
 						disabled = function() return not db.chat.enable end,
 					},
 					enableBorderColoring = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Enable Editbox Channel Border Coloring"],
 						desc = L["Enables the coloring of the border to the edit box to match what channel you are typing in."],
 						disabled = function() return not db.chat.enable end,
 					},
 					tab = {
 						type = "group",
-						order = 5,
+						order = 6,
 						name = L["Tabs"],
 						desc = L["Tab Font Settings."],
 						guiInline  = true,
@@ -1041,7 +1171,7 @@ local function GetOptions()
 							---------------------------
 							fontSize = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Font Size"],
 								desc = L["Controls the size of the tab font"],
 								type = "range",
@@ -1049,13 +1179,13 @@ local function GetOptions()
 							},
 							fontOutline = {
 								type = "toggle",
-								order = 1,
+								order = 2,
 								name = L["Outline Tab Font"],
 								desc = L["Enables the outlineing of tab font."],
 							},
 							normalColor = {
 								type = "color",
-								order = 3,
+								order = 4,
 								name = L["Tab Normal Color"],
 								desc = L["Picks the Normal Color of the Chat Tab."],
 								hasAlpha = false,
@@ -1073,7 +1203,7 @@ local function GetOptions()
 							},
 							specialColor = {
 								type = "color",
-								order = 3,
+								order = 4,
 								name = L["Tab Special Color"],
 								desc = L["Picks the Special Color of the Chat Tab."],
 								hasAlpha = false,
@@ -1091,7 +1221,7 @@ local function GetOptions()
 							},
 							selectedColor = {
 								type = "color",
-								order = 3,
+								order = 4,
 								name = L["Tab Selected Color"],
 								desc = L["Picks the Selected Color of the Chat Tab."],
 								hasAlpha = false,
@@ -1143,43 +1273,64 @@ local function GetOptions()
 						name = " ",
 					},
 					---------------------------
+					reloadUI = {
+						type = "execute",
+						name = "Reload UI",
+						desc = " ",
+						order = 0,
+						func = 	function()
+							ReloadUI()
+						end,
+					},
+					Text = {
+						type = "description",
+						order = 0,
+						name = "When changes are made a reload of the UI is needed.",
+						width = "full",
+					},
+					Text1 = {
+						type = "description",
+						order = 1,
+						name = " ",
+						width = "full",
+					},
 					enable = {
 						type = "toggle",
-						order = 0,
+						order = 1,
 						name = L["Enable"],
 						desc = L["Enables datapanel Module."],
 					},
 					time24 = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["24-Hour Time"],
 						desc = L["Display time datapanel on a 24 hour time scale"],
 						disabled = function() return not db.datapanel.enable end,
 					},
 					bag = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Bag Open"],
 						desc = L["Checked opens Backpack only, Unchecked opens all bags."],
 						disabled = function() return not db.datapanel.enable end,
 					},
 					battleground = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Battleground Text"],
 						desc = L["Display special datapanels when inside a battleground"],
 						disabled = function() return not db.datapanel.enable end,
 					},
 					recountraiddps = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Recount Raid DPS"],
 						desc = L["Display Recount's Raid DPS (RECOUNT MUST BE INSTALLED)"],
 						disabled = function() return not db.datapanel.enable end,
 					},
 					DataGroup = {
 						type = "group",
-						order = 5,
+						order = 6,
 						name = L["Text Positions"],
 						guiInline  = true,
 						disabled = function() return not db.datapanel.enable end,
@@ -1209,7 +1360,7 @@ local function GetOptions()
 							---------------------------
 							bags = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Bags"],
 								desc = L["Display ammount of bag space"]..L["\n\n0 - Disabled\n1 - POSITION #1\n2 - POSITION #2\n3 - POSITION #3\n4 - POSITION #4\n5 - POSITION #5\n6 - POSITION #6\n7 - POSITION #7\n8 - POSITION #8\n9 - POSITION #9"],
 								min = 0, max = 9, step = 1,
@@ -1217,7 +1368,7 @@ local function GetOptions()
 							},
 							calltoarms = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Call to Arms"],
 								desc = L["Display the active roles that will recieve a reward for completing a random dungeon"]..L["\n\n0 - Disabled\n1 - POSITION #1\n2 - POSITION #2\n3 - POSITION #3\n4 - POSITION #4\n5 - POSITION #5\n6 - POSITION #6\n7 - POSITION #7\n8 - POSITION #8\n9 - POSITION #9"],
 								min = 0, max = 9, step = 1,
@@ -1225,7 +1376,7 @@ local function GetOptions()
 							},
 							coords = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Coordinates"],
 								desc = L["Display Player's Coordinates"]..L["\n\n0 - Disabled\n1 - POSITION #1\n2 - POSITION #2\n3 - POSITION #3\n4 - POSITION #4\n5 - POSITION #5\n6 - POSITION #6\n7 - POSITION #7\n8 - POSITION #8\n9 - POSITION #9"],
 								min = 0, max = 9, step = 1,
@@ -1233,7 +1384,7 @@ local function GetOptions()
 							},
 							dps_text = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["DPS"],
 								desc = L["Display ammount of DPS"]..L["\n\n0 - Disabled\n1 - POSITION #1\n2 - POSITION #2\n3 - POSITION #3\n4 - POSITION #4\n5 - POSITION #5\n6 - POSITION #6\n7 - POSITION #7\n8 - POSITION #8\n9 - POSITION #9"],
 								min = 0, max = 9, step = 1,
@@ -1241,7 +1392,7 @@ local function GetOptions()
 							},
 							dur = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Durability"],
 								desc = L["Display your current durability"]..L["\n\n0 - Disabled\n1 - POSITION #1\n2 - POSITION #2\n3 - POSITION #3\n4 - POSITION #4\n5 - POSITION #5\n6 - POSITION #6\n7 - POSITION #7\n8 - POSITION #8\n9 - POSITION #9"],
 								min = 0, max = 9, step = 1,
@@ -1249,7 +1400,7 @@ local function GetOptions()
 							},
 							friends = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Friends"],
 								desc = L["Display current online friends"]..L["\n\n0 - Disabled\n1 - POSITION #1\n2 - POSITION #2\n3 - POSITION #3\n4 - POSITION #4\n5 - POSITION #5\n6 - POSITION #6\n7 - POSITION #7\n8 - POSITION #8\n9 - POSITION #9"],
 								min = 0, max = 9, step = 1,
@@ -1257,7 +1408,7 @@ local function GetOptions()
 							},
 							guild = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Guild"],
 								desc = L["Display current online people in guild"]..L["\n\n0 - Disabled\n1 - POSITION #1\n2 - POSITION #2\n3 - POSITION #3\n4 - POSITION #4\n5 - POSITION #5\n6 - POSITION #6\n7 - POSITION #7\n8 - POSITION #8\n9 - POSITION #9"],
 								min = 0, max = 9, step = 1,
@@ -1265,7 +1416,7 @@ local function GetOptions()
 							},
 							hps_text = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["HPS"],
 								desc = L["Display ammount of HPS"]..L["\n\n0 - Disabled\n1 - POSITION #1\n2 - POSITION #2\n3 - POSITION #3\n4 - POSITION #4\n5 - POSITION #5\n6 - POSITION #6\n7 - POSITION #7\n8 - POSITION #8\n9 - POSITION #9"],
 								min = 0, max = 9, step = 1,
@@ -1273,7 +1424,7 @@ local function GetOptions()
 							},
 							pro = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Professions"],
 								desc = L["Display Professions"]..L["\n\n0 - Disabled\n1 - POSITION #1\n2 - POSITION #2\n3 - POSITION #3\n4 - POSITION #4\n5 - POSITION #5\n6 - POSITION #6\n7 - POSITION #7\n8 - POSITION #8\n9 - POSITION #9"],
 								min = 0, max = 9, step = 1,
@@ -1281,7 +1432,7 @@ local function GetOptions()
 							},
 							recount = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Recount"],
 								desc = L["Display Recount's DPS (RECOUNT MUST BE INSTALLED)"]..L["\n\n0 - Disabled\n1 - POSITION #1\n2 - POSITION #2\n3 - POSITION #3\n4 - POSITION #4\n5 - POSITION #5\n6 - POSITION #6\n7 - POSITION #7\n8 - POSITION #8\n9 - POSITION #9"],
 								min = 0, max = 9, step = 1,
@@ -1289,7 +1440,7 @@ local function GetOptions()
 							},
 							spec = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Talent Spec"],
 								desc = L["Display current spec"]..L["\n\n0 - Disabled\n1 - POSITION #1\n2 - POSITION #2\n3 - POSITION #3\n4 - POSITION #4\n5 - POSITION #5\n6 - POSITION #6\n7 - POSITION #7\n8 - POSITION #8\n9 - POSITION #9"],
 								min = 0, max = 9, step = 1,
@@ -1297,7 +1448,7 @@ local function GetOptions()
 							},
 							stat1 = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Stat #1"],
 								desc = L["Display stat based on your role (Avoidance-Tank, AP-Melee, SP/HP-Caster)"]..L["\n\n0 - Disabled\n1 - POSITION #1\n2 - POSITION #2\n3 - POSITION #3\n4 - POSITION #4\n5 - POSITION #5\n6 - POSITION #6\n7 - POSITION #7\n8 - POSITION #8\n9 - POSITION #9"],
 								min = 0, max = 9, step = 1,
@@ -1305,7 +1456,7 @@ local function GetOptions()
 							},
 							stat2 = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Stat #2"],
 								desc = L["Display stat based on your role (Armor-Tank, Crit-Melee, Crit-Caster)"]..L["\n\n0 - Disabled\n1 - POSITION #1\n2 - POSITION #2\n3 - POSITION #3\n4 - POSITION #4\n5 - POSITION #5\n6 - POSITION #6\n7 - POSITION #7\n8 - POSITION #8\n9 - POSITION #9"],
 								min = 0, max = 9, step = 1,
@@ -1313,7 +1464,7 @@ local function GetOptions()
 							},
 							system = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["System"],
 								desc = L["Display FPS and Latency"]..L["\n\n0 - Disabled\n1 - POSITION #1\n2 - POSITION #2\n3 - POSITION #3\n4 - POSITION #4\n5 - POSITION #5\n6 - POSITION #6\n7 - POSITION #7\n8 - POSITION #8\n9 - POSITION #9"],
 								min = 0, max = 9, step = 1,
@@ -1321,7 +1472,7 @@ local function GetOptions()
 							},
 							wowtime = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Time"],
 								desc = L["Display current time"]..L["\n\n0 - Disabled\n1 - POSITION #1\n2 - POSITION #2\n3 - POSITION #3\n4 - POSITION #4\n5 - POSITION #5\n6 - POSITION #6\n7 - POSITION #7\n8 - POSITION #8\n9 - POSITION #9"],
 								min = 0, max = 9, step = 1,
@@ -1329,7 +1480,7 @@ local function GetOptions()
 							},
 							zone = {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Zone"],
 								desc = L["Display Player's Current Zone."]..L["\n\n0 - Disabled\n1 - POSITION #1\n2 - POSITION #2\n3 - POSITION #3\n4 - POSITION #4\n5 - POSITION #5\n6 - POSITION #6\n7 - POSITION #7\n8 - POSITION #8\n9 - POSITION #9"],
 								min = 0, max = 9, step = 1,
@@ -1371,30 +1522,51 @@ local function GetOptions()
 						name = " ",
 					},
 					---------------------------
+					reloadUI = {
+						type = "execute",
+						name = "Reload UI",
+						desc = " ",
+						order = 0,
+						func = 	function()
+							ReloadUI()
+						end,
+					},
+					Text = {
+						type = "description",
+						order = 0,
+						name = "When changes are made a reload of the UI is needed.",
+						width = "full",
+					},
+					Text1 = {
+						type = "description",
+						order = 1,
+						name = " ",
+						width = "full",
+					},
 					enable = {
 						type = "toggle",
-						order = 0,
+						order = 1,
 						name = L["Enable"],
 						desc = L["Enable Merchant Settings"],
 						width = "full",
 					},
 					autoRepair = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Auto Repair"],
 						desc = L["Automatically repair when visiting a vendor"],
 						disabled = function() return not db.merchant.enable end,
 					},
 					autoSellGrey = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Sell Grays"],
 						desc = L["Automatically sell gray items when visiting a vendor"],
 						disabled = function() return not db.merchant.enable end,
 					},
 					sellMisc = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Sell Misc Items"],
 						desc = L["Automatically sell a user selected item."],
 						disabled = function() return not db.merchant.enable end,
@@ -1432,23 +1604,44 @@ local function GetOptions()
 						name = " ",
 					},
 					---------------------------
+					reloadUI = {
+						type = "execute",
+						name = "Reload UI",
+						desc = " ",
+						order = 0,
+						func = 	function()
+							ReloadUI()
+						end,
+					},
+					Text = {
+						type = "description",
+						order = 0,
+						name = "When changes are made a reload of the UI is needed.",
+						width = "full",
+					},
+					Text1 = {
+						type = "description",
+						order = 1,
+						name = " ",
+						width = "full",
+					},
 					enable = {
 						type = "toggle",
-						order = 0,
+						order = 1,
 						name = L["Enable"],
 						desc = L["Enables Minimap Modifications."],
 						width = "full"
 					},
 					farm = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Farming"],
 						desc = L["Enlarges the Minimap when Farming."],
 						disabled = function() return not db.minimap.enable end,
 					},
 					farmscale = {
 						type = "range",
-						order = 4,
+						order = 5,
 						name = L["Farming Map Scale"],
 						desc = L["Controls the Size of the Farming Map"],
 						disabled = function() return not db.minimap.enable or not db.minimap.farm end,
@@ -1456,7 +1649,7 @@ local function GetOptions()
 					},
 					gameclock = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Game Clock"],
 						desc = L["Enable the Clock Frame on Minimap."],
 						disabled = function() return not db.minimap.enable end,
@@ -1494,58 +1687,79 @@ local function GetOptions()
 						name = " ",
 					},
 					---------------------------
+					reloadUI = {
+						type = "execute",
+						name = "Reload UI",
+						desc = " ",
+						order = 0,
+						func = 	function()
+							ReloadUI()
+						end,
+					},
+					Text = {
+						type = "description",
+						order = 0,
+						name = "When changes are made a reload of the UI is needed.",
+						width = "full",
+					},
+					Text1 = {
+						type = "description",
+						order = 1,
+						name = " ",
+						width = "full",
+					},
 					enable = {
 						type = "toggle",
-						order = 0,
+						order = 1,
 						name = L["Enable"],
 						desc = L["Enable Nameplate Settings"],
 						width = "full",
 					},
 					enableTankMode = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Enable Tank Mode"],
 						disabled = function() return not db.nameplates.enable end,
 					},
 					colorNameWithThreat = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Color Name With Threat"],
 						disabled = function() return not db.nameplates.enable end,
 					},
 					showFullHP = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Show Full HP"],
 						disabled = function() return not db.nameplates.enable end,
 					},
 					showLevel = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Show Level"],
 						disabled = function() return not db.nameplates.enable end,
 					},
 					showTargetBorder = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Show Target Border"],
 						disabled = function() return not db.nameplates.enable end,
 					},
 					showEliteBorder = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Show Elite Border"],
 						disabled = function() return not db.nameplates.enable end,
 					},
 					showTotemIcon = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Show Totem Icon"],
 						disabled = function() return not db.nameplates.enable end,
 					},
 					abbrevLongNames = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Abbrev Long Names"],
 						disabled = function() return not db.nameplates.enable end,
 					},
@@ -1582,7 +1796,28 @@ local function GetOptions()
 						order = 5,
 						name = " ",
 					},	
-					---------------------------								
+					---------------------------
+					reloadUI = {
+						type = "execute",
+						name = "Reload UI",
+						desc = " ",
+						order = 0,
+						func = 	function()
+							ReloadUI()
+						end,
+					},
+					Text = {
+						type = "description",
+						order = 0,
+						name = "When changes are made a reload of the UI is needed.",
+						width = "full",
+					},
+					Text1 = {
+						type = "description",
+						order = 1,
+						name = " ",
+						width = "full",
+					},					
 					enable = {
 						order = 1,
 						name = L["Enable"],
@@ -1591,63 +1826,63 @@ local function GetOptions()
 						type = "toggle",							
 					},					
 					showCombatRegen = {
-						order = 1,
+						order = 2,
 						name = L["Show Combat Regen"],
 						--desc = L["Shows a players Regen while in combat."],
 						type = "toggle",
 						disabled = function() return not db.powerbar.enable end,
 					},				
 					showSoulshards = {
-						order = 1,
+						order = 2,
 						name = L["Show Soulshards"],
 						--desc = L["Shows Shards as a number value."],
 						type = "toggle",
 						disabled = function() return not db.powerbar.enable end,
 					},
 					showHolypower = {
-						order = 1,
+						order = 2,
 						name = L["Show Holypower"],
 						--desc = L["Shows Holypower as a number value."],
 						type = "toggle",
 						disabled = function() return not db.powerbar.enable end,
 					},
 					showMana = {
-						order = 1,
+						order = 2,
 						name = L["Show Mana"],
 						--desc = L["Shows Holypower as a number value."],
 						type = "toggle",
 						disabled = function() return not db.powerbar.enable end,
 					},
 					showFocus = {
-						order = 1,
+						order = 2,
 						name = L["Show Focus"],
 						--desc = L["Shows Holypower as a number value."],
 						type = "toggle",
 						disabled = function() return not db.powerbar.enable end,
 					},
 					showRage = {
-						order = 1,
+						order = 2,
 						name = L["Show Rage"],
 						--desc = L["Shows Holypower as a number value."],
 						type = "toggle",
 						disabled = function() return not db.powerbar.enable end,
 					},
 					valueAbbrev = {
-						order = 1,
+						order = 2,
 						name = L["Value Abbrev"],
 						--desc = L["Shows Runes cooldowns as numbers."],
 						type = "toggle",
 						disabled = function() return not db.powerbar.enable end,
 					},
 					valueFontOutline = {
-						order = 1,
+						order = 2,
 						name = L["Value Font Outline"],
 						--desc = L["Shows Focus power."],
 						type = "toggle",
 						disabled = function() return not db.powerbar.enable end,
 					},					
 					sizeWidth= {
-						order = 4,
+						order = 5,
 						name = L["Size Width"],
 						--desc = L["Controls the width of power."],
 						type = "range",
@@ -1655,7 +1890,7 @@ local function GetOptions()
 						disabled = function() return not db.powerbar.enable end,
 					},					
 					activeAlpha = {
-						order = 4,
+						order = 5,
 						name = L["Active Alpha"],
 						--desc = L["Shows ComboPoints as a number value."],
 						type = "range",
@@ -1663,7 +1898,7 @@ local function GetOptions()
 						disabled = function() return not db.powerbar.enable end,
 					},
 					inactiveAlpha = {
-						order = 4,
+						order = 5,
 						name = L["In Active Alpha"],
 						--desc = L["Shows ComboPoints as a number value."],
 						type = "range",
@@ -1671,7 +1906,7 @@ local function GetOptions()
 						disabled = function() return not db.powerbar.enable end,
 					},
 					emptyAlpha = {
-						order = 4,
+						order = 5,
 						name = L["Empty Alpha"],
 						--desc = L["Shows ComboPoints as a number value."],
 						type = "range",
@@ -1679,7 +1914,7 @@ local function GetOptions()
 						disabled = function() return not db.powerbar.enable end,
 					},										
 					valueFontSize = {
-						order = 4,
+						order = 5,
 						name = L["Value Font Size"],
 						--desc = L["Shows ComboPoints as a number value."],
 						type = "range",
@@ -1687,7 +1922,7 @@ local function GetOptions()
 						disabled = function() return not db.powerbar.enable end,
 					},	
 					valueFontAdjustmentX = {
-						order = 4,
+						order = 5,
 						name = L["Value Font Adjustment X"],
 						--desc = L["Shows ComboPoints as a number value."],
 						type = "range",
@@ -1696,7 +1931,7 @@ local function GetOptions()
 					},
 					position = {
 						type = "group",
-						order = 5,
+						order = 6,
 						guiInline = true,
 						name = L["Position"],
 						--desc = L["Combo Points Options"],	
@@ -1729,7 +1964,7 @@ local function GetOptions()
 							},	
 							---------------------------							
 							selfAnchor = {
-								order = 2,
+								order = 3,
 								name = L["Self Anchor"],
 								--desc = L["Style of Border for Sqaure Minimap."],
 								disabled = function() return not db.powerbar.enable end,
@@ -1738,7 +1973,7 @@ local function GetOptions()
 							},
 							offSetX = {
 								type = "range",							
-								order = 4,
+								order = 5,
 								name = L["X Offset"],
 								desc = L["Controls the X offset. (Left - Right)"],
 								min = -250, max = 250, step = 5,
@@ -1746,7 +1981,7 @@ local function GetOptions()
 							},
 							offSetY = {
 								type = "range",							
-								order = 4,
+								order = 5,
 								name = L["Y Offset"],
 								desc = L["Controls the Y offset. (Up - Down)"],
 								min = -250, max = 250, step = 5,
@@ -1788,35 +2023,35 @@ local function GetOptions()
 							},	
 							---------------------------							
 							show = {
-								order = 1,
+								order = 2,
 								name = L["Show"],
 								--desc = L["Adds a font outline to ComboPoints."],
 								type = "toggle",
 								disabled = function() return not db.powerbar.enable end,
 							},
 							showComboPoints = {
-								order = 1,
+								order = 2,
 								name = L["Show Combo Points"],
 								--desc = L["Adds a font outline to ComboPoints."],
 								type = "toggle",
 								disabled = function() return not db.powerbar.enable end,
 							},
 							comboPointsBelow = {
-								order = 1,
+								order = 2,
 								name = L["Combo Points Below"],
 								--desc = L["Adds a font outline to ComboPoints."],
 								type = "toggle",
 								disabled = function() return not db.powerbar.enable end,
 							},							
 							comboFontOutline = {
-								order = 1,
+								order = 2,
 								name = L["Combo Font Outline"],
 								--desc = L["Adds a font outline to ComboPoints."],
 								type = "toggle",
 								disabled = function() return not db.powerbar.enable end,
 							},
 							comboFontSize = {
-								order = 4,
+								order = 5,
 								name = L["Combo Font Size"],
 								--desc = L["Controls the ComboPoints font size."],
 								type = "range",
@@ -1859,28 +2094,28 @@ local function GetOptions()
 							},	
 							---------------------------							
 							show = {
-								order = 1,
+								order = 2,
 								name = L["Show"],
 								--desc = L["Adds a font outline to Runes."],
 								type = "toggle",
 								disabled = function() return not db.powerbar.enable end,
 							},
 							showRuneCooldown = {
-								order = 1,
+								order = 2,
 								name = L["Show Rune Cooldown"],
 								--desc = L["Adds a font outline to Runes."],
 								type = "toggle",
 								disabled = function() return not db.powerbar.enable end,
 							},							
 							runeFontOutline = {
-								order = 1,
+								order = 2,
 								name = L["Rune Font Outline"],
 								--desc = L["Adds a font outline to Runes."],
 								type = "toggle",
 								disabled = function() return not db.powerbar.enable end,
 							},
 							runeFontSize= {
-								order = 4,
+								order = 5,
 								name = L["Rune Font Size"],
 								--desc = L["Controls the Runes font size."],
 								type = "range",
@@ -1922,23 +2157,44 @@ local function GetOptions()
 						order = 5,										
 						name = " ",
 					},	
-					---------------------------				
+					---------------------------
+					reloadUI = {
+						type = "execute",
+						name = "Reload UI",
+						desc = " ",
+						order = 0,
+						func = 	function()
+							ReloadUI()
+						end,
+					},
+					Text = {
+						type = "description",
+						order = 0,
+						name = "When changes are made a reload of the UI is needed.",
+						width = "full",
+					},
+					Text1 = {
+						type = "description",
+						order = 1,
+						name = " ",
+						width = "full",
+					},					
 					enable = {
 						type = "toggle",					
-						order = 0,
+						order = 1,
 						name = L["Enable"],
 						desc = L["Enables Quest Module"],							
 					},					
 					autocomplete = {
 						type = "toggle",					
-						order = 1,
+						order = 2,
 						name = L["Autocomplete"],
 						desc = L["Automatically complete your quest."],
 						disabled = function() return not db.quest.enable end,
 					},
 					tekvendor = {
 						type = "toggle",
-						order = 1,						
+						order = 2,						
 						name = L["Tek's Vendor"],
 						desc = L["Enables Tek's best quest item by vendor price."],							
 					},
@@ -1975,31 +2231,52 @@ local function GetOptions()
 						order = 5,										
 						name = " ",
 					},	
-					---------------------------				
+					---------------------------	
+					reloadUI = {
+						type = "execute",
+						name = "Reload UI",
+						desc = " ",
+						order = 0,
+						func = 	function()
+							ReloadUI()
+						end,
+					},
+					Text = {
+						type = "description",
+						order = 0,
+						name = "When changes are made a reload of the UI is needed.",
+						width = "full",
+					},
+					Text1 = {
+						type = "description",
+						order = 1,
+						name = " ",
+						width = "full",
+					},					
 					enable = {
 						type = "toggle",					
-						order = 0,
+						order = 1,
 						name = L["Enable"],
 						desc = L["Enables AddOn Skinning"],
 						width = "full",						
 					},						
 					DBM = {
 						type = "toggle",					
-						order = 1,
+						order = 2,
 						name = L["DBM"],
 						desc = L["Skins Deadly Boss Mods to match BasicUI."],
 						disabled = function() return not db.skin.enable end,
 					},
 					Recount = {
 						type = "toggle",					
-						order = 1,
+						order = 2,
 						name = L["Recount"],
 						desc = L["Skins Recount to match BasicUI."],
 						disabled = function() return not db.skin.enable end,
 					},
 					RecountBackdrop = {
 						type = "toggle",					
-						order = 1,
+						order = 2,
 						name = L["Recount Backdrop"],
 						desc = L["Keep the backdrop in the Recount Window."],
 						disabled = function() return not db.skin.enable end,
@@ -2038,92 +2315,113 @@ local function GetOptions()
 						name = " ",
 					},
 					---------------------------
+					reloadUI = {
+						type = "execute",
+						name = "Reload UI",
+						desc = " ",
+						order = 0,
+						func = 	function()
+							ReloadUI()
+						end,
+					},
+					Text = {
+						type = "description",
+						order = 0,
+						name = "When changes are made a reload of the UI is needed.",
+						width = "full",
+					},
+					Text1 = {
+						type = "description",
+						order = 1,
+						name = " ",
+						width = "full",
+					},
 					enable = {
 						type = "toggle",
-						order = 0,
+						order = 1,
 						name = L["Enable"],
 						desc = L["Enables Tooltip Module"],
 					},
 					disableFade = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Disable Fade"],
 						desc = L["Disables Tooltip Fade."],
 						disabled = function() return not db.tooltip.enable end,
 					},
 					reactionBorderColor = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Reaction Border Color"],
 						desc = L["Colors the borders match targets classcolors."],
 						disabled = function() return not db.tooltip.enable end,
 					},
 					itemqualityBorderColor = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Item Quality Border Color"],
 						desc = L["Colors the border of the tooltip to match the items quality."],
 						disabled = function() return not db.tooltip.enable end,
 					},
 					showPlayerTitles = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Player Titles"],
 						desc = L["Shows players title in tooltip."],
 						disabled = function() return not db.tooltip.enable end,
 					},
 					showPVPIcons = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["PVP Icons"],
 						desc = L["Shows PvP Icons in tooltip."],
 						disabled = function() return not db.tooltip.enable end,
 					},
 					showUnitRole = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Show Units Role"],
 						desc = L["Shows Units Role in tooltip."],
 						disabled = function() return not db.tooltip.enable end,
 					},
 					abbrevRealmNames = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Abberviate Realm Names"],
 						desc = L["Abberviates Players Realm Name."],
 						disabled = function() return not db.tooltip.enable end,
 					},
 					showMouseoverTarget = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Mouseover Target"],
 						desc = L["Shows mouseover target."],
 						disabled = function() return not db.tooltip.enable end,
 					},
 					showItemLevel = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Item Level"],
 						desc = L["Shows targets average item level."],
 						disabled = function() return not db.tooltip.enable end,
 					},
 					hideInCombat = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Hide in Combat"],
 						desc = L["Hides unit frame tooltips during combat."],
 						disabled = function() return not db.tooltip.enable end,
 					},
 					hideRealmText = {
 						type = "toggle",
-						order = 1,
+						order = 2,
 						name = L["Hide Realm Text"],
 						desc = L["Hide the coalesced/interactive realm text."],
 						disabled = function() return not db.tooltip.enable end,
 					},
 					healthbar = {
 						type = "group",
-						order = 5,
+						order = 6,
 						name = L["Healthbar"],
 						desc = L["Players Healthbar Options."],
 						guiInline  = true,
@@ -2156,28 +2454,28 @@ local function GetOptions()
 							---------------------------
 							showHealthValue = {
 								type = "toggle",
-								order = 1,
+								order = 2,
 								name = L["Health Value"],
 								desc = L["Shows health value over healthbar."],
 								disabled = function() return not db.tooltip.enable end,
 							},
 							showOutline = {
 								type = "toggle",
-								order = 1,
+								order = 2,
 								name = L["Font Outline"],
 								desc = L["Adds a font outline to health value."],
 								disabled = function() return not db.tooltip.enable end,
 							},
 							reactionColoring = {
 								type = "toggle",
-								order = 1,
+								order = 2,
 								name = L["Reaction Coloring"],
 								desc = L["Change healthbar color to targets classcolor. (Overides Custom Color)"],
 								disabled = function() return not db.tooltip.enable end,
 							},
 							custom = {
 								type = "group",
-								order = 5,
+								order = 6,
 								name = L["Custom"],
 								desc = L["Custom Coloring"],
 								childGroups = "tree",
@@ -2210,14 +2508,14 @@ local function GetOptions()
 									---------------------------
 									apply = {
 										type = "toggle",
-										order = 1,
+										order = 2,
 										name = L["Apply Custom Color"],
 										desc = L["Use the Custom Color you have chosen."],
 										disabled = function() return not db.tooltip.enable end,
 									},
 									color = {
 										type = "color",
-										order = 3,
+										order = 4,
 										name = L["Custom Color"],
 										desc = L["Picks a Custom Color for the tooltip border."],
 										hasAlpha = false,
@@ -2236,7 +2534,7 @@ local function GetOptions()
 							},
 							textPos = {
 								type = "select",
-								order = 2,
+								order = 3,
 								name = L["Text Position"],
 								desc = L["Health Value Position."],
 								disabled = function() return not db.tooltip.enable end,
@@ -2244,7 +2542,7 @@ local function GetOptions()
 							},
 							fontSize= {
 								type = "range",
-								order = 4,
+								order = 5,
 								name = L["Font Size"],
 								desc = L["Controls the healthbar value font size."],
 								min = 8, max = 25, step = 1,
@@ -2301,9 +2599,30 @@ local function GetOptions()
 						name = " ",
 					},
 					---------------------------
+					reloadUI = {
+						type = "execute",
+						name = "Reload UI",
+						desc = " ",
+						order = 0,
+						func = 	function()
+							ReloadUI()
+						end,
+					},
+					Text = {
+						type = "description",
+						order = 0,
+						name = "When changes are made a reload of the UI is needed.",
+						width = "full",
+					},
+					Text1 = {
+						type = "description",
+						order = 1,
+						name = " ",
+						width = "full",
+					},
 					enable = {
 						type = "toggle",
-						order = 0,
+						order = 1,
 						name = L["Enable"],
 						desc = L["Enables Uniframes Module"],
 					},
@@ -2799,6 +3118,27 @@ function BasicUI:SetUpOptions()
 
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("BasicUI", options)
 
-	self.optionsFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("BasicUI", "BasicUI", nil)
+	-- @PHANX: You could write out each subkey but let's be lazy:
+	local panels = {}
+	for k in pairs(options.args) do -- this assumes all immediate children are groups
+		if k ~= "welcome" and k ~= "profile" then -- skip these so we can add them manually as the first and last panels
+			tinsert(panels, k)
+		end
+	end
+	sort(panels) -- alphabetize so it looks nice and is easy to navigate
+
+	local Dialog = LibStub("AceConfigDialog-3.0")
+
+	-- Use the "welcome" panel as the main one:
+	self.optionsFrame = Dialog:AddToBlizOptions("BasicUI", "BasicUI", nil, "welcome")
+
+	-- Add all the rest as sub-panels:
+	for i = 1, #panels do
+		local k = panels[i]
+		Dialog:AddToBlizOptions("BasicUI", options.args[k].name, "BasicUI", k)
+	end
+
+	-- Add the profile panel last:
+	Dialog:AddToBlizOptions("BasicUI", options.args.profile.name, "BasicUI", "profile")
 
 end
