@@ -131,15 +131,18 @@ else
 	LOCALE_MASK = lib.LOCALE_BIT_western
 	locale_is_western = true
 --
-	SML_MT_font["Arial Narrow"]			= [[Fonts\ARIALN.TTF]]
-	SML_MT_font["Friz Quadrata TT"]		= [[Fonts\FRIZQT__.TTF]]
-	SML_MT_font["Morpheus"]				= [[Fonts\MORPHEUS.TTF]]
-	SML_MT_font["Skurri"]				= [[Fonts\SKURRI.TTF]]
-	SML_MT_font["BasicUI Normal"] 		= [[Interface\Addons\BasicUI\Media\NORMAL.ttf]]
-	SML_MT_font["BasicUI Bold"] 		= [[Interface\Addons\BasicUI\Media\BOLD.ttf]]
-	SML_MT_font["BasicUI Italic"] 		= [[Interface\Addons\BasicUI\Media\ITALIC.ttf]]
-	SML_MT_font["BasicUI Bold Italic"] 	= [[Interface\Addons\BasicUI\Media\BOLDITALIC.ttf]]
-	SML_MT_font["BasicUI Number"] 		= [[Interface\Addons\BasicUI\Media\NUMBER.ttf]]
+	SML_MT_font["Arial Narrow"]							= [[Fonts\ARIALN.TTF]]
+	SML_MT_font["Friz Quadrata TT"]						= [[Fonts\FRIZQT__.TTF]]
+	SML_MT_font["Friz Quadrata Bold"] 					= [[Interface\Addons\BasicUI\Media\FrizQuadrataBold.ttf]]
+	SML_MT_font["Friz Quadrata Italic"] 				= [[Interface\Addons\BasicUI\Media\FrizQuadrataItalic.ttf]]
+	SML_MT_font["Friz Quadrata Bold Italic"] 			= [[Interface\Addons\BasicUI\Media\FrizQuadrataBoldItalic.ttf]]	
+	SML_MT_font["Morpheus"]								= [[Fonts\MORPHEUS.TTF]]
+	SML_MT_font["Skurri"]								= [[Fonts\SKURRI.TTF]]
+	SML_MT_font["BasicUI Normal"] 						= [[Interface\Addons\BasicUI\Media\NORMAL.ttf]]
+	SML_MT_font["BasicUI Bold"] 						= [[Interface\Addons\BasicUI\Media\BOLD.ttf]]
+	SML_MT_font["BasicUI Italic"] 						= [[Interface\Addons\BasicUI\Media\ITALIC.ttf]]
+	SML_MT_font["BasicUI Bold Italic"] 					= [[Interface\Addons\BasicUI\Media\BOLDITALIC.ttf]]
+	SML_MT_font["BasicUI Number"] 						= [[Interface\Addons\BasicUI\Media\NUMBER.ttf]]
 --
 	lib.DefaultMedia.font = "Friz Quadrata TT"
 --

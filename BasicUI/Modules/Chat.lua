@@ -1,15 +1,52 @@
+local MODULE_NAME = "Chat"
 local BasicUI = LibStub("AceAddon-3.0"):GetAddon("BasicUI")
-local BasicUI_Chat = BasicUI:NewModule("Chat", "AceEvent-3.0")
+local Chat = BasicUI:NewModule(MODULE_NAME, "AceEvent-3.0")
+local L = BasicUI.L
 
-----------
--- Chat --
-----------
-function BasicUI_Chat:OnEnable()
-	local db = BasicUI.db.profile
+------------------------------------------------------------------------
+--	 Module Database
+------------------------------------------------------------------------
+
+local db
+local defaults = {
+	profile = {
+		enable = true,
+		disableFade = false,
+		chatOutline = false,
+		windowborder = false,
+		enableborder = false,
+		 
+		enableHyperlinkTooltip = true, 
+		enableBorderColoring = true,
+
+		tab = {
+			fontSize = 15,
+			fontOutline = true, 
+			normalColor = {r = 1, g = 1, b = 1},
+			specialColor = {r = 1, g = 0, b = 1},
+			selectedColor = {r = 0, g = 0.75, b = 1},
+		},
+	}
+}
+
+------------------------------------------------------------------------
+--	 Module Functions
+------------------------------------------------------------------------
+
+local classColor
+
+function Chat:OnInitialize()
+	self.db = BasicUI.db:RegisterNamespace(MODULE_NAME, defaults)
+	db = self.db.profile	
+
+	local _, class = UnitClass("player")
+	classColor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
+
+	self:SetEnabledState(BasicUI:GetModuleEnabled(MODULE_NAME))
+end
+
+function Chat:OnEnable()
 	
-	if db.chat.enable ~= true then return end
-	
-	local ccolor = RAID_CLASS_COLORS[select(2, UnitClass("player"))]
 	-- Chat Message Groups
 	ChatFrame_RemoveAllMessageGroups(ChatFrame1)
 	ChatFrame_AddMessageGroup(ChatFrame1, "SAY")
@@ -195,12 +232,12 @@ function BasicUI_Chat:OnEnable()
 
 	ChatFrame1EditBox:SetAltArrowKeyMode(false)
 	ChatFrame1EditBox:ClearAllPoints()
-	ChatFrame1EditBox:SetFont(db.media.fontNormal, db.media.fontSize)
+	ChatFrame1EditBox:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize)
 	ChatFrame1EditBox:SetPoint('BOTTOMLEFT', ChatFrame1, 'TOPLEFT', 2, 33)
 	ChatFrame1EditBox:SetPoint('BOTTOMRIGHT', ChatFrame1, 'TOPRIGHT', 0, 33)
 	ChatFrame1EditBox:SetBackdrop({
-		bgFile = db.chat.editboxbackground,
-		edgeFile = db.chat.editboxborder,
+		bgFile = BasicUI.media.background,
+		edgeFile = BasicUI.media.border,
 		tile = true, tileSize = 16, edgeSize = 18,
 		insets = {left = 3, right = 3, top = 2, bottom = 3},
 	})
@@ -208,18 +245,6 @@ function BasicUI_Chat:OnEnable()
 
 	ChatFrame1EditBox:SetBackdropColor(0, 0, 0, 0.5)
 
-	if (db.chat.enableBorderColoring) then
-
-		hooksecurefunc('ChatEdit_UpdateHeader', function(editBox)
-			local type = editBox:GetAttribute('chatType')
-			if (not type) then
-				return
-			end
-
-			local info = ChatTypeInfo[type]
-			ChatFrame1EditBox:SetBackdropBorderColor(info.r, info.g, info.b)
-		end)
-	end
 
 		-- Hide the menu and friend button
 
@@ -279,7 +304,7 @@ function BasicUI_Chat:OnEnable()
 			end
 		end
 
-		if (db.chat.enableBottomButton) then
+		if (db.enableBottomButton) then
 			local buttonBottom = _G[self:GetName() .. 'ButtonFrameBottomButton']
 			if (self:AtBottom()) then
 				buttonBottom:SetAlpha(0)
@@ -314,20 +339,20 @@ function BasicUI_Chat:OnEnable()
 		local tabText = _G[self..'TabText']
 		tabText:SetJustifyH('CENTER')
 		tabText:SetWidth(60)
-		if (db.chat.tab.fontOutline) then
-			tabText:SetFont(db.media.fontBold, db.media.fontSize, 'THINOUTLINE')
+		if (db.tab.fontOutline) then
+			tabText:SetFont(BasicUI.media.fontBold, BasicUI.db.profile.general.fontSize, 'THINOUTLINE')
 			tabText:SetShadowOffset(0, 0)
 		else
-			tabText:SetFont(db.media.fontBold, db.fontLarge)
+			tabText:SetFont(BasicUI.media.fontBold, db.fontLarge)
 			tabText:SetShadowOffset(1, -1)
-		end
+		end		
 
 		local a1, a2, a3, a4, a5 = tabText:GetPoint()
 		tabText:SetPoint(a1, a2, a3, a4, 1)
 
-		local s1, s2, s3 = db.chat.tab.specialColor.r, db.chat.tab.specialColor.g, db.chat.tab.specialColor.b 
-		local e1, e2, e3 = db.chat.tab.selectedColor.r, db.chat.tab.selectedColor.g, db.chat.tab.selectedColor.b
-		local n1, n2, n3 = db.chat.tab.normalColor.r, db.chat.tab.normalColor.g, db.chat.tab.normalColor.b
+		local s1, s2, s3 = db.tab.specialColor.r, db.tab.specialColor.g, db.tab.specialColor.b 
+		local e1, e2, e3 = db.tab.selectedColor.r, db.tab.selectedColor.g, db.tab.selectedColor.b
+		local n1, n2, n3 = db.tab.normalColor.r, db.tab.normalColor.g, db.tab.normalColor.b
 
 		local tabGlow = _G[self..'TabGlow']
 		hooksecurefunc(tabGlow, 'Show', function()
@@ -386,18 +411,18 @@ function BasicUI_Chat:OnEnable()
 	local function ModChat(self)
 		local chat = _G[self]
 
-		if (not db.chat.chatOutline) then
+		if (not dbOutline) then
 			chat:SetShadowOffset(1, -1)
 		end
 
-		if (db.chat.disableFade) then
+		if (db.disableFade) then
 			chat:SetFading(false)
 		end
 
 		SkinTab(self)
 
 		local font, fontsize, fontflags = chat:GetFont()
-		chat:SetFont(db.media.fontNormal, fontsize, db.chat.chatOutline and 'THINOUTLINE' or fontflags)
+		chat:SetFont(BasicUI.media.fontNormal, fontsize, dbOutline and 'THINOUTLINE' or fontflags)
 		chat:SetClampedToScreen(false)
 
 		chat:SetClampRectInsets(0, 0, 0, 0)
@@ -419,15 +444,7 @@ function BasicUI_Chat:OnEnable()
 		local buttonBottom = _G[self..'ButtonFrameBottomButton']
 		buttonBottom:SetAlpha(0)
 		buttonBottom:EnableMouse(false)
-		
-		if (db.chat.enableBottomButton) then
-			buttonBottom:ClearAllPoints()
-			buttonBottom:SetPoint('BOTTOMRIGHT', chat, -1, -3)
-			buttonBottom:HookScript('OnClick', function(self)
-				self:SetAlpha(0)
-				self:EnableMouse(false)
-			end)
-		end
+
 
 		for _, texture in pairs({
 			'ButtonFrameBackground',
@@ -517,7 +534,7 @@ function BasicUI_Chat:OnEnable()
 		end
 
 		if (event == 'CHAT_MSG_WHISPER' or event == 'CHAT_MSG_BN_WHISPER') then
-			PlaySoundFile(db.chat.sound)
+			PlaySoundFile(BasicUI.media.sound)
 		end
 	end)
 
@@ -591,16 +608,16 @@ function BasicUI_Chat:OnEnable()
 	f:SetPoint('BOTTOMRIGHT', ChatFrame1EditBox, 'TOPRIGHT', -3, 10)
 	f:SetFrameStrata('DIALOG')
 	f:SetBackdrop({
-		bgFile = db.chat.background,
-		edgeFile = db.chat.border,
+		bgFile = BasicUI.media.background,
+		edgeFile = BasicUI.media.border,
 		tile = true, tileSize = 16, edgeSize = 18,
 		insets = {left = 3, right = 3, top = 3, bottom = 3
 	}})
-	f:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b)
+	f:SetBackdropBorderColor(classColor.r, classColor.g, classColor.b)
 	f:Hide()
 
 	f.t = f:CreateFontString(nil, 'OVERLAY')
-	f.t:SetFont(db.media.fontNormal, db.media.fontSize)
+	f.t:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize)
 	f.t:SetPoint('TOPLEFT', f, 8, -8)
 	f.t:SetTextColor(1, 1, 0)
 	f.t:SetShadowOffset(1, -1)
@@ -775,73 +792,95 @@ function BasicUI_Chat:OnEnable()
 		hideOnEscape = 1,
 		maxLetters = 1024,
 	}
+	self:Refresh()
+end
 
-	if db.chat.enableHyperlinkTooltip ~= true then return end
+function Chat:Refresh()
 
-	--[[
+	db = self.db.profile
 
-		All Create for hyperlink.lua goes to Neal, ballagarba, and Tuks.
-		Neav UI = http://www.wowinterface.com/downloads/info13981-NeavUI.html.
-		Tukui = http://www.tukui.org/download.php.
-		Edited by Cokedriver.
-		
-	]]
+	if (db.enableBorderColoring) then
+		hooksecurefunc('ChatEdit_UpdateHeader', function(editBox)
+			local type = editBox:GetAttribute('chatType')
+			if (not type) then
+				return
+			end
 
-	local _G = getfenv(0)
-	local orig1, orig2 = {}, {}
-	local GameTooltip = GameTooltip
-
-	local linktypes = {
-		item = true, 
-		enchant = true, 
-		spell = true, 
-		quest = true, 
-		unit = true, 
-		talent = true, 
-		achievement = true, 
-		glyph = true
-	}
-
-	local function OnHyperlinkEnter(frame, link, ...)
-		local linktype = link:match('^([^:]+)')
-		if (linktype and linktypes[linktype]) then
-			GameTooltip:SetOwner(ChatFrame1, 'ANCHOR_CURSOR', 0, 20)
-			GameTooltip:SetHyperlink(link)
-			GameTooltip:Show()
-		else
-			GameTooltip:Hide()
-		end
-
-		if (orig1[frame]) then 
-			return orig1[frame](frame, link, ...) 
-		end
+			local info = ChatTypeInfo[type]
+			ChatFrame1EditBox:SetBackdropBorderColor(info.r, info.g, info.b)
+		end)
+	else return
 	end
 
-	local function OnHyperlinkLeave(frame, ...)
-		GameTooltip:Hide()
+	if (db.enableHyperlinkTooltip) then
 
-		if (orig2[frame]) then 
-			return orig2[frame](frame, ...) 
-		end
-	end
+		--[[
 
-	local function EnableItemLinkTooltip()
-		for _, v in pairs(CHAT_FRAMES) do
-			local chat = _G[v]
-			if (chat and not chat.URLCopy) then
-				orig1[chat] = chat:GetScript('OnHyperlinkEnter')
-				chat:SetScript('OnHyperlinkEnter', OnHyperlinkEnter)
+			All Create for hyperlink.lua goes to Neal, ballagarba, and Tuks.
+			Neav UI = http://www.wowinterface.com/downloads/info13981-NeavUI.html.
+			Tukui = http://www.tukui.org/download.php.
+			Edited by Cokedriver.
+			
+		]]
 
-				orig2[chat] = chat:GetScript('OnHyperlinkLeave')
-				chat:SetScript('OnHyperlinkLeave', OnHyperlinkLeave)
-				chat.URLCopy = true
+		local _G = getfenv(0)
+		local orig1, orig2 = {}, {}
+		local GameTooltip = GameTooltip
+
+		local linktypes = {
+			item = true, 
+			enchant = true, 
+			spell = true, 
+			quest = true, 
+			unit = true, 
+			talent = true, 
+			achievement = true, 
+			glyph = true
+		}
+
+		local function OnHyperlinkEnter(frame, link, ...)
+			local linktype = link:match('^([^:]+)')
+			if (linktype and linktypes[linktype]) then
+				GameTooltip:SetOwner(ChatFrame1, 'ANCHOR_CURSOR', 0, 20)
+				GameTooltip:SetHyperlink(link)
+				GameTooltip:Show()
+			else
+				GameTooltip:Hide()
+			end
+
+			if (orig1[frame]) then 
+				return orig1[frame](frame, link, ...) 
 			end
 		end
-	end
-	hooksecurefunc('FCF_OpenTemporaryWindow', EnableItemLinkTooltip)
-	EnableItemLinkTooltip()
 
-	if db.chat.windowborder == true then
+		local function OnHyperlinkLeave(frame, ...)
+			GameTooltip:Hide()
+
+			if (orig2[frame]) then 
+				return orig2[frame](frame, ...) 
+			end
+		end
+
+		local function EnableItemLinkTooltip()
+			for _, v in pairs(CHAT_FRAMES) do
+				local chat = _G[v]
+				if (chat and not chat.URLCopy) then
+					orig1[chat] = chat:GetScript('OnHyperlinkEnter')
+					chat:SetScript('OnHyperlinkEnter', OnHyperlinkEnter)
+
+					orig2[chat] = chat:GetScript('OnHyperlinkLeave')
+					chat:SetScript('OnHyperlinkLeave', OnHyperlinkLeave)
+					chat.URLCopy = true
+				end
+			end
+		end
+		hooksecurefunc('FCF_OpenTemporaryWindow', EnableItemLinkTooltip)
+		EnableItemLinkTooltip()
+	else
+		return
+	end
+
+	if (db.windowborder) then
 		for i = 1, NUM_CHAT_WINDOWS do
 			local cf = _G['ChatFrame'..i]
 			local bg = CreateFrame("Frame", nil, cf);
@@ -854,38 +893,228 @@ function BasicUI_Chat:OnEnable()
 			end	
 			bg:SetPoint("BOTTOMRIGHT", 8, -12);
 			bg:SetBackdrop({
-				edgeFile = db.chat.border,
+				edgeFile = BasicUI.media.border,
 				tile = true, tileSize = 16, edgeSize = 18,
 			})
-
-			bg:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b)
-
-
+			bg:SetBackdropBorderColor(classColor.r, classColor.g, classColor.b)
 		end
+	else
+		return
+	end
+end
+------------------------------------------------------------------------
+--	 Module options
+------------------------------------------------------------------------
+
+local options
+function Chat:GetOptions()
+	if options then
+		return options
 	end
 
-	-- default position of chat
-	local function SetDefaultChatPosition(frame)
-		if frame then
-			local id = frame:GetID()
-			local name = FCF_GetChatWindowInfo(id)
-			local fontSize = select(2, frame:GetFont())
-
-			-- font size
-			if fontSize < 15 then		
-				FCF_SetChatWindowFontSize(nil, frame, 15)
-			else
-				FCF_SetChatWindowFontSize(nil, frame, fontSize)
-			end
-			
-			if id == 1 then
-				frame:ClearAllPoints()
-				frame:SetPoint("BOTTOMLEFT", UIParent, 50, 185)
-			end
-			
-			-- lock them if unlocked
-			if not frame.isLocked then FCF_SetLocked(frame, 1) end
-		end
+	local function isModuleDisabled()
+		return not BasicUI:GetModuleEnabled(MODULE_NAME)
 	end
-	hooksecurefunc("FCF_RestorePositionAndDimensions", SetDefaultChatPosition)
+
+	options = {
+		type = "group",
+		name = L[MODULE_NAME],
+		get = function(info) return db[ info[#info] ] end,
+		set = function(info, value) db[ info[#info] ] = value; self:Refresh() end,
+		disabled = isModuleDisabled(),
+		args = {
+			---------------------------
+			--Option Type Seperators
+			sep1 = {
+				type = "description",
+				order = 2,
+				name = " ",
+			},
+			sep2 = {
+				type = "description",
+				order = 3,
+				name = " ",
+			},
+			sep3 = {
+				type = "description",
+				order = 4,
+				name = " ",
+			},
+			sep4 = {
+				type = "description",
+				order = 5,
+				name = " ",
+			},
+			---------------------------
+			reloadUI = {
+				type = "execute",
+				name = "Reload UI",
+				desc = " ",
+				order = 0,
+				func = 	function()
+					ReloadUI()
+				end,
+			},
+			Text = {
+				type = "description",
+				order = 0,
+				name = "When changes are made a reload of the UI is needed.",
+				width = "full",
+			},
+			Text1 = {
+				type = "description",
+				order = 1,
+				name = " ",
+				width = "full",
+			},
+			enable = {
+				type = "toggle",
+				order = 1,
+				name = L["Enable Chat Module"],
+				width = "full",
+				disabled = false,
+			},
+			windowborder = {
+				type = "toggle",
+				order = 2,
+				name = L["Window Border"],
+				desc = L["Enables Chat Window Border."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			disableFade = {
+				type = "toggle",
+				order = 2,
+				name = L["Disable Fade"],
+				desc = L["Disables Chat Fading."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			chatOutline = {
+				type = "toggle",
+				order = 2,
+				name = L["Chat Outline"],
+				desc = L["Outlines the chat Text."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			enableHyperlinkTooltip = {
+				type = "toggle",
+				order = 2,
+				name = L["Enable Hyplerlink Tooltip"],
+				desc = L["Enables the mouseover items in chat tooltip."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			enableBorderColoring = {
+				type = "toggle",
+				order = 2,
+				name = L["Enable Editbox Channel Border Coloring"],
+				desc = L["Enables the coloring of the border to the edit box to match what channel you are typing in."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			tab = {
+				type = "group",
+				order = 6,
+				name = L["Tabs"],
+				desc = L["Tab Font Settings."],
+				guiInline  = true,
+				disabled = function() return isModuleDisabled() or not db.enable end,
+				get = function(info) return db.tab[ info[#info] ] end,
+				set = function(info, value) db.tab[ info[#info] ] = value;   end,
+				args = {
+					---------------------------
+					--Option Type Seperators
+					sep1 = {
+						type = "description",
+						order = 2,
+						name = " ",
+					},
+					sep2 = {
+						type = "description",
+						order = 3,
+						name = " ",
+					},
+					sep3 = {
+						type = "description",
+						order = 4,
+						name = " ",
+					},
+					sep4 = {
+						type = "description",
+						order = 5,
+						name = " ",
+					},
+					---------------------------
+					fontSize = {
+						type = "range",
+						order = 5,
+						name = L["Tab Font Size"],
+						desc = L["Controls the size of the tab font"],
+						type = "range",
+						min = 9, max = 20, step = 1,
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					fontOutline = {
+						type = "toggle",
+						order = 2,
+						name = L["Outline Tab Font"],
+						desc = L["Enables the outlineing of tab font."],
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					normalColor = {
+						type = "color",
+						order = 4,
+						name = L["Tab Normal Color"],
+						desc = L["Picks the Normal Color of the Chat Tab."],
+						hasAlpha = false,
+						disabled = function() return isModuleDisabled() or not db.enable end,
+						get = function(info)
+							local hb = db.tab[ info[#info] ]
+							return hb.r, hb.g, hb.b
+						end,
+						set = function(info, r, g, b)
+							db.tab[ info[#info] ] = {}
+							local hb = db.tab[ info[#info] ]
+							hb.r, hb.g, hb.b = r, g, b
+							StaticPopup_Show("BASICUI_CFG_RELOAD")
+						end,
+					},
+					specialColor = {
+						type = "color",
+						order = 4,
+						name = L["Tab Special Color"],
+						desc = L["Picks the Special Color of the Chat Tab."],
+						hasAlpha = false,
+						disabled = function() return isModuleDisabled() or not db.enable end,
+						get = function(info)
+							local hb = db.tab[ info[#info] ]
+							return hb.r, hb.g, hb.b
+						end,
+						set = function(info, r, g, b)
+							db.tab[ info[#info] ] = {}
+							local hb = db.tab[ info[#info] ]
+							hb.r, hb.g, hb.b = r, g, b
+							StaticPopup_Show("BASICUI_CFG_RELOAD")
+						end,
+					},
+					selectedColor = {
+						type = "color",
+						order = 4,
+						name = L["Tab Selected Color"],
+						desc = L["Picks the Selected Color of the Chat Tab."],
+						hasAlpha = false,
+						disabled = function() return isModuleDisabled() or not db.enable end,
+						get = function(info)
+							local hb = db.tab[ info[#info] ]
+							return hb.r, hb.g, hb.b
+						end,
+						set = function(info, r, g, b)
+							db.tab[ info[#info] ] = {}
+							local hb = db.tab[ info[#info] ]
+							hb.r, hb.g, hb.b = r, g, b
+							StaticPopup_Show("BASICUI_CFG_RELOAD")
+						end,
+					},
+				},
+			},
+		},
+	}
+	return options
 end

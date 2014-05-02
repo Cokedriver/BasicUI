@@ -1,13 +1,70 @@
+local MODULE_NAME = "Tooltip"
 local BasicUI = LibStub("AceAddon-3.0"):GetAddon("BasicUI")
-local BasicUI_Tooltip = BasicUI:NewModule("Tooltip", "AceEvent-3.0")
+local Tooltip = BasicUI:NewModule(MODULE_NAME, "AceEvent-3.0")
+local L = BasicUI.L
 
--------------
--- Tooltip --
--------------
-function BasicUI_Tooltip:OnEnable()
-	local db = BasicUI.db.profile
+------------------------------------------------------------------------
+--	 Module Database
+------------------------------------------------------------------------
+
+local db
+local defaults = {
+	profile = {
+		enable = true,
+		fontSize = 15,
+		fontOutline = true,
+		disableFade = false,                     		-- Can cause errors or a buggy tooltip!
+		abbrevRealmNames = true, 	
+
+		hideInCombat = false,                       -- Hide unit frame tooltips during combat	
+		hideRealmText = true,                      -- Hide the coalesced/interactive realm text	
+		reactionBorderColor = true,
+		itemqualityBorderColor = true,
+		
+		showPlayerTitles = true,
+		showPVPIcons = false,                        	-- Show pvp icons instead of just a prefix
+		showMouseoverTarget = true,
+		showOnMouseover = false,
+		showUnitRole = true,
+		showItemLevel = true,
+		showSpecializationIcon = false,
+		
+		healthbar = {
+			showHealthValue = true,
+			showOutline = true,
+			healthFormat = '$cur / $max',           -- Possible: $cur, $max, $deficit, $perc, $smartperc, $smartcolorperc, $colorperc
+			healthFullFormat = '$cur',              -- if the tooltip unit has 100% hp 		
+			textPos = "CENTER",                     -- Possible "TOP" "BOTTOM" "CENTER"	
+			reactionColoring = false,
+			custom = {
+				apply = false,
+				color =	{ r = 1, g = 1, b = 0},
+			},		
+			fontSize = 15,
+		},		
+	}
+}
+
+------------------------------------------------------------------------
+--	 Module Functions
+------------------------------------------------------------------------
+
+local classColor
+
+function Tooltip:OnInitialize()
+	self.db = BasicUI.db:RegisterNamespace(MODULE_NAME, defaults)
+	db = self.db.profile	
+
+	local _, class = UnitClass("player")
+	classColor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
+
+	self:SetEnabledState(BasicUI:GetModuleEnabled(MODULE_NAME))
+end
+
+
+function Tooltip:OnEnable()
 	
-	if db.tooltip.enable ~= true then return end
+	if db.enable ~= true then return end
 
 	--[[
 
@@ -65,19 +122,19 @@ function BasicUI_Tooltip:OnEnable()
 
 		-- Some tooltip changes
 
-	if (db.tooltip.fontOutline) then
-		GameTooltipHeaderText:SetFont(db.media.fontBold, (db.tooltip.fontSize + 2), 'THINOUTLINE')
+	if (db.fontOutline) then
+		GameTooltipHeaderText:SetFont(BasicUI.media.fontBold, (db.fontSize + 2), 'THINOUTLINE')
 		GameTooltipHeaderText:SetShadowOffset(0, 0)
 
-		GameTooltipText:SetFont(db.media.fontNormal, (db.tooltip.fontSize), 'THINOUTLINE')
+		GameTooltipText:SetFont(BasicUI.media.fontNormal, (db.fontSize), 'THINOUTLINE')
 		GameTooltipText:SetShadowOffset(0, 0)
 
-		GameTooltipTextSmall:SetFont(db.media.fontNormal, (db.tooltip.fontSize), 'THINOUTLINE')
+		GameTooltipTextSmall:SetFont(BasicUI.media.fontNormal, (db.fontSize), 'THINOUTLINE')
 		GameTooltipTextSmall:SetShadowOffset(0, 0)
 	else
-		GameTooltipHeaderText:SetFont(db.media.fontBold, (db.tooltip.fontSize + 2))
-		GameTooltipText:SetFont(db.media.fontNormal, (db.tooltip.fontSize))
-		GameTooltipTextSmall:SetFont(db.media.fontNormal, (db.tooltip.fontSize))
+		GameTooltipHeaderText:SetFont(BasicUI.media.fontBold, (db.fontSize + 2))
+		GameTooltipText:SetFont(BasicUI.media.fontNormal, (db.fontSize))
+		GameTooltipTextSmall:SetFont(BasicUI.media.fontNormal, (db.fontSize))
 	end
 
 	GameTooltipStatusBar:SetHeight(7)
@@ -171,8 +228,8 @@ function BasicUI_Tooltip:OnEnable()
 		end
 
 		self:SetBackdrop({
-			bgFile = db.tooltip.background,    -- 'Interface\\Tooltips\\UI-Tooltip-Background',
-			edgeFile = db.tooltip.border,
+			bgFile = BasicUI.media.background,    -- 'Interface\\Tooltips\\UI-Tooltip-Background',
+			edgeFile = BasicUI.media.border,
 			tile = true, tileSize = 16, edgeSize = 18,
 
 			insets = {
@@ -208,7 +265,7 @@ function BasicUI_Tooltip:OnEnable()
 
 		-- Itemquaility border
 
-	if (db.tooltip.itemqualityBorderColor) then
+	if (db.itemqualityBorderColor) then
 		for _, tooltip in pairs({
 			GameTooltip,
 			ItemRefTooltip,
@@ -331,7 +388,7 @@ function BasicUI_Tooltip:OnEnable()
 			if (not UnitRace(unit)) then
 				return nil
 			end
-			return GetFormattedUnitLevel(unit)..UnitRace(unit)..GetFormattedUnitClass(unit)..(db.tooltip.showSpecializationIcon and specIcon or '')
+			return GetFormattedUnitLevel(unit)..UnitRace(unit)..GetFormattedUnitClass(unit)..(db.showSpecializationIcon and specIcon or '')
 		else
 			return GetFormattedUnitLevel(unit)..GetFormattedUnitClassification(unit)..GetFormattedUnitType(unit)
 		end
@@ -356,9 +413,9 @@ function BasicUI_Tooltip:OnEnable()
 
 	local function SetHealthBarColor(unit)
 		local r, g, b
-		if (db.tooltip.healthbar.custom.apply and not db.tooltip.healthbar.reactionColoring) then
-			r, g, b = db.tooltip.healthbar.custom.color.r, db.tooltip.healthbar.custom.color.g, db.tooltip.healthbar.custom.color.b
-		elseif (db.tooltip.healthbar.reactionColoring and unit) then
+		if (db.healthbar.custom.apply and not db.healthbar.reactionColoring) then
+			r, g, b = db.healthbar.custom.color.r, db.healthbar.custom.color.g, db.healthbar.custom.color.b
+		elseif (db.healthbar.reactionColoring and unit) then
 			r, g, b = UnitSelectionColor(unit)
 		else
 			r, g, b = 0, 1, 0
@@ -372,7 +429,7 @@ function BasicUI_Tooltip:OnEnable()
 		local index = GetRaidTargetIndex(unit)
 
 		if (index) then
-			if (UnitIsPVP(unit) and db.tooltip.showPVPIcons) then
+			if (UnitIsPVP(unit) and db.showPVPIcons) then
 				return ICON_LIST[index]..'11|t'
 			else
 				return ICON_LIST[index]..'11|t '
@@ -386,13 +443,13 @@ function BasicUI_Tooltip:OnEnable()
 		local factionGroup = UnitFactionGroup(unit)
 
 		if (UnitIsPVPFreeForAll(unit)) then
-			if (db.tooltip.showPVPIcons) then
+			if (db.showPVPIcons) then
 				return '|TInterface\\AddOns\\MyCore\\Media\\UI-PVP-FFA:12|t'
 			else
 				return '|cffFF0000# |r'
 			end
 		elseif (factionGroup and UnitIsPVP(unit)) then
-			if (db.tooltip.showPVPIcons) then
+			if (db.showPVPIcons) then
 				return '|TInterface\\AddOns\\MyCore\\Media\\UI-PVP-'..factionGroup..':12|t'
 			else
 				return '|cff00FF00# |r'
@@ -429,7 +486,7 @@ function BasicUI_Tooltip:OnEnable()
 	GameTooltip:HookScript('OnTooltipSetUnit', function(self, ...)
 		local unit = GetRealUnit(self)
 
-		if (db.tooltip.hideInCombat and InCombatLockdown()) then
+		if (db.hideInCombat and InCombatLockdown()) then
 			self:Hide()
 			return
 		end
@@ -465,7 +522,7 @@ function BasicUI_Tooltip:OnEnable()
 
 				-- Hide player titles
 
-			if (db.tooltip.showPlayerTitles) then
+			if (db.showPlayerTitles) then
 				if (UnitPVPName(unit)) then
 					name = UnitPVPName(unit)
 				end
@@ -491,13 +548,13 @@ function BasicUI_Tooltip:OnEnable()
 
 				-- Role text
 
-			if (db.tooltip.showUnitRole) then
+			if (db.showUnitRole) then
 				self:AddLine(GetUnitRoleString(unit), 1, 1, 1)
 			end
 
 				-- Mouse over target with raidicon support
 
-			if (db.tooltip.showMouseoverTarget) then
+			if (db.showMouseoverTarget) then
 				AddMouseoverTarget(self, unit)
 			end
 
@@ -525,7 +582,7 @@ function BasicUI_Tooltip:OnEnable()
 				-- Player realm names
 
 			if (realm and realm ~= '') then
-				if (db.tooltip.abbrevRealmNames)   then
+				if (db.abbrevRealmNames)   then
 					self:AppendText(' (*)')
 				else
 					self:AppendText(' - '..realm)
@@ -541,7 +598,7 @@ function BasicUI_Tooltip:OnEnable()
 
 				-- Border coloring
 
-			if (db.tooltip.reactionBorderColor) then
+			if (db.reactionBorderColor) then
 				local r, g, b = UnitSelectionColor(unit)
 					self:SetBackdropBorderColor(r, g, b)
 			end
@@ -551,7 +608,7 @@ function BasicUI_Tooltip:OnEnable()
 			if (UnitIsDead(unit) or UnitIsGhost(unit)) then
 				GameTooltipStatusBar:SetBackdropColor(0.5, 0.5, 0.5, 0.3)
 			else
-				if (not db.tooltip.healthbar.custom.apply and not db.tooltip.healthbar.reactionColoring) then
+				if (not db.healthbar.custom.apply and not db.healthbar.reactionColoring) then
 					GameTooltipStatusBar:SetBackdropColor(27/255, 243/255, 27/255, 0.3)
 				else
 					SetHealthBarColor(unit)
@@ -560,7 +617,7 @@ function BasicUI_Tooltip:OnEnable()
 
 				-- Custom healthbar coloring
 
-			if (db.tooltip.healthbar.reactionColoring or db.tooltip.healthbar.custom.apply) then
+			if (db.healthbar.reactionColoring or db.healthbar.custom.apply) then
 				GameTooltipStatusBar:HookScript('OnValueChanged', function()
 					SetHealthBarColor(unit)
 				end)
@@ -568,7 +625,7 @@ function BasicUI_Tooltip:OnEnable()
 
 				-- Show player item lvl
 
-			if (db.tooltip.showItemLevel and ilvl > 1) then
+			if (db.showItemLevel and ilvl > 1) then
 				GameTooltip:AddLine(STAT_AVERAGE_ITEM_LEVEL .. ': ' .. '|cffFFFFFF'..ilvl..'|r')
 			end
 
@@ -608,7 +665,7 @@ function BasicUI_Tooltip:OnEnable()
 		GameTooltipStatusBar:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', -1, 3)
 		GameTooltipStatusBar:SetBackdropColor(0, 1, 0, 0.3)
 
-		if (db.tooltip.reactionBorderColor) then
+		if (db.reactionBorderColor) then
 			self:SetBackdropColor(1, 1, 1)
 		end
 	end)
@@ -616,7 +673,7 @@ function BasicUI_Tooltip:OnEnable()
 
 		-- Hide coalesced/interactive realm information
 
-	if (db.tooltip.hideRealmText) then
+	if (db.hideRealmText) then
 		local COALESCED_REALM_TOOLTIP1 = string.split(FOREIGN_SERVER_LABEL, COALESCED_REALM_TOOLTIP)
 		local INTERACTIVE_REALM_TOOLTIP1 = string.split(INTERACTIVE_SERVER_LABEL, INTERACTIVE_REALM_TOOLTIP)
 		-- Dirty checking of the coalesced realm text because it's added
@@ -643,7 +700,7 @@ function BasicUI_Tooltip:OnEnable()
 	end
 
 	hooksecurefunc('GameTooltip_SetDefaultAnchor', function(self, parent)
-		if (db.tooltip.showOnMouseover) then
+		if (db.showOnMouseover) then
 			self:SetOwner(parent, 'ANCHOR_CURSOR')
 		end
 	end)
@@ -735,13 +792,13 @@ function BasicUI_Tooltip:OnEnable()
 
 	local bar = GameTooltipStatusBar
 	bar.Text = bar:CreateFontString(nil, 'OVERLAY')
-	bar.Text:SetPoint('CENTER', bar, db.tooltip.healthbar.textPos, 0, 1)
+	bar.Text:SetPoint('CENTER', bar, db.healthbar.textPos, 0, 1)
 
-	if (db.tooltip.healthbar.showOutline) then
-		bar.Text:SetFont(db.media.fontNormal, db.tooltip.healthbar.fontSize, 'THINOUTLINE')
+	if (db.healthbar.showOutline) then
+		bar.Text:SetFont(BasicUI.media.fontNormal, db.healthbar.fontSize, 'THINOUTLINE')
 		bar.Text:SetShadowOffset(0, 0)
 	else
-		bar.Text:SetFont(db.media.fontNormal, db.tooltip.healthbar.fontSize)
+		bar.Text:SetFont(BasicUI.media.fontNormal, db.healthbar.fontSize)
 		bar.Text:SetShadowOffset(1, -1)
 	end
 
@@ -818,8 +875,8 @@ function BasicUI_Tooltip:OnEnable()
 			CreateHealthString(self)
 		end
 
-		local fullString = GetHealthTag(db.tooltip.healthbar.healthFullFormat, value, max)
-		local normalString = GetHealthTag(db.tooltip.healthbar.healthFormat, value, max)
+		local fullString = GetHealthTag(db.healthbar.healthFullFormat, value, max)
+		local normalString = GetHealthTag(db.healthbar.healthFormat, value, max)
 
 		local perc = (value/max)*100 
 		if (perc >= 100 and currentValue ~= 1) then
@@ -830,8 +887,7 @@ function BasicUI_Tooltip:OnEnable()
 			self.Text:SetText('')
 		end
 	end)
-
-	local ccolor = RAID_CLASS_COLORS[select(2, UnitClass("player"))]		
+		
 	local watchFrame = _G['WatchFrame']	
 	watchFrame:SetHeight(400)
 	watchFrame:ClearAllPoints()
@@ -867,9 +923,305 @@ function BasicUI_Tooltip:OnEnable()
 	watchHead:SetScript('OnLeave', function() GameTooltip:Hide() end)
 
 	local watchHeadTitle = _G['WatchFrameTitle']
-	watchHeadTitle:SetFont(db.media.fontBold, 15)
-	if db.misc.classcolor == true then
-		watchHeadTitle:SetTextColor(ccolor.r, ccolor.g, ccolor.b)
+	watchHeadTitle:SetFont(BasicUI.media.fontBold, 15)
+	if BasicUI.db.profile.general.classcolor == true then
+		watchHeadTitle:SetTextColor(classColor.r, classColor.g, classColor.b)
 	end		
+end
+
+
+------------------------------------------------------------------------
+--	 Module Options
+------------------------------------------------------------------------
+
+local options
+function Tooltip:GetOptions()
+	if options then
+		return options
+	end
+
+	local function isModuleDisabled()
+		return not BasicUI:GetModuleEnabled(MODULE_NAME)
+	end
+
+	local regions = {
+		['BOTTOM'] = L['Bottom'],
+		['BOTTOMLEFT'] = L['Bottom Left'],
+		['BOTTOMRIGHT'] = L['Bottom Right'],
+		['CENTER'] = L['Center'],
+		['LEFT'] = L['Left'],
+		['RIGHT'] = L['Right'],
+		['TOP'] = L['Top'],
+		['TOPLEFT'] = L['Top Left'],
+		['TOPRIGHT'] = L['Top Right'],
+	}	
 	
+	options = {
+		type = "group",
+		name = L[MODULE_NAME],
+		get = function(info) return db[ info[#info] ] end,
+		set = function(info, value) db[ info[#info] ] = value;   end,
+		disabled = isModuleDisabled(),
+		args = {
+			---------------------------
+			--Option Type Seperators
+			sep1 = {
+				type = "description",
+				order = 2,
+				name = " ",
+			},
+			sep2 = {
+				type = "description",
+				order = 3,
+				name = " ",
+			},
+			sep3 = {
+				type = "description",
+				order = 4,
+				name = " ",
+			},
+			sep4 = {
+				type = "description",
+				order = 5,
+				name = " ",
+			},
+			---------------------------
+			reloadUI = {
+				type = "execute",
+				name = "Reload UI",
+				desc = " ",
+				order = 0,
+				func = 	function()
+					ReloadUI()
+				end,
+			},
+			Text = {
+				type = "description",
+				order = 0,
+				name = "When changes are made a reload of the UI is needed.",
+				width = "full",
+			},
+			Text1 = {
+				type = "description",
+				order = 1,
+				name = " ",
+				width = "full",
+			},
+			enable = {
+				type = "toggle",
+				order = 1,
+				name = L["Enable Tooltip Module"],
+				width = "full",
+			},
+			disableFade = {
+				type = "toggle",
+				order = 2,
+				name = L["Disable Fade"],
+				desc = L["Disables Tooltip Fade."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			reactionBorderColor = {
+				type = "toggle",
+				order = 2,
+				name = L["Reaction Border Color"],
+				desc = L["Colors the borders match targets classcolors."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			itemqualityBorderColor = {
+				type = "toggle",
+				order = 2,
+				name = L["Item Quality Border Color"],
+				desc = L["Colors the border of the tooltip to match the items quality."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			showPlayerTitles = {
+				type = "toggle",
+				order = 2,
+				name = L["Player Titles"],
+				desc = L["Shows players title in tooltip."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			showPVPIcons = {
+				type = "toggle",
+				order = 2,
+				name = L["PVP Icons"],
+				desc = L["Shows PvP Icons in tooltip."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			showUnitRole = {
+				type = "toggle",
+				order = 2,
+				name = L["Show Units Role"],
+				desc = L["Shows Units Role in tooltip."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			abbrevRealmNames = {
+				type = "toggle",
+				order = 2,
+				name = L["Abberviate Realm Names"],
+				desc = L["Abberviates Players Realm Name."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			showMouseoverTarget = {
+				type = "toggle",
+				order = 2,
+				name = L["Mouseover Target"],
+				desc = L["Shows mouseover target."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			showItemLevel = {
+				type = "toggle",
+				order = 2,
+				name = L["Item Level"],
+				desc = L["Shows targets average item level."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			hideInCombat = {
+				type = "toggle",
+				order = 2,
+				name = L["Hide in Combat"],
+				desc = L["Hides unit frame tooltips during combat."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			hideRealmText = {
+				type = "toggle",
+				order = 2,
+				name = L["Hide Realm Text"],
+				desc = L["Hide the coalesced/interactive realm text."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			healthbar = {
+				type = "group",
+				order = 6,
+				name = L["Healthbar"],
+				desc = L["Players Healthbar Options."],
+				guiInline  = true,
+				disabled = function() return isModuleDisabled() or not db.enable end,
+				get = function(info) return db.healthbar[ info[#info] ] end,
+				set = function(info, value) db.healthbar[ info[#info] ] = value;   end,
+				args = {
+					---------------------------
+					--Option Type Seperators
+					sep1 = {
+						type = "description",
+						order = 2,
+						name = " ",
+					},
+					sep2 = {
+						type = "description",
+						order = 3,
+						name = " ",
+					},
+					sep3 = {
+						type = "description",
+						order = 4,
+						name = " ",
+					},
+					sep4 = {
+						type = "description",
+						order = 5,
+						name = " ",
+					},
+					---------------------------
+					showHealthValue = {
+						type = "toggle",
+						order = 2,
+						name = L["Health Value"],
+						desc = L["Shows health value over healthbar."],
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					showOutline = {
+						type = "toggle",
+						order = 2,
+						name = L["Font Outline"],
+						desc = L["Adds a font outline to health value."],
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					reactionColoring = {
+						type = "toggle",
+						order = 2,
+						name = L["Reaction Coloring"],
+						desc = L["Change healthbar color to targets classcolor. (Overides Custom Color)"],
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					custom = {
+						type = "group",
+						order = 6,
+						name = L["Custom"],
+						desc = L["Custom Coloring"],
+						childGroups = "tree",
+						disabled = function() return isModuleDisabled() or not db.enable end,
+						get = function(info) return db.healthbar.custom[ info[#info] ] end,
+						set = function(info, value) db.healthbar.custom[ info[#info] ] = value;   end,
+						args = {
+							---------------------------
+							--Option Type Seperators
+							sep1 = {
+								type = "description",
+								name = " ",
+								order = 2,
+							},
+							sep2 = {
+								type = "description",
+								name = " ",
+								order = 3,
+							},
+							sep3 = {
+								type = "description",
+								name = " ",
+								order = 4,
+							},
+							sep4 = {
+								type = "description",
+								name = " ",
+								order = 5,
+							},
+							---------------------------
+							apply = {
+								type = "toggle",
+								order = 2,
+								name = L["Apply Custom Color"],
+								desc = L["Use the Custom Color you have chosen."],
+								disabled = function() return isModuleDisabled() or not db.enable end,
+							},
+							color = {
+								type = "color",
+								order = 4,
+								name = L["Custom Color"],
+								desc = L["Picks a Custom Color for the tooltip border."],
+								hasAlpha = false,
+								disabled = function() return isModuleDisabled() or not db.healthbar.custom.apply or not db.enable end,
+								get = function(info)
+									local hb = db.healthbar.custom[ info[#info] ]
+									return hb.r, hb.g, hb.b
+								end,
+								set = function(info, r, g, b)
+									db.healthbar.custom[ info[#info] ] = {}
+									local hb = db.healthbar.custom[ info[#info] ]
+									hb.r, hb.g, hb.b = r, g, b
+								end,
+							},
+						},
+					},
+					textPos = {
+						type = "select",
+						order = 3,
+						name = L["Text Position"],
+						desc = L["Health Value Position."],
+						disabled = function() return isModuleDisabled() or not db.enable end,
+						values = regions,
+					},
+					fontSize= {
+						type = "range",
+						order = 5,
+						name = L["Font Size"],
+						desc = L["Controls the healthbar value font size."],
+						min = 8, max = 25, step = 1,
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+				},
+			},
+		},
+	}
+	return options
 end

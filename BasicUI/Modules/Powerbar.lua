@@ -1,13 +1,83 @@
+local MODULE_NAME = "Powerbar"
 local BasicUI = LibStub("AceAddon-3.0"):GetAddon("BasicUI")
-local BasicUI_Powerbar = BasicUI:NewModule("Powerbar", "AceEvent-3.0")
+local Powerbar = BasicUI:NewModule(MODULE_NAME, "AceEvent-3.0")
+local L = BasicUI.L
 
----------------
--- Powerbar --
----------------
-function BasicUI_Powerbar:OnEnable()
-	local db = BasicUI.db.profile
+------------------------------------------------------------------------
+--	 Module Database
+------------------------------------------------------------------------
 
-	if db.powerbar.enable ~= true then return end
+local db
+local defaults = {
+	profile = {
+		enable = true,
+		position = {
+			selfAnchor = "CENTER",
+			frameParent = "UIParent",
+			offSetX = 0,
+			offSetY = -100
+		},
+		sizeWidth = 200,
+		
+		showCombatRegen = true, 
+
+		activeAlpha = 1,
+		inactiveAlpha = 0.5,
+		emptyAlpha = 0,
+		
+		valueAbbrev = true,
+			
+		valueFontSize = 20,
+		valueFontOutline = true,
+		valueFontAdjustmentX = 0,
+
+		showSoulshards = true,
+		showHolypower = true,
+		showMana = true,
+		showFocus = true,
+		showRage = true,
+		
+		extraFontSize = 16,                             -- The fontsize for the holypower and soulshard number
+		extraFontOutline = true,                        
+			
+		
+		energy = {
+			show = true,
+			showComboPoints = true,
+			comboPointsBelow = false,
+			
+			comboFontSize = 16,
+			comboFontOutline = true,
+		},
+		
+		
+		rune = {
+			show = true,
+			showRuneCooldown = true,
+		   
+			runeFontSize = 16,
+			runeFontOutline = true,
+		},
+	}
+}
+
+------------------------------------------------------------------------
+--	Module Functions
+------------------------------------------------------------------------
+
+function Powerbar:OnInitialize()
+	self.db = BasicUI.db:RegisterNamespace(MODULE_NAME, defaults)
+	db = self.db.profile	
+
+	local _, class = UnitClass("player")
+	classColor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
+
+	self:SetEnabledState(BasicUI:GetModuleEnabled(MODULE_NAME))
+end
+
+
+function Powerbar:OnEnable()
+	if db.enable ~= true then return end
 
 	local playerClass = select(2, UnitClass('player'))
 
@@ -53,7 +123,7 @@ function BasicUI_Powerbar:OnEnable()
 	local f = CreateFrame('Frame', nil, UIParent)
 	f:SetScale(1.4)
 	f:SetSize(18, 18)
-	f:SetPoint(db.powerbar.position.selfAnchor, db.powerbar.position.frameParent, db.powerbar.position.offSetX, db.powerbar.position.offSetY)
+	f:SetPoint(db.position.selfAnchor, db.position.frameParent, db.position.offSetX, db.position.offSetY)
 	f:EnableMouse(false)
 
 	f:RegisterEvent('PLAYER_REGEN_ENABLED')
@@ -62,7 +132,7 @@ function BasicUI_Powerbar:OnEnable()
 	f:RegisterUnitEvent('UNIT_COMBO_POINTS', 'player')
 	f:RegisterEvent('PLAYER_TARGET_CHANGED')
 
-	if (db.powerbar.rune.showRuneCooldown) then
+	if (db.rune.showRuneCooldown) then
 		f:RegisterEvent('RUNE_TYPE_UPDATE')
 	end
 
@@ -70,7 +140,7 @@ function BasicUI_Powerbar:OnEnable()
 	f:RegisterUnitEvent('UNIT_POWER_FREQUENT', 'player')
 	f:RegisterEvent('UPDATE_SHAPESHIFT_FORM')
 
-	if (db.powerbar.showCombatRegen) then
+	if (db.showCombatRegen) then
 		f:RegisterUnitEvent('UNIT_AURA', 'player')
 	end
 
@@ -79,17 +149,17 @@ function BasicUI_Powerbar:OnEnable()
 	f:RegisterUnitEvent('UNIT_EXITED_VEHICLE', 'player')
 	f:RegisterUnitEvent('UNIT_EXITING_VEHICLE', 'player')
 
-	if (db.powerbar.energy.showComboPoints) then
+	if (db.energy.showComboPoints) then
 		f.ComboPoints = {}
 
 		for i = 1, 5 do
 			f.ComboPoints[i] = f:CreateFontString(nil, 'ARTWORK')
 
-			if (db.powerbar.energy.comboFontOutline) then
-				f.ComboPoints[i]:SetFont(db.media.fontBold, db.powerbar.energy.comboFontSize, 'THINOUTLINE')
+			if (db.energy.comboFontOutline) then
+				f.ComboPoints[i]:SetFont(BasicUI.media.fontBold, db.energy.comboFontSize, 'THINOUTLINE')
 				f.ComboPoints[i]:SetShadowOffset(0, 0)
 			else
-				f.ComboPoints[i]:SetFont(db.media.fontBold, db.powerbar.energy.comboFontSize)
+				f.ComboPoints[i]:SetFont(BasicUI.media.fontBold, db.energy.comboFontSize)
 				f.ComboPoints[i]:SetShadowOffset(1, -1)
 			end
 
@@ -98,7 +168,7 @@ function BasicUI_Powerbar:OnEnable()
 			f.ComboPoints[i]:SetAlpha(0)
 		end
 
-		local yOffset = db.powerbar.energy.comboPointsBelow and -35 or 0
+		local yOffset = db.energy.comboPointsBelow and -35 or 0
 		f.ComboPoints[1]:SetPoint('CENTER', -52, yOffset)
 		f.ComboPoints[2]:SetPoint('CENTER', -26, yOffset)
 		f.ComboPoints[3]:SetPoint('CENTER', 0, yOffset)
@@ -113,7 +183,7 @@ function BasicUI_Powerbar:OnEnable()
 		for i = 1, 5 do
 			f.Chi[i] = f:CreateFontString(nil, 'ARTWORK')
 
-			f.Chi[i]:SetFont(db.media.fontBold, db.powerbar.energy.comboFontSize, 'THINOUTLINE')
+			f.Chi[i]:SetFont(BasicUI.media.fontBold, db.energy.comboFontSize, 'THINOUTLINE')
 			f.Chi[i]:SetShadowOffset(0, 0)
 
 			f.Chi[i]:SetParent(f)
@@ -121,7 +191,7 @@ function BasicUI_Powerbar:OnEnable()
 			f.Chi[i]:SetAlpha(0)
 		end
 
-		local yOffset = db.powerbar.energy.comboPointsBelow and -35 or 0
+		local yOffset = db.energy.comboPointsBelow and -35 or 0
 		f.Chi[1]:SetPoint('CENTER', -39, yOffset)
 		f.Chi[2]:SetPoint('CENTER', -13, yOffset)
 		f.Chi[3]:SetPoint('CENTER', 13, yOffset)
@@ -130,14 +200,14 @@ function BasicUI_Powerbar:OnEnable()
 		f.Chi[5]:Hide()
 	end
 
-	if (playerClass == 'WARLOCK' and db.powerbar.showSoulshards or playerClass == 'PALADIN' and db.powerbar.showHolypower or playerClass == 'PRIEST' and db.powerbar.showShadowOrbs) then
+	if (playerClass == 'WARLOCK' and db.showSoulshards or playerClass == 'PALADIN' and db.showHolypower or playerClass == 'PRIEST' and db.showShadowOrbs) then
 		f.extraPoints = f:CreateFontString(nil, 'ARTWORK')
 
-		if (db.powerbar.extraFontOutline) then
-			f.extraPoints:SetFont(db.media.fontBold, db.powerbar.extraFontSize, 'THINOUTLINE')
+		if (db.extraFontOutline) then
+			f.extraPoints:SetFont(BasicUI.media.fontBold, db.extraFontSize, 'THINOUTLINE')
 			f.extraPoints:SetShadowOffset(0, 0)
 		else
-			f.extraPoints:SetFont(db.media.fontBold, db.powerbar.extraFontSize)
+			f.extraPoints:SetFont(BasicUI.media.fontBold, db.extraFontSize)
 			f.extraPoints:SetShadowOffset(1, -1)
 		end
 
@@ -145,7 +215,7 @@ function BasicUI_Powerbar:OnEnable()
 		f.extraPoints:SetPoint('CENTER', 0, 0)
 	end
 
-	if (playerClass == 'DEATHKNIGHT' and db.powerbar.rune.showRuneCooldown) then
+	if (playerClass == 'DEATHKNIGHT' and db.rune.showRuneCooldown) then
 		for i = 1, 6 do
 			RuneFrame:UnregisterAllEvents()
 			_G['RuneButtonIndividual'..i]:Hide()
@@ -156,11 +226,11 @@ function BasicUI_Powerbar:OnEnable()
 		for i = 1, 6 do
 			f.Rune[i] = f:CreateFontString(nil, 'ARTWORK')
 
-			if (db.powerbar.rune.runeFontOutline) then
-				f.Rune[i]:SetFont(db.media.fontBold, db.powerbar.rune.runeFontSize, 'THINOUTLINE')
+			if (db.rune.runeFontOutline) then
+				f.Rune[i]:SetFont(BasicUI.media.fontBold, db.rune.runeFontSize, 'THINOUTLINE')
 				f.Rune[i]:SetShadowOffset(0, 0)
 			else
-				f.Rune[i]:SetFont(db.media.fontBold, db.powerbar.rune.runeFontSize)
+				f.Rune[i]:SetFont(BasicUI.media.fontBold, db.rune.runeFontSize)
 				f.Rune[i]:SetShadowOffset(1, -1)
 			end
 
@@ -178,27 +248,27 @@ function BasicUI_Powerbar:OnEnable()
 
 	f.Power = CreateFrame('StatusBar', nil, UIParent)
 	f.Power:SetScale(UIParent:GetScale())
-	f.Power:SetSize(db.powerbar.sizeWidth, 5)
+	f.Power:SetSize(db.sizeWidth, 5)
 	f.Power:SetPoint('CENTER', f, 0, -23)
-	f.Power:SetStatusBarTexture(db.powerbar.statusbar)
+	f.Power:SetStatusBarTexture(BasicUI.media.statusbar)
 	f.Power:SetAlpha(0)
 
 	f.Power.Value = f.Power:CreateFontString(nil, 'ARTWORK')
 
-	if (db.powerbar.valueFontOutline) then
-		f.Power.Value:SetFont(db.media.fontNormal, db.powerbar.valueFontSize, 'THINOUTLINE')
+	if (db.valueFontOutline) then
+		f.Power.Value:SetFont(BasicUI.media.fontNormal, db.valueFontSize, 'THINOUTLINE')
 		f.Power.Value:SetShadowOffset(0, 0)
 	else
-		f.Power.Value:SetFont(db.media.fontNormal, db.powerbar.valueFontSize)
+		f.Power.Value:SetFont(BasicUI.media.fontNormal, db.valueFontSize)
 		f.Power.Value:SetShadowOffset(1, -1)
 	end
 
-	f.Power.Value:SetPoint('CENTER', f.Power, 0, db.powerbar.valueFontAdjustmentX)
+	f.Power.Value:SetPoint('CENTER', f.Power, 0, db.valueFontAdjustmentX)
 	f.Power.Value:SetVertexColor(1, 1, 1)
 
 	f.Power.Background = f.Power:CreateTexture(nil, 'BACKGROUND')
 	f.Power.Background:SetAllPoints(f.Power)
-	f.Power.Background:SetTexture(db.powerbar.statusbar)
+	f.Power.Background:SetTexture(BasicUI.media.statusbar)
 	f.Power.Background:SetVertexColor(0.25, 0.25, 0.25, 1)
 
 	f.Power.Below = f.Power:CreateTexture(nil, 'BACKGROUND')
@@ -212,9 +282,9 @@ function BasicUI_Powerbar:OnEnable()
 	f.Power.Above:SetTexture([[Interface\AddOns\BasicUI\Media\textureArrowAbove]])
 	f.Power.Above:SetPoint('BOTTOM', f.Power.Below, 'TOP', 0, f.Power:GetHeight())
 
-	if (db.powerbar.showCombatRegen) then
+	if (db.showCombatRegen) then
 		f.mpreg = f.Power:CreateFontString(nil, 'ARTWORK')
-		f.mpreg:SetFont(db.media.fontNormal, 12, 'THINOUTLINE')
+		f.mpreg:SetFont(BasicUI.media.fontNormal, 12, 'THINOUTLINE')
 		f.mpreg:SetShadowOffset(0, 0)
 		f.mpreg:SetPoint('TOP', f.Power.Below, 'BOTTOM', 0, 4)
 		f.mpreg:SetParent(f.Power)
@@ -275,7 +345,7 @@ function BasicUI_Powerbar:OnEnable()
 	local function UpdateChi()
 		local chi = UnitPower('player', SPELL_POWER_CHI)
 		local maxChi = UnitPowerMax('player', SPELL_POWER_CHI)
-		local yOffset = db.powerbar.energy.comboPointsBelow and -35 or 0
+		local yOffset = db.energy.comboPointsBelow and -35 or 0
 
 		if (f.Chi.maxChi ~= maxChi) then
 			if (maxChi == 4) then
@@ -333,14 +403,14 @@ function BasicUI_Powerbar:OnEnable()
 		local _, powerType = UnitPowerType('player')
 		local newAlpha = nil
 
-		if ((not db.powerbar.energy.show and powerType == 'ENERGY') or (not db.powerbar.showFocus and powerType == 'FOCUS') or (not db.powerbar.showRage and powerType == 'RAGE') or (not db.powerbar.showMana and powerType == 'MANA') or (not db.powerbar.rune.show and powerType == 'RUNEPOWER') or UnitIsDeadOrGhost('player') or UnitHasVehicleUI('player')) then
+		if ((not db.energy.show and powerType == 'ENERGY') or (not db.showFocus and powerType == 'FOCUS') or (not db.showRage and powerType == 'RAGE') or (not db.showMana and powerType == 'MANA') or (not db.rune.show and powerType == 'RUNEPOWER') or UnitIsDeadOrGhost('player') or UnitHasVehicleUI('player')) then
 			f.Power:SetAlpha(0)
 		elseif (InCombatLockdown()) then
-			newAlpha = db.powerbar.activeAlpha
+			newAlpha = db.activeAlpha
 		elseif (not InCombatLockdown() and UnitPower('player') > 0) then
-			newAlpha = db.powerbar.inactiveAlpha
+			newAlpha = db.inactiveAlpha
 		else
-			newAlpha = db.powerbar.emptyAlpha
+			newAlpha = db.emptyAlpha
 		end
 
 		if (newAlpha) then
@@ -366,7 +436,7 @@ function BasicUI_Powerbar:OnEnable()
 		f.Power:SetMinMaxValues(0, UnitPowerMax('player', f))
 		f.Power:SetValue(min)
 
-		if (db.powerbar.valueAbbrev) then
+		if (db.valueAbbrev) then
 			f.Power.Value:SetText(min > 0 and FormatValue(min) or '')
 		else
 			f.Power.Value:SetText(min > 0 and min or '')
@@ -400,7 +470,7 @@ function BasicUI_Powerbar:OnEnable()
 			end
 		end
 
-		if (event == 'RUNE_TYPE_UPDATE' and db.powerbar.rune.showRuneCooldown) then
+		if (event == 'RUNE_TYPE_UPDATE' and db.rune.showRuneCooldown) then
 			f.Rune[arg1].type = GetRuneType(arg1)
 		end
 
@@ -442,7 +512,7 @@ function BasicUI_Powerbar:OnEnable()
 			if (InCombatLockdown()) then
 				securecall('UIFrameFadeIn', f, 0.35, f:GetAlpha(), 1)
 			else
-				securecall('UIFrameFadeOut', f, 0.35, f:GetAlpha(), db.powerbar.inactiveAlpha)
+				securecall('UIFrameFadeOut', f, 0.35, f:GetAlpha(), db.inactiveAlpha)
 			end
 		end
 
@@ -451,7 +521,7 @@ function BasicUI_Powerbar:OnEnable()
 		end
 
 		if (event == 'PLAYER_REGEN_ENABLED') then
-			securecall('UIFrameFadeOut', f, 0.35, f:GetAlpha(), db.powerbar.inactiveAlpha)
+			securecall('UIFrameFadeOut', f, 0.35, f:GetAlpha(), db.inactiveAlpha)
 		end
 	end)
 
@@ -480,4 +550,365 @@ function BasicUI_Powerbar:OnEnable()
 			end
 		end)
 	end
+end
+
+------------------------------------------------------------------------
+--	 Module Options
+------------------------------------------------------------------------
+
+local options
+function Powerbar:GetOptions()
+	if options then
+		return options
+	end
+
+	local function isModuleDisabled()
+		return not BasicUI:GetModuleEnabled(MODULE_NAME)
+	end
+
+	local regions = {
+		['BOTTOM'] = L['Bottom'],
+		['BOTTOMLEFT'] = L['Bottom Left'],
+		['BOTTOMRIGHT'] = L['Bottom Right'],
+		['CENTER'] = L['Center'],
+		['LEFT'] = L['Left'],
+		['RIGHT'] = L['Right'],
+		['TOP'] = L['Top'],
+		['TOPLEFT'] = L['Top Left'],
+		['TOPRIGHT'] = L['Top Right'],
+	}
+	
+	options = {
+		type = "group",
+		name = L[MODULE_NAME],
+		get = function(info) return db[ info[#info] ] end,
+		set = function(info, value) db[ info[#info] ] = value;  end,					
+		args = {
+			---------------------------
+			--Option Type Seperators
+			sep1 = {
+				type = "description",
+				order = 2,								
+				name = " ",
+			},
+			sep2 = {
+				type = "description",
+				order = 3,
+				name = " ",								
+			},
+			sep3 = {
+				type = "description",
+				order = 4,
+				name = " ",
+			},
+			sep4 = {
+				type = "description",
+				order = 5,
+				name = " ",
+			},	
+			---------------------------
+			reloadUI = {
+				type = "execute",
+				name = "Reload UI",
+				desc = " ",
+				order = 0,
+				func = 	function()
+					ReloadUI()
+				end,
+			},
+			Text = {
+				type = "description",
+				order = 0,
+				name = "When changes are made a reload of the UI is needed.",
+				width = "full",
+			},
+			Text1 = {
+				type = "description",
+				order = 1,
+				name = " ",
+				width = "full",
+			},					
+			enable = {
+				order = 1,
+				name = L["Enable Powerbar Module"],
+				width = "full",
+				type = "toggle",							
+			},					
+			showCombatRegen = {
+				order = 2,
+				name = L["Show Combat Regen"],
+				type = "toggle",
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},				
+			showSoulshards = {
+				order = 2,
+				name = L["Show Soulshards Text"],
+				type = "toggle",
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			showHolypower = {
+				order = 2,
+				name = L["Show Holypower Text"],
+				type = "toggle",
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			showMana = {
+				order = 2,
+				name = L["Show Mana Text"],
+				type = "toggle",
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			showFocus = {
+				order = 2,
+				name = L["Show Focus Text"],
+				type = "toggle",
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			showRage = {
+				order = 2,
+				name = L["Show Rage Text"],
+				type = "toggle",
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			valueAbbrev = {
+				order = 2,
+				name = L["Value Abbrev"],
+				type = "toggle",
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			valueFontOutline = {
+				order = 2,
+				name = L["Value Font Outline"],
+				type = "toggle",
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},					
+			sizeWidth= {
+				order = 5,
+				name = L["Size Width"],
+				type = "range",
+				min = 50, max = 350, step = 25,
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},					
+			activeAlpha = {
+				order = 5,
+				name = L["Active Alpha"],
+				type = "range",
+				min = 0, max = 1, step = 0.1,
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			inactiveAlpha = {
+				order = 5,
+				name = L["In Active Alpha"],
+				type = "range",
+				min = 0, max = 1, step = 0.1,
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			emptyAlpha = {
+				order = 5,
+				name = L["Empty Alpha"],
+				type = "range",
+				min = 0, max = 1, step = 0.1,
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},										
+			valueFontSize = {
+				order = 5,
+				name = L["Value Font Size"],
+				type = "range",
+				min = 8, max = 30, step = 1,
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},	
+			valueFontAdjustmentX = {
+				order = 5,
+				name = L["Value Font Adjustment X"],
+				type = "range",
+				min = -200, max = 200, step = 1,
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			position = {
+				type = "group",
+				order = 6,
+				guiInline = true,
+				name = L["Position the Powerbar"],
+				guiInline = true,
+				disabled = function() return isModuleDisabled() or not db.enable end,						
+				get = function(info) return db.position[ info[#info] ] end,
+				set = function(info, value) db.position[ info[#info] ] = value;  end,						
+				args = {
+					---------------------------
+					--Option Type Seperators
+					sep1 = {
+						type = "description",
+						order = 2,								
+						name = " ",
+					},
+					sep2 = {
+						type = "description",
+						order = 3,
+						name = " ",								
+					},	
+					---------------------------							
+					selfAnchor = {
+						order = 1,
+						name = L["Self Anchor"],
+						disabled = function() return isModuleDisabled() or not db.enable end,
+						type = "select",
+						values = regions;
+					},
+					offSetX = {
+						type = "range",							
+						order = 2,
+						name = L["X Offset"],
+						desc = L["Controls the X offset. (Left - Right)"],
+						min = -250, max = 250, step = 5,
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					offSetY = {
+						type = "range",							
+						order = 2,
+						name = L["Y Offset"],
+						desc = L["Controls the Y offset. (Up - Down)"],
+						min = -250, max = 250, step = 5,
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+				},
+			},					
+			energy = {
+				type = "group",
+				order = 5,
+				guiInline = true,
+				name = L["Energy"],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+				get = function(info) return db.energy[ info[#info] ] end,
+				set = function(info, value) db.energy[ info[#info] ] = value;  end,						
+				args = {
+					---------------------------
+					--Option Type Seperators
+					sep1 = {
+						type = "description",
+						order = 2,								
+						name = " ",
+					},
+					sep2 = {
+						type = "description",
+						order = 3,
+						name = " ",								
+					},
+					sep3 = {
+						type = "description",
+						order = 4,
+						name = " ",
+					},
+					sep4 = {
+						type = "description",
+						order = 5,
+						name = " ",
+					},	
+					---------------------------							
+					show = {
+						order = 1,
+						name = L["Show Energy Text"],
+						type = "toggle",
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					Text1 = {
+						type = "description",
+						order = 1,
+						name = " ",
+						width = "full",
+					},					
+					showComboPoints = {
+						order = 2,
+						name = L["Show Combo Points"],
+						type = "toggle",
+						disabled = function() return isModuleDisabled() or not db.enable or not db.energy.show end,
+					},
+					comboPointsBelow = {
+						order = 2,
+						name = L["Combo Points Below"],
+						type = "toggle",
+						disabled = function() return isModuleDisabled() or not db.enable or not db.energy.show end,
+					},							
+					comboFontOutline = {
+						order = 2,
+						name = L["Combo Font Outline"],
+						type = "toggle",
+						disabled = function() return isModuleDisabled() or not db.enable or not db.energy.show end,
+					},
+					comboFontSize = {
+						order = 5,
+						name = L["Combo Font Size"],
+						type = "range",
+						min = 8, max = 25, step = 1,
+						disabled = function() return isModuleDisabled() or not db.enable or not db.energy.show end,
+					},
+				},
+			},
+			rune = {
+				type = "group",
+				order = 5,
+				guiInline = true,
+				name = L["Rune"],	
+				disabled = function() return isModuleDisabled() or not db.enable end,
+				get = function(info) return db.rune[ info[#info] ] end,
+				set = function(info, value) db.rune[ info[#info] ] = value;  end,						
+				args = {
+					---------------------------
+					--Option Type Seperators
+					sep1 = {
+						type = "description",
+						order = 2,								
+						name = " ",
+					},
+					sep2 = {
+						type = "description",
+						order = 3,
+						name = " ",								
+					},
+					sep3 = {
+						type = "description",
+						order = 4,
+						name = " ",
+					},
+					sep4 = {
+						type = "description",
+						order = 5,
+						name = " ",
+					},	
+					---------------------------							
+					show = {
+						order = 1,
+						name = L["Show Rune Text"],
+						type = "toggle",
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					Text1 = {
+						type = "description",
+						order = 1,
+						name = " ",
+						width = "full",
+					},					
+					showRuneCooldown = {
+						order = 2,
+						name = L["Show Rune Cooldown"],
+						type = "toggle",
+						disabled = function() return isModuleDisabled() or not db.enable or not db.rune.show end,
+					},							
+					runeFontOutline = {
+						order = 2,
+						name = L["Rune Font Outline"],
+						type = "toggle",
+						disabled = function() return isModuleDisabled() or not db.enable or not db.rune.show end,
+					},
+					runeFontSize= {
+						order = 5,
+						name = L["Rune Font Size"],
+						type = "range",
+						min = 8, max = 25, step = 1,
+						disabled = function() return isModuleDisabled() or not db.enable or not db.rune.show end,
+					},						
+				},
+			},					
+		},
+	}
+	return options
 end

@@ -1,90 +1,274 @@
+local MODULE_NAME = "Datatext"
 local BasicUI = LibStub("AceAddon-3.0"):GetAddon("BasicUI")
-local BasicUI_Datapanel = BasicUI:NewModule("Datapanel", "AceEvent-3.0")
+local Datatext = BasicUI:NewModule(MODULE_NAME, "AceEvent-3.0")
+local Adjust = LibStub:GetLibrary("LibBasicAdjust-1.0", true)
+local L = BasicUI.L
 
----------------
--- Datapanel --
----------------
-function BasicUI_Datapanel:OnEnable()
-	local db = BasicUI.db.profile
-	
-	if db.datapanel.enable ~= true then return end
-	
-	local ccolor = RAID_CLASS_COLORS[select(2, UnitClass("player"))]
-	local myclass = UnitClass("player")
-	local myname, _ = UnitName("player")
-	local myrealm = GetRealmName()
-	local getscreenwidth = tonumber(string.match(({GetScreenResolutions()})[GetCurrentResolution()], "(%d+)x+%d"))
-	local toc = select(4, GetBuildInfo())
-	local locale = GetLocale()
-	local currentFightDPS
-	
-	PP = function(p, obj)
+------------------------------------------------------------------------
+--	 Module Database
+------------------------------------------------------------------------
 
-		local left = PanelLeft
-		local center = PanelCenter
-		local right = PanelRight
+local db
+local defaults = {
+	profile = {
+		enable = true,
+		battleground = true,                            	-- enable 3 stats in battleground only that replace stat1,stat2,stat3.
+		bag = false,										-- True = Open Backpack; False = Open All bags			
 		
-			-- Left Panel Data
-		if p == 1 then
-			obj:SetParent(left)
-			obj:SetHeight(left:GetHeight())
-			obj:SetPoint('LEFT', left, 30, 0)
-			obj:SetPoint('TOP', left)
-			obj:SetPoint('BOTTOM', left)
-		elseif p == 2 then
-			obj:SetParent(left)
-			obj:SetHeight(left:GetHeight())
-			obj:SetPoint('TOP', left)
-			obj:SetPoint('BOTTOM', left)
-		elseif p == 3 then
-			obj:SetParent(left)
-			obj:SetHeight(left:GetHeight())
-			obj:SetPoint('RIGHT', left, -30, 0)
-			obj:SetPoint('TOP', left)
-			obj:SetPoint('BOTTOM', left)
-			
-			-- Center Panel Data
-		elseif p == 4 then
-			obj:SetParent(center)
-			obj:SetHeight(center:GetHeight())
-			obj:SetPoint('LEFT', center, 30, 0)
-			obj:SetPoint('TOP', center)
-			obj:SetPoint('BOTTOM', center)
-		elseif p == 5 then
-			obj:SetParent(center)
-			obj:SetHeight(center:GetHeight())
-			obj:SetPoint('TOP', center)
-			obj:SetPoint('BOTTOM', center)
-		elseif p == 6 then
-			obj:SetParent(center)
-			obj:SetHeight(center:GetHeight())
-			obj:SetPoint('RIGHT', center, -30, 0)
-			obj:SetPoint('TOP', center)
-			obj:SetPoint('BOTTOM', center)
-			
-			-- Right Panel Data
-		elseif p == 7 then
-			obj:SetParent(right)
-			obj:SetHeight(right:GetHeight())
-			obj:SetPoint('LEFT', right, 30, 0)
-			obj:SetPoint('TOP', right)
-			obj:SetPoint('BOTTOM', right)
-		elseif p == 8 then
-			obj:SetParent(right)
-			obj:SetHeight(right:GetHeight())
-			obj:SetPoint('TOP', right)
-			obj:SetPoint('BOTTOM', right)
-		elseif p == 9 then
-			obj:SetParent(right)
-			obj:SetHeight(right:GetHeight())
-			obj:SetPoint('RIGHT', right, -30, 0)
-			obj:SetPoint('TOP', right)
-			obj:SetPoint('BOTTOM', right)
-		end
+		-- Color Datatext	
+		customcolor = { r = 1, g = 1, b = 1},				-- Color of Text for Datapanel
+		-- Stat Locations
+		armor 			= "P0",                                -- show your armor value against the level mob you are currently targeting.
+		avd 			= "P0",                                -- show your current avoidance against the level of the mob your targeting	
+		bags			= "P9",                                -- show space used in bags on panel.
+		haste 			= "P0",                                -- show your haste rating on panels.	
+		system 			= "P0",                                -- show total memory and others systems info (FPS/MS) on panel.	
+		guild 			= "P4",                                -- show number on guildmate connected on panel.
+		dur 			= "P8",                                -- show your equipment durability on panel.
+		friends 		= "P6",                                -- show number of friends connected.
+		dps_text 		= "P0",                                -- show a dps meter on panel.
+		hps_text 		= "P0",                                -- show a heal meter on panel.
+		spec 			= "P5",								-- show your current spec on panel.
+		coords 			= "P0",								-- show your current coords on panel.
+		pro 			= "P7",								-- shows your professions and tradeskills
+		stat1 			= "P1",								-- Stat Based on your Role (Avoidance-Tank, AP-Melee, SP/HP-Caster)
+		stat2 			= "P3",								-- Stat Based on your Role (Armor-Tank, Crit-Melee, Crit-Caster)
+		recount 		= "P2",								-- Stat Based on Recount"s DPS
+		recountraiddps 	= false,							-- Enables tracking or Recounts Raid DPS
+		calltoarms 		= "P0",								-- Show Current Call to Arms.		
+	}
+}
 
+------------------------------------------------------------------------
+--	 Local Module Functions
+------------------------------------------------------------------------
+-- Variables that point to frames or other objects:
+local Datapanel, StatPanelLeft, StatPanelCenter, StatPanelRight, BGPanel
+local currentFightDPS
+local PLAYER_CLASS = UnitClass("player")
+local PLAYER_NAME = UnitName("player")
+local PLAYER_REALM = GetRealmName()
+local SCREEN_WIDTH = tonumber(string.match(({GetScreenResolutions()})[GetCurrentResolution()], "(%d+)x+%d"))
+local TOC_VERSION = select(4, GetBuildInfo())
+local GAME_LOCALE = GetLocale()
+local classColor
+
+local function RGBToHex(r, g, b)
+	if r > 1 then r = 1 elseif r < 0 then r = 0 end
+	if g > 1 then g = 1 elseif g < 0 then g = 0 end
+	if b > 1 then b = 1 elseif b < 0 then b = 0 end
+	return format("|cff%02x%02x%02x", r*255, g*255, b*255)
+end
+
+local function HexToRGB(hex)
+	local rhex, ghex, bhex = strsub(hex, 1, 2), strsub(hex, 3, 4), strsub(hex, 5, 6)
+	return tonumber(rhex, 16), tonumber(ghex, 16), tonumber(bhex, 16)
+end
+
+local function ShortValue(v)
+	if v >= 1e6 then
+		return format("%.1fm", v / 1e6):gsub("%.?0+([km])$", "%1")
+	elseif v >= 1e3 or v <= -1e3 then
+		return format("%.1fk", v / 1e3):gsub("%.?0+([km])$", "%1")
+	else
+		return v
+	end
+end
+
+--Check Player's Role
+
+local classRoles = {
+	PALADIN = {
+		[1] = "Caster",
+		[2] = "Tank",
+		[3] = "Melee",
+	},
+	PRIEST = "Caster",
+	WARLOCK = "Caster",
+	WARRIOR = {
+		[1] = "Melee",
+		[2] = "Melee",
+		[3] = "Tank",	
+	},
+	HUNTER = "Melee",
+	SHAMAN = {
+		[1] = "Caster",
+		[2] = "Melee",
+		[3] = "Caster",	
+	},
+	ROGUE = "Melee",
+	MAGE = "Caster",
+	DEATHKNIGHT = {
+		[1] = "Tank",
+		[2] = "Melee",
+		[3] = "Melee",	
+	},
+	DRUID = {
+		[1] = "Caster",
+		[2] = "Melee",
+		[3] = "Tank",	
+		[4] = "Caster"
+	},
+	MONK = {
+		[1] = "Tank",
+		[2] = "Caster",
+		[3] = "Melee",	
+	},
+}
+
+local _, playerClass = UnitClass("player")
+local Role
+local function CheckRole()
+	local talentTree = GetSpecialization()
+
+	if(type(classRoles[playerClass]) == "string") then
+		Role = classRoles[playerClass]
+	elseif(talentTree) then
+		Role = classRoles[playerClass][talentTree]
+	end
+end
+
+local eventHandler = CreateFrame("Frame")
+eventHandler:RegisterEvent("PLAYER_ENTERING_WORLD")
+eventHandler:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+eventHandler:RegisterEvent("PLAYER_TALENT_UPDATE")
+eventHandler:RegisterEvent("CHARACTER_POINTS_CHANGED")
+eventHandler:SetScript("OnEvent", CheckRole)
+
+
+------------------------------------------------------------------------
+--	 Module Functions
+------------------------------------------------------------------------
+
+function Datatext:SetDataPanel()
+
+	Datapanel = CreateFrame("Frame", "Datapanel", UIParent)
+
+	Datapanel:SetPoint("BOTTOM", UIParent, 0, 0)
+	Datapanel:SetWidth(1200)
+	Datapanel:SetFrameLevel(1)
+	Datapanel:SetHeight(35)
+	Datapanel:SetFrameStrata("LOW")
+	Datapanel:SetBackdrop({ bgFile = BasicUI.media.background, edgeFile = BasicUI.media.panelborder, edgeSize = 25, insets = { left = 5, right = 5, top = 5, bottom = 5 } })
+	Datapanel:SetBackdropColor(0, 0, 0, 1)
+
+	-- Hide Panels When in a Vehicle or Pet Battle
+	Datapanel:RegisterUnitEvent("UNIT_ENTERING_VEHICLE", "player")
+	Datapanel:RegisterUnitEvent("UNIT_EXITED_VEHICLE", "player")
+	Datapanel:RegisterUnitEvent("PET_BATTLE_OPENING_START")
+	Datapanel:RegisterUnitEvent("PET_BATTLE_CLOSE")
+	Datapanel:RegisterUnitEvent("PLAYER_ENTERING_WORLD")
+
+	Datapanel:SetScript("OnEvent", function(self, event, ...)
+		if event == "UNIT_ENTERING_VEHICLE" or event == "PET_BATTLE_OPENING_START" then
+			self:Hide()
+		elseif event == "UNIT_EXITED_VEHICLE" or event == "PET_BATTLE_CLOSE" or event == "PLAYER_ENTERING_WORLD" then	
+			self:Show()
+		end
+	end)	
+	
+	if Adjust then	
+		Adjust:RegisterBottom(Datapanel)
 	end
 
-	DataTextTooltipAnchor = function(self)
+end
+
+function Datatext:SetStatPanelLeft()
+	StatPanelLeft = CreateFrame("Frame", nil, Datapanel)
+	StatPanelLeft:SetPoint("LEFT", Datapanel, 5, 0)
+	StatPanelLeft:SetHeight(35)
+	StatPanelLeft:SetWidth(1200 / 3)
+	StatPanelLeft:SetFrameStrata("MEDIUM")
+	StatPanelLeft:SetFrameLevel(1)
+end
+
+function Datatext:SetStatPanelCenter()	
+	StatPanelCenter = CreateFrame("Frame", nil, Datapanel)
+	StatPanelCenter:SetPoint("CENTER", Datapanel, 0, 0)
+	StatPanelCenter:SetHeight(35)
+	StatPanelCenter:SetWidth(1200 / 3)
+	StatPanelCenter:SetFrameStrata("MEDIUM")
+	StatPanelCenter:SetFrameLevel(1)
+end
+
+function Datatext:SetStatPanelRight()
+	StatPanelRight = CreateFrame("Frame", nil, Datapanel)
+	StatPanelRight:SetPoint("RIGHT", Datapanel, -5, 0)
+	StatPanelRight:SetHeight(35)
+	StatPanelRight:SetWidth(1200 / 3)
+	StatPanelRight:SetFrameStrata("MEDIUM")
+	StatPanelRight:SetFrameLevel(1)
+end
+
+function Datatext:PlacePlugin(position, plugin)
+	local left = StatPanelLeft
+	local center = StatPanelCenter
+	local right = StatPanelRight
+
+	-- Left Panel Data
+	if position == "P1" then
+		plugin:SetParent(left)
+		plugin:SetHeight(left:GetHeight())
+		plugin:SetPoint('LEFT', left, 30, 0)
+		plugin:SetPoint('TOP', left)
+		plugin:SetPoint('BOTTOM', left)
+	elseif position == "P2" then
+		plugin:SetParent(left)
+		plugin:SetHeight(left:GetHeight())
+		plugin:SetPoint('TOP', left)
+		plugin:SetPoint('BOTTOM', left)
+	elseif position == "P3" then
+		plugin:SetParent(left)
+		plugin:SetHeight(left:GetHeight())
+		plugin:SetPoint('RIGHT', left, -30, 0)
+		plugin:SetPoint('TOP', left)
+		plugin:SetPoint('BOTTOM', left)
+
+	-- Center Panel Data
+	elseif position == "P4" then
+		plugin:SetParent(center)
+		plugin:SetHeight(center:GetHeight())
+		plugin:SetPoint('LEFT', center, 30, 0)
+		plugin:SetPoint('TOP', center)
+		plugin:SetPoint('BOTTOM', center)
+	elseif position == "P5" then
+		plugin:SetParent(center)
+		plugin:SetHeight(center:GetHeight())
+		plugin:SetPoint('TOP', center)
+		plugin:SetPoint('BOTTOM', center)
+	elseif position == "P6" then
+		plugin:SetParent(center)
+		plugin:SetHeight(center:GetHeight())
+		plugin:SetPoint('RIGHT', center, -30, 0)
+		plugin:SetPoint('TOP', center)
+		plugin:SetPoint('BOTTOM', center)
+
+	-- Right Panel Data
+	elseif position == "P7" then
+		plugin:SetParent(right)
+		plugin:SetHeight(right:GetHeight())
+		plugin:SetPoint('LEFT', right, 30, 0)
+		plugin:SetPoint('TOP', right)
+		plugin:SetPoint('BOTTOM', right)
+	elseif position == "P8" then
+		plugin:SetParent(right)
+		plugin:SetHeight(right:GetHeight())
+		plugin:SetPoint('TOP', right)
+		plugin:SetPoint('BOTTOM', right)
+	elseif position == "P9" then
+		plugin:SetParent(right)
+		plugin:SetHeight(right:GetHeight())
+		plugin:SetPoint('RIGHT', right, -30, 0)
+		plugin:SetPoint('TOP', right)
+		plugin:SetPoint('BOTTOM', right)
+	elseif position == "P0" then
+		return
+	end
+end
+
+function Datatext:CreateStats()
+
+	local function DataTextTooltipAnchor(self)
 		local panel = self:GetParent()
 		local anchor = 'GameTooltip'
 		local xoff = 1
@@ -92,401 +276,38 @@ function BasicUI_Datapanel:OnEnable()
 		
 		
 		for _, panel in pairs ({
-			PanelLeft,
-			PanelCenter,
-			PanelRight,
+			StatPanelLeft,
+			StatPanelCenter,
+			StatPanelRight,
 		})	do
-			if db.datapanel.top == true then
-				anchor = 'ANCHOR_BOTTOM'
-			else
-				anchor = 'ANCHOR_TOP'
-			end
+			anchor = 'ANCHOR_TOP'
 		end	
 		return anchor, panel, xoff, yoff
-	end
-
-	--Check Player's Role
-
-	local classRoles = {
-		PALADIN = {
-			[1] = "Caster",
-			[2] = "Tank",
-			[3] = "Melee",
-		},
-		PRIEST = "Caster",
-		WARLOCK = "Caster",
-		WARRIOR = {
-			[1] = "Melee",
-			[2] = "Melee",
-			[3] = "Tank",	
-		},
-		HUNTER = "Melee",
-		SHAMAN = {
-			[1] = "Caster",
-			[2] = "Melee",
-			[3] = "Caster",	
-		},
-		ROGUE = "Melee",
-		MAGE = "Caster",
-		DEATHKNIGHT = {
-			[1] = "Tank",
-			[2] = "Melee",
-			[3] = "Melee",	
-		},
-		DRUID = {
-			[1] = "Caster",
-			[2] = "Melee",
-			[3] = "Tank",	
-			[4] = "Caster"
-		},
-		MONK = {
-			[1] = "Tank",
-			[2] = "Caster",
-			[3] = "Melee",	
-		},
-	}
-
-	local _, playerClass = UnitClass("player")
-	local Role
-	local function CheckRole()
-		local talentTree = GetSpecialization()
-
-		if(type(classRoles[playerClass]) == "string") then
-			Role = classRoles[playerClass]
-		elseif(talentTree) then
-			Role = classRoles[playerClass][talentTree]
-		end
-	end
-
-	local eventHandler = CreateFrame("Frame")
-	eventHandler:RegisterEvent("PLAYER_ENTERING_WORLD")
-	eventHandler:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
-	eventHandler:RegisterEvent("PLAYER_TALENT_UPDATE")
-	eventHandler:RegisterEvent("CHARACTER_POINTS_CHANGED")
-	eventHandler:SetScript("OnEvent", CheckRole)
-
-	SetFontString = function(parent, fontName, fontHeight, fontStyle)
-		local fs = parent:CreateFontString(nil, 'OVERLAY')
-		fs:SetFont(fontName, fontHeight, fontStyle)
-		fs:SetJustifyH('LEFT')
-		fs:SetShadowColor(0, 0, 0)
-		fs:SetShadowOffset(1.25, -1.25)
-		return fs
-	end
-
-	function RGBToHex(r, g, b)
-		r = r <= 1 and r >= 0 and r or 0
-		g = g <= 1 and g >= 0 and g or 0
-		b = b <= 1 and b >= 0 and b or 0
-		return string.format("|cff%02x%02x%02x", r*255, g*255, b*255)
-	end
-
-	ShortValue = function(v)
-		if v >= 1e6 then
-			return ("%.1fm"):format(v / 1e6):gsub("%.?0+([km])$", "%1")
-		elseif v >= 1e3 or v <= -1e3 then
-			return ("%.1fk"):format(v / 1e3):gsub("%.?0+([km])$", "%1")
-		else
-			return v
-		end
-	end
-
-	function HexToRGB(hex)
-		local rhex, ghex, bhex = string.sub(hex, 1, 2), string.sub(hex, 3, 4), string.sub(hex, 5, 6)
-		return tonumber(rhex, 16), tonumber(ghex, 16), tonumber(bhex, 16)
-	end
-
-	--------------
-	-- Data Panel
-	--------------
-	if db.datapanel.enablepanel == true then
-
-		--[[
-			All Credit for Datapanel.lua goes to Tuks.
-			Tukui = http://www.tukui.org/download.php.
-			Edited by Cokedriver.
-		]]
-
-		local DataPanel = CreateFrame('Frame', 'DataPanel', UIParent)
-		local PanelLeft = CreateFrame('Frame', 'PanelLeft', UIParent)
-		local PanelCenter = CreateFrame('Frame', 'PanelCenter', UIParent)
-		local PanelRight = CreateFrame('Frame', 'PanelRight', UIParent)
-		local BattleGroundPanel = CreateFrame('Frame', 'BattleGroundPanel', UIParent)
-
-		if db.datapanel.panel == "top" then
-			DataPanel:SetPoint('TOP', UIParent, 0, 0)
-			DataPanel:SetHeight(35)
-			DataPanel:SetWidth(getscreenwidth)
-			DataPanel:SetFrameStrata('LOW')
-			DataPanel:SetFrameLevel(0)
-				DataPanel:SetBackdrop({
-				bgFile = db.datapanel.background,
-				edgeFile = db.datapanel.border,
-				edgeSize = 25,
-				insets = {left = 5, right = 5, top = 5, bottom = 5}
-			})
-			DataPanel:SetBackdropColor(0, 0, 0, 1)
-
-
-			-- Left Panel
-			PanelLeft:SetPoint('LEFT', DataPanel, 5, 0)
-			PanelLeft:SetHeight(35)
-			PanelLeft:SetWidth(getscreenwidth / 3)
-			PanelLeft:SetFrameStrata('LOW')
-			PanelLeft:SetFrameLevel(1)		
-
-			-- Center Panel
-			PanelCenter:SetPoint('CENTER', DataPanel, 0, 0)
-			PanelCenter:SetHeight(35)
-			PanelCenter:SetWidth(getscreenwidth / 3)
-			PanelCenter:SetFrameStrata('LOW')
-			PanelCenter:SetFrameLevel(1)		
-
-			-- Right Panel
-			PanelRight:SetPoint('RIGHT', DataPanel, -5, 0)
-			PanelRight:SetHeight(35)
-			PanelRight:SetWidth(getscreenwidth / 3)
-			PanelRight:SetFrameStrata('LOW')
-			PanelRight:SetFrameLevel(1)		
-
-			-- Battleground Panel
-			BattleGroundPanel:SetAllPoints(PanelLeft)
-			BattleGroundPanel:SetFrameStrata('LOW')
-			BattleGroundPanel:SetFrameLevel(1)
-			
-		elseif db.datapanel.panel == "bottom" then
-			DataPanel:SetPoint('BOTTOM', UIParent, 0, 0)
-			DataPanel:SetHeight(35)
-			DataPanel:SetWidth(1200)
-			DataPanel:SetFrameStrata('LOW')
-			DataPanel:SetFrameLevel(0)
-			DataPanel:SetBackdrop({
-				bgFile = db.datapanel.background,
-				edgeFile = db.datapanel.border,
-				edgeSize = 25,
-				insets = {left = 5, right = 5, top = 5, bottom = 5}
-			})
-			DataPanel:SetBackdropColor(0, 0, 0, 1)
-
-			
-			-- Left Panel
-			PanelLeft:SetPoint('LEFT', DataPanel, 5, 0)
-			PanelLeft:SetHeight(35)
-			PanelLeft:SetWidth(1200 / 3)
-			PanelLeft:SetFrameStrata('LOW')
-			PanelLeft:SetFrameLevel(1)		
-
-			-- Center Panel
-			PanelCenter:SetPoint('CENTER', DataPanel, 0, 0)
-			PanelCenter:SetHeight(35)
-			PanelCenter:SetWidth(1200 / 3)
-			PanelCenter:SetFrameStrata('LOW')
-			PanelCenter:SetFrameLevel(1)		
-
-			-- Right panel
-			PanelRight:SetPoint('RIGHT', DataPanel, -5, 0)
-			PanelRight:SetHeight(35)
-			PanelRight:SetWidth(1200 / 3)
-			PanelRight:SetFrameStrata('LOW')
-			PanelRight:SetFrameLevel(1)		
-
-			-- Battleground Panel
-			BattleGroundPanel:SetAllPoints(PanelLeft)
-			BattleGroundPanel:SetFrameStrata('LOW')
-			BattleGroundPanel:SetFrameLevel(1)
-			
-		elseif db.datapanel.panel == "shortbar" then	
-			DataPanel:SetPoint('BOTTOM', UIParent, 0, 0)
-			DataPanel:SetHeight(35)
-			DataPanel:SetWidth(725)
-			DataPanel:SetFrameStrata('LOW')
-			DataPanel:SetFrameLevel(0)
-			DataPanel:SetBackdrop({
-				bgFile = db.datapanel.background,
-				edgeFile = db.datapanel.border,							
-				edgeSize = 25,
-				insets = {left = 3, right = 3, top = 3, bottom = 3},
-			})
-			DataPanel:SetBackdropColor(0, 0, 0, 1)
-			
-			-- Left Panel
-			PanelLeft:SetPoint('LEFT', DataPanel, 5, 0)
-			PanelLeft:SetHeight(35)
-			PanelLeft:SetWidth(725 / 2)
-			PanelLeft:SetFrameStrata('LOW')
-			PanelLeft:SetFrameLevel(1)				
-
-			-- Right panel
-			PanelRight:SetPoint('RIGHT', DataPanel, -5, 0)
-			PanelRight:SetHeight(35)
-			PanelRight:SetWidth(725 / 2)
-			PanelRight:SetFrameStrata('LOW')
-			PanelRight:SetFrameLevel(1)		
-
-			-- Battleground Panel
-			BattleGroundPanel:SetAllPoints(PanelLeft)
-			BattleGroundPanel:SetFrameStrata('LOW')
-			BattleGroundPanel:SetFrameLevel(1)	
-			
-		end
-
-
-
-
-			-- move some frames to make way for the datapanel
-		if db.datapanel.panel == "top" then
-
-			local top = function() end
-			
-			-- Player Frame
-			PlayerFrame:ClearAllPoints() 
-			PlayerFrame:SetPoint("TOPLEFT", -19, -20) 
-			PlayerFrame.ClearAllPoints = top 
-			PlayerFrame.SetPoint = top
-			
-			-- Target Frame
-			TargetFrame:ClearAllPoints() 
-			TargetFrame:SetPoint("TOPLEFT", 250, -20) 
-			TargetFrame.ClearAllPoints = top 
-			TargetFrame.SetPoint = top
-			
-			-- Minimap Frame
-			MinimapCluster:ClearAllPoints() 
-			MinimapCluster:SetPoint('TOPRIGHT', 0, -32) 
-			MinimapCluster.ClearAllPoints = top 
-			MinimapCluster.SetPoint = top
-			
-			-- Buff Frame
-			BuffFrame:ClearAllPoints() 
-			BuffFrame:SetPoint('TOP', MinimapCluster, -110, -2) 
-			BuffFrame.ClearAllPoints = top 
-			BuffFrame.SetPoint = top
-			
-			-- PvP Frame
-			WorldStateAlwaysUpFrame:ClearAllPoints() 
-			WorldStateAlwaysUpFrame:SetPoint('TOP', 0, -32) 
-			WorldStateAlwaysUpFrame.ClearAllpoints = top 
-			WorldStateAlwaysUpFrame.Setpoint = top
-			
-
-		else
-
-			-- Move some stuff for the panel on bottom.
-			
-			local bottom = function() end
-			
-			-- Main Menu Bar
-			MainMenuBar:ClearAllPoints() 
-			MainMenuBar:SetPoint("BOTTOM", DataPanel, "TOP", 0, -3) 
-			MainMenuBar.ClearAllPoints = bottom 
-			MainMenuBar.SetPoint = bottom
-			
-			-- Vehicle Bar
-			OverrideActionBar:ClearAllPoints() 
-			OverrideActionBar:SetPoint("BOTTOM", DataPanel, "TOP", 0, -3) 
-			OverrideActionBar.ClearAllPoints = bottom 
-			OverrideActionBar.SetPoint = bottom
-			
-			-- Pet Battle Bar
-			PetBattleFrame.BottomFrame:ClearAllPoints() 
-			PetBattleFrame.BottomFrame:SetPoint("BOTTOM", DataPanel, "TOP", 0, -3) 
-			PetBattleFrame.BottomFrame.ClearAllPoints = bottom 
-			PetBattleFrame.BottomFrame.SetPoint = bottom
-			
-			-- World Status
-			WorldStateAlwaysUpFrame:ClearAllPoints() 
-			WorldStateAlwaysUpFrame:SetPoint('TOP', -20, -40) 
-			WorldStateAlwaysUpFrame.ClearAllpoints = bottom 
-			WorldStateAlwaysUpFrame.Setpoint = bottom
-			
-			-- Buff Frame
-			BuffFrame:ClearAllPoints() 
-			BuffFrame:SetPoint('TOP', MinimapCluster, -110, -15) 
-			BuffFrame.ClearAllPoints = bottom 
-			BuffFrame.SetPoint = bottom	
-
-			
-			-- Move the tooltip above the Actionbar
-			hooksecurefunc('GameTooltip_SetDefaultAnchor', function(self)
-				self:SetPoint('BOTTOMRIGHT', UIParent, -95, 135)
-			end)
-
-			
-			 -- Move the Bags above the Actionbar
-			CONTAINER_WIDTH = 192;
-			CONTAINER_SPACING = 5;
-			VISIBLE_CONTAINER_SPACING = 3;
-			CONTAINER_OFFSET_Y = 70;
-			CONTAINER_OFFSET_X = 0;
-
-			 
-			function UpdateContainerFrameAnchors()
-				local _, xOffset, yOffset, _, _, _, _;
-				local containerScale = 1;
-				screenHeight = GetScreenHeight() / containerScale;
-				-- Adjust the start anchor for bags depending on the multibars
-				xOffset = CONTAINER_OFFSET_X / containerScale;
-				yOffset = CONTAINER_OFFSET_Y / containerScale + 25;
-				-- freeScreenHeight determines when to start a new column of bags
-				freeScreenHeight = screenHeight - yOffset;
-				column = 0;
-				for index, frameName in ipairs(ContainerFrame1.bags) do
-					frame = _G[frameName];
-					frame:SetScale(containerScale);
-					if ( index == 1 ) then
-						-- First bag
-						frame:SetPoint('BOTTOMRIGHT', frame:GetParent(), 'BOTTOMRIGHT', -xOffset, yOffset );
-					elseif ( freeScreenHeight < frame:GetHeight() ) then
-						-- Start a new column
-						column = column + 1;
-						freeScreenHeight = screenHeight - yOffset;
-						frame:SetPoint('BOTTOMRIGHT', frame:GetParent(), 'BOTTOMRIGHT', -(column * CONTAINER_WIDTH) - xOffset, yOffset );
-					else
-						-- Anchor to the previous bag
-						frame:SetPoint('BOTTOMRIGHT', ContainerFrame1.bags[index - 1], 'TOPRIGHT', 0, CONTAINER_SPACING);   
-					end
-					freeScreenHeight = freeScreenHeight - frame:GetHeight() - VISIBLE_CONTAINER_SPACING;
-				end
-			end	 
-		end	
-	end
-
-	----------------
-	-- Color System
-	----------------
-
-	--[[
-
-		All Credit for Colors.lua goes to Tuks.
-		Tukui = http://www.tukui.org/download.php.
-		Edited by Cokedriver.
-		
-	]]
-
-	if db.misc.classcolor ~= true then
-		local r, g, b = db.datapanel.customcolor.r, db.datapanel.customcolor.g, db.datapanel.customcolor.b
+	end	
+	
+	if BasicUI.db.profile.general.classcolor ~= true then
+		local r, g, b = db.customcolor.r, db.customcolor.g, db.customcolor.b
 		hexa = ("|cff%.2x%.2x%.2x"):format(r * 255, g * 255, b * 255)
 		hexb = "|r"
 	else
-		hexa = ("|cff%.2x%.2x%.2x"):format(ccolor.r * 255, ccolor.g * 255, ccolor.b * 255)
+		hexa = ("|cff%.2x%.2x%.2x"):format(classColor.r * 255, classColor.g * 255, classColor.b * 255)
 		hexb = "|r"
-	end
-
-
+	end	
+	
 	----------------
 	-- Player Armor
 	----------------
-	if db.datapanel.armor and db.datapanel.armor > 0 then
+	if db.armor then
 		local effectiveArmor
 		
-		local Stat = CreateFrame('Frame')
+		local Stat = CreateFrame('Frame', nil, Datapanel)
 		Stat:EnableMouse(true)
 		Stat:SetFrameStrata('BACKGROUND')
 		Stat:SetFrameLevel(3)
 
-		local Text  = DataPanel:CreateFontString(nil, 'OVERLAY')
-		Text:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		PP(db.datapanel.armor, Text)
+		local Text  = Stat:CreateFontString(nil, 'OVERLAY')
+		Text:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
+		self:PlacePlugin(db.armor, Text)
 
 		local function Update(self)
 			effectiveArmor = select(2, UnitArmor("player"))
@@ -531,16 +352,16 @@ function BasicUI_Datapanel:OnEnable()
 	--------------------
 	-- Player Avoidance
 	--------------------
-	if db.datapanel.avd and db.datapanel.avd > 0 then
+	if db.avd then
 		local dodge, parry, block, avoidance, targetlv, playerlv, basemisschance, leveldifference
-		local Stat = CreateFrame('Frame')
+		local Stat = CreateFrame('Frame', nil, Datapanel)
 		Stat:EnableMouse(true)
 		Stat:SetFrameStrata('BACKGROUND')
 		Stat:SetFrameLevel(3)
 
-		local Text  = DataPanel:CreateFontString(nil, 'OVERLAY')
-		Text:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		PP(db.datapanel.avd, Text)
+		local Text  = Stat:CreateFontString(nil, 'OVERLAY')
+		Text:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
+		self:PlacePlugin(db.avd, Text)
 		
 		local targetlv, playerlv
 
@@ -617,15 +438,15 @@ function BasicUI_Datapanel:OnEnable()
 	-- Bags
 	--------
 
-	if db.datapanel.bags and db.datapanel.bags > 0 then
-		local Stat = CreateFrame('Frame')
+	if db.bags then
+		local Stat = CreateFrame('Frame', nil, Datapanel)
 		Stat:EnableMouse(true)
 		Stat:SetFrameStrata('BACKGROUND')
 		Stat:SetFrameLevel(3)
 
-		local Text  = DataPanel:CreateFontString(nil, 'OVERLAY')
-		Text:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		PP(db.datapanel.bags, Text)
+		local Text = Stat:CreateFontString(nil, 'OVERLAY')
+		Text:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
+		self:PlacePlugin(db.bags, Text)
 
 		local Profit	= 0
 		local Spent		= 0
@@ -642,7 +463,7 @@ function BasicUI_Datapanel:OnEnable()
 			if c >= 10000 then
 				local g = math.floor(c/10000)
 				c = c - g*10000
-				str = str..g.."|cFFFFD800g|r "
+				str = str..BreakUpLargeNumbers(g).."|cFFFFD800g|r "
 			end
 			if c >= 100 then
 				local s = math.floor(c/100)
@@ -656,29 +477,6 @@ function BasicUI_Datapanel:OnEnable()
 			return str
 		end
 		
-		local function FormatTooltipMoney(c)
-			if not c then return end
-			local str = ""
-			if not c or c < 0 then 
-				return str 
-			end
-			
-			if c >= 10000 then
-				local g = math.floor(c/10000)
-				c = c - g*10000
-				str = str..g.."|cFFFFD800g|r "
-			end
-			if c >= 100 then
-				local s = math.floor(c/100)
-				c = c - s*100
-				str = str..s.."|cFFC7C7C7s|r "
-			end
-			if c >= 0 then
-				str = str..c.."|cFFEEA55Fc|r"
-			end
-			
-			return str
-		end	
 		local function OnEvent(self, event)
 			local totalSlots, freeSlots = 0, 0
 			local itemLink, subtype, isBag
@@ -717,19 +515,17 @@ function BasicUI_Datapanel:OnEnable()
 			
 			if OldMoney>NewMoney then		-- Lost Money
 				Spent = Spent - Change
-			else							-- Gained Moeny
+			else							-- Gained Money
 				Profit = Profit + Change
 			end
 			
-			--Text:SetText(formatMoney(NewMoney))
-			-- Setup Money Tooltip
 			self:SetAllPoints(Text)
 
 			local myPlayerName  = UnitName("player")				
 			if not BasicDB then BasicDB = {} end
 			if not BasicDB.gold then BasicDB.gold = {} end
 			if not BasicDB.gold[myPlayerRealm] then BasicDB.gold[myPlayerRealm]={} end
-			BasicDB.gold[myPlayerRealm][myPlayerName] = GetMoney()		
+			BasicDB.gold[myPlayerRealm][myPlayerName] = GetMoney()	
 				
 			OldMoney = NewMoney	
 				
@@ -741,9 +537,11 @@ function BasicUI_Datapanel:OnEnable()
 		Stat:RegisterEvent("PLAYER_TRADE_MONEY")
 		Stat:RegisterEvent("TRADE_MONEY_CHANGED")
 		Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
+		Stat:RegisterEvent("BAG_UPDATE")
+		
 		Stat:SetScript('OnMouseDown', 
 			function()
-				if db.datapanel.bag ~= true then
+				if db.bag ~= true then
 					ToggleAllBags()
 				else
 					ToggleBag(0)
@@ -756,9 +554,9 @@ function BasicUI_Datapanel:OnEnable()
 				local anchor, panel, xoff, yoff = DataTextTooltipAnchor(Text)
 				GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 				GameTooltip:ClearLines()
-				GameTooltip:AddLine(hexa..myname.."'s"..hexb.." Gold")
+				GameTooltip:AddLine(hexa..PLAYER_NAME.."'s"..hexb.." Gold")
 				GameTooltip:AddLine' '			
-				GameTooltip:AddLine("Session: ")
+				GameTooltip:AddLine("This Session: ")				
 				GameTooltip:AddDoubleLine("Earned:", formatMoney(Profit), 1, 1, 1, 1, 1, 1)
 				GameTooltip:AddDoubleLine("Spent:", formatMoney(Spent), 1, 1, 1, 1, 1, 1)
 				if Profit < Spent then
@@ -766,24 +564,25 @@ function BasicUI_Datapanel:OnEnable()
 				elseif (Profit-Spent)>0 then
 					GameTooltip:AddDoubleLine("Profit:", formatMoney(Profit-Spent), 0, 1, 0, 1, 1, 1)
 				end				
-				GameTooltip:AddLine' '								
-			
+				GameTooltip:AddDoubleLine("Total:", formatMoney(OldMoney), 1, 1, 1, 1, 1, 1)
+				GameTooltip:AddLine' '
+				
 				local totalGold = 0				
-				GameTooltip:AddLine("Character: ")			
+				GameTooltip:AddLine("Character's: ")			
 				local thisRealmList = BasicDB.gold[myPlayerRealm];
 				for k,v in pairs(thisRealmList) do
-					GameTooltip:AddDoubleLine(k, FormatTooltipMoney(v), 1, 1, 1, 1, 1, 1)
+					GameTooltip:AddDoubleLine(k, formatMoney(v), 1, 1, 1, 1, 1, 1)
 					totalGold=totalGold+v;
 				end  
 				GameTooltip:AddLine' '
-				GameTooltip:AddLine("Server: ")
-				GameTooltip:AddDoubleLine("Total: ", FormatTooltipMoney(totalGold), 1, 1, 1, 1, 1, 1)
+				GameTooltip:AddLine("Server:")
+				GameTooltip:AddDoubleLine("Total: ", formatMoney(totalGold), 1, 1, 1, 1, 1, 1)
 
 				for i = 1, GetNumWatchedTokens() do
 					local name, count, extraCurrencyType, icon, itemID = GetBackpackCurrencyInfo(i)
 					if name and i == 1 then
 						GameTooltip:AddLine(" ")
-						GameTooltip:AddLine(CURRENCY)
+						GameTooltip:AddLine(CURRENCY..":")
 					end
 					local r, g, b = 1,1,1
 					if itemID then r, g, b = GetItemQualityColor(select(3, GetItemInfo(itemID))) end
@@ -813,7 +612,7 @@ function BasicUI_Datapanel:OnEnable()
 	----------------
 	-- Battleground
 	----------------
-	if db.datapanel.battleground == true then 
+	if db.battleground == true then 
 
 		--Map IDs
 		local WSG = 443
@@ -825,7 +624,7 @@ function BasicUI_Datapanel:OnEnable()
 		local TBFG = 736
 		local AB = 461
 
-		local bgframe = BattleGroundPanel
+		local bgframe = BGPanel
 		bgframe:SetScript('OnEnter', function(self)
 			local numScores = GetNumBattlefieldScores()
 			for i=1, numScores do
@@ -869,23 +668,23 @@ function BasicUI_Datapanel:OnEnable()
 		end) 
 		bgframe:SetScript('OnLeave', function(self) GameTooltip:Hide() end)
 
-		local Stat = CreateFrame('Frame')
+		local Stat = CreateFrame('Frame', nil, Datapanel)
 		Stat:EnableMouse(true)
 
-		local Text1  = BattleGroundPanel:CreateFontString(nil, 'OVERLAY')
-		Text1:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		Text1:SetPoint('LEFT', BattleGroundPanel, 30, 0)
-		Text1:SetHeight(DataPanel:GetHeight())
+		local Text1  = BGPanel:CreateFontString(nil, 'OVERLAY')
+		Text1:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
+		Text1:SetPoint('LEFT', BGPanel, 30, 0)
+		Text1:SetHeight(Datapanel:GetHeight())
 
-		local Text2  = BattleGroundPanel:CreateFontString(nil, 'OVERLAY')
-		Text2:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		Text2:SetPoint('CENTER', BattleGroundPanel, 0, 0)
-		Text2:SetHeight(DataPanel:GetHeight())
+		local Text2  = BGPanel:CreateFontString(nil, 'OVERLAY')
+		Text2:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
+		Text2:SetPoint('CENTER', BGPanel, 0, 0)
+		Text2:SetHeight(Datapanel:GetHeight())
 
-		local Text3  = BattleGroundPanel:CreateFontString(nil, 'OVERLAY')
-		Text3:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		Text3:SetPoint('RIGHT', BattleGroundPanel, -30, 0)
-		Text3:SetHeight(DataPanel:GetHeight())
+		local Text3  = BGPanel:CreateFontString(nil, 'OVERLAY')
+		Text3:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
+		Text3:SetPoint('RIGHT', BGPanel, -30, 0)
+		Text3:SetHeight(Datapanel:GetHeight())
 
 		local int = 2
 		local function Update(self, t)
@@ -902,7 +701,7 @@ function BasicUI_Datapanel:OnEnable()
 						dmgtxt = ("Damage : "..hexa..damageDone..hexb)
 					end
 					if ( name ) then
-						if ( name == myname ) then
+						if ( name == PLAYER_NAME ) then
 							Text2:SetText("Honor : "..hexa..format('%d', honorGained)..hexb)
 							Text1:SetText(dmgtxt)
 							Text3:SetText("Killing Blows : "..hexa..killingBlows..hexb)
@@ -919,13 +718,13 @@ function BasicUI_Datapanel:OnEnable()
 				local inInstance, instanceType = IsInInstance()
 				if inInstance and (instanceType == 'pvp') then			
 					bgframe:Show()
-					PanelLeft:Hide()
+					StatPanelLeft:Hide()
 				else
 					Text1:SetText('')
 					Text2:SetText('')
 					Text3:SetText('')
 					bgframe:Hide()
-					PanelLeft:Show()
+					StatPanelLeft:Show()
 				end
 			end
 		end
@@ -939,15 +738,15 @@ function BasicUI_Datapanel:OnEnable()
 	----------------
 	-- Call To Arms
 	----------------
-	if db.datapanel.calltoarms and db.datapanel.calltoarms > 0 then
-		local Stat = CreateFrame("Frame")
+	if db.calltoarms then
+		local Stat = CreateFrame('Frame', nil, Datapanel)
 		Stat:EnableMouse(true)
 		Stat:SetFrameStrata("MEDIUM")
 		Stat:SetFrameLevel(3)
 
-		local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		PP(db.datapanel.calltoarms, Text)
+		local Text  = Stat:CreateFontString(nil, "OVERLAY")
+		Text:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
+		self:PlacePlugin(db.calltoarms, Text)
 		
 		local function MakeIconString(tank, healer, damage)
 			local str = ""
@@ -1010,7 +809,7 @@ function BasicUI_Datapanel:OnEnable()
 			local anchor, panel, xoff, yoff = DataTextTooltipAnchor(Text)
 			GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 			GameTooltip:ClearLines()
-			GameTooltip:AddLine(hexa..myname.."'s"..hexb.." Call to Arms")
+			GameTooltip:AddLine(hexa..PLAYER_NAME.."'s"..hexb.." Call to Arms")
 			GameTooltip:AddLine(' ')
 			
 			local allUnavailable = true
@@ -1066,15 +865,15 @@ function BasicUI_Datapanel:OnEnable()
 	---------------
 	-- Coordinates
 	---------------
-	if db.datapanel.coords and db.datapanel.coords > 0 then
-		local Stat = CreateFrame("Frame")
+	if db.coords then
+		local Stat = CreateFrame('Frame', nil, Datapanel)
 		Stat:EnableMouse(true)
 		Stat:SetFrameStrata('BACKGROUND')
 		Stat:SetFrameLevel(3)
 
-		local Text = DataPanel:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		PP(db.datapanel.coords, Text)
+		local Text = Stat:CreateFontString(nil, "OVERLAY")
+		Text:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
+		self:PlacePlugin(db.coords, Text)
 
 		local function Update(self)
 		local px,py=GetPlayerMapPosition("player")
@@ -1088,20 +887,20 @@ function BasicUI_Datapanel:OnEnable()
 	---------------------
 	-- Damage Per Second
 	---------------------
-	if db.datapanel.dps_text and db.datapanel.dps_text > 0 then
+	if db.dps_text then
 		local events = {SWING_DAMAGE = true, RANGE_DAMAGE = true, SPELL_DAMAGE = true, SPELL_PERIODIC_DAMAGE = true, DAMAGE_SHIELD = true, DAMAGE_SPLIT = true, SPELL_EXTRA_ATTACKS = true}
-		local DPS_FEED = CreateFrame('Frame')
+		local DPS_FEED = CreateFrame('Frame', nil, Datapanel)
 		local player_id = UnitGUID('player')
 		local dmg_total, last_dmg_amount = 0, 0
 		local cmbt_time = 0
 
 		local pet_id = UnitGUID('pet')
 		 
-		local dText = DataPanel:CreateFontString(nil, 'OVERLAY')
-		dText:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
+		local dText = DPS_FEED:CreateFontString(nil, 'OVERLAY')
+		dText:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
 		dText:SetText("DPS: ", '0')
 
-		PP(db.datapanel.dps_text, dText)
+		self:PlacePlugin(db.dps_text, dText)
 
 		DPS_FEED:EnableMouse(true)
 		DPS_FEED:SetFrameStrata('BACKGROUND')
@@ -1146,13 +945,13 @@ function BasicUI_Datapanel:OnEnable()
 			   
 			if id == player_id or id == pet_id then
 				if select(2, ...) == "SWING_DAMAGE" then
-					if toc < 40200 then
+					if TOC_VERSION < 40200 then
 						last_dmg_amount = select(10, ...)
 					else
 						last_dmg_amount = select(12, ...)
 					end
 				else
-					if toc < 40200 then
+					if TOC_VERSION < 40200 then
 						last_dmg_amount = select(13, ...)
 					else
 						last_dmg_amount = select(15, ...)
@@ -1190,7 +989,7 @@ function BasicUI_Datapanel:OnEnable()
 	--------------
 	-- Durability
 	--------------
-	if db.datapanel.dur and db.datapanel.dur > 0 then
+	if db.dur then
 
 		Slots = {
 			[1] = {1, "Head", 1000},
@@ -1207,14 +1006,14 @@ function BasicUI_Datapanel:OnEnable()
 		}
 
 
-		local Stat = CreateFrame("Frame")
+		local Stat = CreateFrame('Frame', nil, Datapanel)
 		Stat:EnableMouse(true)
 		Stat:SetFrameStrata("MEDIUM")
 		Stat:SetFrameLevel(3)
 
-		local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		PP(db.datapanel.dur, Text)
+		local Text  = Stat:CreateFontString(nil, "OVERLAY")
+		Text:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
+		self:PlacePlugin(db.dur, Text)
 
 		local function OnEvent(self)
 			local Total = 0
@@ -1251,7 +1050,7 @@ function BasicUI_Datapanel:OnEnable()
 				local anchor, panel, xoff, yoff = DataTextTooltipAnchor(Text)
 				GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 				GameTooltip:ClearLines()
-				GameTooltip:AddLine(hexa..myname.."'s"..hexb.." Durability")
+				GameTooltip:AddLine(hexa..PLAYER_NAME.."'s"..hexb.." Durability")
 				GameTooltip:AddLine' '			
 				for i = 1, 11 do
 					if Slots[i][3] ~= 1000 then
@@ -1270,11 +1069,11 @@ function BasicUI_Datapanel:OnEnable()
 
 	end
 
-	--------------------------------------------------------------------
+	-----------
 	-- FRIEND
-	--------------------------------------------------------------------
+	-----------
 
-	if db.datapanel.friends or db.datapanel.friends > 0 then
+	if db.friends then
 
 
 		local _, _, _, broadcastText = BNGetInfo();
@@ -1308,14 +1107,14 @@ function BasicUI_Datapanel:OnEnable()
 			hideOnEscape = 1
 		}
 
-		local Stat = CreateFrame("Frame")
+		local Stat = CreateFrame('Frame', nil, Datapanel)
 		Stat:EnableMouse(true)
 		Stat:SetFrameStrata("MEDIUM")
 		Stat:SetFrameLevel(3)
 
-		local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		PP(db.datapanel.friends, Text)
+		local Text  = Stat:CreateFontString(nil, "OVERLAY")
+		Text:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
+		self:PlacePlugin(db.friends, Text)
 
 		local menuFrame = CreateFrame("Frame", "FriendRightClickMenu", UIParent, "UIDropDownMenuTemplate")
 		local menuList = {
@@ -1511,8 +1310,8 @@ function BasicUI_Datapanel:OnEnable()
 						menuList[3].menuList[menuCountWhispers] = {text = realID, arg1 = realID, arg2 = true, notCheckable=true, func = whisperClick}
 
 						if BNTable[i][6] == wowString and UnitFactionGroup("player") == BNTable[i][12] then
-							classc, levelc = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[BNTable[i][14]], GetQuestDifficultyColor(BNTable[i][16])
-							if classc == nil then classc = GetQuestDifficultyColor(BNTable[i][16]) end
+							classc, levelc = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[BNTable[i][14]], GetQuestDifficultyColor(90)
+							if classc == nil then classc = GetQuestDifficultyColor(90) end
 
 							if UnitInParty(BNTable[i][4]) or UnitInRaid(BNTable[i][4]) then grouped = 1 else grouped = 2 end
 							menuCountInvites = menuCountInvites + 1
@@ -1545,7 +1344,7 @@ function BasicUI_Datapanel:OnEnable()
 				end
 			end
 
-			Text:SetFormattedText(displayString, "Friends: ", totalOnline + BNTotalOnline)
+			Text:SetFormattedText(displayString, "Friends:", totalOnline + BNTotalOnline)
 			self:SetAllPoints(Text)
 		end
 
@@ -1560,7 +1359,7 @@ function BasicUI_Datapanel:OnEnable()
 				local anchor, panel, xoff, yoff = DataTextTooltipAnchor(Text)
 				GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 				GameTooltip:ClearLines()	
-				GameTooltip:AddDoubleLine(hexa..myname.."'s"..hexb.." Friends", format(totalOnlineString, totalonline, totalfriends))
+				GameTooltip:AddDoubleLine(hexa..PLAYER_NAME.."'s"..hexb.." Friends", format(totalOnlineString, totalonline, totalfriends))
 				if totalOnline > 0 then
 					GameTooltip:AddLine(' ')
 					GameTooltip:AddLine(worldOfWarcraftString)
@@ -1592,8 +1391,8 @@ function BasicUI_Datapanel:OnEnable()
 							if BNTable[i][6] == wowString then
 								if (BNTable[i][8] == true) then status = 1 elseif (BNTable[i][9] == true) then status = 2 else status = 3 end
 			
-								classc, levelc = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[BNTable[i][14]], GetQuestDifficultyColor(BNTable[i][16])
-								if classc == nil then classc = GetQuestDifficultyColor(BNTable[i][16]) end
+								classc, levelc = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[BNTable[i][14]], GetQuestDifficultyColor(90)
+								if classc == nil then classc = GetQuestDifficultyColor(90) end
 								
 								if UnitInParty(BNTable[i][4]) or UnitInRaid(BNTable[i][4]) then grouped = 1 else grouped = 2 end
 								GameTooltip:AddDoubleLine(format(clientLevelNameString, BNTable[i][6],levelc.r*255,levelc.g*255,levelc.b*255,BNTable[i][16],classc.r*255,classc.g*255,classc.b*255,BNTable[i][4],groupedTable[grouped], 255, 0, 0, statusTable[status]),BNTable[i][2],238,238,238,238,238,238)
@@ -1631,16 +1430,16 @@ function BasicUI_Datapanel:OnEnable()
 	---------
 	-- Guild
 	---------
-	if db.datapanel.guild and db.datapanel.guild > 0 then
+	if db.guild then
 
-		local Stat = CreateFrame("Frame")
+		local Stat = CreateFrame('Frame', nil, Datapanel)
 		Stat:EnableMouse(true)
 		Stat:SetFrameStrata("MEDIUM")
 		Stat:SetFrameLevel(3)
 
-		local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		PP(db.datapanel.guild, Text)
+		local Text  = Stat:CreateFontString(nil, "OVERLAY")
+		Text:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
+		self:PlacePlugin(db.guild, Text)
 
 		local tthead, ttsubh, ttoff = {r=0.4, g=0.78, b=1}, {r=0.75, g=0.9, b=1}, {r=.3,g=1,b=.3}
 		local activezone, inactivezone = {r=0.3, g=1.0, b=0.3}, {r=0.65, g=0.65, b=0.65}
@@ -1799,7 +1598,7 @@ function BasicUI_Datapanel:OnEnable()
 			local anchor, panel, xoff, yoff = DataTextTooltipAnchor(Text)
 			GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 			GameTooltip:ClearLines()
-			GameTooltip:AddLine(hexa..myname.."'s"..hexb.." Guild")		
+			GameTooltip:AddLine(hexa..PLAYER_NAME.."'s"..hexb.." Guild")		
 			if GuildInfo then
 				GameTooltip:AddDoubleLine(string.format(guildInfoString0, GuildInfo), string.format(guildInfoString1, "Guild Level:", GuildLevel),tthead.r,tthead.g,tthead.b,tthead.r,tthead.g,tthead.b)		
 			end
@@ -1815,8 +1614,7 @@ function BasicUI_Datapanel:OnEnable()
 			local col = RGBToHex(ttsubh.r, ttsubh.g, ttsubh.b)
 			GameTooltip:AddLine' '
 			if GuildLevel and GuildLevel ~= 25 then
-				--UpdateGuildXP()
-				
+
 				if guildXP[0] then
 					local currentXP, nextLevelXP, percentTotal = unpack(guildXP[0])
 					
@@ -1880,15 +1678,15 @@ function BasicUI_Datapanel:OnEnable()
 	----------------
 	-- Player Haste
 	----------------
-	if db.datapanel.haste and db.datapanel.haste > 0 then
-		local Stat = CreateFrame('Frame')
+	if db.haste then
+		local Stat = CreateFrame('Frame', nil, Datapanel)
 		Stat:EnableMouse(true)
 		Stat:SetFrameStrata('BACKGROUND')
 		Stat:SetFrameLevel(3)
 
-		local Text  = DataPanel:CreateFontString(nil, 'OVERLAY')
-		Text:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		PP(db.datapanel.haste, Text)
+		local Text  = Stat:CreateFontString(nil, 'OVERLAY')
+		Text:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
+		self:PlacePlugin(db.haste, Text)
 
 		local int = 1
 
@@ -1916,108 +1714,21 @@ function BasicUI_Datapanel:OnEnable()
 		Update(Stat, 10)
 	end
 
-	--------------------
-	-- Heals Per Second
-	--------------------
-	if db.datapanel.hps_text and db.datapanel.hps_text > 0 then
-		local events = {SPELL_HEAL = true, SPELL_PERIODIC_HEAL = true}
-		local HPS_FEED = CreateFrame('Frame')
-		local player_id = UnitGUID('player')
-		local actual_heals_total, cmbt_time = 0
-	 
-		local hText = DataPanel:CreateFontString(nil, 'OVERLAY')
-		hText:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		hText:SetText("HPS: ", '0')
-	 
-		PP(db.datapanel.hps_text, hText)
-	 
-		HPS_FEED:EnableMouse(true)
-		HPS_FEED:SetFrameStrata('BACKGROUND')
-		HPS_FEED:SetFrameLevel(3)
-		HPS_FEED:SetHeight(20)
-		HPS_FEED:SetWidth(100)
-		HPS_FEED:SetAllPoints(hText)
-	 
-		HPS_FEED:SetScript('OnEvent', function(self, event, ...) self[event](self, ...) end)
-		HPS_FEED:RegisterEvent('PLAYER_LOGIN')
-	 
-		HPS_FEED:SetScript('OnUpdate', function(self, elap)
-			if UnitAffectingCombat('player') then
-				HPS_FEED:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
-				cmbt_time = cmbt_time + elap
-			else
-				HPS_FEED:UnregisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
-			end
-			hText:SetText(get_hps())
-		end)
-	 
-		function HPS_FEED:PLAYER_LOGIN()
-			HPS_FEED:RegisterEvent('PLAYER_REGEN_ENABLED')
-			HPS_FEED:RegisterEvent('PLAYER_REGEN_DISABLED')
-			player_id = UnitGUID('player')
-			HPS_FEED:UnregisterEvent('PLAYER_LOGIN')
-		end
-	 
-		-- handler for the combat log. used http://www.wowwiki.com/API_COMBAT_LOG_EVENT for api
-		function HPS_FEED:COMBAT_LOG_EVENT_UNFILTERED(...)         
-			-- filter for events we only care about. i.e heals
-			if not events[select(2, ...)] then return end
-			if event == 'PLAYER_REGEN_DISABLED' then return end
-
-			-- only use events from the player
-			local id = select(4, ...)
-			if id == player_id then
-				if toc < 40200 then
-					amount_healed = select(13, ...)
-					amount_over_healed = select(14, ...)
-				else
-					amount_healed = select(15, ...)
-					amount_over_healed = select(16, ...)
-				end
-				-- add to the total the healed amount subtracting the overhealed amount
-				actual_heals_total = actual_heals_total + math.max(0, amount_healed - amount_over_healed)
-			end
-		end
-		
-		function get_hps()
-			if (actual_heals_total == 0) then
-				return (hexa.."HPS: "..hexb..'0' )
-			else
-				return string.format('%.1f '..hexa.."HPS"..hexb, (actual_heals_total or 0) / (cmbt_time or 1))
-			end
-		end
-	 
-		function HPS_FEED:PLAYER_REGEN_ENABLED()
-			hText:SetText(get_hps)
-		end
-	   
-		function HPS_FEED:PLAYER_REGEN_DISABLED()
-			cmbt_time = 0
-			actual_heals_total = 0
-		end
-		 
-		HPS_FEED:SetScript('OnMouseDown', function (self, button, down)
-			cmbt_time = 0
-			actual_heals_total = 0
-		end)
-	 
-	end
-
 	---------------
 	-- Professions
 	---------------
-	if db.datapanel.pro and db.datapanel.pro > 0 then
+	if db.pro then
 
-		local Stat = CreateFrame('Button')
+		local Stat = CreateFrame('Button', nil, Datapanel)
 		Stat:RegisterEvent('PLAYER_ENTERING_WORLD')
 		Stat:SetFrameStrata('BACKGROUND')
 		Stat:SetFrameLevel(3)
 		Stat:EnableMouse(true)
 		Stat.tooltip = false
 
-		local Text = DataPanel:CreateFontString(nil, 'OVERLAY')
-		Text:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		PP(db.datapanel.pro, Text)
+		local Text = Stat:CreateFontString(nil, 'OVERLAY')
+		Text:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
+		self:PlacePlugin(db.pro, Text)
 
 		local function Update(self)
 			for i = 1, select("#", GetProfessions()) do
@@ -2035,7 +1746,7 @@ function BasicUI_Datapanel:OnEnable()
 			local anchor, panel, xoff, yoff = DataTextTooltipAnchor(Text)
 			GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 			GameTooltip:ClearLines()
-			GameTooltip:AddLine(hexa..myname.."'s"..hexb.." Professions")
+			GameTooltip:AddLine(hexa..PLAYER_NAME.."'s"..hexb.." Professions")
 			GameTooltip:AddLine' '		
 			for i = 1, select("#", GetProfessions()) do
 				local v = select(i, GetProfessions());
@@ -2098,16 +1809,16 @@ function BasicUI_Datapanel:OnEnable()
 	-----------
 	-- Recount
 	-----------
-	if db.datapanel.recount and db.datapanel.recount > 0 then 
+	if db.recount then 
 
-		local RecountDPS = CreateFrame("Frame")
+		local RecountDPS = CreateFrame('Frame', nil, Datapanel)
 		RecountDPS:EnableMouse(true)
 		RecountDPS:SetFrameStrata("MEDIUM")
 		RecountDPS:SetFrameLevel(3)
 
-		local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		PP(db.datapanel.recount, Text)
+		local Text  = RecountDPS:CreateFontString(nil, "OVERLAY")
+		Text:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
+		self:PlacePlugin(db.recount, Text)
 		RecountDPS:SetAllPoints(Text)
 
 		function OnEvent(self, event, ...)
@@ -2115,7 +1826,7 @@ function BasicUI_Datapanel:OnEnable()
 				if IsAddOnLoaded("Recount") then
 					RecountDPS:RegisterEvent("PLAYER_REGEN_ENABLED")
 					RecountDPS:RegisterEvent("PLAYER_REGEN_DISABLED")
-					myname = UnitName("player")
+					PLAYER_NAME = UnitName("player")
 					currentFightDPS = 0
 				else
 					return
@@ -2137,7 +1848,7 @@ function BasicUI_Datapanel:OnEnable()
 
 		function RecountDPS:getDPS()
 			if not IsAddOnLoaded("Recount") then return "N/A" end
-			if db.datapanel.recountraiddps == true then
+			if db.recountraiddps == true then
 				-- show raid dps
 				_, dps = RecountDPS:getRaidValuePerSecond(Recount.db.profile.CurDataSet)
 				return dps
@@ -2148,7 +1859,7 @@ function BasicUI_Datapanel:OnEnable()
 
 		-- quick dps calculation from recount's data
 		function RecountDPS:getValuePerSecond()
-			local _, dps = Recount:MergedPetDamageDPS(Recount.db2.combatants[myname], Recount.db.profile.CurDataSet)
+			local _, dps = Recount:MergedPetDamageDPS(Recount.db2.combatants[PLAYER_NAME], Recount.db.profile.CurDataSet)
 			return math.floor(10 * dps + 0.5) / 10
 		end
 
@@ -2177,10 +1888,10 @@ function BasicUI_Datapanel:OnEnable()
 			local anchor, panel, xoff, yoff = DataTextTooltipAnchor(Text)
 			GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 			GameTooltip:ClearLines()
-			GameTooltip:AddLine(hexa..myname.."'s"..hexb.." Damage")
+			GameTooltip:AddLine(hexa..PLAYER_NAME.."'s"..hexb.." Damage")
 			GameTooltip:AddLine' '		
 			if IsAddOnLoaded("Recount") then
-				local damage, dps = Recount:MergedPetDamageDPS(Recount.db2.combatants[myname], Recount.db.profile.CurDataSet)
+				local damage, dps = Recount:MergedPetDamageDPS(Recount.db2.combatants[PLAYER_NAME], Recount.db.profile.CurDataSet)
 				local raid_damage, raid_dps = RecountDPS:getRaidValuePerSecond(Recount.db.profile.CurDataSet)
 				-- format the number
 				dps = math.floor(10 * dps + 0.5) / 10
@@ -2231,16 +1942,16 @@ function BasicUI_Datapanel:OnEnable()
 	--------------------
 	-- Talent Spec Swap
 	--------------------
-	if db.datapanel.spec and db.datapanel.spec > 0 then
+	if db.spec then
 
-		local Stat = CreateFrame('Frame')
+		local Stat = CreateFrame('Frame', nil, Datapanel)
 		Stat:EnableMouse(true)
 		Stat:SetFrameStrata('BACKGROUND')
 		Stat:SetFrameLevel(3)
 
-		local Text  = DataPanel:CreateFontString(nil, 'OVERLAY')
-		Text:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		PP(db.datapanel.spec, Text)
+		local Text  = Stat:CreateFontString(nil, 'OVERLAY')
+		Text:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
+		self:PlacePlugin(db.spec, Text)
 
 		local talent = {}
 		local active
@@ -2280,7 +1991,7 @@ function BasicUI_Datapanel:OnEnable()
 			GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 
 			GameTooltip:ClearLines()
-			GameTooltip:AddLine(hexa..myname.."'s"..hexb.." Spec")
+			GameTooltip:AddLine(hexa..PLAYER_NAME.."'s"..hexb.." Spec")
 			GameTooltip:AddLine' '		
 			for i = 1, GetNumSpecGroups() do
 				if GetSpecialization(false, false, i) then
@@ -2335,17 +2046,17 @@ function BasicUI_Datapanel:OnEnable()
 	-----------------
 	-- Statistics #1
 	-----------------
-	if db.datapanel.stat1 and db.datapanel.stat1 > 0 then
+	if db.stat1 then
 
-		local Stat = CreateFrame("Frame")
+		local Stat = CreateFrame('Frame', nil, Datapanel)
 		Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
 		Stat:SetFrameStrata("BACKGROUND")
 		Stat:SetFrameLevel(3)
 		Stat:EnableMouse(true)
 
-		local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		PP(db.datapanel.stat1, Text)
+		local Text  = Stat:CreateFontString(nil, "OVERLAY")
+		Text:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
+		self:PlacePlugin(db.stat1, Text)
 
 		local format = string.format
 		local targetlv, playerlv = UnitLevel("target"), UnitLevel("player")
@@ -2365,7 +2076,7 @@ function BasicUI_Datapanel:OnEnable()
 			local anchor, panel, xoff, yoff = DataTextTooltipAnchor(Text)
 			GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 			GameTooltip:ClearLines()
-			GameTooltip:AddLine(hexa..myname.."'s"..hexb.." Statistics")
+			GameTooltip:AddLine(hexa..PLAYER_NAME.."'s"..hexb.." Statistics")
 			GameTooltip:AddLine' '		
 			
 			if Role == "Tank" then
@@ -2387,20 +2098,20 @@ function BasicUI_Datapanel:OnEnable()
 				local base, combat = GetManaRegen()
 				GameTooltip:AddDoubleLine(MANA_REGEN, format(manaRegenString, base * 5, combat * 5), 1, 1, 1)
 			elseif Role == "Melee" then
-				local hit =  myclass == "HUNTER" and GetCombatRating(CR_HIT_RANGED) or GetCombatRating(CR_HIT_MELEE)
-				local hitBonus =  myclass == "HUNTER" and GetCombatRatingBonus(CR_HIT_RANGED) or GetCombatRatingBonus(CR_HIT_MELEE)
+				local hit =  UNIT_CLASS == "HUNTER" and GetCombatRating(CR_HIT_RANGED) or GetCombatRating(CR_HIT_MELEE)
+				local hitBonus =  UNIT_CLASS == "HUNTER" and GetCombatRatingBonus(CR_HIT_RANGED) or GetCombatRatingBonus(CR_HIT_MELEE)
 			
 				GameTooltip:AddDoubleLine(STAT_HIT_CHANCE, format(modifierString, hit, hitBonus), 1, 1, 1)
 				
-				local haste = myclass == "HUNTER" and GetCombatRating(CR_HASTE_RANGED) or GetCombatRating(CR_HASTE_MELEE)
-				local hasteBonus = myclass == "HUNTER" and GetCombatRatingBonus(CR_HASTE_RANGED) or GetCombatRatingBonus(CR_HASTE_MELEE)
+				local haste = UNIT_CLASS == "HUNTER" and GetCombatRating(CR_HASTE_RANGED) or GetCombatRating(CR_HASTE_MELEE)
+				local hasteBonus = UNIT_CLASS == "HUNTER" and GetCombatRatingBonus(CR_HASTE_RANGED) or GetCombatRatingBonus(CR_HASTE_MELEE)
 				
 				GameTooltip:AddDoubleLine(STAT_HASTE, format(modifierString, haste, hasteBonus), 1, 1, 1)
 			end
 			
 			local masteryspell
 			if GetCombatRating(CR_MASTERY) ~= 0 and GetSpecialization() then
-				if myclass == "DRUID" then
+				if UNIT_CLASS == "DRUID" then
 					if Role == "Melee" then
 						masteryspell = select(2, GetSpecializationMasterySpells(GetSpecialization()))
 					elseif Role == "Tank" then
@@ -2457,10 +2168,10 @@ function BasicUI_Datapanel:OnEnable()
 			if parry <= 0 then parry = 0 end
 			if block <= 0 then block = 0 end
 			
-			if myclass == "DRUID" then
+			if UNIT_CLASS == "DRUID" then
 				parry = 0
 				block = 0
-			elseif myclass == "DEATHKNIGHT" then
+			elseif UNIT_CLASS == "DEATHKNIGHT" then
 				block = 0
 			end
 			avoidance = (dodge+parry+block+basemisschance)
@@ -2488,7 +2199,7 @@ function BasicUI_Datapanel:OnEnable()
 			local Rbase, RposBuff, RnegBuff = UnitRangedAttackPower("player");
 			local Reffective = Rbase + RposBuff + RnegBuff;
 				
-			if myclass == "HUNTER" then
+			if UNIT_CLASS == "HUNTER" then
 				pwr = Reffective
 			else
 				pwr = effective
@@ -2523,17 +2234,17 @@ function BasicUI_Datapanel:OnEnable()
 	-----------------
 	-- Statistics #2
 	-----------------
-	if db.datapanel.stat2 and db.datapanel.stat2 > 0 then
+	if db.stat2 then
 
-		local Stat = CreateFrame("Frame")
+		local Stat = CreateFrame('Frame', nil, Datapanel)
 		Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
 		Stat:SetFrameStrata("BACKGROUND")
 		Stat:SetFrameLevel(3)
 		Stat:EnableMouse(true)
 
-		local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		PP(db.datapanel.stat2, Text)
+		local Text  = Stat:CreateFontString(nil, "OVERLAY")
+		Text:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
+		self:PlacePlugin(db.stat2, Text)
 
 		local _G = getfenv(0)
 		local format = string.format
@@ -2575,7 +2286,7 @@ function BasicUI_Datapanel:OnEnable()
 			local anchor, panel, xoff, yoff = DataTextTooltipAnchor(Text)
 			GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 			GameTooltip:ClearLines()
-			GameTooltip:AddLine(hexa..myname.."'s"..hexb.." Statistics")
+			GameTooltip:AddLine(hexa..PLAYER_NAME.."'s"..hexb.." Statistics")
 			GameTooltip:AddLine' '	
 			
 			if Role == "Tank" then
@@ -2592,14 +2303,14 @@ function BasicUI_Datapanel:OnEnable()
 			elseif Role == "Caster" or Role == "Melee" then
 				AddTooltipHeader(MAGIC_RESISTANCES_COLON)
 				
-				local baseResistance, effectiveResistance, posResitance, negResistance
+				local base, total, bonus, minus
 				for i = 2, 6 do
-					baseResistance, effectiveResistance, posResitance, negResistance = UnitResistance("player", i)
-					GameTooltip:AddDoubleLine(_G["DAMAGE_SCHOOL"..(i+1)], format(chanceString, (effectiveResistance / (effectiveResistance + (500 + level + 2.5))) * 100),1,1,1)
+					base, total, bonus, minus = UnitResistance("player", i)
+					GameTooltip:AddDoubleLine(_G["DAMAGE_SCHOOL"..(i+1)], format(chanceString, (total / (total + (500 + level + 2.5))) * 100),1,1,1)
 				end
 				
 				local spellpen = GetSpellPenetration()
-				if (myclass == "SHAMAN" or Role == "Caster") and spellpen > 0 then
+				if (UNIT_CLASS == "SHAMAN" or Role == "Caster") and spellpen > 0 then
 					GameTooltip:AddLine' '
 					GameTooltip:AddDoubleLine(ITEM_MOD_SPELL_PENETRATION_SHORT, spellpen,1,1,1)
 				end
@@ -2628,7 +2339,7 @@ function BasicUI_Datapanel:OnEnable()
 			local rangedcrit = GetRangedCritChance()
 			local critChance
 				
-			if myclass == "HUNTER" then    
+			if UNIT_CLASS == "HUNTER" then    
 				critChance = rangedcrit
 			else
 				critChance = meleecrit
@@ -2664,18 +2375,18 @@ function BasicUI_Datapanel:OnEnable()
 	-------------------
 	-- System Settings
 	-------------------
-	if db.datapanel.system and db.datapanel.system > 0 then
+	if db.system then
 
-		local Stat = CreateFrame("Frame")
+		local Stat = CreateFrame('Frame', nil, Datapanel)
 		Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
 		Stat:SetFrameStrata("BACKGROUND")
 		Stat:SetFrameLevel(3)
 		Stat:EnableMouse(true)
 		Stat.tooltip = false
 
-		local Text  = DataPanel:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(db.media.fontNormal, db.media.fontSize,'THINOUTLINE')
-		PP(db.datapanel.system, Text)
+		local Text  = Stat:CreateFontString(nil, "OVERLAY")
+		Text:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
+		self:PlacePlugin(db.system, Text)
 
 		local bandwidthString = "%.2f Mbps"
 		local percentageString = "%.2f%%"
@@ -2780,7 +2491,7 @@ function BasicUI_Datapanel:OnEnable()
 			local anchor, panel, xoff, yoff = DataTextTooltipAnchor(Text)
 			GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 			GameTooltip:ClearLines()
-			GameTooltip:AddLine(hexa..myname.."'s"..hexb.." Latency")
+			GameTooltip:AddLine(hexa..PLAYER_NAME.."'s"..hexb.." Latency")
 			GameTooltip:AddLine' '			
 			GameTooltip:AddDoubleLine("Home Latency: ", string.format(homeLatencyString, latencyHome), 0.80, 0.31, 0.31,0.84, 0.75, 0.65)
 			GameTooltip:AddDoubleLine("World Latency: ", string.format(worldLatencyString, latencyWorld), 0.80, 0.31, 0.31,0.84, 0.75, 0.65)
@@ -2806,4 +2517,325 @@ function BasicUI_Datapanel:OnEnable()
 		Stat:SetScript("OnUpdate", Update)
 		Update(Stat, 10)
 	end
+end
+
+function Datatext:OnInitialize()
+	self.db = BasicUI.db:RegisterNamespace(MODULE_NAME, defaults)
+	db = self.db.profile	
+
+	local _, class = UnitClass("player")
+	classColor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
+
+	self:SetEnabledState(BasicUI:GetModuleEnabled(MODULE_NAME))
+end
+
+
+function Datatext:OnEnable()
+	-- This line should not be needed if you're using modules correctly:
+	if not db.enable then return end
+
+	if db.enable then -- How is this different than "enable" ? If the panel is not enabled, what's the point of doing anything else?
+		self:CreatePanel() -- factor this giant blob out into its own function to keep things clean
+		self:Refresh()
+	end
+end
+
+function Datatext:Refresh()
+	if InCombatLockdown() then
+		return self:RegisterEvent("PLAYER_REGEN_ENABLED", "OnEnable")
+	end
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+	
+	self:CreateStats()
+end
+
+function Datatext:SetFontString(parent, file, size, flags)
+	local fs = parent:CreateFontString(nil, "OVERLAY")
+	fs:SetFont(file, size, flags)
+	fs:SetJustifyH("LEFT")
+	fs:SetShadowColor(0, 0, 0)
+	fs:SetShadowOffset(1.25, -1.25)
+	return fs
+end
+
+function Datatext:CreatePanel()
+
+	if Datapanel then return end -- already done
+	
+	-- Setup the Panels
+	self:SetDataPanel()
+	self:SetStatPanelLeft()
+	self:SetStatPanelCenter()
+	self:SetStatPanelRight()
+	
+	-- No Need for function it always sets it self on the PanelLeft
+	BGPanel = CreateFrame("Frame", nil, Datapanel)
+	BGPanel:SetAllPoints(StatPanelLeft)
+	BGPanel:SetFrameStrata("LOW")
+	BGPanel:SetFrameLevel(1)
+
+
+end
+
+
+------------------------------------------------------------------------
+--	 Module Options
+------------------------------------------------------------------------
+
+local options
+function Datatext:GetOptions()
+	if options then
+		return options
+	end
+
+	local function isModuleDisabled()
+		return not BasicUI:GetModuleEnabled(MODULE_NAME)
+	end
+
+	local statposition = {
+		["P0"] = L["Not Shown"],
+		["P1"] = L["Position #1"],
+		["P2"] = L["Position #2"],
+		["P3"] = L["Position #3"],
+		["P4"] = L["Position #4"],
+		["P5"] = L["Position #5"],
+		["P6"] = L["Position #6"],
+		["P7"] = L["Position #7"],
+		["P8"] = L["Position #8"],
+		["P9"] = L["Position #9"],
+	}
+	
+	options = {
+		type = "group",
+		name = L[MODULE_NAME],
+		childGroups = "tree",
+		get = function(info) return db[ info[#info] ] end,
+		set = function(info, value) db[ info[#info] ] = value;   end,
+		disabled = isModuleDisabled(),
+		args = {
+			---------------------------
+			--Option Type Seperators
+			sep1 = {
+				type = "description",
+				order = 2,
+				name = " ",
+			},
+			sep2 = {
+				type = "description",
+				order = 3,
+				name = " ",
+			},
+			sep3 = {
+				type = "description",
+				order = 4,
+				name = " ",
+			},
+			sep4 = {
+				type = "description",
+				order = 5,
+				name = " ",
+			},
+			---------------------------
+			reloadUI = {
+				type = "execute",
+				name = "Reload UI",
+				desc = " ",
+				order = 0,
+				func = 	function()
+					ReloadUI()
+				end,
+			},
+			Text = {
+				type = "description",
+				order = 0,
+				name = "When changes are made a reload of the UI is needed.",
+				width = "full",
+			},
+			Text1 = {
+				type = "description",
+				order = 1,
+				name = " ",
+				width = "full",
+			},
+			enable = {
+				type = "toggle",
+				order = 1,
+				name = L["Enable Datapanel Module"],
+				width = "full"
+			},
+			time24 = {
+				type = "toggle",
+				order = 2,
+				name = L["24-Hour Time"],
+				desc = L["Display time datapanel on a 24 hour time scale"],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			bag = {
+				type = "toggle",
+				order = 2,
+				name = L["Bag Open"],
+				desc = L["Checked opens Backpack only, Unchecked opens all bags."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			battleground = {
+				type = "toggle",
+				order = 2,
+				name = L["Battleground Text"],
+				desc = L["Display special datapanels when inside a battleground"],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			recountraiddps = {
+				type = "toggle",
+				order = 2,
+				name = L["Recount Raid DPS"],
+				desc = L["Display Recount's Raid DPS (RECOUNT MUST BE INSTALLED)"],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			DataGroup = {
+				type = "group",
+				order = 6,
+				name = L["Text Positions"],
+				guiInline  = true,
+				disabled = function() return isModuleDisabled() or not db.enable end,
+				args = {
+					---------------------------
+					--Option Type Seperators
+					sep1 = {
+						type = "description",
+						order = 2,
+						name = " ",
+					},
+					sep2 = {
+						type = "description",
+						order = 3,
+						name = " ",
+					},
+					sep3 = {
+						type = "description",
+						order = 4,
+						name = " ",
+					},
+					sep4 = {
+						type = "description",
+						order = 5,
+						name = " ",
+					},
+					---------------------------
+					bags = {
+						type = "select",
+						order = 5,
+						name = L["Bags"],
+						desc = L["Display amount of bag space"],
+						values = statposition;
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					calltoarms = {
+						type = "select",
+						order = 5,
+						name = L["Call to Arms"],
+						desc = L["Display the active roles that will recieve a reward for completing a random dungeon"],
+						values = statposition;
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					coords = {
+						type = "select",
+						order = 5,
+						name = L["Coordinates"],
+						desc = L["Display Player's Coordinates"],
+						values = statposition;
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					dps_text = {
+						type = "select",
+						order = 5,
+						name = L["DPS"],
+						desc = L["Display amount of DPS"],
+						values = statposition;
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					dur = {
+						type = "select",
+						order = 5,
+						name = L["Durability"],
+						desc = L["Display your current durability"],
+						values = statposition;
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					friends = {
+						type = "select",
+						order = 5,
+						name = L["Friends"],
+						desc = L["Display current online friends"],
+						values = statposition;
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					guild = {
+						type = "select",
+						order = 5,
+						name = L["Guild"],
+						desc = L["Display current online people in guild"],
+						values = statposition;
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					hps_text = {
+						type = "select",
+						order = 5,
+						name = L["HPS"],
+						desc = L["Display amount of HPS"],
+						values = statposition;
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					pro = {
+						type = "select",
+						order = 5,
+						name = L["Professions"],
+						desc = L["Display Professions"],
+						values = statposition;
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					recount = {
+						type = "select",
+						order = 5,
+						name = L["Recount"],
+						desc = L["Display Recount's DPS (RECOUNT MUST BE INSTALLED)"],
+						values = statposition;
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					spec = {
+						type = "select",
+						order = 5,
+						name = L["Talent Spec"],
+						desc = L["Display current spec"],
+						values = statposition;
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					stat1 = {
+						type = "select",
+						order = 5,
+						name = L["Stat #1"],
+						desc = L["Display stat based on your role (Avoidance-Tank, AP-Melee, SP/HP-Caster)"],
+						values = statposition;
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					stat2 = {
+						type = "select",
+						order = 5,
+						name = L["Stat #2"],
+						desc = L["Display stat based on your role (Armor-Tank, Crit-Melee, Crit-Caster)"],
+						values = statposition;
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					system = {
+						type = "select",
+						order = 5,
+						name = L["System"],
+						desc = L["Display FPS and Latency"],
+						values = statposition;
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+				},
+			},
+		},
+	}
+	return options
 end

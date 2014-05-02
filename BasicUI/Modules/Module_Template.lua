@@ -1,6 +1,6 @@
 local MODULE_NAME = "Nameplates"
 local BasicUI = LibStub("AceAddon-3.0"):GetAddon("BasicUI")
-local Nameplates = BasicUI:NewModule(MODULE_NAME, "AceEvent-3.0")
+local MODULE = BasicUI:NewModule(MODULE_NAME, "AceEvent-3.0")
 local L = BasicUI.L
 
 ------------------------------------------------------------------------
@@ -27,7 +27,7 @@ local defaults = {
 --	Module Functions
 ------------------------------------------------------------------------
 
-function Nameplates:OnInitialize()
+function MODULE:OnInitialize()
 	self.db = BasicUI.db:RegisterNamespace(MODULE_NAME, defaults)
 	db = self.db.profile	
 
@@ -38,7 +38,7 @@ function Nameplates:OnInitialize()
 end
 
 
-function Nameplates:OnEnable()
+function MODULE:OnEnable()
 	if db.enable ~= true then return end
 
 	local len = string.len
@@ -390,13 +390,13 @@ function Nameplates:OnEnable()
 		if (not self.Health.Value) then
 			self.Health.Value = self.Health:CreateFontString(nil, 'OVERLAY')
 			self.Health.Value:SetPoint('CENTER', self.Health, 0, 0)
-			self.Health.Value:SetFont(BasicUI.media.fontNormal, 12)
+			self.Health.Value:SetFont(db.profile.general.fontNormal, 12)
 			self.Health.Value:SetShadowOffset(1, -1)
 		end
 
 		if (not self.NewName) then
 			self.NewName = self:CreateFontString(nil, 'ARTWORK')
-			self.NewName:SetFont(BasicUI.media.fontNormal, 15, 'THINOUTLINE')
+			self.NewName:SetFont(db.profile.general.fontNormal, 15, 'THINOUTLINE')
 			self.NewName:SetShadowOffset(0, 0)
 			-- self.NewName:SetPoint('CENTER', self.Health, 'CENTER', 0, 9)
 			self.NewName:SetPoint('BOTTOM', self.Health, 'TOP', 0, 2)
@@ -436,7 +436,7 @@ function Nameplates:OnEnable()
 		if (not self.Castbar.CastTime) then
 			self.Castbar.CastTime = self.Castbar:CreateFontString(nil, 'OVERLAY')
 			self.Castbar.CastTime:SetPoint('RIGHT', self.Castbar, 1.6666667, 0)
-			self.Castbar.CastTime:SetFont(BasicUI.media.fontNormal, 16)   -- , 'THINOUTLINE')
+			self.Castbar.CastTime:SetFont(db.profile.general.fontNormal, 16)   -- , 'THINOUTLINE')
 			self.Castbar.CastTime:SetTextColor(1, 1, 1)
 			self.Castbar.CastTime:SetShadowOffset(1, -1)
 		end
@@ -447,7 +447,7 @@ function Nameplates:OnEnable()
 			self.Castbar.Name = self.Castbar:CreateFontString(nil, 'OVERLAY')
 			self.Castbar.Name:SetPoint('LEFT', self.Castbar, 1.5, 0)
 			self.Castbar.Name:SetPoint('RIGHT', self.Castbar.CastTime, 'LEFT', -6, 0)
-			self.Castbar.Name:SetFont(BasicUI.media.fontNormal, 10)
+			self.Castbar.Name:SetFont(db.profile.general.fontNormal, 10)
 			self.Castbar.Name:SetTextColor(1, 1, 1)
 			self.Castbar.Name:SetShadowOffset(1, -1)
 			self.Castbar.Name:SetJustifyH('LEFT')
@@ -565,7 +565,7 @@ end
 ------------------------------------------------------------------------
 
 local options
-function Nameplates:GetOptions()
+function MODULE:GetOptions()
 	if options then
 		return options
 	end

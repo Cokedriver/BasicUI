@@ -1,11 +1,39 @@
+local MODULE_NAME = "Minimap"
 local BasicUI = LibStub("AceAddon-3.0"):GetAddon("BasicUI")
-local BasicUI_Minimap = BasicUI:NewModule("Minimap", "AceEvent-3.0")
+local MyMinimap = BasicUI:NewModule(MODULE_NAME, "AceEvent-3.0")
+local L = BasicUI.L
 
-function BasicUI_Minimap:OnEnable()
-	local db = BasicUI.db.profile
-	
-	if db.minimap.enable ~= true then return end
-	
+------------------------------------------------------------------------
+--	 Module Database
+------------------------------------------------------------------------
+
+local db
+local defaults = {
+	profile = {
+		enable = true,
+		gameclock = true,
+		farm = false,
+		farmscale = 1.15,
+		coords = true,		
+	}
+}
+
+------------------------------------------------------------------------
+--	Module Functions
+------------------------------------------------------------------------
+
+function MyMinimap:OnInitialize()
+	self.db = BasicUI.db:RegisterNamespace(MODULE_NAME, defaults)
+	db = self.db.profile	
+
+	local _, class = UnitClass("player")
+	classColor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
+
+	self:SetEnabledState(BasicUI:GetModuleEnabled(MODULE_NAME))
+end
+
+
+function MyMinimap:OnEnable()
 	--[[
 
 		All Credit for Minimap.lua goes to Neal and ballagarba.
@@ -14,7 +42,7 @@ function BasicUI_Minimap:OnEnable()
 
 	]]
 
-	if db.minimap.enable ~= true then return end
+	if db.enable ~= true then return end
 
 
 	-- Minimap tweaks:
@@ -32,31 +60,12 @@ function BasicUI_Minimap:OnEnable()
 			Minimap_ZoomOut()
 		end
 	end)
-	MiniMapTracking:ClearAllPoints()
-	MiniMapTracking:SetPoint("TOPRIGHT", -26, 7)
-
-	-- Hide Minimap Clock
-	if db.minimap.gameclock == true then
-		TimeManagerClockButton:Show()
-	else
-		TimeManagerClockButton:Hide()
-	end
-
-	-- Bigger minimap
-	if db.minimap.farm == true then
-
-		MinimapCluster:SetScale(db.minimap.farmscale)
-		MinimapCluster:EnableMouse(false)
-	else
-		MinimapCluster:SetScale(1.1)
-		MinimapCluster:EnableMouse(false)
-	end
-
-	-- Modify Minimap Tracker:
+	
+	-- Modify Minimap Tracker:	
 	MiniMapTracking:UnregisterAllEvents()
 	MiniMapTracking:Hide()
 
-	Minimap:SetScript('OnMouseUp', function(self, button)
+	Minimap:SetScript('OnMouseDown', function(self, button)
 		if (button == 'RightButton') then
 			ToggleDropDownMenu(1, nil, MiniMapTrackingDropDown, self, - (Minimap:GetWidth() * 0.7), -3)
 		else
@@ -76,25 +85,25 @@ function BasicUI_Minimap:OnEnable()
 	Minimap:SetScript('OnLeave', function() GameTooltip:Hide() end)
 	
 	-- Coords on World Map
-	if db.minimap.coords then
-		local f = CreateFrame('Frame', nil, WorldMapFrame)
-		f:SetParent(WorldMapButton)
+	if db.coords then
+		local coordsFrame = CreateFrame('Frame', nil, WorldMapFrame)
+		coordsFrame:SetParent(WorldMapButton)
 
-		f.Player = f:CreateFontString(nil, 'OVERLAY')
-		f.Player:SetFont(db.media.fontNormal, 26)
-		f.Player:SetShadowOffset(1, -1)
-		f.Player:SetJustifyH('LEFT')
-		f.Player:SetPoint('BOTTOMLEFT', WorldMapButton, 7, 4)
-		f.Player:SetTextColor(1, 0.82, 0)
+		coordsFrame.Player = coordsFrame:CreateFontString(nil, 'OVERLAY')
+		coordsFrame.Player:SetFont(BasicUI.media.fontNormal, 26)
+		coordsFrame.Player:SetShadowOffset(1, -1)
+		coordsFrame.Player:SetJustifyH('LEFT')
+		coordsFrame.Player:SetPoint('BOTTOMLEFT', WorldMapButton, 7, 4)
+		coordsFrame.Player:SetTextColor(1, 0.82, 0)
 
-		f.Cursor = f:CreateFontString(nil, 'OVERLAY')
-		f.Cursor:SetFont(db.media.fontNormal, 26)
-		f.Cursor:SetShadowOffset(1, -1)
-		f.Cursor:SetJustifyH('LEFT')
-		f.Cursor:SetPoint('BOTTOMLEFT', f.Player, 'TOPLEFT')
-		f.Cursor:SetTextColor(1, 0.82, 0)
+		coordsFrame.Cursor = coordsFrame:CreateFontString(nil, 'OVERLAY')
+		coordsFrame.Cursor:SetFont(BasicUI.media.fontNormal, 26)
+		coordsFrame.Cursor:SetShadowOffset(1, -1)
+		coordsFrame.Cursor:SetJustifyH('LEFT')
+		coordsFrame.Cursor:SetPoint('BOTTOMLEFT', coordsFrame.Player, 'TOPLEFT')
+		coordsFrame.Cursor:SetTextColor(1, 0.82, 0)
 
-		f:SetScript('OnUpdate', function(self, elapsed)
+		coordsFrame:SetScript('OnUpdate', function(self, elapsed)
 			local width = WorldMapDetailFrame:GetWidth() 
 			local height = WorldMapDetailFrame:GetHeight()
 			local mx, my = WorldMapDetailFrame:GetCenter()
@@ -105,16 +114,133 @@ function BasicUI_Minimap:OnEnable()
 			my = ((my + height / 2) - (cy / WorldMapDetailFrame:GetEffectiveScale())) / height
 
 			if (mx >= 0 and my >= 0 and mx <= 1 and my <= 1) then
-				f.Cursor:SetText(MOUSE_LABEL..format(': %.0f x %.0f', mx * 100, my * 100))
+				coordsFrame.Cursor:SetText(MOUSE_LABEL..format(': %.0f x %.0f', mx * 100, my * 100))
 			else
-				f.Cursor:SetText('')
+				coordsFrame.Cursor:SetText('')
 			end
 
 			if (px ~= 0 and py ~= 0) then
-				f.Player:SetText(PLAYER..format(': %.0f x %.0f', px * 100, py * 100))
+				coordsFrame.Player:SetText(PLAYER..format(': %.0f x %.0f', px * 100, py * 100))
 			else
-				f.Player:SetText('')
+				coordsFrame.Player:SetText('')
 			end
 		end)
 	end
+	
+	self:Refresh()
+end
+
+function MyMinimap:Refresh()
+	-- Hide Minimap Clock
+	if db.gameclock == true then
+		TimeManagerClockButton:Show()
+	else
+		TimeManagerClockButton:Hide()
+	end
+
+	-- Bigger minimap
+	if db.farm == true then
+		MinimapCluster:SetScale(db.farmscale)
+		MinimapCluster:EnableMouse(false)
+	else
+		MinimapCluster:SetScale(1.1)
+		MinimapCluster:EnableMouse(false)
+	end
+end
+
+------------------------------------------------------------------------
+--	 Module Options
+------------------------------------------------------------------------
+
+local options
+function MyMinimap:GetOptions()
+	if options then
+		return options
+	end
+
+	local function isModuleDisabled()
+		return not BasicUI:GetModuleEnabled(MODULE_NAME)
+	end
+	
+	options = {
+		type = "group",
+		name = L[MODULE_NAME],
+		get = function(info) return db[ info[#info] ] end,
+		set = function(info, value) db[ info[#info] ] = value;   self:Refresh() end,
+		args = {
+			---------------------------
+			--Option Type Seperators
+			sep1 = {
+				type = "description",
+				order = 2,
+				name = " ",
+			},
+			sep2 = {
+				type = "description",
+				order = 3,
+				name = " ",
+			},
+			sep3 = {
+				type = "description",
+				order = 4,
+				name = " ",
+			},
+			sep4 = {
+				type = "description",
+				order = 5,
+				name = " ",
+			},
+			---------------------------
+			reloadUI = {
+				type = "execute",
+				name = "Reload UI",
+				desc = " ",
+				order = 0,
+				func = 	function()
+					ReloadUI()
+				end,
+			},
+			Text = {
+				type = "description",
+				order = 0,
+				name = "When changes are made a reload of the UI is needed.",
+				width = "full",
+			},
+			Text1 = {
+				type = "description",
+				order = 1,
+				name = " ",
+				width = "full",
+			},
+			enable = {
+				type = "toggle",
+				order = 1,
+				name = L["Enable Minimap Module"],
+				width = "full"
+			},
+			farm = {
+				type = "toggle",
+				order = 2,
+				name = L["Farming"],
+				desc = L["Enlarges the Minimap when Farming."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+			farmscale = {
+				type = "range",
+				order = 5,
+				name = L["Farming Map Scale"],
+				desc = L["Controls the Size of the Farming Map"],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+				min = 1, max = 5, step = 0.1,
+			},
+			gameclock = {
+				type = "toggle",
+				order = 2,
+				name = L["Game Clock"],
+				desc = L["Enable the Clock Frame on Minimap."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
+		},
+	}
+	return options
 end
