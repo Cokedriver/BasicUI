@@ -179,6 +179,7 @@ function Actionbars:SetupHooks()
 		local buffIcon		= _G[self..index.."Icon"]
 		local buffBorder 	= _G[self..index.."Border"]
 
+
 		if buffIcon then
 			buffIcon:SetTexCoord(.07, .93, .07, .93)
 		end

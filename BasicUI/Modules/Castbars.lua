@@ -14,7 +14,7 @@ local defaults = {
 		
 		CastingBarFrame = {
 			enable = true,
-			fontSize = 18,
+			fontSize = 15,
 			textPosition = "LEFT",
 			enableLag = true,
 			enableTimer = true,
@@ -24,8 +24,8 @@ local defaults = {
 			offSetY	= 175,
 		},
 		TargetFrameSpellBar = {
-			enable = false,
-			fontSize = 18,
+			enable = true,
+			fontSize = 15,
 			textPosition = "CENTER",
 			enableLag = true,
 			enableTimer = true,
@@ -36,7 +36,7 @@ local defaults = {
 		},
 		FocusFrameSpellBar = {
 			enable = true,
-			fontSize = 18,
+			fontSize = 15,
 			textPosition = "CENTER",
 			enableLag = true,
 			enableTimer = true,
@@ -56,7 +56,7 @@ local defaults = {
 		},
 		PetCastingBarFrame = {
 			enable = true,
-			fontSize = 18,
+			fontSize = 15,
 			textPosition = "CENTER",
 			enableTimer = true,
 			selfAnchor = "BOTTOM",

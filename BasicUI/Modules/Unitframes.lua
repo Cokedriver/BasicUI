@@ -40,16 +40,6 @@ local defaults = {
 			scale = 1.5,
 			fontSize = 11,			-- Stausbar Font Size
 		},
-		boss = {
-			enable = true,
-			scale = 1.15,
-			--fontSize = 13,			-- Stausbar Font Size
-			position = {
-				relAnchor = "RIGHT",
-				offSet = -50,		-- Controls the X offset. (Left - Right)
-				offSetY = -250,		-- Controls the Y offset. (Up - Down)
-			},		
-		},
 	},
 }
 
@@ -98,19 +88,19 @@ function MODULE:OnEnable()
 	enabled = true -- since most of this stuff is non-undoable (eg. hooksecurefunc)
 
 	-- Move Party Frames
-	PartyMemberFrame1:SetPoint(db.party.position.relAnchor, UIParent, db.party.position.offSetX, db.party.position.offSetY);
+	--PartyMemberFrame1:SetPoint(db.party.position.relAnchor, UIParent, db.party.position.offSetX, db.party.position.offSetY);
 	
 	-- Move Boss Frames
 	local movingBossFrame
-	hooksecurefunc(Boss1TargetFrame, "SetPoint", function(f, ...)
-		if movingBossFrame or InCombatLockdown() then
-			return
-		end
-		movingBossFrame = true
-		Boss1TargetFrame:ClearAllPoints()
-		Boss1TargetFrame:SetPoint(db.boss.position.relAnchor, UIParent, db.boss.position.offSetX, db.boss.position.offSetY)
-		movingBossFrame = nil
-	end)
+	--hooksecurefunc(Boss1TargetFrame, "SetPoint", function(f, ...)
+		--if movingBossFrame or InCombatLockdown() then
+			--return
+		--end
+		--movingBossFrame = true
+		--Boss1TargetFrame:ClearAllPoints()
+		--Boss1TargetFrame:SetPoint(db.boss.position.relAnchor, UIParent, db.boss.position.offSetX, db.boss.position.offSetY)
+		--movingBossFrame = nil
+	--end)
 	
 	-- Update Unit Frames
 	self:ApplySettings()
@@ -125,10 +115,6 @@ function MODULE:OnEnable()
 	for _, region in pairs({
 		TargetFrameNameBackground,
 		FocusFrameNameBackground,
-		Boss1TargetFrameNameBackground,
-		Boss2TargetFrameNameBackground,
-		Boss3TargetFrameNameBackground,
-		Boss4TargetFrameNameBackground,
 	}) do
 		region:SetTexture(0, 0, 0, 0.5)
 	end
@@ -272,13 +258,6 @@ MODULE.UnitFunctions = {
 			_G[arenaFrame]:SetScale(db.arena.scale)
 			_G[arenaFrame.."HealthBarText"]:SetFont(BasicUI.media.fontNormal, db.arena.fontSize,"THINOUTLINE")
 			_G[arenaFrame.."ManaBarText"]:SetFont(BasicUI.media.fontNormal, db.arena.fontSize, "THINOUTLINE")
-		end
-	end,
-
-	boss = function(self)
-		for i = 1, MAX_BOSS_FRAMES do
-			local bossFrame = "Boss"..i.."TargetFrame"
-			_G[bossFrame]:SetScale(db.boss.scale)
 		end
 	end,
 
@@ -693,125 +672,6 @@ function MODULE:GetOptions()
 						min = 8, max = 25, step = 1,
 						disabled = function() return isModuleDisabled() or not db.enable or not db.arena.enable end,																
 					},
-				},
-			},
-			boss = {
-				type = "group",
-				order = 8,
-				name = L["Boss Frame Adjustments"],
-				get = function(info) return db.boss[ info[#info] ] end,
-				set = function(info, value) db.boss[ info[#info] ] = value; self:ApplySettings(event) end,
-				disabled = function() return isModuleDisabled() or not db.enable end,
-				guiInline  = true,
-				args = {
-					---------------------------
-					sep1 = {
-						type = "description",
-						order = 1,
-						name = " ",
-					},
-					sep2 = {
-						type = "description",
-						order = 2,
-						name = " ",
-					},
-					sep3 = {
-						type = "description",
-						order = 3,
-						name = " ",
-					},
-					sep4 = {
-						type = "description",
-						order = 4,
-						name = " ",
-					},
-					sep5 = {
-						type = "description",
-						order = 5,
-						name = " ",
-					},
-					---------------------------
-					enable = {
-						type = "toggle",
-						order = 0,
-						name = L["Enable Boss Frame"],
-						width = "full",
-					},
-					scale = {
-						type = "range",
-						order = 1,
-						name = L["Scale"],
-						desc = L["Controls the scaling of Blizzard's Boss Frames"],
-						min = 0.5, max = 2, step = 0.05,
-						disabled = function() return isModuleDisabled() or not db.enable or not db.boss.enable end,																
-					},
-					--[[fontSize= {
-						type = "range",
-						order = 2,
-						name = L["HP/Mana Font Size"],
-						desc = L["Controls the Boss Healthbar/Manabar value font size."],
-						min = 8, max = 25, step = 1,
-						disabled = function() return not db.enable or not db.boss.enable end,																
-					},]]
-					position = {
-						type = "group",
-						order = 5,
-						childGroups = "tree",
-						name = L["Position"],
-						--desc = L["Combo Points Options"],
-						disabled = function() return isModuleDisabled() or not db.enable or not db.boss.enable end,
-						get = function(info) return db.boss.position[ info[#info] ] end,
-						set = function(info, value) db.boss.position[ info[#info] ] = value; self:ApplySettings(event) end,														
-						args = {
-							---------------------------
-							--Option Type Seperators
-							sep1 = {
-								type = "description",
-								order = 1,
-								name = " ",
-							},
-							sep2 = {
-								type = "description",
-								order = 2,
-								name = " ",
-							},
-							sep3 = {
-								type = "description",
-								order = 3,
-								name = " ",
-							},
-							sep4 = {
-								type = "description",
-								order = 4,
-								name = " ",
-							},
-							---------------------------
-							relAnchor = {
-								type = "select",
-								order = 1,
-								name = L["Relative Anchor"],
-								desc = L["Relative Anchor Position."],
-								disabled = function() return isModuleDisabled() or not db.enable or not db.boss.enable end,
-								values = regions,																	
-							},
-							offSetX = {
-								type = "range",
-								order = 2,
-								name = L["X Offset"],
-								desc = L["Controls the X offset. (Left - Right)"],
-								min = -250, max = 250, step = 5,
-								disabled = function() return isModuleDisabled() or not db.enable or not db.boss.enable end,																	
-							},
-							offSetY = {
-								type = "range",
-								order = 3,
-								name = L["Y Offset"],
-								desc = L["Controls the Y offset. (Up - Down)"],
-								min = -250, max = 250, step = 5,
-								disabled = function() return isModuleDisabled() or not db.enable or not db.boss.enable end,							
-							},
-						},
-					}
 				},
 			},
 		},

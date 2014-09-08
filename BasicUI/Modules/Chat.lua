@@ -879,29 +879,34 @@ function Chat:Refresh()
 	else
 		return
 	end
+	
 
-	if (db.windowborder) then
-		for i = 1, NUM_CHAT_WINDOWS do
-			local cf = _G['ChatFrame'..i]
-			local bg = CreateFrame("Frame", nil, cf);
-			bg:SetFrameStrata("BACKGROUND");
-			
-			if i == 2 then
-				bg:SetPoint("TOPLEFT", -8, 32);
-			else
-				bg:SetPoint("TOPLEFT", -8, 8);
-			end	
-			bg:SetPoint("BOTTOMRIGHT", 8, -12);
-			bg:SetBackdrop({
-				edgeFile = BasicUI.media.border,
-				tile = true, tileSize = 16, edgeSize = 18,
-			})
-			bg:SetBackdropBorderColor(classColor.r, classColor.g, classColor.b)
-		end
-	else
-		return
+
+	for i = 1, NUM_CHAT_WINDOWS do
+		local cf = _G['ChatFrame'..i]
+		local bg = CreateFrame("Frame", nil, cf);
+		bg:SetFrameStrata("BACKGROUND");
+		
+		if i == 2 then
+			bg:SetPoint("TOPLEFT", -8, 32);
+		else
+			bg:SetPoint("TOPLEFT", -8, 8);
+		end	
+		bg:SetPoint("BOTTOMRIGHT", 8, -12);
+		bg:SetBackdrop({
+			edgeFile = BasicUI.media.border,
+			tile = true, tileSize = 16, edgeSize = 18,
+		})
+		bg:SetBackdropBorderColor(classColor.r, classColor.g, classColor.b)
+		if (db.windowborder) then
+			bg:Show()
+		else
+			bg:Hide()
+		end		
 	end
+	
 end
+	
 ------------------------------------------------------------------------
 --	 Module options
 ------------------------------------------------------------------------
