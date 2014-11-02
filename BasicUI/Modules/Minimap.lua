@@ -13,7 +13,7 @@ local defaults = {
 		enable = true,
 		gameclock = true,
 		farm = false,
-		farmscale = 1.15,
+		farmscale = 1.17,
 		coords = true,		
 	}
 }
@@ -143,7 +143,7 @@ function MyMinimap:Refresh()
 		MinimapCluster:SetScale(db.farmscale)
 		MinimapCluster:EnableMouse(false)
 	else
-		MinimapCluster:SetScale(1.1)
+		MinimapCluster:SetScale(1.15)
 		MinimapCluster:EnableMouse(false)
 	end
 end

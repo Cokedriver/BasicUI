@@ -12,33 +12,36 @@ local defaults = {
 		player = {
 			enable = true,			-- Enable Player Frame Adjustments
 			scale = 1.15,			-- Player Frame Scale
-			fontSize = 13,			-- Stausbar Font Size
-			fontSizepet = 10,		-- Stausbar Font Size
 		},
 		target = {
 			enable = true,			-- Enable Target Frame Adjustments
 			scale = 1.15,			-- Target Frame Scale
-			fontSize = 13,			-- Stausbar Font Size
 		},
 		focus = {
 			enable = true,			-- Enable Focus Frame Adjustments
 			scale = 1.15,			-- Focus Frame Scale
-			fontSize = 13,			-- Stausbar Font Size
 		},
 		party = {
 			enable = true,
 			scale = 1.15,
-			fontSize = 11,			-- Stausbar Font Size
 			position = {
 				relAnchor = "TOPLEFT",
 				offSetX = 10,		-- Controls the X offset. (Left - Right)
-				offSetY = -150,		-- Controls the Y offset. (Up - Down)
+				offSetY = -200,		-- Controls the Y offset. (Up - Down)
 			},				
 		},
 		arena = {
 			enable = true,
-			scale = 1.5,
-			fontSize = 11,			-- Stausbar Font Size
+			scale = 1.15,
+		},
+		boss = {
+			enable = true,
+			scale = 1.15,
+			position = {
+				relAnchor = "RIGHT",
+				offSetX = -50,		-- Controls the X offset. (Left - Right)
+				offSetY = -250,		-- Controls the Y offset. (Up - Down)
+			},				
 		},
 	},
 }
@@ -88,10 +91,21 @@ function MODULE:OnEnable()
 	enabled = true -- since most of this stuff is non-undoable (eg. hooksecurefunc)
 
 	-- Move Party Frames
+	local movingPartyFrame
+	hooksecurefunc(PartyMemberFrame1, "SetPoint", function(f, ...)
+		if movingPartyFrame or InCombatLockdown() then
+			return
+		end
+		movingPartyFrame = true
+		PartyMemberFrame1:ClearAllPoints()
+		PartyMemberFrame1:SetPoint(db.party.position.relAnchor, UIParent, db.party.position.offSetX, db.party.position.offSetY)
+		movingPartyFrame = nil
+	end)	
+	
 	--PartyMemberFrame1:SetPoint(db.party.position.relAnchor, UIParent, db.party.position.offSetX, db.party.position.offSetY);
 	
 	-- Move Boss Frames
-	local movingBossFrame
+	--local movingBossFrame
 	--hooksecurefunc(Boss1TargetFrame, "SetPoint", function(f, ...)
 		--if movingBossFrame or InCombatLockdown() then
 			--return
@@ -105,45 +119,45 @@ function MODULE:OnEnable()
 	-- Update Unit Frames
 	self:ApplySettings()
 
-	-- Disable healing/damage spam over player/pet frame:
-	PlayerHitIndicator:SetText(nil)
-	PlayerHitIndicator.SetText = function() end
-	PetHitIndicator:SetText(nil)
-	PetHitIndicator.SetText = function() end
-
 	-- Change other frames' name backgrounds to match player frame
 	for _, region in pairs({
 		TargetFrameNameBackground,
 		FocusFrameNameBackground,
+		Boss1TargetFrameNameBackground, 
+		Boss2TargetFrameNameBackground, 
+		Boss3TargetFrameNameBackground, 
+		Boss4TargetFrameNameBackground,
+		Boss5TargetFrameNameBackground, 
+		
 	}) do
 		region:SetTexture(0, 0, 0, 0.5)
 	end
 	
 	-- Font Style / Color thanks to Phanx from WoWinterface.
-	hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", function(statusBar, fontString, value, valueMin, valueMax)
+	hooksecurefunc("TextStatusBar_UpdateTextStringWithValues", function(statusBar, textString, value, valueMin, valueMax)
 		if value == 0 then
-			return fontString:SetText("")
+			return textString:SetText("")
 		end
 
 		local style = GetCVar("statusTextDisplay")
 		if style == "PERCENT" then
-			return fontString:SetFormattedText("%.0f%%", value / valueMax * 100)
+			return textString:SetFormattedText("%.0f%%", value / valueMax * 100)
 		end
 		for i = 1, #shorts do
 			local t = shorts[i]
 			if value >= t[1] then
 				if style == "BOTH" then
-					return fontString:SetFormattedText(t[4], value / t[2], value / valueMax * 100)
+					return textString:SetFormattedText(t[4], value / t[2], value / valueMax * 100)
 				else
 					if value < valueMax then
 						for j = 1, #shorts do
 							local v = shorts[j]
 							if valueMax >= v[1] then
-								return fontString:SetFormattedText(t[3] .. " / " .. v[3], value / t[2], valueMax / v[2])
+								return textString:SetFormattedText(t[3] .. " / " .. v[3], value / t[2], valueMax / v[2])
 							end
 						end
 					end
-					return fontString:SetFormattedText(t[3], value / t[2])
+					return textString:SetFormattedText(t[3], value / t[2])
 				end
 			end
 		end
@@ -214,32 +228,20 @@ MODULE.UnitFunctions = {
 
 	player = function(self)	
 		PlayerFrame:SetScale(db.player.scale)
-		PlayerFrameHealthBarText:SetFont(BasicUI.media.fontNormal, db.player.fontSize,"THINOUTLINE")
-		PlayerFrameManaBarText:SetFont(BasicUI.media.fontNormal, db.player.fontSize, "THINOUTLINE")
-		PlayerFrameAlternateManaBarText:SetFont(BasicUI.media.fontNormal, db.player.fontSize, "THINOUTLINE")
-
-		PetFrameHealthBarText:SetFont(BasicUI.media.fontNormal, db.player.fontSizepet,"THINOUTLINE")
-		PetFrameManaBarText:SetFont(BasicUI.media.fontNormal, db.player.fontSizepet, "THINOUTLINE")
 	end,
 
 	target = function(self)		
 		TargetFrame:SetScale(db.target.scale)
-		TargetFrameTextureFrameHealthBarText:SetFont(BasicUI.media.fontNormal, db.target.fontSize, "THINOUTLINE")
-		TargetFrameTextureFrameManaBarText:SetFont(BasicUI.media.fontNormal, db.target.fontSize, "THINOUTLINE")
 	end,
 
 	focus = function(self)		
 		FocusFrame:SetScale(db.focus.scale)
-		FocusFrameTextureFrameHealthBarText:SetFont(BasicUI.media.fontNormal, db.focus.fontSize,"THINOUTLINE")
-		FocusFrameTextureFrameManaBarText:SetFont(BasicUI.media.fontNormal, db.focus.fontSize,"THINOUTLINE")
 	end,
 
 	party = function(self)		
 		for i = 1, MAX_PARTY_MEMBERS do
 			local partyFrame = "PartyMemberFrame"..i
 			_G[partyFrame]:SetScale(db.party.scale)
-			_G[partyFrame.."HealthBarText"]:SetFont(BasicUI.media.fontNormal, db.party.fontSize, "THINOUTLINE")
-			_G[partyFrame.."ManaBarText"]:SetFont(BasicUI.media.fontNormal, db.party.fontSize, "THINOUTLINE")
 		end
 	end,
 
@@ -251,16 +253,18 @@ MODULE.UnitFunctions = {
 		for i = 1, MAX_ARENA_ENEMIES do
 			local prepFrame = "ArenaPrepFrame"..i
 			_G[prepFrame]:SetScale(db.arena.scale)
-			_G[prepFrame.."HealthBarText"]:SetFont(BasicUI.media.fontNormal, db.arena.fontSize,"THINOUTLINE")
-			_G[prepFrame.."ManaBarText"]:SetFont(BasicUI.media.fontNormal, db.arena.fontSize, "THINOUTLINE")
 
 			local arenaFrame = "ArenaEnemyFrame"..i
 			_G[arenaFrame]:SetScale(db.arena.scale)
-			_G[arenaFrame.."HealthBarText"]:SetFont(BasicUI.media.fontNormal, db.arena.fontSize,"THINOUTLINE")
-			_G[arenaFrame.."ManaBarText"]:SetFont(BasicUI.media.fontNormal, db.arena.fontSize, "THINOUTLINE")
 		end
-	end,
-
+	end, 
+	
+	-- Set Boss Frames Scale
+	SecureHandlerWrapScript(Boss1TargetFrame, 'OnShow', Boss1TargetFrame, 'self:SetScale(1.15)'),
+	SecureHandlerWrapScript(Boss2TargetFrame, 'OnShow', Boss2TargetFrame, 'self:SetScale(1.15)'),
+	SecureHandlerWrapScript(Boss3TargetFrame, 'OnShow', Boss3TargetFrame, 'self:SetScale(1.15)'),
+	SecureHandlerWrapScript(Boss4TargetFrame, 'OnShow', Boss4TargetFrame, 'self:SetScale(1.15)'),
+	SecureHandlerWrapScript(Boss5TargetFrame, 'OnShow', Boss5TargetFrame, 'self:SetScale(1.15)'),
 }
 ------------------------------------------------------------------------------
 
@@ -366,28 +370,6 @@ function MODULE:GetOptions()
 						min = 0.5, max = 2, step = 0.05,								
 						disabled = function() return isModuleDisabled() or not db.enable or not db.player.enable end,							
 					},
-					fontSize= {
-						type = "range",
-						order = 2,
-						name = L["HP/Mana Font Size"],
-						desc = L["Controls the Player Healthbar/Manabar value font size."],
-						min = 8, max = 25, step = 1,								
-						disabled = function() return isModuleDisabled() or not db.enable or not db.player.enable end,							
-					},
-					Text2 = {
-						type = "description",
-						order = 2,
-						name = " ",
-						width = "full",
-					},
-					fontSizepet= {
-						type = "range",
-						order = 2,
-						name = L["HP/Mana Font Size for your pet"],
-						desc = L["Controls the Player Pet Healthbar/Manabar value font size."],
-						min = 8, max = 25, step = 1,
-						disabled = function() return isModuleDisabled() or not db.enable or not db.player.enable end,								
-					},
 				},
 			},
 			target = {
@@ -436,14 +418,6 @@ function MODULE:GetOptions()
 						min = 0.5, max = 2, step = 0.05,
 						disabled = function() return isModuleDisabled() or not db.enable or not db.target.enable end,																
 					},
-					fontSize= {
-						type = "range",
-						order = 2,
-						name = L["HP/Mana Font Size"],
-						desc = L["Controls the Target Healthbar/Manabar value font size."],
-						min = 8, max = 25, step = 1,
-						disabled = function() return isModuleDisabled() or not db.enable or not db.target.enable end,															
-					},
 				},
 			},
 			focus = {
@@ -491,14 +465,6 @@ function MODULE:GetOptions()
 						desc = L["Controls the scaling of Blizzard's Focus Frame"],
 						min = 0.5, max = 2, step = 0.05,
 						disabled = function() return isModuleDisabled() or not db.enable or not db.focus.enable end,																
-					},
-					fontSize= {
-						type = "range",
-						order = 2,
-						name = L["HP/Mana Font Size"],
-						desc = L["Controls the Focus Healthbar/Manabar value font size."],
-						min = 8, max = 25, step = 1,
-						disabled = function() return isModuleDisabled() or not db.enable or not db.focus.enable end,															
 					},
 				},
 			},
@@ -550,14 +516,6 @@ function MODULE:GetOptions()
 						name = L["Scale"],
 						desc = L["Controls the scaling of Blizzard's Party Frame"],
 						min = 0.5, max = 2, step = 0.05,
-						disabled = function() return isModuleDisabled() or not db.enable or not db.party.enable end,																
-					},
-					fontSize= {
-						type = "range",
-						order = 2,
-						name = L["HP/Mana Font Size"],
-						desc = L["Controls the Party Healthbar/Manabar value font size."],
-						min = 8, max = 25, step = 1,
 						disabled = function() return isModuleDisabled() or not db.enable or not db.party.enable end,																
 					},
 					position = {
@@ -664,13 +622,115 @@ function MODULE:GetOptions()
 						min = 0.5, max = 2, step = 0.05,
 						disabled = function() return isModuleDisabled() or not db.enable or not db.arena.enable end,																
 					},
-					fontSize= {
-						type = "range",
+				},
+			},
+			boss = {
+				type = "group",
+				order = 6,
+				name = L["Boss Frame Adjustments"],
+				get = function(info) return db.boss[ info[#info] ] end,
+				set = function(info, value) db.boss[ info[#info] ] = value; self:ApplySettings(event) end,
+				disabled = function() return isModuleDisabled() or not db.enable end,
+				guiInline  = true,
+				args = {
+					---------------------------
+					sep1 = {
+						type = "description",
+						order = 1,
+						name = " ",
+					},
+					sep2 = {
+						type = "description",
 						order = 2,
-						name = L["HP/Mana Font Size"],
-						desc = L["Controls the Arena Healthbar/Manabar value font size."],
-						min = 8, max = 25, step = 1,
-						disabled = function() return isModuleDisabled() or not db.enable or not db.arena.enable end,																
+						name = " ",
+					},
+					sep3 = {
+						type = "description",
+						order = 3,
+						name = " ",
+					},
+					sep4 = {
+						type = "description",
+						order = 4,
+						name = " ",
+					},
+					sep5 = {
+						type = "description",
+						order = 5,
+						name = " ",
+					},
+					---------------------------
+					enable = {
+						type = "toggle",
+						order = 0,
+						name = L["Enable Boss Frame"],
+						width = "full",
+					},
+					scale = {
+						type = "range",
+						order = 1,
+						name = L["Scale"],
+						desc = L["Controls the scaling of Blizzard's Boss Frame's"],
+						min = 0.5, max = 2, step = 0.05,
+						disabled = function() return isModuleDisabled() or not db.enable or not db.boss.enable end,																
+					},
+					position = {
+						type = "group",
+						order = 2,
+						childGroups = "tree",
+						name = L["Boss Frame Position"],
+						disabled = function() return isModuleDisabled() or not db.enable or not db.boss.enable end,
+						get = function(info) return db.boss.position[ info[#info] ] end,
+						set = function(info, value) db.boss.position[ info[#info] ] = value; self:ApplySettings(event) end,						
+						
+						args = {
+							---------------------------
+							--Option Type Seperators
+							sep1 = {
+								type = "description",
+								order = 1,
+								name = " ",
+							},
+							sep2 = {
+								type = "description",
+								order = 2,
+								name = " ",
+							},
+							sep3 = {
+								type = "description",
+								order = 3,
+								name = " ",
+							},
+							sep4 = {
+								type = "description",
+								order = 4,
+								name = " ",
+							},
+							---------------------------
+							relAnchor = {
+								order = 1,
+								name = L["Self Anchor"],
+								type = "select",
+								values = regions,
+								disabled = function() return isModuleDisabled() or not db.enable or not db.boss.enable end,																		
+							},
+							offSetX = {
+								type = "range",
+								order = 2,
+								name = L["X Offset"],
+								desc = L["Controls the X offset. (Left - Right)"],
+								min = -250, max = 250, step = 5,
+								disabled = function() return isModuleDisabled() or not db.enable or not db.boss.enable end,																		
+							},
+							offSetY = {
+								type = "range",
+								order = 3,
+								name = L["Y Offset"],
+								desc = L["Controls the Y offset. (Up - Down)"],
+								min = -250, max = 250, step = 5,
+								disabled = function() return isModuleDisabled() or not db.enable or not db.boss.enable end,																		
+							},
+						},
 					},
 				},
 			},

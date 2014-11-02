@@ -22,7 +22,7 @@ local defaults = {
 		avd 			= "P0",                                -- show your current avoidance against the level of the mob your targeting	
 		bags			= "P9",                                -- show space used in bags on panel.
 		haste 			= "P0",                                -- show your haste rating on panels.	
-		system 			= "P0",                                -- show total memory and others systems info (FPS/MS) on panel.	
+		system 			= "P1",                                -- show total memory and others systems info (FPS/MS) on panel.	
 		guild 			= "P4",                                -- show number on guildmate connected on panel.
 		dur 			= "P8",                                -- show your equipment durability on panel.
 		friends 		= "P6",                                -- show number of friends connected.
@@ -31,8 +31,7 @@ local defaults = {
 		spec 			= "P5",								-- show your current spec on panel.
 		coords 			= "P0",								-- show your current coords on panel.
 		pro 			= "P7",								-- shows your professions and tradeskills
-		stat1 			= "P1",								-- Stat Based on your Role (Avoidance-Tank, AP-Melee, SP/HP-Caster)
-		stat2 			= "P3",								-- Stat Based on your Role (Armor-Tank, Crit-Melee, Crit-Caster)
+		statistics 		= "P3",								-- Stat Based on your Role (Avoidance-Tank, AP-Melee, SP/HP-Caster)
 		recount 		= "P2",								-- Stat Based on Recount"s DPS
 		recountraiddps 	= false,							-- Enables tracking or Recounts Raid DPS
 		calltoarms 		= "P0",								-- Show Current Call to Arms.		
@@ -117,14 +116,14 @@ local classRoles = {
 }
 
 local _, playerClass = UnitClass("player")
-local Role
+local playerRole
 local function CheckRole()
 	local talentTree = GetSpecialization()
 
 	if(type(classRoles[playerClass]) == "string") then
-		Role = classRoles[playerClass]
+		playerRole = classRoles[playerClass]
 	elseif(talentTree) then
-		Role = classRoles[playerClass][talentTree]
+		playerRole = classRoles[playerClass][talentTree]
 	end
 end
 
@@ -1594,19 +1593,6 @@ function Datatext:CreateStats()
 			end
 		end
 
-		local function UpdateGuildXP()
-			local currentXP, remainingXP = UnitGetGuildXP("player")
-			local nextLevelXP = currentXP + remainingXP
-			local percentTotal
-			if currentXP > 0 and nextLevelXP > 0  then
-				percentTotal = ceil((currentXP / nextLevelXP) * 100)
-			else 
-				percentTotal = 0
-			end
-			
-			guildXP[0] = { currentXP, nextLevelXP, percentTotal }
-		end
-
 		local function UpdateGuildMessage()
 			guildMotD = GetGuildRosterMOTD()
 		end
@@ -1625,7 +1611,6 @@ function Datatext:CreateStats()
 			
 				if not GuildFrame and IsInGuild() then 
 					LoadAddOn("Blizzard_GuildUI")
-					UpdateGuildXP() 
 					GuildRoster() 
 				end
 			end,
@@ -1641,10 +1626,6 @@ function Datatext:CreateStats()
 						self:GetScript("OnEnter")(self, nil, true)
 					end
 				end
-			end,
-			-- our guild xp changed, recalculate it	
-			["GUILD_XP_UPDATE"] = function (self, arg1)
-				UpdateGuildXP()
 			end,
 			["PLAYER_GUILD_UPDATE"] = function (self, arg1)
 				GuildRoster()
@@ -1738,7 +1719,6 @@ function Datatext:CreateStats()
 			
 			local anchor, panel, xoff, yoff = DataTextTooltipAnchor(Text)
 			local guildName, guildRank = GetGuildInfo('player')
-			local guildLevel = GetGuildLevel()
 			
 			GameTooltip:SetOwner(panel, anchor, xoff, yoff)
 			GameTooltip:ClearLines()		
@@ -1756,14 +1736,6 @@ function Datatext:CreateStats()
 			end
 			
 			local col = RGBToHex(ttsubh.r, ttsubh.g, ttsubh.b)
-			if GetGuildLevel() ~= 25 then
-				if guildXP[0] then
-					local currentXP, nextLevelXP, percentTotal = unpack(guildXP[0])
-					
-					GameTooltip:AddLine(' ')
-					GameTooltip:AddLine(format(guildXpCurrentString, ShortValue(currentXP), ShortValue(nextLevelXP), percentTotal))
-				end
-			end
 			
 			local _, _, standingID, barMin, barMax, barValue = GetGuildFactionInfo()
 			if standingID ~= 8 then -- Not Max Rep
@@ -2196,7 +2168,7 @@ function Datatext:CreateStats()
 	-----------------
 	-- Statistics #1
 	-----------------
-	if db.stat1 then
+	if db.statistics then
 
 		local Stat = CreateFrame('Frame', nil, Datapanel)
 		Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -2206,19 +2178,9 @@ function Datatext:CreateStats()
 
 		local Text  = Stat:CreateFontString(nil, "OVERLAY")
 		Text:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
-		self:PlacePlugin(db.stat1, Text)
+		self:PlacePlugin(db.statistics, Text)
 
-		local format = string.format
-		local targetlv, playerlv = UnitLevel("target"), UnitLevel("player")
-		local basemisschance, leveldifference, dodge, parry, block
-		local chanceString = "%.2f%%"
-		local modifierString = string.join("", "%d (+", chanceString, ")")
-		local manaRegenString = "%d / %d"
-		local displayNumberString = string.join("", "%s", "%d|r")
-		local displayFloatString = string.join("", "%s", "%.2f%%|r")
-		local spellpwr, avoidance, pwr
-		local haste, hasteBonus
-		local level = UnitLevel("player")
+		local playerClass, englishClass = UnitClass("player");
 
 		local function ShowTooltip(self)
 			if InCombatLockdown() then return end
@@ -2228,131 +2190,131 @@ function Datatext:CreateStats()
 			GameTooltip:ClearLines()
 			GameTooltip:AddLine(hexa..PLAYER_NAME.."'s"..hexb.." Statistics")
 			GameTooltip:AddLine' '		
-			
-			if Role == "Tank" then
-				if targetlv > 1 then
-					GameTooltip:AddDoubleLine("Avoidance Breakdown", string.join("", " (", "lvl", " ", targetlv, ")"))
-				elseif targetlv == -1 then
-					GameTooltip:AddDoubleLine("Avoidance Breakdown", string.join("", " (", "Boss", ")"))
-				else
-					GameTooltip:AddDoubleLine("Avoidance Breakdown", string.join("", " (", "lvl", " ", playerlv, ")"))
+			if UnitLevel("player") > 10 then
+					
+				if playerRole == "Tank" then
+					local Total_Dodge = GetDodgeChance()
+					local Total_Parry = GetParryChance()
+					local Total_Block = GetBlockChance()
+					
+					GameTooltip:AddLine(STAT_CATEGORY_DEFENSE)
+					GameTooltip:AddDoubleLine(DODGE_CHANCE, format("%.2f%%", Total_Dodge),1,1,1)
+					GameTooltip:AddDoubleLine(PARRY_CHANCE, format("%.2f%%", Total_Parry),1,1,1)
+					GameTooltip:AddDoubleLine(BLOCK_CHANCE, format("%.2f%%", Total_Block),1,1,1)				
+					
+				elseif playerRole == "Caster" then
+					local SC = GetSpellCritChance("2")
+					local Total_Spell_Haste = UnitSpellHaste("player")
+					local base, casting = GetManaRegen()
+					local manaRegenString = "%d / %d"				
+					
+					GameTooltip:AddLine(STAT_CATEGORY_SPELL)
+					GameTooltip:AddDoubleLine(STAT_CRITICAL_STRIKE, format("%.2f%%", SC), 1, 1, 1)
+					GameTooltip:AddDoubleLine(STAT_HASTE, format("%.2f%%", Total_Spell_Haste), 1, 1, 1)		
+					GameTooltip:AddDoubleLine(MANA_REGEN, format(manaRegenString, base * 5, casting * 5), 1, 1, 1)
+
+				elseif playerRole == "Melee" then
+				
+					if englishClass == "HUNTER" then
+						local Total_Range_Haste = GetRangedHaste("player")
+						local Range_Armor_Pen = GetArmorPenetration();
+						local Range_Crit = GetRangedCritChance("25")
+						local speed = UnitRangedDamage("player")
+						local Total_Range_Speed = speed
+						
+						GameTooltip:AddLine(STAT_CATEGORY_RANGED)					
+						GameTooltip:AddDoubleLine("Armor Penetration", format("%.2f%%", Range_Armor_Pen), 1, 1, 1)
+						GameTooltip:AddDoubleLine(STAT_CRITICAL_STRIKE, format("%.2f%%", Range_Crit), 1, 1, 1)	
+						GameTooltip:AddDoubleLine(STAT_HASTE, format("%.2f%%", Total_Range_Haste), 1, 1, 1)
+						GameTooltip:AddDoubleLine(STAT_ATTACK_SPEED, format("%.2f".." (sec)", Total_Range_Speed), 1, 1, 1)					
+					else
+						local Melee_Crit = GetCritChance("player")
+						local Melee_Armor_Pen = GetArmorPenetration();
+						local Total_Melee_Haste = GetMeleeHaste("player")
+						local mainSpeed = UnitAttackSpeed("player");
+						local MH = mainSpeed
+						
+						GameTooltip:AddLine(STAT_CATEGORY_MELEE)
+						GameTooltip:AddDoubleLine("Armor Penetration", format("%.2f%%", Melee_Armor_Pen), 1, 1, 1)
+						GameTooltip:AddDoubleLine(STAT_CRITICAL_STRIKE, format("%.2f%%", Melee_Crit), 1, 1, 1)		
+						GameTooltip:AddDoubleLine(STAT_HASTE, format("%.2f%%", Total_Melee_Haste), 1, 1, 1)
+						GameTooltip:AddDoubleLine(STAT_ATTACK_SPEED, format("%.2f".." (sec)", MH), 1, 1, 1)
+					end
 				end
 				GameTooltip:AddLine' '
-				GameTooltip:AddDoubleLine(DODGE_CHANCE, format(chanceString, dodge),1,1,1)
-				GameTooltip:AddDoubleLine(PARRY_CHANCE, format(chanceString, parry),1,1,1)
-				GameTooltip:AddDoubleLine(BLOCK_CHANCE, format(chanceString, block),1,1,1)
-				GameTooltip:AddDoubleLine(MISS_CHANCE, format(chanceString, basemisschance),1,1,1)
-			elseif Role == "Caster" then
-				GameTooltip:AddDoubleLine(STAT_HIT_CHANCE, format(modifierString, GetCombatRating(CR_HIT_SPELL), GetCombatRatingBonus(CR_HIT_SPELL)), 1, 1, 1)
-				GameTooltip:AddDoubleLine(STAT_HASTE, format(modifierString, GetCombatRating(CR_HASTE_SPELL), GetCombatRatingBonus(CR_HASTE_SPELL)), 1, 1, 1)
-				local base, combat = GetManaRegen()
-				GameTooltip:AddDoubleLine(MANA_REGEN, format(manaRegenString, base * 5, combat * 5), 1, 1, 1)
-			elseif Role == "Melee" then
-				local hit =  UNIT_CLASS == "HUNTER" and GetCombatRating(CR_HIT_RANGED) or GetCombatRating(CR_HIT_MELEE)
-				local hitBonus =  UNIT_CLASS == "HUNTER" and GetCombatRatingBonus(CR_HIT_RANGED) or GetCombatRatingBonus(CR_HIT_MELEE)
-			
-				GameTooltip:AddDoubleLine(STAT_HIT_CHANCE, format(modifierString, hit, hitBonus), 1, 1, 1)
+				GameTooltip:AddLine(STAT_CATEGORY_GENERAL)
+				local masteryspell
+				local Multi_Strike = GetMultistrike();
+				local Life_Steal = GetLifesteal();
+				--local Versatility = GetVersatility();
+				local Versatility_Damage_Bonus = GetCombatRatingBonus(CR_VERSATILITY_DAMAGE_DONE) + GetVersatilityBonus(CR_VERSATILITY_DAMAGE_DONE);
+				local Avoidance = GetAvoidance();
+				local bonusArmor, isNegatedForSpec = UnitBonusArmor("player");
 				
-				local haste = UNIT_CLASS == "HUNTER" and GetCombatRating(CR_HASTE_RANGED) or GetCombatRating(CR_HASTE_MELEE)
-				local hasteBonus = UNIT_CLASS == "HUNTER" and GetCombatRatingBonus(CR_HASTE_RANGED) or GetCombatRatingBonus(CR_HASTE_MELEE)
-				
-				GameTooltip:AddDoubleLine(STAT_HASTE, format(modifierString, haste, hasteBonus), 1, 1, 1)
-			end
-			
-			local masteryspell
-			if GetCombatRating(CR_MASTERY) ~= 0 and GetSpecialization() then
-				if UNIT_CLASS == "DRUID" then
-					if Role == "Melee" then
-						masteryspell = select(2, GetSpecializationMasterySpells(GetSpecialization()))
-					elseif Role == "Tank" then
-						masteryspell = select(1, GetSpecializationMasterySpells(GetSpecialization()))
+				GameTooltip:AddDoubleLine(STAT_BONUS_ARMOR, format("%s", bonusArmor), 1, 1, 1)
+				GameTooltip:AddDoubleLine(STAT_MULTISTRIKE, format("%.2f%%", Multi_Strike), 1, 1, 1)
+				GameTooltip:AddDoubleLine(STAT_LIFESTEAL, format("%.2f%%", Life_Steal), 1, 1, 1)
+				GameTooltip:AddDoubleLine(STAT_VERSATILITY, format("%.2f%%", Versatility_Damage_Bonus), 1, 1, 1)
+				--GameTooltip:AddDoubleLine(STAT_VERSATILITY, format("%d", Versatility), 1, 1, 1)
+				GameTooltip:AddDoubleLine(STAT_AVOIDANCE, format("%.2f%%", Avoidance), 1, 1, 1)
+				if GetCombatRating(CR_MASTERY) ~= 0 and GetSpecialization() then
+					if englishClass == "DRUID" then
+						if playerRole == "Melee" then
+							masteryspell = select(2, GetSpecializationMasterySpells(GetSpecialization()))
+						elseif playerRole == "Tank" then
+							masteryspell = select(1, GetSpecializationMasterySpells(GetSpecialization()))
+						else
+							masteryspell = GetSpecializationMasterySpells(GetSpecialization())
+						end
 					else
 						masteryspell = GetSpecializationMasterySpells(GetSpecialization())
 					end
-				else
-					masteryspell = GetSpecializationMasterySpells(GetSpecialization())
-				end
-				
+					
 
-
-				local masteryName, _, _, _, _, _, _, _, _ = GetSpellInfo(masteryspell)
-				if masteryName then
-					GameTooltip:AddLine' '
-					GameTooltip:AddDoubleLine(masteryName, format(modifierString, GetCombatRating(CR_MASTERY), GetCombatRatingBonus(CR_MASTERY)), 1, 1, 1)
-				end
+					local Mastery = GetMasteryEffect("player")
+					local masteryName, _, _, _, _, _, _, _, _ = GetSpellInfo(masteryspell)
+					if masteryName then
+						GameTooltip:AddDoubleLine(masteryName, format("%.2f%%", Mastery), 1, 1, 1)
+					end
+				end			
+			else
+				GameTooltip:AddLine("No Stats Available unit Level 10")
 			end
-			
+
 			GameTooltip:Show()
 		end
 
 		local function UpdateTank(self)
-					
-			-- the 5 is for base miss chance
-			if targetlv == -1 then
-				basemisschance = (5 - (3*.2))
-				leveldifference = 3
-			elseif targetlv > playerlv then
-				basemisschance = (5 - ((targetlv - playerlv)*.2))
-				leveldifference = (targetlv - playerlv)
-			elseif targetlv < playerlv and targetlv > 0 then
-				basemisschance = (5 + ((playerlv - targetlv)*.2))
-				leveldifference = (targetlv - playerlv)
-			else
-				basemisschance = 5
-				leveldifference = 0
-			end
+			local armorString = hexa..ARMOR..hexb..": "
+			local displayNumberString = string.join("", "%s", "%d|r");
+			local base, effectiveArmor, armor, posBuff, negBuff = UnitArmor("player");
+			local Melee_Reduction = effectiveArmor
 			
-			if select(2, UnitRace("player")) == "NightElf" then basemisschance = basemisschance + 2 end
-			
-			if leveldifference >= 0 then
-				dodge = (GetDodgeChance()-leveldifference*.2)
-				parry = (GetParryChance()-leveldifference*.2)
-				block = (GetBlockChance()-leveldifference*.2)
-			else
-				dodge = (GetDodgeChance()+abs(leveldifference*.2))
-				parry = (GetParryChance()+abs(leveldifference*.2))
-				block = (GetBlockChance()+abs(leveldifference*.2))
-			end
-			
-			if dodge <= 0 then dodge = 0 end
-			if parry <= 0 then parry = 0 end
-			if block <= 0 then block = 0 end
-			
-			if UNIT_CLASS == "DRUID" then
-				parry = 0
-				block = 0
-			elseif UNIT_CLASS == "DEATHKNIGHT" then
-				block = 0
-			end
-			avoidance = (dodge+parry+block+basemisschance)
-			
-			Text:SetFormattedText(displayFloatString, hexa.."AVD: "..hexb, avoidance)
+			Text:SetFormattedText(displayNumberString, armorString, effectiveArmor)
 			--Setup Tooltip
 			self:SetAllPoints(Text)
 		end
 
 		local function UpdateCaster(self)
-			if GetSpellBonusHealing() > GetSpellBonusDamage(7) then
-				spellpwr = GetSpellBonusHealing()
-			else
-				spellpwr = GetSpellBonusDamage(7)
-			end
+			local spellpwr = GetSpellBonusDamage("2");
+			local displayNumberString = string.join("", "%s", "%d|r");
 			
 			Text:SetFormattedText(displayNumberString, hexa.."SP: "..hexb, spellpwr)
 			--Setup Tooltip
 			self:SetAllPoints(Text)
 		end
 
-		local function UpdateMelee(self)
-			local base, posBuff, negBuff = UnitAttackPower("player");
-			local effective = base + posBuff + negBuff;
-			local Rbase, RposBuff, RnegBuff = UnitRangedAttackPower("player");
-			local Reffective = Rbase + RposBuff + RnegBuff;
+		local function UpdateMelee(self)	
+			local displayNumberString = string.join("", "%s", "%d|r");
 				
-			if UNIT_CLASS == "HUNTER" then
-				pwr = Reffective
+			if englishClass == "HUNTER" then
+				local base, posBuff, negBuff = UnitRangedAttackPower("player")
+				local Range_AP = base + posBuff + negBuff	
+				pwr = Range_AP
 			else
-				pwr = effective
+				local base, posBuff, negBuff = UnitAttackPower("player")
+				local Melee_AP = base + posBuff + negBuff		
+				pwr = Melee_AP
 			end
 			
 			Text:SetFormattedText(displayNumberString, hexa.."AP: "..hexb, pwr)      
@@ -2365,153 +2327,16 @@ function Datatext:CreateStats()
 		local function Update(self, t)
 			int = int - t
 			if int > 0 then return end
-			if Role == "Tank" then 
-				UpdateTank(self)
-			elseif Role == "Caster" then
-				UpdateCaster(self)
-			elseif Role == "Melee" then
-				UpdateMelee(self)
-			end
-			int = 2
-		end
-
-		Stat:SetScript("OnEnter", function() ShowTooltip(Stat) end)
-		Stat:SetScript("OnLeave", function() GameTooltip:Hide() end)
-		Stat:SetScript("OnUpdate", Update)
-		Update(Stat, 10)
-	end
-
-	-----------------
-	-- Statistics #2
-	-----------------
-	if db.stat2 then
-
-		local Stat = CreateFrame('Frame', nil, Datapanel)
-		Stat:RegisterEvent("PLAYER_ENTERING_WORLD")
-		Stat:SetFrameStrata("BACKGROUND")
-		Stat:SetFrameLevel(3)
-		Stat:EnableMouse(true)
-
-		local Text  = Stat:CreateFontString(nil, "OVERLAY")
-		Text:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize,'THINOUTLINE')
-		self:PlacePlugin(db.stat2, Text)
-
-		local _G = getfenv(0)
-		local format = string.format
-		local chanceString = "%.2f%%"
-		local armorString = hexa..ARMOR..hexb..": "
-		local modifierString = string.join("", "%d (+", chanceString, ")")
-		local baseArmor, effectiveArmor, armor, posBuff, negBuff
-		local displayNumberString = string.join("", "%s", "%d|r")
-		local displayFloatString = string.join("", "%s", "%.2f%%|r")
-		local level = UnitLevel("player")
-
-
-		local function CalculateMitigation(level, effective)
-			local mitigation
-			
-			if not effective then
-				_, effective, _, _, _ = UnitArmor("player")
-			end
-			
-			if level < 60 then
-				mitigation = (effective/(effective + 400 + (85 * level)));
+			if UnitLevel("player") >= 10 then
+				if playerRole == "Tank" then 
+					UpdateTank(self)
+				elseif playerRole == "Caster" then
+					UpdateCaster(self)
+				elseif playerRole == "Melee" then
+					UpdateMelee(self)
+				end
 			else
-				mitigation = (effective/(effective + (467.5 * level - 22167.5)));
-			end
-			if mitigation > .75 then
-				mitigation = .75
-			end
-			return mitigation
-		end
-
-		local function AddTooltipHeader(description)
-			GameTooltip:AddLine(description)
-			GameTooltip:AddLine(' ')
-		end
-
-		local function ShowTooltip(self)
-			if InCombatLockdown() then return end
-		
-			local anchor, panel, xoff, yoff = DataTextTooltipAnchor(Text)
-			GameTooltip:SetOwner(panel, anchor, xoff, yoff)
-			GameTooltip:ClearLines()
-			GameTooltip:AddLine(hexa..PLAYER_NAME.."'s"..hexb.." Statistics")
-			GameTooltip:AddLine' '	
-			
-			if Role == "Tank" then
-				AddTooltipHeader("Mitigation By Level: ")
-				local lv = level +3
-				for i = 1, 4 do
-					GameTooltip:AddDoubleLine(lv,format(chanceString, CalculateMitigation(lv, effectiveArmor) * 100),1,1,1)
-					lv = lv - 1
-				end
-				lv = UnitLevel("target")
-				if lv and lv > 0 and (lv > level + 3 or lv < level) then
-					GameTooltip:AddDoubleLine(lv, format(chanceString, CalculateMitigation(lv, effectiveArmor) * 100),1,1,1)
-				end	
-			elseif Role == "Caster" or Role == "Melee" then
-				AddTooltipHeader(MAGIC_RESISTANCES_COLON)
-				
-				local base, total, bonus, minus
-				for i = 2, 6 do
-					base, total, bonus, minus = UnitResistance("player", i)
-					GameTooltip:AddDoubleLine(_G["DAMAGE_SCHOOL"..(i+1)], format(chanceString, (total / (total + (500 + level + 2.5))) * 100),1,1,1)
-				end
-				
-				local spellpen = GetSpellPenetration()
-				if (UNIT_CLASS == "SHAMAN" or Role == "Caster") and spellpen > 0 then
-					GameTooltip:AddLine' '
-					GameTooltip:AddDoubleLine(ITEM_MOD_SPELL_PENETRATION_SHORT, spellpen,1,1,1)
-				end
-			end
-			GameTooltip:Show()
-		end
-
-		local function UpdateTank(self)
-			baseArmor, effectiveArmor, armor, posBuff, negBuff = UnitArmor("player");
-			
-			Text:SetFormattedText(displayNumberString, armorString, effectiveArmor)
-			--Setup Tooltip
-			self:SetAllPoints(Text)
-		end
-
-		local function UpdateCaster(self)
-			local spellcrit = GetSpellCritChance(1)
-
-			Text:SetFormattedText(displayFloatString, hexa.."Crit: "..hexb, spellcrit)
-			--Setup Tooltip
-			self:SetAllPoints(Text)
-		end
-
-		local function UpdateMelee(self)
-			local meleecrit = GetCritChance()
-			local rangedcrit = GetRangedCritChance()
-			local critChance
-				
-			if UNIT_CLASS == "HUNTER" then    
-				critChance = rangedcrit
-			else
-				critChance = meleecrit
-			end
-			
-			Text:SetFormattedText(displayFloatString, hexa.."Crit: "..hexb, critChance)
-			--Setup Tooltip
-			self:SetAllPoints(Text)
-		end
-
-		-- initial delay for update (let the ui load)
-		local int = 5	
-		local function Update(self, t)
-			int = int - t
-			if int > 0 then return end
-			
-			if Role == "Tank" then
-				UpdateTank(self)
-			elseif Role == "Caster" then
-				UpdateCaster(self)
-			elseif Role == "Melee" then
-				UpdateMelee(self)		
+				Text:SetText(hexa.."No Stats"..hexb)
 			end
 			int = 2
 		end
@@ -2959,19 +2784,11 @@ function Datatext:GetOptions()
 						values = statposition;
 						disabled = function() return isModuleDisabled() or not db.enable end,
 					},
-					stat1 = {
+					statistics = {
 						type = "select",
 						order = 5,
-						name = L["Stat #1"],
-						desc = L["Display stat based on your role (Avoidance-Tank, AP-Melee, SP/HP-Caster)"],
-						values = statposition;
-						disabled = function() return isModuleDisabled() or not db.enable end,
-					},
-					stat2 = {
-						type = "select",
-						order = 5,
-						name = L["Stat #2"],
-						desc = L["Display stat based on your role (Armor-Tank, Crit-Melee, Crit-Caster)"],
+						name = L["Statistics"],
+						desc = L["Display stat based on your role (Armor-Tank, Attack Power-Melee, SSpell Power-Caster)"],
 						values = statposition;
 						disabled = function() return isModuleDisabled() or not db.enable end,
 					},

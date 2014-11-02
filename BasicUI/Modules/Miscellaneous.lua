@@ -12,7 +12,6 @@ local defaults = {
 	profile = {
 		enable = true,
 		flashgathernodes = true,
-		cooldown = true,
 		quicky = true,
 		vellum = true,
 		altbuy = true,
@@ -104,163 +103,6 @@ function Miscellaneous:FlashGatherNods()
 		self.ChainCall(flashFrame:CreateTexture("PointerDotOn","OVERLAY")) :SetTexture("Interface\\AddOns\\BasicUI\\Media\\objecticons_on") :SetSize(50,50) :SetPoint("CENTER") :SetNonBlocking(true) :Show()
 		self.ChainCall(flashFrame:CreateTexture("PointerDotOff","OVERLAY")) :SetTexture("Interface\\AddOns\\BasicUI\\Media\\objecticons_off") :SetSize(50,50) :SetPoint("RIGHT") :SetNonBlocking(true) :Show()
 	end
-end
-
-function Miscellaneous:Cooldown()
-	
-	if db.cooldown ~= true then return end
-
-	OmniCC = true                               -- hack to work around detection from other addons for OmniCC
-
-	local FONT_COLOR = {1, 1, 1}
-	local FONT_FACE, FONT_SIZE = BasicUI.media.fontNormal, 20
-
-	local MIN_DURATION = 2.5                    -- the minimum duration to show cooldown text for
-	local DECIMAL_THRESHOLD = 2                 -- threshold in seconds to start showing decimals
-
-	local MIN_SCALE = 0.5                       -- the minimum scale we want to show cooldown counts at, anything below this will be hidden
-	local ICON_SIZE = 36
-
-	local DAY, HOUR, MINUTE = 86400, 3600, 60
-	local DAYISH, HOURISH, MINUTEISH = 3600 * 23.5, 60 * 59.5, 59.5 
-	local HALFDAYISH, HALFHOURISH, HALFMINUTEISH = DAY/2 + 0.5, HOUR/2 + 0.5, MINUTE/2 + 0.5
-
-	local GetTime = GetTime
-
-	local min = math.min
-	local floor = math.floor
-	local format = string.format
-
-	local round = function(x) 
-		return floor(x + 0.5) 
-	end
-
-	local function getTimeText(s)
-		if (s < DECIMAL_THRESHOLD + 0.5) then
-			return format('|cffff0000%.1f|r', s), s - format('%.1f', s)
-		elseif (s < MINUTEISH) then
-			local seconds = round(s)
-			return format('|cffffff00%d|r', seconds), s - (seconds - 0.51)
-		elseif (s < HOURISH) then
-			local minutes = round(s/MINUTE)
-			return format('|cffffffff%dm|r', minutes), minutes > 1 and (s - (minutes*MINUTE - HALFMINUTEISH)) or (s - MINUTEISH)
-		elseif (s < DAYISH) then
-			local hours = round(s/HOUR)
-			return format('|cffccccff%dh|r', hours), hours > 1 and (s - (hours*HOUR - HALFHOURISH)) or (s - HOURISH)
-		else
-			local days = round(s/DAY)
-			return format('|cffcccccc%dd|r', days), days > 1 and (s - (days*DAY - HALFDAYISH)) or (s - DAYISH)
-		end
-	end
-
-		-- stops the timer
-
-	local function Timer_Stop(self)
-		self.enabled = nil
-		self:Hide()
-	end
-
-		-- forces the given timer to update on the next frame
-
-	local function Timer_ForceUpdate(self)
-		self.nextUpdate = 0
-		self:Show()
-	end
-
-		-- adjust font size whenever the timer's parent size changes, hide if it gets too tiny
-
-	local function Timer_OnSizeChanged(self, width, height)
-		local fontScale = round(width) / ICON_SIZE
-
-		if (fontScale == self.fontScale) then
-			return
-		end
-
-		self.fontScale = fontScale
-
-		if (fontScale < MIN_SCALE) then
-			self:Hide()
-		else
-			self.text:SetFont(FONT_FACE, fontScale * FONT_SIZE, 'OUTLINE')
-			self.text:SetShadowColor(0, 0, 0, 0.5)
-			self.text:SetShadowOffset(2, -2)
-
-			if (self.enabled) then
-				Timer_ForceUpdate(self)
-			end
-		end
-	end
-
-		-- update timer text, if it needs to be, hide the timer if done
-
-	local function Timer_OnUpdate(self, elapsed)
-		if (self.nextUpdate > 0) then
-			self.nextUpdate = self.nextUpdate - elapsed
-		else
-			local remain = self.duration - (GetTime() - self.start)
-			if (round(remain) > 0) then
-				local time, nextUpdate = getTimeText(remain)
-				self.text:SetText(time)
-				self.nextUpdate = nextUpdate
-			else
-				Timer_Stop(self)
-			end
-		end
-	end
-
-		-- returns a new timer object
-
-	local function Timer_Create(self)
-		local scaler = CreateFrame('Frame', nil, self)
-		scaler:SetAllPoints(self)
-
-		local timer = CreateFrame('Frame', nil, scaler)
-		timer:Hide()
-		timer:SetAllPoints(scaler)
-		timer:SetScript('OnUpdate', Timer_OnUpdate)
-
-		local text = timer:CreateFontString(nil, 'BACKGROUND ')
-		text:SetPoint('CENTER', 0, 0)
-		text:SetJustifyH("CENTER")
-		timer.text = text
-
-		Timer_OnSizeChanged(timer, scaler:GetSize())
-		scaler:SetScript('OnSizeChanged', function(self, ...) 
-			Timer_OnSizeChanged(timer, ...) 
-		end)
-
-		self.timer = timer
-
-		return timer
-	end
-
-		-- hook the SetCooldown method of all cooldown frames
-		-- ActionButton1Cooldown is used here since its likely to always exist 
-		-- and I'd rather not create my own cooldown frame to preserve a tiny bit of memory
-
-	hooksecurefunc(getmetatable(ActionButton1Cooldown).__index, 'SetCooldown', function(self, start, duration)
-		if (self.noOCC) then 
-			return 
-		end
-
-		if (start > 0 and duration > MIN_DURATION) then
-			local timer = self.timer or Timer_Create(self)
-			timer.start = start
-			timer.duration = duration
-			timer.enabled = true
-			timer.nextUpdate = 0
-
-			if (timer.fontScale >= MIN_SCALE) then 
-				timer:Show() 
-			end
-		else
-			local timer = self.timer
-			
-			if (timer) then
-				Timer_Stop(timer)
-			end
-		end
-	end)
 end
 
 function Miscellaneous:Quicky()
@@ -377,66 +219,103 @@ function Miscellaneous:Velluminous()
 end
 
 function Miscellaneous:Merchant()
-
-	if db.merchant.enable ~= true then return end
 	
+	------------
+	-- Merchant
+	------------
 	-- Credit for Merchant goes to Tuks for his Tukui project.
 	-- You can find his Addon at http://tukui.org/dl.php
 	-- Editied by Cokedriver
+	
+	if db.merchant.enable ~= true then return end
+	
+	local MerchantFilter = {
+		[6289]  = true, -- Raw Longjaw Mud Snapper
+		[6291]  = true, -- Raw Brilliant Smallfish
+		[6308]  = true, -- Raw Bristle Whisker Catfish
+		[6309]  = true, -- 17 Pound Catfish
+		[6310]  = true, -- 19 Pound Catfish
+		[41808] = true, -- Bonescale Snapper
+		[42336] = true, -- Bloodstone Band
+		[42337] = true, -- Sun Rock Ring
+		[43244] = true, -- Crystal Citrine Necklace
+		[43571] = true, -- Sewer Carp
+		[43572] = true, -- Magic Eater		
+	}
 
-	local sg = CreateFrame("Frame")
-	sg:SetScript("OnEvent", function()
-		if db.merchant.autoSellGrey then
-			local c = 0
-			for b=0,4 do
-				for s=1,GetContainerNumSlots(b) do
-					local l,lid = GetContainerItemLink(b, s), GetContainerItemID(b, s)
-					if l and lid then
-					local p = 0
-					local mult1, mult2 = select(11, GetItemInfo(l)), select(2, GetContainerItemInfo(b, s))
-					if mult1 and mult2 then p = mult1 * mult2 end					
-						if db.merchant.autoSellGrey and select(3, GetItemInfo(l)) == 0 and p > 0 then
-							UseContainerItem(b, s)
+	local Merchant_Frame = CreateFrame("Frame")
+	Merchant_Frame:SetScript("OnEvent", function()
+		if db.merchant.autoSellGrey or db.merchant.sellMisc then
+			local Cost = 0
+			
+			for Bag = 0, 4 do
+				for Slot = 1, GetContainerNumSlots(Bag) do
+					local Link, ID = GetContainerItemLink(Bag, Slot), GetContainerItemID(Bag, Slot)
+					
+					if (Link and ID) then
+						local Price = 0
+						local Mult1, Mult2 = select(11, GetItemInfo(Link)), select(2, GetContainerItemInfo(Bag, Slot))
+						
+						if (Mult1 and Mult2) then
+							Price = Mult1 * Mult2
+						end
+						
+						if (db.merchant.autoSellGrey and select(3, GetItemInfo(Link)) == 0 and Price > 0) then
+							UseContainerItem(Bag, Slot)
 							PickupMerchantItem()
-							c = c+p
+							Cost = Cost + Price
+						end
+						
+						if db.merchant.sellMisc and MerchantFilter[ID] then
+							UseContainerItem(Bag, Slot)
+							PickupMerchantItem()
+							Cost = Cost + Price
 						end
 					end
 				end
 			end
-			if c>0 then
-				local g, s, c = math.floor(c/10000) or 0, math.floor((c%10000)/100) or 0, c%100
-				DEFAULT_CHAT_FRAME:AddMessage("Your grey item's have been sold for".." |cffffffff"..g.."|cffffd700g|r".." |cffffffff"..s.."|cffc7c7cfs|r".." |cffffffff"..c.."|cffeda55fc|r"..".",255,255,0)
+			
+			if (Cost > 0) then
+				local Gold, Silver, Copper = math.floor(Cost / 10000) or 0, math.floor((Cost % 10000) / 100) or 0, Cost % 100
+				
+				DEFAULT_CHAT_FRAME:AddMessage("Your grey item's have been sold for".." |cffffffff"..Gold.."|cffffd700g|r".." |cffffffff"..Silver.."|cffc7c7cfs|r".." |cffffffff"..Copper.."|cffeda55fc|r"..".",255,255,0)
 			end
 		end
-		if not IsShiftKeyDown() then
-			if CanMerchantRepair() and db.merchant.autoRepair then	
-				guildRepairFlag = 0
-				local cost, possible = GetRepairAllCost()
-				-- additional checks for guild repairs
-				if (IsInGuild()) and (CanGuildBankRepair()) then
-					 if cost <= GetGuildBankWithdrawMoney() then
-						guildRepairFlag = 1
-					 end
-				end
-				if cost>0 then
-					if (possible or guildRepairFlag) then
-						RepairAllItems(guildRepairFlag)
-						local c = cost%100
-						local s = math.floor((cost%10000)/100)
-						local g = math.floor(cost/10000)
-						if db.merchant.guildPay == "true" and guildRepairFlag == 1 then
-							DEFAULT_CHAT_FRAME:AddMessage("Your guild payed".." |cffffffff"..g.."|cffffd700g|r".." |cffffffff"..s.."|cffc7c7cfs|r".." |cffffffff"..c.."|cffeda55fc|r".." to repair your gear.",255,255,0)
-						else
-							DEFAULT_CHAT_FRAME:AddMessage("You payed".." |cffffffff"..g.."|cffffd700g|r".." |cffffffff"..s.."|cffc7c7cfs|r".." |cffffffff"..c.."|cffeda55fc|r".." to repair your gear.",255,255,0)
-						end	
-					else
-						DEFAULT_CHAT_FRAME:AddMessage("You don't have enough money for repair!",255,0,0)
+		
+		if (not IsShiftKeyDown()) then
+			if (CanMerchantRepair() and db.merchant.autoRepair) then
+				local Cost, Possible = GetRepairAllCost()
+				
+				if (Cost > 0) then
+					if (IsInGuild() and db.merchant.UseGuildRepair) then
+						local CanGuildRepair = (CanGuildBankRepair() and (Cost <= GetGuildBankWithdrawMoney()))
+						
+						if CanGuildRepair then
+							RepairAllItems(1)
+							
+							return
+						end
 					end
-				end		
+					
+					if Possible then
+						RepairAllItems()
+						
+						local Copper = Cost % 100
+						local Silver = math.floor((Cost % 10000) / 100)
+						local Gold = math.floor(Cost / 10000)
+						if guildRepairFlag == 1 then
+							DEFAULT_CHAT_FRAME:AddMessage("Your guild payed".." |cffffffff"..Gold.."|cffffd700g|r".." |cffffffff"..Silver.."|cffc7c7cfs|r".." |cffffffff"..Copper.."|cffeda55fc|r".." to repair your gear.",255,255,0)
+						else
+							DEFAULT_CHAT_FRAME:AddMessage("You payed".." |cffffffff"..Gold.."|cffffd700g|r".." |cffffffff"..Silver.."|cffc7c7cfs|r".." |cffffffff"..Copper.."|cffeda55fc|r".." to repair your gear.",255,255,0)
+						end
+					else
+						DEFAULT_CHAT_FRAME:AddMessage(L.Merchant.NotEnoughMoney, 255, 0, 0)
+					end
+				end
 			end
-		end
+		end		
 	end)
-	sg:RegisterEvent("MERCHANT_SHOW")	
+	Merchant_Frame:RegisterEvent("MERCHANT_SHOW")	
 
 end
 
@@ -869,7 +748,6 @@ function Miscellaneous:SkinAddons()
 end
 
 function Miscellaneous:OnEnable()	
-	self:Cooldown()
 	self:FlashGatherNods()
 	self:Velluminous()
 	self:Quicky()
@@ -965,13 +843,6 @@ function Miscellaneous:GetOptions()
 				desc = L["Enables a vellum button for Enchanters to click."],
 				disabled = function() return isModuleDisabled() or not db.enable end,
 			},
-			cooldown = {
-				type = "toggle",
-				order = 2,						
-				name = L["Cooldown"],
-				desc = L["Enables a version of OmniCC."],
-				disabled = function() return isModuleDisabled() or not db.enable end,
-			},
 			quicky = {
 				type = "toggle",
 				order = 2,						
@@ -982,8 +853,8 @@ function Miscellaneous:GetOptions()
 			altbuy = {
 				type = "toggle",
 				order = 2,
-				name = L["Auto Disenchant"],
-				desc = L["If Checked when in a a group any green items will have Disenchant auto selected if a enchanter is in your group"],
+				name = L["Alt Buy"],
+				desc = L["If Checked when at a merchant Alt + Left Click will buy a full stack."],
 				disabled = function() return isModuleDisabled() or not db.enable end,
 			},
 			flashgathernodes = {
@@ -1078,61 +949,6 @@ function Miscellaneous:GetOptions()
 						name = L["Sell Grays"],
 						desc = L["Automatically sell gray items when visiting a vendor"],
 						disabled = function() return isModuleDisabled() or not db.enable or not db.merchant.enable end,
-					},
-				},
-			},
-			quest = {
-				type = "group",			
-				order = 6,
-				name = L["Quest"],
-				desc = L["Quest Module for BasicUI."],
-				guiInline  = true,
-				get = function(info) return db.quest[ info[#info] ] end,
-				set = function(info, value) db.quest[ info[#info] ] = value; end,
-				disabled = function() return isModuleDisabled() or not db.enable end,
-				args = {
-					---------------------------
-					--Option Type Seperators
-					sep1 = {
-						type = "description",
-						order = 2,										
-						name = " ",
-					},
-					sep2 = {
-						type = "description",
-						order = 3,										
-						name = " ",
-					},
-					sep3 = {
-						type = "description",
-						order = 4,										
-						name = " ",
-					},
-					sep4 = {
-						type = "description",
-						order = 5,										
-						name = " ",
-					},	
-					---------------------------					
-					enable = {
-						type = "toggle",					
-						order = 1,
-						name = L["Enable"],
-						desc = L["Enables Quest Module"],							
-					},					
-					autocomplete = {
-						type = "toggle",					
-						order = 2,
-						name = L["Autocomplete"],
-						desc = L["Automatically complete your quest."],
-						disabled = function() return isModuleDisabled() or not db.enable or not db.quest.enable end,
-					},
-					tekvendor = {
-						type = "toggle",
-						order = 2,						
-						name = L["Tek's Vendor"],
-						desc = L["Enables Tek's best quest item by vendor price."],
-						disabled = function() return isModuleDisabled() or not db.enable or not db.quest.enable end,						
 					},
 				},
 			},

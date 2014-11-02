@@ -1,7 +1,7 @@
-## Interface: 50400
+## Interface: 60000
 ## Title: BasicUI
 ## Author: Cokedriver 
-## Version: 5.4.7
+## Version: 6.0.1
 ## SavedVariables: BasicDB
 ## SavedVariablesPerCharacter: BasicDBPerCharacter
 ## X-credits: Phanx, Neav, Tuks, Elv, Baine, Treeston, and many more.
