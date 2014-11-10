@@ -12,9 +12,9 @@ Libs\Libs.xml
 
 BasicUI.lua
 
-Modules\Media.lua
+--Modules\Media.lua
 Modules\Actionbars.lua
-Modules\Buffs.lua
+--Modules\Buffs.lua
 Modules\Castbars.lua
 Modules\Chat.lua
 Modules\Datatext.lua

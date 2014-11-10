@@ -11,19 +11,19 @@ local defaults = {
 		--abbrevRealmNames = true,
 		player = {
 			enable = true,			-- Enable Player Frame Adjustments
-			scale = 1.15,			-- Player Frame Scale
+			scale = 1.193,			-- Player Frame Scale
 		},
 		target = {
 			enable = true,			-- Enable Target Frame Adjustments
-			scale = 1.15,			-- Target Frame Scale
+			scale = 1.193,			-- Target Frame Scale
 		},
 		focus = {
 			enable = true,			-- Enable Focus Frame Adjustments
-			scale = 1.15,			-- Focus Frame Scale
+			scale = 1.193,			-- Focus Frame Scale
 		},
 		party = {
 			enable = true,
-			scale = 1.15,
+			scale = 1.193,
 			position = {
 				relAnchor = "TOPLEFT",
 				offSetX = 10,		-- Controls the X offset. (Left - Right)
@@ -32,16 +32,11 @@ local defaults = {
 		},
 		arena = {
 			enable = true,
-			scale = 1.15,
+			scale = 1.193,
 		},
 		boss = {
 			enable = true,
-			scale = 1.15,
-			position = {
-				relAnchor = "RIGHT",
-				offSetX = -50,		-- Controls the X offset. (Left - Right)
-				offSetY = -250,		-- Controls the Y offset. (Up - Down)
-			},				
+			scale = 1.193,				
 		},
 	},
 }
@@ -59,12 +54,12 @@ local CUSTOM_FACTION_BAR_COLORS = {
 
 -- Font Style
 local shorts = {
-	{ 1e10, 1e9, "%.0fB" }, --  10b+ as  12b
-	{  1e9, 1e9, "%.1fB" }, --   1b+ as 8.3b
-	{  1e7, 1e6, "%.0fM" }, --  10m+ as  14m
-	{  1e6, 1e6, "%.1fM" }, --   1m+ as 7.4m
-	{  1e5, 1e3, "%.0fK" }, -- 100k+ as 840k
-	{  1e3, 1e3, "%.1fK" }, --   1k+ as 2.5k
+	{ 1e10, 1e9, "%.0fB" }, --  10b+ as  12B
+	{  1e9, 1e9, "%.1fB" }, --   1b+ as 8.3B
+	{  1e7, 1e6, "%.0fM" }, --  10m+ as  14M
+	{  1e6, 1e6, "%.1fM" }, --   1m+ as 7.4M
+	{  1e5, 1e3, "%.0fK" }, -- 100k+ as 840K
+	{  1e3, 1e3, "%.1fK" }, --   1k+ as 2.5K
 	{    0,   1,    "%d" }, -- < 1k  as  974
 }
 for i = 1, #shorts do
@@ -89,32 +84,6 @@ function MODULE:OnEnable()
 
 	if enabled or not db.enable then return end
 	enabled = true -- since most of this stuff is non-undoable (eg. hooksecurefunc)
-
-	-- Move Party Frames
-	local movingPartyFrame
-	hooksecurefunc(PartyMemberFrame1, "SetPoint", function(f, ...)
-		if movingPartyFrame or InCombatLockdown() then
-			return
-		end
-		movingPartyFrame = true
-		PartyMemberFrame1:ClearAllPoints()
-		PartyMemberFrame1:SetPoint(db.party.position.relAnchor, UIParent, db.party.position.offSetX, db.party.position.offSetY)
-		movingPartyFrame = nil
-	end)	
-	
-	--PartyMemberFrame1:SetPoint(db.party.position.relAnchor, UIParent, db.party.position.offSetX, db.party.position.offSetY);
-	
-	-- Move Boss Frames
-	--local movingBossFrame
-	--hooksecurefunc(Boss1TargetFrame, "SetPoint", function(f, ...)
-		--if movingBossFrame or InCombatLockdown() then
-			--return
-		--end
-		--movingBossFrame = true
-		--Boss1TargetFrame:ClearAllPoints()
-		--Boss1TargetFrame:SetPoint(db.boss.position.relAnchor, UIParent, db.boss.position.offSetX, db.boss.position.offSetY)
-		--movingBossFrame = nil
-	--end)
 	
 	-- Update Unit Frames
 	self:ApplySettings()
@@ -225,7 +194,6 @@ end
 
 MODULE.UnitFunctions = {
 
-
 	player = function(self)	
 		PlayerFrame:SetScale(db.player.scale)
 	end,
@@ -243,6 +211,8 @@ MODULE.UnitFunctions = {
 			local partyFrame = "PartyMemberFrame"..i
 			_G[partyFrame]:SetScale(db.party.scale)
 		end
+		-- Move Party Frames	
+		PartyMemberFrame1:SetPoint(db.party.position.relAnchor, UIParent, db.party.position.offSetX, db.party.position.offSetY);
 	end,
 
 	arena = function(self)		
@@ -259,12 +229,14 @@ MODULE.UnitFunctions = {
 		end
 	end, 
 	
-	-- Set Boss Frames Scale
-	SecureHandlerWrapScript(Boss1TargetFrame, 'OnShow', Boss1TargetFrame, 'self:SetScale(1.15)'),
-	SecureHandlerWrapScript(Boss2TargetFrame, 'OnShow', Boss2TargetFrame, 'self:SetScale(1.15)'),
-	SecureHandlerWrapScript(Boss3TargetFrame, 'OnShow', Boss3TargetFrame, 'self:SetScale(1.15)'),
-	SecureHandlerWrapScript(Boss4TargetFrame, 'OnShow', Boss4TargetFrame, 'self:SetScale(1.15)'),
-	SecureHandlerWrapScript(Boss5TargetFrame, 'OnShow', Boss5TargetFrame, 'self:SetScale(1.15)'),
+	boss = function(self)
+			-- Set Boss Frames Scale
+		SecureHandlerWrapScript(Boss1TargetFrame, 'OnShow', Boss1TargetFrame, 'self:SetScale('..db.boss.scale..')')
+		SecureHandlerWrapScript(Boss2TargetFrame, 'OnShow', Boss2TargetFrame, 'self:SetScale('..db.boss.scale..')')
+		SecureHandlerWrapScript(Boss3TargetFrame, 'OnShow', Boss3TargetFrame, 'self:SetScale('..db.boss.scale..')')
+		SecureHandlerWrapScript(Boss4TargetFrame, 'OnShow', Boss4TargetFrame, 'self:SetScale('..db.boss.scale..')')
+		SecureHandlerWrapScript(Boss5TargetFrame, 'OnShow', Boss5TargetFrame, 'self:SetScale('..db.boss.scale..')')
+	end
 }
 ------------------------------------------------------------------------------
 
@@ -673,64 +645,6 @@ function MODULE:GetOptions()
 						desc = L["Controls the scaling of Blizzard's Boss Frame's"],
 						min = 0.5, max = 2, step = 0.05,
 						disabled = function() return isModuleDisabled() or not db.enable or not db.boss.enable end,																
-					},
-					position = {
-						type = "group",
-						order = 2,
-						childGroups = "tree",
-						name = L["Boss Frame Position"],
-						disabled = function() return isModuleDisabled() or not db.enable or not db.boss.enable end,
-						get = function(info) return db.boss.position[ info[#info] ] end,
-						set = function(info, value) db.boss.position[ info[#info] ] = value; self:ApplySettings(event) end,						
-						
-						args = {
-							---------------------------
-							--Option Type Seperators
-							sep1 = {
-								type = "description",
-								order = 1,
-								name = " ",
-							},
-							sep2 = {
-								type = "description",
-								order = 2,
-								name = " ",
-							},
-							sep3 = {
-								type = "description",
-								order = 3,
-								name = " ",
-							},
-							sep4 = {
-								type = "description",
-								order = 4,
-								name = " ",
-							},
-							---------------------------
-							relAnchor = {
-								order = 1,
-								name = L["Self Anchor"],
-								type = "select",
-								values = regions,
-								disabled = function() return isModuleDisabled() or not db.enable or not db.boss.enable end,																		
-							},
-							offSetX = {
-								type = "range",
-								order = 2,
-								name = L["X Offset"],
-								desc = L["Controls the X offset. (Left - Right)"],
-								min = -250, max = 250, step = 5,
-								disabled = function() return isModuleDisabled() or not db.enable or not db.boss.enable end,																		
-							},
-							offSetY = {
-								type = "range",
-								order = 3,
-								name = L["Y Offset"],
-								desc = L["Controls the Y offset. (Up - Down)"],
-								min = -250, max = 250, step = 5,
-								disabled = function() return isModuleDisabled() or not db.enable or not db.boss.enable end,																		
-							},
-						},
 					},
 				},
 			},
