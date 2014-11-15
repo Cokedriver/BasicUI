@@ -228,8 +228,8 @@ function Tooltip:OnEnable()
 		end
 
 		self:SetBackdrop({
-			bgFile = BasicUI.media.background,    -- 'Interface\\Tooltips\\UI-Tooltip-Background',
-			edgeFile = BasicUI.media.border,
+			bgFile = [[Interface\AddOns\BasicUI\Media\Textures\BLACK8X8]]    -- 'Interface\\Tooltips\\UI-Tooltip-Background',
+			edgeFile = [[Interface\Tooltips\UI-Tooltip-Border]],
 			tile = true, tileSize = 16, edgeSize = 18,
 
 			insets = {

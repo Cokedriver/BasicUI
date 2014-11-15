@@ -59,7 +59,7 @@ function Miscellaneous:OnInitialize()
 end
 
 function Miscellaneous:FlashGatherNods()
-	if (IsAddOnLoaded('Zygor Guides Viewer 4')) then return end
+	if (IsAddOnLoaded('Zygor Guides Viewer 5.0')) then return end
 
 	
 	function AssignButtonTexture(obj,tx,num,total)

@@ -12,11 +12,6 @@ local defaults = {
 			fontNumber		= [[Interface\Addons\BasicUI\Media\NUMBER.ttf]],
 			fontSize 		= 15,
 			classcolor = true,
-			statusbar 		= "Blizzard",
-			border 			= "Blizzard Tooltip",
-			panelborder		= "BasicUI Border",
-			background 		= "Blizzard Dialog Background Dark",
-			sound			= "Whisper",
 		},
 		modules = {
 			["*"] = true,
@@ -81,26 +76,11 @@ end
 
 
 function BasicUI:UpdateMedia()
-	
-	-- Fonts
 	self.media.fontNormal 		= LSM:Fetch("font", db.general.fontNormal)
 	self.media.fontBold 		= LSM:Fetch("font", db.general.fontBold)
 	self.media.fontItalic 		= LSM:Fetch("font", db.general.fontItalic)
 	self.media.fontBoldItalic	= LSM:Fetch("font", db.general.fontBoldItalic)
 	self.media.fontNumber 		= LSM:Fetch("font", db.general.fontNumber)
-	
-	-- Background
-	self.media.background 		= LSM:Fetch("background", db.general.background)
-	
-	-- Borders
-	self.media.border 			= LSM:Fetch("border", db.general.border)
-	self.media.panelborder 		= LSM:Fetch("border", db.general.panelborder)
-	
-	-- Statusbar
-	self.media.statusbar 		= LSM:Fetch("statusbar", db.general.statusbar)
-	
-	-- Sound
-	self.media.sound			= LSM:Fetch("sound", db.general.sound)
 end
 
 function BasicUI:UpdateBlizzardFonts()
@@ -374,63 +354,9 @@ function BasicUI:GetOptions()
 						dialogControl = 'LSM30_Font', --Select your widget here						
 						values = AceGUIWidgetLSMlists.font,
 					},
-					Text13 = {
-						type = "description",
-						order = 13,
-						name = " ",
-						width = "full",
-					},
-					background = {
-						type = 'select',
-						order = 13,						
-						name = L["BasicUI Background"],
-						width = "normal",
-						dialogControl = 'LSM30_Background', --Select your widget here						
-						values = AceGUIWidgetLSMlists.background,							
-					},					
-					border = {
-						type = 'select',
-						order = 13,						
-						name = L["BasicUI Border"],
-						dialogControl = 'LSM30_Border', --Select your widget here						
-						values = AceGUIWidgetLSMlists.border,
-					},					
-					panelborder = {
-						type = 'select',
-						order = 13,						
-						name = L["BasicUI Datapanel Border"],
-						dialogControl = 'LSM30_Border', --Select your widget here						
-						values = AceGUIWidgetLSMlists.border,
-					},
-					Text14 = {
-						type = "description",
-						order = 14,
-						name = " ",
-						width = "full",
-					},					
-					statusbar = {
-						type = 'select',
-						order = 14,						
-						name = L["BasicUI Statusbar"],
-						dialogControl = 'LSM30_Statusbar', --Select your widget here						
-						values = AceGUIWidgetLSMlists.statusbar,
-					},
-					Text15 = {
-						type = "description",
-						order = 15,
-						name = " ",
-						width = "full",
-					},
-					sound = {
-						type = 'select',
-						order = 15,						
-						name = L["BasicUI Sound"],
-						dialogControl = 'LSM30_Sound', --Select your widget here						
-						values = AceGUIWidgetLSMlists.sound,
-					},
 				},
 			},			
-		}
+		},
 	}
 	return options
 end

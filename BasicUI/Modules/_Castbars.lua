@@ -160,7 +160,7 @@ function Castbars:OnEnable()
 				d.y = 5;
 				
 				_G[k.."Text"]:SetPoint("CENTER", k, -10, 2);
-				_G[k.."StatusBar"]:SetStatusBarTexture(BasicUI.media.statusbar);
+				_G[k.."StatusBar"]:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]]);
 			else
 				d.w = 240 + 24 + (5 * 2) + 5;
 				d.h = 24 + (5 * 2);
@@ -168,7 +168,7 @@ function Castbars:OnEnable()
 				d.y = 5;
 				
 				_G[k.."Text"]:SetPoint(db[k].textPosition, k, 0, 0);
-				_G[k]:SetStatusBarTexture(BasicUI.media.statusbar);
+				_G[k]:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]]);
 				_G[k.."Flash"].Show = _G[k.."Flash"].Hide;
 				_G[k.."Spark"].Show = _G[k.."Spark"].Hide;
 				
@@ -218,8 +218,8 @@ function Castbars:OnEnable()
 			a:SetWidth(d.w); a:SetHeight(d.h);
 			a:SetBackdropColor(.1, .1, .1, .95);
 			a:SetBackdrop({
-				bgFile = BasicUI.media.background,
-				edgeFile = BasicUI.media.border,
+				bgFile = [[Interface\AddOns\BasicUI\Media\Textures\BLACK8X8]],
+				edgeFile = [[Interface\Tooltips\UI-Tooltip-Border]],
 				tile = true, tileSize = 16, edgeSize = 15,
 				insets = {left = 3, right = 3, top = 3, bottom = 3}
 			})

@@ -148,7 +148,7 @@ function Datatext:SetDataPanel()
 	Datapanel:SetFrameLevel(1)
 	Datapanel:SetHeight(35)
 	Datapanel:SetFrameStrata("LOW")
-	Datapanel:SetBackdrop({ bgFile = BasicUI.media.background, edgeFile = BasicUI.media.panelborder, edgeSize = 25, insets = { left = 5, right = 5, top = 5, bottom = 5 } })
+	Datapanel:SetBackdrop({ bgFile = [[Interface\AddOns\BasicUI\Media\Textures\BLACK8X8]], edgeFile = [[Interface\AddOns\BasicUI\Media\UI-DialogBox-Border.blp]], edgeSize = 25, insets = { left = 5, right = 5, top = 5, bottom = 5 } })
 	Datapanel:SetBackdropColor(0, 0, 0, 1)
 
 	-- Hide Panels When in a Vehicle or Pet Battle

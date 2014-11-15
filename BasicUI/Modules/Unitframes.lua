@@ -8,7 +8,6 @@ local db
 local defaults = {
 	profile = {
 		enable = true,
-		--abbrevRealmNames = true,
 		player = {
 			enable = true,			-- Enable Player Frame Adjustments
 			scale = 1.193,			-- Player Frame Scale
@@ -208,8 +207,7 @@ MODULE.UnitFunctions = {
 
 	party = function(self)		
 		for i = 1, MAX_PARTY_MEMBERS do
-			local partyFrame = "PartyMemberFrame"..i
-			_G[partyFrame]:SetScale(db.party.scale)
+			_G["PartyMemberFrame"..i]:SetScale(db.party.scale)
 		end
 		-- Move Party Frames	
 		PartyMemberFrame1:SetPoint(db.party.position.relAnchor, UIParent, db.party.position.offSetX, db.party.position.offSetY);
@@ -221,11 +219,8 @@ MODULE.UnitFunctions = {
 		end
 
 		for i = 1, MAX_ARENA_ENEMIES do
-			local prepFrame = "ArenaPrepFrame"..i
-			_G[prepFrame]:SetScale(db.arena.scale)
-
-			local arenaFrame = "ArenaEnemyFrame"..i
-			_G[arenaFrame]:SetScale(db.arena.scale)
+			_G["ArenaPrepFrame"..i]:SetScale(db.arena.scale)
+			_G["ArenaEnemyFrame"..i]:SetScale(db.arena.scale)
 		end
 	end, 
 	
