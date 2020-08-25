@@ -26,5 +26,5 @@ Cokedriver
 ## Thank You...
 I would just like to thank all those who created the addons I have used to create this UI.
 
-##Special Thanks goes to:
+## Special Thanks goes to:
 Phanx - WoWInterface, Neal - NeavUI, Tuks and Programers - Tukui, Nightcracker - ncQuest and all the others.
