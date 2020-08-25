@@ -10,6 +10,7 @@
 -- * **race** Race-specific data. All of the players characters of the same race share this database.
 -- * **faction** Faction-specific data. All of the players characters of the same faction share this database.
 -- * **factionrealm** Faction and realm specific data. All of the players characters on the same realm and of the same faction share this database.
+-- * **locale** Locale specific data, based on the locale of the players game client.
 -- * **global** Global Data. All characters on the same account share this database.
 -- * **profile** Profile-specific data. All characters using the same profile share this database. The user can control which profile should be used.
 --
@@ -39,15 +40,15 @@
 -- end
 -- @class file
 -- @name AceDB-3.0.lua
--- @release $Id: AceDB-3.0.lua 1115 2014-09-21 11:52:35Z kaelten $
-local ACEDB_MAJOR, ACEDB_MINOR = "AceDB-3.0", 25
-local AceDB, oldminor = LibStub:NewLibrary(ACEDB_MAJOR, ACEDB_MINOR)
+-- @release $Id: AceDB-3.0.lua 1193 2018-08-02 12:24:37Z funkydude $
+local ACEDB_MAJOR, ACEDB_MINOR = "AceDB-3.0", 26
+local AceDB = LibStub:NewLibrary(ACEDB_MAJOR, ACEDB_MINOR)
 
 if not AceDB then return end -- No upgrade needed
 
 -- Lua APIs
 local type, pairs, next, error = type, pairs, next, error
-local setmetatable, getmetatable, rawset, rawget = setmetatable, getmetatable, rawset, rawget
+local setmetatable, rawset, rawget = setmetatable, rawset, rawget
 
 -- WoW APIs
 local _G = _G
@@ -263,7 +264,7 @@ local factionrealmKey = factionKey .. " - " .. realmKey
 local localeKey = GetLocale():lower()
 
 local regionTable = { "US", "KR", "EU", "TW", "CN" }
-local regionKey = _G["GetCurrentRegion"] and regionTable[GetCurrentRegion()] or string.sub(GetCVar("realmList"), 1, 2):upper()
+local regionKey = regionTable[GetCurrentRegion()]
 local factionrealmregionKey = factionrealmKey .. " - " .. regionKey
 
 -- Actual database initialization function
@@ -303,7 +304,7 @@ local function initdb(sv, defaults, defaultProfile, olddb, parent)
 		["factionrealm"] = factionrealmKey,
 		["factionrealmregion"] = factionrealmregionKey,
 		["profile"] = profileKey,
-        ["locale"] = localeKey,
+		["locale"] = localeKey,
 		["global"] = true,
 		["profiles"] = true,
 	}
@@ -617,8 +618,6 @@ function DBObjectLib:ResetDB(defaultProfile)
 	for k,v in pairs(sv) do
 		sv[k] = nil
 	end
-
-	local parent = self.parent
 
 	initdb(sv, self.defaults, defaultProfile, self)
 

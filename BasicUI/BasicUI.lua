@@ -1,31 +1,28 @@
 local BasicUI = LibStub("AceAddon-3.0"):NewAddon("BasicUI")
-local LSM = LibStub("LibSharedMedia-3.0")
-
-local db
-local defaults = {
-	profile = {
-		general = {
-			fontNormal 		= [[Interface\Addons\BasicUI\Media\NORMAL.ttf]],
-			fontBold 		= [[Interface\Addons\BasicUI\Media\BOLD.ttf]],
-			fontItalic 		= [[Interface\Addons\BasicUI\Media\ITALIC.ttf]],
-			fontBoldItalic 	= [[Interface\Addons\BasicUI\Media\BOLDITALIC.ttf]],
-			fontNumber		= [[Interface\Addons\BasicUI\Media\NUMBER.ttf]],
-			fontSize 		= 15,
-			classcolor = true,
-		},
-		modules = {
-			["*"] = true,
-		}
-	}
-}
-BasicUI.L = setmetatable({}, { __index = function(t,k)
+BasicUI.L =  setmetatable({}, { __index = function(t,k)
 	local v = tostring(k)
 	rawset(t, k, v)
 	return v
 end })
 
 local L = BasicUI.L
-BasicUI.media = {}
+local db
+local defaults = {
+	profile = {
+		modules = {
+			["*"] = true,
+		}
+	}
+}
+
+StaticPopupDialogs["CFG_RELOAD"] = {
+	text = L["One or more of the changes you have made require a ReloadUI."],
+	button1 = ACCEPT,
+	button2 = CANCEL,
+	OnAccept = function() ReloadUI() end,
+	timeout = 0,
+	whileDead = 1,
+}
 
 function BasicUI:OnInitialize()
 	self.db = LibStub("AceDB-3.0"):New("BasicDB", defaults, true) -- true is important!
@@ -57,8 +54,6 @@ function BasicUI:OnInitialize()
 	options.args.profile = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
 	options.args.profile.order = -1
 	Dialog:AddToBlizOptions("BasicUI", options.args.profile.name, "BasicUI", "profile")	
-	
-	self:UpdateMedia()
 end
 
 function BasicUI:OnEnable()
@@ -66,112 +61,12 @@ function BasicUI:OnEnable()
 	
 	db = self.db.profile
 	
+	PLAYER_NAME = UnitName("player")
+	
 	SlashCmdList['RELOADUI'] = function()
 		ReloadUI()
 	end
 	SLASH_RELOADUI1 = '/rl'	
-
-	self:UpdateBlizzardFonts()
-end
-
-
-function BasicUI:UpdateMedia()
-	self.media.fontNormal 		= LSM:Fetch("font", db.general.fontNormal)
-	self.media.fontBold 		= LSM:Fetch("font", db.general.fontBold)
-	self.media.fontItalic 		= LSM:Fetch("font", db.general.fontItalic)
-	self.media.fontBoldItalic	= LSM:Fetch("font", db.general.fontBoldItalic)
-	self.media.fontNumber 		= LSM:Fetch("font", db.general.fontNumber)
-end
-
-function BasicUI:UpdateBlizzardFonts()
-
-	local function SetFont(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)
-		obj:SetFont(font, size, style)
-		if sr and sg and sb then obj:SetShadowColor(sr, sg, sb) end
-		if sox and soy then obj:SetShadowOffset(sox, soy) end
-		if r and g and b then obj:SetTextColor(r, g, b)
-		elseif r then obj:SetAlpha(r) end
-	end	
-
-	local NORMAL     = self.media.fontNormal
-	local BOLD       = self.media.fontBold
-	local BOLDITALIC = self.media.fontBoldItalic
-	local ITALIC     = self.media.fontItalic
-	local NUMBER     = self.media.fontNormal
-
-	UIDROPDOWNMENU_DEFAULT_TEXT_HEIGHT = 15
-	CHAT_FONT_HEIGHTS = {7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24}
-
-	UNIT_NAME_FONT     			= NORMAL
-	DAMAGE_TEXT_FONT   			= NUMBER
-	STANDARD_TEXT_FONT 			= NORMAL
-	NAMEPLATE_FONT 				= NORMAL
-	NAMEPLATE_SPELLCAST_FONT 	= NORMAL
-
-	-- Base fonts
-	SetFont(AchievementFont_Small,                BOLD, 14)
-	SetFont(FriendsFont_Large,                  NORMAL, db.general.fontSize, nil, nil, nil, nil, 0, 0, 0, 1, -1)
-	SetFont(FriendsFont_Normal,                 NORMAL, db.general.fontSize, nil, nil, nil, nil, 0, 0, 0, 1, -1)
-	SetFont(FriendsFont_Small,                  NORMAL, 15, nil, nil, nil, nil, 0, 0, 0, 1, -1)
-	SetFont(FriendsFont_UserText,               NUMBER, db.general.fontSize, nil, nil, nil, nil, 0, 0, 0, 1, -1)
-	SetFont(GameTooltipHeader,                    BOLD, db.general.fontSize, "OUTLINE")
-	SetFont(GameFont_Gigantic,                    BOLD, 32, nil, nil, nil, nil, 0, 0, 0, 1, -1)
-	SetFont(GameFontNormal,						NORMAL, db.general.fontSize)
-	SetFont(GameFontNormalSmall,				NORMAL, 14)
-	SetFont(GameFontHighlightSmall,				NORMAL, 14)
-	SetFont(InvoiceFont_Med,                    ITALIC, db.general.fontSize, nil, 0.15, 0.09, 0.04)
-	SetFont(InvoiceFont_Small,                  ITALIC, 14, nil, 0.15, 0.09, 0.04)
-	SetFont(MailFont_Large,                     ITALIC, db.general.fontSize, nil, 0.15, 0.09, 0.04, 0.54, 0.4, 0.1, 1, -1)
-	SetFont(NumberFont_OutlineThick_Mono_Small, NUMBER, db.general.fontSize, "OUTLINE")
-	SetFont(NumberFont_Outline_Huge,            NUMBER, 30, "THICKOUTLINE", 30)
-	SetFont(NumberFont_Outline_Large,           NUMBER, 17, "OUTLINE")
-	SetFont(NumberFont_Outline_Med,             NUMBER, db.general.fontSize, "OUTLINE")
-	SetFont(NumberFont_Shadow_Med,              NORMAL, db.general.fontSize)
-	SetFont(NumberFont_Shadow_Small,            NORMAL, 14)
-	SetFont(QuestFont_Shadow_Small,             NORMAL, 14)
-	SetFont(QuestFont_Large,                    NORMAL, 16)
-	SetFont(QuestFont_Shadow_Huge,                BOLD, 19, nil, nil, nil, nil, 0.54, 0.4, 0.1)
-	SetFont(QuestFont_Super_Huge,                 BOLD, 24)
-	SetFont(ReputationDetailFont,                 BOLD, db.general.fontSize, nil, nil, nil, nil, 0, 0, 0, 1, -1)
-	SetFont(SpellFont_Small,                      BOLD, 14)
-	SetFont(SystemFont_InverseShadow_Small,       BOLD, db.general.fontSize)
-	SetFont(SystemFont_Large,                   NORMAL, 17)
-	SetFont(SystemFont_Med1,                    NORMAL, 14)
-	SetFont(SystemFont_Med2,                    ITALIC, db.general.fontSize, nil, 0.15, 0.09, 0.04)
-	SetFont(SystemFont_Med3,                    NORMAL, db.general.fontSize)
-	SetFont(SystemFont_OutlineThick_Huge2,      NORMAL, 22, "THICKOUTLINE")
-	SetFont(SystemFont_OutlineThick_Huge4,  BOLDITALIC, 27, "THICKOUTLINE")
-	SetFont(SystemFont_OutlineThick_WTF,    BOLDITALIC, 31, "THICKOUTLINE", nil, nil, nil, 0, 0, 0, 1, -1)
-	SetFont(SystemFont_Outline_Small,           NUMBER, 14, "OUTLINE")
-	SetFont(SystemFont_Shadow_Huge1,              BOLD, 20)
-	SetFont(SystemFont_Shadow_Huge3,              BOLD, 25)
-	SetFont(SystemFont_Shadow_Large,            NORMAL, 17)
-	SetFont(SystemFont_Shadow_Med1,             NORMAL, 14)
-	SetFont(SystemFont_Shadow_Med2,             NORMAL, db.general.fontSize)
-	SetFont(SystemFont_Shadow_Med3,             NORMAL, 17)
-	SetFont(SystemFont_Shadow_Outline_Huge2,    NORMAL, 22, "OUTLINE")
-	SetFont(SystemFont_Shadow_Small,              BOLD, 15)
-	SetFont(SystemFont_Small,                   NORMAL, 14)
-	SetFont(SystemFont_Tiny,                    NORMAL, 14)
-	SetFont(ChatBubbleFont,						NORMAL, db.general.fontSize)
-	
-
-	-- Derived fonts
-	SetFont(BossEmoteNormalHuge,     BOLDITALIC, 27, "THICKOUTLINE")
-	SetFont(CombatTextFont,              NORMAL, 26)
-	SetFont(ErrorFont,                   ITALIC, 16, nil, 60)
-	SetFont(QuestFontNormalSmall,          BOLD, db.general.fontSize, nil, nil, nil, nil, 0.54, 0.4, 0.1)
-	SetFont(WorldMapTextFont,        BOLDITALIC, 31, "THICKOUTLINE",  40, nil, nil, 0, 0, 0, 1, -1)	
-	
-	-- I have no idea why the channel list is getting fucked up
-	-- but re-setting the font obj seems to fix it
-	for i=1,MAX_CHANNEL_BUTTONS do
-		local f = _G["ChannelButton"..i.."Text"]
-		f:SetFontObject(GameFontNormalSmallLeft)
-		-- function f:SetFont(...) error("Attempt to set font on ChannelButton"..i) end
-	end
-
-	for _,butt in pairs(PaperDollTitlesPane.buttons) do butt.text:SetFontObject(GameFontHighlightSmallLeft) end	
 	
 end
 
@@ -191,9 +86,6 @@ function BasicUI:Refresh()
 			v:Refresh()
 		end
 	end
-	
-	self:UpdateMedia()
-	self:UpdateBlizzardFonts()
 end
 
 function BasicUI:GetModuleEnabled(moduleName)
@@ -219,7 +111,7 @@ function BasicUI:GetOptions()
 			general = { -- @PHANX: moved all the "welcome" text into a group, you'll see why later
 				type = "group",
 				order = 1,
-				name = "Media",
+				name = "General",
 				get = function(info) return db.general[ info[#info] ] end,
 				set = function(info, value) db.general[ info[#info] ] = value;   end,					
 				args = {
@@ -263,100 +155,10 @@ function BasicUI:GetOptions()
 						name = L["Thank you all for your AddOns, coding help, and support in creating |cff00B4FFBasic|rUI."],
 						width = "full",
 						fontSize = "medium",
-					},
-					Text7 = {
-						type = "description",
-						order = 6,
-						name = L[" "],
-						width = "full",
-						fontSize = "medium",
-					},					
-					reloadUI = {
-						type = "execute",
-						name = "Reload UI",
-						desc = " ",
-						order = 7,
-						func = 	function()
-							ReloadUI()
-						end,
-					},
-					Text8 = {
-						type = "description",
-						order = 8,
-						name = "When changes are made a reload of the UI is needed.",
-						width = "full",
-					},
-					Text9 = {
-						type = "description",
-						order = 9,
-						name = " ",
-						width = "full",
-					},
-					classcolor = {
-						type = "toggle",					
-						order = 10,
-						name = L["Class Color"],
-						desc = L["Use your classcolor for border and some text color."],
-					},
-					Text11 = {
-						type = "description",
-						order = 11,
-						name = " ",
-						width = "full",
 					},						
-					fontSize = {
-						type = "range",
-						order = 11,						
-						name = L["Game Font Size"],
-						desc = L["Controls the Size of the Game Font"],
-						min = 0,
-						max = 30,
-						step = 1,
-					},
-					Text12 = {
-						type = "description",
-						order = 12,
-						name = " ",
-						width = "full",
-					},					
-					fontNormal = {
-						type = 'select',
-						order = 12,						
-						name = L["BasicUI Normal Font"],
-						dialogControl = 'LSM30_Font', --Select your widget here						
-						values = AceGUIWidgetLSMlists.font,	
-					},
-					fontBold = {
-						type = 'select',
-						order = 12,						
-						name = L["BasicUI Bold Font"],
-						dialogControl = 'LSM30_Font', --Select your widget here						
-						values = AceGUIWidgetLSMlists.font,	
-					},
-					fontItalic = {
-						type = 'select',
-						order = 12,						
-						name = L["BasicUI Italic Font"],
-						dialogControl = 'LSM30_Font', --Select your widget here						
-						values = AceGUIWidgetLSMlists.font,	
-					},
-					fontBoldItalic = {
-						type = 'select',
-						order = 12,						
-						name = L["BasicUI Bold Italic Font"],
-						dialogControl = 'LSM30_Font', --Select your widget here						
-						values = AceGUIWidgetLSMlists.font,	
-					},
-					fontNumber = {
-						type = 'select',
-						order = 12,						
-						name = L["BasicUI Number Font"],
-						dialogControl = 'LSM30_Font', --Select your widget here						
-						values = AceGUIWidgetLSMlists.font,
-					},
 				},
 			},			
-		},
+		}
 	}
 	return options
 end

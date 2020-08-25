@@ -7,7 +7,7 @@ I was torn between a few UI's to use a while back and then relized I could take 
 So that is what i did, this is a combination of NeavUI and TukUI the way i wanted them to be. 
 All addons that are in this UI I was given permission to use.
 
-####Here are a few things that are include in BasicUI:
+### Here are a few things that are include in BasicUI:
 - Stand Alone UI (there are integration of other addons to work with BasicUI).
 - Custom Unitframe Scaleing.
 - AutoSell all Grey items at a vendor.

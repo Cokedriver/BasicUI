@@ -1,6 +1,6 @@
 local MODULE_NAME = "Chat"
 local BasicUI = LibStub("AceAddon-3.0"):GetAddon("BasicUI")
-local Chat = BasicUI:NewModule(MODULE_NAME, "AceEvent-3.0")
+local MODULE = BasicUI:NewModule(MODULE_NAME, "AceEvent-3.0")
 local L = BasicUI.L
 
 ------------------------------------------------------------------------
@@ -11,21 +11,6 @@ local db
 local defaults = {
 	profile = {
 		enable = true,
-		disableFade = false,
-		chatOutline = false,
-		windowborder = false,
-		enableborder = false,
-		 
-		enableHyperlinkTooltip = true, 
-		enableBorderColoring = true,
-
-		tab = {
-			fontSize = 15,
-			fontOutline = true, 
-			normalColor = {r = 1, g = 1, b = 1},
-			specialColor = {r = 1, g = 0, b = 1},
-			selectedColor = {r = 0, g = 0.75, b = 1},
-		},
 	}
 }
 
@@ -35,7 +20,76 @@ local defaults = {
 
 local classColor
 
-function Chat:OnInitialize()
+local showLinkType = {
+	-- 1 Normal tooltip things:
+	achievement  = 1,
+	enchant      = 1,
+	glyph        = 1,
+	item         = 1,
+	instancelock = 1,
+	quest        = 1,
+	spell        = 1,
+	talent       = 1,
+	unit         = 1,
+	currency       = 1,
+	-- 2 Special tooltip things:
+	battlepet           = 2,
+	battlePetAbil       = 2,
+	garrfollowerability = 2,
+	garrfollower        = 2,
+	garrmission         = 2,
+}
+
+local currentLinkType, itemRefLink, itemRefText, itemRefFrame
+ 
+local function OnHyperlinkEnter(frame, link, text)
+	currentLinkType = showLinkType[link:match("(%a+):%d+")]
+	if currentLinkType == 1 then
+		GameTooltip:SetOwner(ChatFrame1Tab, "ANCHOR_TOPLEFT", 20, 20)
+		GameTooltip:SetHyperlink(link)
+		GameTooltip:Show()
+	elseif currentLinkType == 2 then
+		-- Uses a special tooltip, just let the default function handle it.
+		SetItemRef(link, text, "LeftButton", frame)
+		itemRefLink, itemRefText, itemRefFrame = link, text, frame
+	end
+end
+
+local function OnHyperlinkLeave(frame, link, text)
+	if currentLinkType == 1 then
+		GameTooltip:Hide()
+	elseif currentLinkType == 2 then
+		-- Uses a special tooltip, just let the default function handle it.
+		SetItemRef(itemRefLink, itemRefText, "LeftButton", itemRefFrame)
+		itemRefLink, itemRefText, itemRefFrame = nil,nil,nil
+	end
+	currentLinkType = nil
+end
+ 
+local function RegisterFrame(frame)
+	frame:SetScript("OnHyperlinkEnter", OnHyperlinkEnter)
+	frame:SetScript("OnHyperlinkLeave", OnHyperlinkLeave)
+end
+ 
+local cHyperLink = CreateFrame("Frame")
+cHyperLink:RegisterEvent("PLAYER_LOGIN")
+cHyperLink:SetScript("OnEvent", function(self, event, name)
+	if event == "PLAYER_LOGIN" then
+		for i = 1, NUM_CHAT_WINDOWS do
+			RegisterFrame(_G["ChatFrame"..i])
+		end
+	end
+	if GuildBankMessageFrame then
+		RegisterFrame(GuildBankMessageFrame)
+		self:UnregisterAllEvents()
+		self:SetScript("OnEvent", nil)
+		RegisterFrame = nil
+	else
+		self:RegisterEvent("ADDON_LOADED")
+	end
+end)
+
+function MODULE:OnInitialize()
 	self.db = BasicUI.db:RegisterNamespace(MODULE_NAME, defaults)
 	db = self.db.profile	
 
@@ -45,18 +99,14 @@ function Chat:OnInitialize()
 	self:SetEnabledState(BasicUI:GetModuleEnabled(MODULE_NAME))
 end
 
-function Chat:OnEnable()
-
+function MODULE:OnEnable()
+	
 	local type = type
 	local select = select
-	local unpack = unpack
-	local tostring = tostring
-	local concat = table.concat
-	local find = string.find
-
 	local gsub = string.gsub
 	local format = string.format
-
+	local HIDE_BUTTONS = false
+	local FULL_MOVEMENT = false
 
 	CHAT_FRAME_TAB_SELECTED_MOUSEOVER_ALPHA = 1
 	CHAT_FRAME_TAB_SELECTED_NOMOUSE_ALPHA = 0
@@ -105,78 +155,40 @@ function Chat:OnEnable()
 	CHAT_INSTANCE_CHAT_LEADER_GET = '|Hchannel:INSTANCE_CHAT|h[IL]|h %s:\32';
 
 
-	local channelFormat 
-	do
-		local a, b = '.*%[(.*)%].*', '%%[%1%%]'
-		channelFormat = {
-			[1] = {gsub(CHAT_BATTLEGROUND_GET, a, b), '[BG]'},
-			[2] = {gsub(CHAT_BATTLEGROUND_LEADER_GET, a, b), '[BGL]'},
-
-			[3] = {gsub(CHAT_GUILD_GET, a, b), '[G]'},
-			[4] = {gsub(CHAT_OFFICER_GET, a, b), '[O]'},
-			
-			[5] = {gsub(CHAT_PARTY_GET, a, b), '[P]'},
-			[6] = {gsub(CHAT_PARTY_LEADER_GET, a, b), '[PL]'},
-			[7] = {gsub(CHAT_PARTY_GUIDE_GET, a, b), '[PL]'},
-
-			[8] = {gsub(CHAT_RAID_GET, a, b), '[R]'},
-			[9] = {gsub(CHAT_RAID_LEADER_GET, a, b), '[RL]'},
-			[10] = {gsub(CHAT_RAID_WARNING_GET, a, b), '[RW]'},
-
-			[11] = {gsub(CHAT_FLAG_AFK, a, b), '[AFK] '},
-			[12] = {gsub(CHAT_FLAG_DND, a, b), '[DND] '},
-			[13] = {gsub(CHAT_FLAG_GM, a, b), '[GM] '},
-		}
-	end
-
-
 	local AddMessage = ChatFrame1.AddMessage
 	local function FCF_AddMessage(self, text, ...)
 		if (type(text) == 'string') then
 			text = gsub(text, '(|HBNplayer.-|h)%[(.-)%]|h', '%1%2|h')
 			text = gsub(text, '(|Hplayer.-|h)%[(.-)%]|h', '%1%2|h')
-			text = gsub(text, '%[(%d0?)%. (.-)%]', '[%1]') 
-			
-			
-			for i = 1, #channelFormat  do
-				text = gsub(text, channelFormat[i][1], channelFormat[i][2])
-			end
-			
+			text = gsub(text, '%[(%d0?)%. (.-)%]', '[%1]') 			
 		end
 
 		return AddMessage(self, text, ...)
 	end
 
 		-- Modify the editbox
-		
-	for k = 6, 11 do
-	   select(k, ChatFrame1EditBox:GetRegions()):SetTexture(nil)
-	end
 
 	ChatFrame1EditBox:SetAltArrowKeyMode(false)
 	ChatFrame1EditBox:ClearAllPoints()
-	ChatFrame1EditBox:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize)
 	ChatFrame1EditBox:SetPoint('BOTTOMLEFT', ChatFrame1, 'TOPLEFT', 2, 33)
 	ChatFrame1EditBox:SetPoint('BOTTOMRIGHT', ChatFrame1, 'TOPRIGHT', 0, 33)
 	ChatFrame1EditBox:SetBackdrop({
-		bgFile = [[Interface\AddOns\BasicUI\Media\Textures\BLACK8X8]],
+		bgFile = [[Interface\DialogFrame\UI-DialogBox-Background-Dark]],
 		edgeFile = [[Interface\Tooltips\UI-Tooltip-Border]],
 		tile = true, tileSize = 16, edgeSize = 18,
 		insets = {left = 3, right = 3, top = 2, bottom = 3},
 	})
 
 
-	ChatFrame1EditBox:SetBackdropColor(0, 0, 0, 0.5)
+	ChatFrame1EditBox:SetBackdropColor(0, 0, 0, 1)
 
 
-		-- Hide the menu and friend button
+		-- Move the Toast Frame
+	BNToastFrame:HookScript('OnShow', function(self)
+		BNToastFrame:ClearAllPoints()
+		BNToastFrame:SetPoint('BOTTOMLEFT', ChatFrame1EditBox, 'TOPLEFT', 0, 15)
+	end)
 
-	FriendsMicroButton:SetAlpha(0)
-	FriendsMicroButton:EnableMouse(false)
-	FriendsMicroButton:UnregisterAllEvents()
-
-	ChatFrameMenuButton:SetAlpha(0)
-	ChatFrameMenuButton:EnableMouse(false)
 
 		-- Tab text colors for the tabs
 
@@ -188,187 +200,53 @@ function Chat:OnEnable()
 		end
 	end)
 
-		-- Tab text fadeout
-
-	local origFCF_FadeOutChatFrame = FCF_FadeOutChatFrame
-	local function FCF_FadeOutChatFrameHook(chatFrame)
-		origFCF_FadeOutChatFrame(chatFrame)
-
-		local frameName = chatFrame:GetName()
-		local chatTab = _G[frameName..'Tab']
-		local tabGlow = _G[frameName..'TabGlow']
-
-		if (not tabGlow:IsShown()) then
-			if (frameName.isDocked) then
-				securecall('UIFrameFadeOut', chatTab, CHAT_FRAME_FADE_OUT_TIME, chatTab:GetAlpha(), CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA)
-			else
-				securecall('UIFrameFadeOut', chatTab, CHAT_FRAME_FADE_OUT_TIME, chatTab:GetAlpha(), CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA)
-			end
-		end
-	end
-	FCF_FadeOutChatFrame = FCF_FadeOutChatFrameHook
-
-		-- Improve mousewheel scrolling
-
-	hooksecurefunc('FloatingChatFrame_OnMouseScroll', function(self, direction)
-		if (direction > 0) then
-			if (IsShiftKeyDown()) then
-				self:ScrollToTop()
-			else
-				self:ScrollUp()
-				self:ScrollUp()
-			end
-		elseif (direction < 0)  then
-			if (IsShiftKeyDown()) then
-				self:ScrollToBottom()
-			else
-				self:ScrollDown()
-				self:ScrollDown()
-			end
+	hooksecurefunc('ChatEdit_UpdateHeader', function(editBox)
+		local type = editBox:GetAttribute('chatType')
+		if (not type) then
+			return
 		end
 
-		if (db.enableBottomButton) then
-			local buttonBottom = _G[self:GetName() .. 'ButtonFrameBottomButton']
-			if (self:AtBottom()) then
-				buttonBottom:SetAlpha(0)
-				buttonBottom:EnableMouse(false)
-			else
-				buttonBottom:SetAlpha(0.7)
-				buttonBottom:EnableMouse(true)
-			end
-		end
+		local info = ChatTypeInfo[type]
+		ChatFrame1EditBox:SetBackdropBorderColor(info.r, info.g, info.b)
 	end)
 
-		-- Reposit toast frame
-
-	BNToastFrame:HookScript('OnShow', function(self)
-		BNToastFrame:ClearAllPoints()
-		BNToastFrame:SetPoint('BOTTOMLEFT', ChatFrame1EditBox, 'TOPLEFT', 0, 15)
-	end)
-
-		-- Modify the chat tabs
-
-	function SkinTab(self)
-		local chat = _G[self]
-
-		local tab = _G[self..'Tab']
-		for i = 1, select('#', tab:GetRegions()) do
-			local texture = select(i, tab:GetRegions())
-			if (texture and texture:GetObjectType() == 'Texture') then
-				texture:SetTexture(nil)
-			end
-		end
-
-		local tabText = _G[self..'TabText']
-		tabText:SetJustifyH('CENTER')
-		tabText:SetWidth(60)
-		if (db.tab.fontOutline) then
-			tabText:SetFont(BasicUI.media.fontBold, BasicUI.db.profile.general.fontSize, 'THINOUTLINE')
-			tabText:SetShadowOffset(0, 0)
-		else
-			tabText:SetFont(BasicUI.media.fontBold, db.fontLarge)
-			tabText:SetShadowOffset(1, -1)
-		end		
-
-		local a1, a2, a3, a4, a5 = tabText:GetPoint()
-		tabText:SetPoint(a1, a2, a3, a4, 1)
-
-		local s1, s2, s3 = db.tab.specialColor.r, db.tab.specialColor.g, db.tab.specialColor.b 
-		local e1, e2, e3 = db.tab.selectedColor.r, db.tab.selectedColor.g, db.tab.selectedColor.b
-		local n1, n2, n3 = db.tab.normalColor.r, db.tab.normalColor.g, db.tab.normalColor.b
-
-		local tabGlow = _G[self..'TabGlow']
-		hooksecurefunc(tabGlow, 'Show', function()
-			tabText:SetTextColor(s1, s2, s3, CHAT_FRAME_TAB_NORMAL_MOUSEOVER_ALPHA)
-		end)
-
-		hooksecurefunc(tabGlow, 'Hide', function()
-			tabText:SetTextColor(n1, n2, n3)
-		end)
-
-		tab:SetScript('OnEnter', function()
-			tabText:SetTextColor(s1, s2, s3, tabText:GetAlpha())
-		end)
-
-		tab:SetScript('OnLeave', function()
-			local hasNofication = tabGlow:IsShown()
-
-			local r, g, b
-			if (_G[self] == SELECTED_CHAT_FRAME and chat.isDocked) then
-				r, g, b = e1, e2, e3
-			elseif (hasNofication) then
-				r, g, b = s1, s2, s3
-			else
-				r, g, b = n1, n2, n3
-			end
-
-			tabText:SetTextColor(r, g, b)
-		end)
-
-		hooksecurefunc(tab, 'Show', function()
-			if (not tab.wasShown) then
-				local hasNofication = tabGlow:IsShown()
-				
-				if (chat:IsMouseOver()) then
-					tab:SetAlpha(CHAT_FRAME_TAB_NORMAL_MOUSEOVER_ALPHA)
-				else
-					tab:SetAlpha(CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA)
-				end
-
-				local r, g, b
-				if (_G[self] == SELECTED_CHAT_FRAME and chat.isDocked) then
-					r, g, b = e1, e2, e3
-				elseif (hasNofication) then
-					r, g, b = s1, s2, s3
-				else
-					r, g, b = n1, n2, n3
-				end
-
-				tabText:SetTextColor(r, g, b)
-
-				tab.wasShown = true
-			end
-		end)
-	end
 
 	local function ModChat(self)
 		local chat = _G[self]
-
-		if (not dbOutline) then
-			chat:SetShadowOffset(1, -1)
-		end
-
-		if (db.disableFade) then
-			chat:SetFading(false)
-		end
-
-		SkinTab(self)
-
 		local font, fontsize, fontflags = chat:GetFont()
-		chat:SetFont(BasicUI.media.fontNormal, fontsize, dbOutline and 'THINOUTLINE' or fontflags)
-		chat:SetClampedToScreen(false)
-
-		chat:SetClampRectInsets(0, 0, 0, 0)
-		chat:SetMaxResize(UIParent:GetWidth(), UIParent:GetHeight())
-		chat:SetMinResize(150, 25)
 		
+		if FULL_MOVEMENT == true then
+			chat:SetClampedToScreen(false)
+			chat:SetClampRectInsets(0, 0, 0, 0)
+			chat:SetMaxResize(UIParent:GetWidth(), UIParent:GetHeight())
+			chat:SetMinResize(150, 25)
+		end
+
 		if (self ~= 'ChatFrame2') then
 			chat.AddMessage = FCF_AddMessage
 		end
 
-		local buttonUp = _G[self..'ButtonFrameUpButton']
-		buttonUp:SetAlpha(0)
-		buttonUp:EnableMouse(false)
+		if HIDE_BUTTONS == true then
+			QuickJoinToastButton:SetAlpha(0)
+			QuickJoinToastButton:EnableMouse(false)
+			QuickJoinToastButton:UnregisterAllEvents()
+			
+			ChatFrameMenuButton:SetAlpha(0)
+			ChatFrameMenuButton:EnableMouse(false)	
+			
+			local buttonUp = _G[self..'ButtonFrameUpButton']
+			buttonUp:SetAlpha(0)
+			buttonUp:EnableMouse(false)
 
-		local buttonDown = _G[self..'ButtonFrameDownButton']
-		buttonDown:SetAlpha(0)
-		buttonDown:EnableMouse(false)
+			local buttonDown = _G[self..'ButtonFrameDownButton']
+			buttonDown:SetAlpha(0)
+			buttonDown:EnableMouse(false)
 
-		local buttonBottom = _G[self..'ButtonFrameBottomButton']
-		buttonBottom:SetAlpha(0)
-		buttonBottom:EnableMouse(false)
-
-
+			local buttonBottom = _G[self..'ButtonFrameBottomButton']
+			buttonBottom:SetAlpha(0)
+			buttonBottom:EnableMouse(false)
+		end
+		
 		for _, texture in pairs({
 			'ButtonFrameBackground',
 			'ButtonFrameTopLeftTexture',
@@ -381,7 +259,14 @@ function Chat:OnEnable()
 			'ButtonFrameTopTexture',
 		}) do
 			_G[self..texture]:SetTexture(nil)
+		end	
+
+			-- Modify the editbox
+
+		for k = 3, 8 do
+			select(k, _G[self..'EditBox']:GetRegions()):SetTexture(nil)
 		end
+
 	end
 
 	local function SetChatStyle()
@@ -390,18 +275,6 @@ function Chat:OnEnable()
 			if (chat and not chat.hasModification) then
 				ModChat(chat:GetName())
 
-				local convButton = _G[chat:GetName()..'ConversationButton']
-				if (convButton) then
-					convButton:SetAlpha(0)
-					convButton:EnableMouse(false)
-				end
-
-				local chatMinimize = _G[chat:GetName()..'ButtonFrameMinimizeButton']
-				if (chatMinimize) then
-					chatMinimize:SetAlpha(0)
-					chatMinimize:EnableMouse(0)
-				end
-
 				chat.hasModification = true
 			end
 		end
@@ -409,433 +282,81 @@ function Chat:OnEnable()
 	hooksecurefunc('FCF_OpenTemporaryWindow', SetChatStyle)
 	SetChatStyle()
 
-		-- Chat menu, just a middle click on the chatframe 1 tab
-
-	hooksecurefunc('ChatFrameMenu_UpdateAnchorPoint', function()
-		if (FCF_GetButtonSide(DEFAULT_CHAT_FRAME) == 'right') then
-			ChatMenu:ClearAllPoints()
-			ChatMenu:SetPoint('BOTTOMRIGHT', ChatFrame1Tab, 'TOPLEFT')
-		else
-			ChatMenu:ClearAllPoints()
-			ChatMenu:SetPoint('BOTTOMLEFT', ChatFrame1Tab, 'TOPRIGHT')
-		end
-	end)
-
-	ChatFrame1Tab:RegisterForClicks('AnyUp')
-	ChatFrame1Tab:HookScript('OnClick', function(self, button)
-		if (button == 'MiddleButton' or button == 'Button4' or button == 'Button5') then
-			if (ChatMenu:IsShown()) then
-				ChatMenu:Hide()
-			else
-				ChatMenu:Show()
-			end
-		else
-			ChatMenu:Hide()
-		end
-	end)
-
-		-- Modify the gm chatframe and add a sound notification on incoming whispers
-
-	local f = CreateFrame('Frame')
-	f:RegisterEvent('ADDON_LOADED')
-	f:RegisterEvent('CHAT_MSG_WHISPER')
-	f:RegisterEvent('CHAT_MSG_BN_WHISPER')
-	f:SetScript('OnEvent', function(_, event)
-		if (event == 'ADDON_LOADED' and arg1 == 'Blizzard_GMChatUI') then
-			GMChatFrame:EnableMouseWheel(true)
-			GMChatFrame:SetScript('OnMouseWheel', ChatFrame1:GetScript('OnMouseWheel'))
-			GMChatFrame:SetHeight(200)
-
-			GMChatFrameUpButton:SetAlpha(0)
-			GMChatFrameUpButton:EnableMouse(false)
-
-			GMChatFrameDownButton:SetAlpha(0)
-			GMChatFrameDownButton:EnableMouse(false)
-
-			GMChatFrameBottomButton:SetAlpha(0)
-			GMChatFrameBottomButton:EnableMouse(false)
-		end
-
+	------------------------------------------------------------------------
+	--	 add a sound notification on incoming whispers
+	------------------------------------------------------------------------
+	local SoundFrame = CreateFrame('Frame')
+	SoundFrame:RegisterEvent('ADDON_LOADED')
+	SoundFrame:RegisterEvent('CHAT_MSG_WHISPER')
+	SoundFrame:RegisterEvent('CHAT_MSG_BN_WHISPER')
+	SoundFrame:SetScript('OnEvent', function(_, event)
 		if (event == 'CHAT_MSG_WHISPER' or event == 'CHAT_MSG_BN_WHISPER') then
-			PlaySoundFile(BasicUI.media.sound)
+			PlaySoundFile([[Interface\AddOns\BasicUI\Media\Whisper.mp3]])
 		end
-	end)
+	end)	
 
-	local combatLog = {
-		text = 'CombatLog',
-		colorCode = '|cffFFD100',
-		isNotRadio = true,
+	------------------------------------------------------------------------
+	--	 Skin the Chat Bubbles
+	------------------------------------------------------------------------
+	local select, pairs = select, pairs
+	local format = string.format
+	local CreateFrame = CreateFrame
+	local C_ChatBubbles_GetAllChatBubbles = C_ChatBubbles.GetAllChatBubbles
+	local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
-		func = function() 
-			if (not LoggingCombat()) then
-				LoggingCombat(true) 
-				DEFAULT_CHAT_FRAME:AddMessage(COMBATLOGENABLED, 1, 1, 0)
-			else
-				LoggingCombat(false)
-				DEFAULT_CHAT_FRAME:AddMessage(COMBATLOGDISABLED, 1, 1, 0)
-			end
-		end,
-
-		checked = function()
-			if (LoggingCombat()) then
-				return true
-			else
-				return false
+	local function StyleBubble(frame)
+		for i=1, frame:GetNumRegions() do
+			local region = select(i, frame:GetRegions())
+			if region:GetObjectType() == "Texture" then
+				region:SetTexture(nil)
+			elseif region:GetObjectType() == "FontString" then
+				frame.text = region
 			end
 		end
-	}
-
-	local chatLog = {
-		text = 'ChatLog',
-		colorCode = '|cffFFD100',
-		isNotRadio = true,
-
-		func = function() 
-			if (not LoggingChat()) then
-				LoggingChat(true) 
-				DEFAULT_CHAT_FRAME:AddMessage(CHATLOGENABLED, 1, 1, 0)
-			else
-				LoggingChat(false)
-				DEFAULT_CHAT_FRAME:AddMessage(CHATLOGDISABLED, 1, 1, 0)
-			end
-		end,
-
-		checked = function()
-			if (LoggingChat()) then
-				return true
-			else
-				return false
-			end
-		end
-	}
-
-	local origFCF_Tab_OnClick = FCF_Tab_OnClick
-	local function FCF_Tab_OnClickHook(chatTab, ...)
-		origFCF_Tab_OnClick(chatTab, ...)
-
-		combatLog.arg1 = chatTab
-		UIDropDownMenu_AddButton(combatLog)
-
-		chatLog.arg1 = chatTab
-		UIDropDownMenu_AddButton(chatLog)
-	end
-	FCF_Tab_OnClick = FCF_Tab_OnClickHook
-
-
-		-- Chat Copy
-
-	local f = CreateFrame('Frame', nil, UIParent)
-	f:SetHeight(220)
-	f:SetBackdropColor(0, 0, 0, 1)
-	f:SetPoint('BOTTOMLEFT', ChatFrame1EditBox, 'TOPLEFT', 3, 10)
-	f:SetPoint('BOTTOMRIGHT', ChatFrame1EditBox, 'TOPRIGHT', -3, 10)
-	f:SetFrameStrata('DIALOG')
-	f:SetBackdrop({
-		bgFile = [[Interface\AddOns\BasicUI\Media\Textures\BLACK8X8]],
-		edgeFile = [[Interface\Tooltips\UI-Tooltip-Border]],
-		tile = true, tileSize = 16, edgeSize = 18,
-		insets = {left = 3, right = 3, top = 3, bottom = 3
-	}})
-	f:SetBackdropBorderColor(classColor.r, classColor.g, classColor.b)
-	f:Hide()
-
-	f.t = f:CreateFontString(nil, 'OVERLAY')
-	f.t:SetFont(BasicUI.media.fontNormal, BasicUI.db.profile.general.fontSize)
-	f.t:SetPoint('TOPLEFT', f, 8, -8)
-	f.t:SetTextColor(1, 1, 0)
-	f.t:SetShadowOffset(1, -1)
-	f.t:SetJustifyH('LEFT')
-
-	f.b = CreateFrame('EditBox', nil, f)
-	f.b:SetMultiLine(true)
-	f.b:SetMaxLetters(20000)
-	f.b:SetSize(450, 270)
-	f.b:SetScript('OnEscapePressed', function()
-		f:Hide() 
-	end)
-
-	f.s = CreateFrame('ScrollFrame', '$parentScrollBar', f, 'UIPanelScrollFrameTemplate')
-	f.s:SetPoint('TOPLEFT', f, 'TOPLEFT', 8, -30)
-	f.s:SetPoint('BOTTOMRIGHT', f, 'BOTTOMRIGHT', -30, 8)
-	f.s:SetScrollChild(f.b)
-
-	f.c = CreateFrame('Button', nil, f, 'UIPanelCloseButton')
-	f.c:SetPoint('TOPRIGHT', f, 'TOPRIGHT', 0, -1)
-
-	local lines = {}
-	local function GetChatLines(...)
-		local count = 1
-		for i = select('#', ...), 1, -1 do
-			local region = select(i, ...)
-			if (region:GetObjectType() == 'FontString') then
-				lines[count] = tostring(region:GetText())
-				count = count + 1
-			end
-		end
-
-		return count - 1
-	end
-
-	local function copyChat(self)
-		local chat = _G[self:GetName()]
-		local _, fontSize = chat:GetFont()
-
-		FCF_SetChatWindowFontSize(self, chat, 0.1)
-		local lineCount = GetChatLines(chat:GetRegions())
-		FCF_SetChatWindowFontSize(self, chat, fontSize)
-
-		if (lineCount > 0) then
-			ToggleFrame(f)
-			f.t:SetText(chat:GetName())
-
-			local f1, f2, f3 = ChatFrame1:GetFont()
-			f.b:SetFont(f1, f2, f3)
-
-			local text = concat(lines, '\n', 1, lineCount)
-			f.b:SetText(text)
-		end
-	end
-
-	local function CreateCopyButton(self)
-		self.Copy = CreateFrame('Button', nil, _G[self:GetName()])
-		self.Copy:SetSize(20, 20)
-		self.Copy:SetPoint('TOPRIGHT', self, -5, -5)
-
-		self.Copy:SetNormalTexture'Interface\\AddOns\\BasicUI\\Media\\textureCopyNormal'
-		self.Copy:GetNormalTexture():SetSize(20, 20)
-
-		self.Copy:SetHighlightTexture'Interface\\AddOns\\BasicUI\\Media\\textureCopyHighlight'
-		self.Copy:GetHighlightTexture():SetAllPoints(self.Copy:GetNormalTexture())
-
-		local tab = _G[self:GetName()..'Tab']
-		hooksecurefunc(tab, 'SetAlpha', function()
-			self.Copy:SetAlpha(tab:GetAlpha()*0.55)
-		end)
 		
-		self.Copy:SetScript('OnMouseDown', function(self)
-			self:GetNormalTexture():ClearAllPoints()
-			self:GetNormalTexture():SetPoint('CENTER', 1, -1)
-		end)
+		frame.text:SetFontObject('SystemFont_Small')
+		frame.text:SetJustifyH('LEFT')
 
-		self.Copy:SetScript('OnMouseUp', function()
-			self.Copy:GetNormalTexture():ClearAllPoints()
-			self.Copy:GetNormalTexture():SetPoint('CENTER')
-			
-			if (self.Copy:IsMouseOver()) then
-				copyChat(self)
-			end
-		end)
-	end
-
-	local function EnableCopyButton()
-		for _, v in pairs(CHAT_FRAMES) do
-			local chat = _G[v]
-			if (chat and not chat.Copy) then
-				CreateCopyButton(chat)
-			end
-		end
-	end
-	hooksecurefunc('FCF_OpenTemporaryWindow', EnableCopyButton)
-	EnableCopyButton()
-
-	 -- Copy URL
-	 
-	local urlStyle = '|cffff00ff|Hurl:%1|h%1|h|r'
-	local urlPatterns = {
-		'(http://%S+)',                 -- http://xxx.com
-		'(www%.%S+)',                   -- www.xxx.com/site/index.php
-		'(%d+%.%d+%.%d+%.%d+:?%d*)',    -- 192.168.1.1 / 192.168.1.1:1110
-	}
-
-	local messageTypes = {
-		'CHAT_MSG_CHANNEL',
-		'CHAT_MSG_GUILD',
-		'CHAT_MSG_PARTY',
-		'CHAT_MSG_RAID',
-		'CHAT_MSG_SAY',
-		'CHAT_MSG_WHISPER',
-	}
-
-	local function urlFilter(self, event, text, ...)
-		for _, pattern in ipairs(urlPatterns) do
-			local result, matches = gsub(text, pattern, urlStyle)
-
-			if (matches > 0) then
-				return false, result, ...
-			end
-		end
-	end
-
-	for _, event in ipairs(messageTypes) do
-		ChatFrame_AddMessageEventFilter(event, urlFilter)
-	end
-
-	local origSetItemRef = SetItemRef
-	local currentLink
-	local SetItemRefHook = function(link, text, button)
-		if (link:sub(0, 3) == 'url') then
-			currentLink = link:sub(5)
-			StaticPopup_Show('UrlCopyDialog')
-			return
-		end
-
-		return origSetItemRef(link, text, button)
-	end
-
-	SetItemRef = SetItemRefHook
-
-	StaticPopupDialogs['UrlCopyDialog'] = {
-		text = 'URL',
-		button2 = CLOSE,
-		hasEditBox = 1,
-		editBoxWidth = 250,
-
-		OnShow = function(frame)
-			local editBox = _G[frame:GetName()..'EditBox']
-			if (editBox) then
-				editBox:SetText(currentLink)
-				editBox:SetFocus()
-				editBox:HighlightText(0)
-			end
-
-			local button = _G[frame:GetName()..'Button2']
-			if (button) then
-				button:ClearAllPoints()
-				button:SetWidth(100)
-				button:SetPoint('CENTER', editBox, 'CENTER', 0, -30)
-			end
-		end,
-
-		EditBoxOnEscapePressed = function(frame) 
-			frame:GetParent():Hide() 
-		end,
-
-		timeout = 0,
-		whileDead = 1,
-		hideOnEscape = 1,
-		maxLetters = 1024,
-	}
-	self:Refresh()
-end
-
-function Chat:Refresh()
-
-	db = self.db.profile
-
-	if (db.enableBorderColoring) then
-		hooksecurefunc('ChatEdit_UpdateHeader', function(editBox)
-			local type = editBox:GetAttribute('chatType')
-			if (not type) then
-				return
-			end
-
-			local info = ChatTypeInfo[type]
-			ChatFrame1EditBox:SetBackdropBorderColor(info.r, info.g, info.b)
-		end)
-	else return
-	end
-
-	if (db.enableHyperlinkTooltip) then
-
-		--[[
-
-			All Create for hyperlink.lua goes to Neal, ballagarba, and Tuks.
-			Neav UI = http://www.wowinterface.com/downloads/info13981-NeavUI.html.
-			Tukui = http://www.tukui.org/download.php.
-			Edited by Cokedriver.
-			
-		]]
-
-		local _G = getfenv(0)
-		local orig1, orig2 = {}, {}
-		local GameTooltip = GameTooltip
-
-		local linktypes = {
-			item = true, 
-			enchant = true, 
-			spell = true, 
-			quest = true, 
-			unit = true, 
-			talent = true, 
-			achievement = true, 
-			glyph = true
-		}
-
-		local function OnHyperlinkEnter(frame, link, ...)
-			local linktype = link:match('^([^:]+)')
-			if (linktype and linktypes[linktype]) then
-				GameTooltip:SetOwner(ChatFrame1, 'ANCHOR_CURSOR', 0, 20)
-				GameTooltip:SetHyperlink(link)
-				GameTooltip:Show()
-			else
-				GameTooltip:Hide()
-			end
-
-			if (orig1[frame]) then 
-				return orig1[frame](frame, link, ...) 
-			end
-		end
-
-		local function OnHyperlinkLeave(frame, ...)
-			GameTooltip:Hide()
-
-			if (orig2[frame]) then 
-				return orig2[frame](frame, ...) 
-			end
-		end
-
-		local function EnableItemLinkTooltip()
-			for _, v in pairs(CHAT_FRAMES) do
-				local chat = _G[v]
-				if (chat and not chat.URLCopy) then
-					orig1[chat] = chat:GetScript('OnHyperlinkEnter')
-					chat:SetScript('OnHyperlinkEnter', OnHyperlinkEnter)
-
-					orig2[chat] = chat:GetScript('OnHyperlinkLeave')
-					chat:SetScript('OnHyperlinkLeave', OnHyperlinkLeave)
-					chat.URLCopy = true
-				end
-			end
-		end
-		hooksecurefunc('FCF_OpenTemporaryWindow', EnableItemLinkTooltip)
-		EnableItemLinkTooltip()
-	else
-		return
-	end
-	
-
-
-	for i = 1, NUM_CHAT_WINDOWS do
-		local cf = _G['ChatFrame'..i]
-		local bg = CreateFrame("Frame", nil, cf);
-		bg:SetFrameStrata("BACKGROUND");
-		
-		if i == 2 then
-			bg:SetPoint("TOPLEFT", -8, 32);
-		else
-			bg:SetPoint("TOPLEFT", -8, 8);
-		end	
-		bg:SetPoint("BOTTOMRIGHT", 8, -12);
-		bg:SetBackdrop({
+		frame:ClearAllPoints()
+		frame:SetPoint('TOPLEFT', frame.text, -7, 7)
+		frame:SetPoint('BOTTOMRIGHT', frame.text, 7, -7)
+		frame:SetBackdrop({
+			bgFile = [[Interface\Tooltips\UI-Tooltip-Background]],
 			edgeFile = [[Interface\Tooltips\UI-Tooltip-Border]],
-			tile = true, tileSize = 16, edgeSize = 18,
+			tile = true,
+			tileSize = 16,
+			edgeSize = 12,
+			insets = {left=3, right=3, top=3, bottom=3},
 		})
-		bg:SetBackdropBorderColor(classColor.r, classColor.g, classColor.b)
-		if (db.windowborder) then
-			bg:Show()
-		else
-			bg:Hide()
-		end		
+		frame:SetBackdropColor(0, 0, 0, 1)
+		
+		local r, g, b = frame.text:GetTextColor()
+		frame:SetBackdropBorderColor(r, g, b, .8)
+				
+		frame.isSkinned = true
 	end
-	
+
+	local frame = CreateFrame('Frame')
+	frame.lastupdate = -2 -- wait 2 seconds before hooking frames
+	local numChildren = 0
+	frame:SetScript('OnUpdate', function(self, elapsed, guid, name)
+		self.lastupdate = self.lastupdate + elapsed
+		if (self.lastupdate < .1) then return end
+		self.lastupdate = 0	
+		
+		for _, chatBubble in pairs(C_ChatBubbles_GetAllChatBubbles()) do
+			if not chatBubble.isSkinned then				
+				StyleBubble(chatBubble)
+			end
+		end
+	end)
 end
-	
 ------------------------------------------------------------------------
 --	 Module options
 ------------------------------------------------------------------------
 
 local options
-function Chat:GetOptions()
+function MODULE:GetOptions()
 	if options then
 		return options
 	end
@@ -848,7 +369,7 @@ function Chat:GetOptions()
 		type = "group",
 		name = L[MODULE_NAME],
 		get = function(info) return db[ info[#info] ] end,
-		set = function(info, value) db[ info[#info] ] = value; self:Refresh() end,
+		set = function(info, value) db[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
 		disabled = isModuleDisabled(),
 		args = {
 			---------------------------
@@ -874,21 +395,6 @@ function Chat:GetOptions()
 				name = " ",
 			},
 			---------------------------
-			reloadUI = {
-				type = "execute",
-				name = "Reload UI",
-				desc = " ",
-				order = 0,
-				func = 	function()
-					ReloadUI()
-				end,
-			},
-			Text = {
-				type = "description",
-				order = 0,
-				name = "When changes are made a reload of the UI is needed.",
-				width = "full",
-			},
 			Text1 = {
 				type = "description",
 				order = 1,
@@ -898,149 +404,10 @@ function Chat:GetOptions()
 			enable = {
 				type = "toggle",
 				order = 1,
-				name = L["Enable Chat Module"],
+				name = L["Enable"],
+				desc = L["Enables the Chat Module for |cff00B4FFBasic|rUI."],
 				width = "full",
-				disabled = false,
-			},
-			windowborder = {
-				type = "toggle",
-				order = 2,
-				name = L["Window Border"],
-				desc = L["Enables Chat Window Border."],
 				disabled = function() return isModuleDisabled() or not db.enable end,
-			},
-			disableFade = {
-				type = "toggle",
-				order = 2,
-				name = L["Disable Fade"],
-				desc = L["Disables Chat Fading."],
-				disabled = function() return isModuleDisabled() or not db.enable end,
-			},
-			chatOutline = {
-				type = "toggle",
-				order = 2,
-				name = L["Chat Outline"],
-				desc = L["Outlines the chat Text."],
-				disabled = function() return isModuleDisabled() or not db.enable end,
-			},
-			enableHyperlinkTooltip = {
-				type = "toggle",
-				order = 2,
-				name = L["Enable Hyplerlink Tooltip"],
-				desc = L["Enables the mouseover items in chat tooltip."],
-				disabled = function() return isModuleDisabled() or not db.enable end,
-			},
-			enableBorderColoring = {
-				type = "toggle",
-				order = 2,
-				name = L["Enable Editbox Channel Border Coloring"],
-				desc = L["Enables the coloring of the border to the edit box to match what channel you are typing in."],
-				disabled = function() return isModuleDisabled() or not db.enable end,
-			},
-			tab = {
-				type = "group",
-				order = 6,
-				name = L["Tabs"],
-				desc = L["Tab Font Settings."],
-				guiInline  = true,
-				disabled = function() return isModuleDisabled() or not db.enable end,
-				get = function(info) return db.tab[ info[#info] ] end,
-				set = function(info, value) db.tab[ info[#info] ] = value;   end,
-				args = {
-					---------------------------
-					--Option Type Seperators
-					sep1 = {
-						type = "description",
-						order = 2,
-						name = " ",
-					},
-					sep2 = {
-						type = "description",
-						order = 3,
-						name = " ",
-					},
-					sep3 = {
-						type = "description",
-						order = 4,
-						name = " ",
-					},
-					sep4 = {
-						type = "description",
-						order = 5,
-						name = " ",
-					},
-					---------------------------
-					fontSize = {
-						type = "range",
-						order = 5,
-						name = L["Tab Font Size"],
-						desc = L["Controls the size of the tab font"],
-						type = "range",
-						min = 9, max = 20, step = 1,
-						disabled = function() return isModuleDisabled() or not db.enable end,
-					},
-					fontOutline = {
-						type = "toggle",
-						order = 2,
-						name = L["Outline Tab Font"],
-						desc = L["Enables the outlineing of tab font."],
-						disabled = function() return isModuleDisabled() or not db.enable end,
-					},
-					normalColor = {
-						type = "color",
-						order = 4,
-						name = L["Tab Normal Color"],
-						desc = L["Picks the Normal Color of the Chat Tab."],
-						hasAlpha = false,
-						disabled = function() return isModuleDisabled() or not db.enable end,
-						get = function(info)
-							local hb = db.tab[ info[#info] ]
-							return hb.r, hb.g, hb.b
-						end,
-						set = function(info, r, g, b)
-							db.tab[ info[#info] ] = {}
-							local hb = db.tab[ info[#info] ]
-							hb.r, hb.g, hb.b = r, g, b
-							StaticPopup_Show("BASICUI_CFG_RELOAD")
-						end,
-					},
-					specialColor = {
-						type = "color",
-						order = 4,
-						name = L["Tab Special Color"],
-						desc = L["Picks the Special Color of the Chat Tab."],
-						hasAlpha = false,
-						disabled = function() return isModuleDisabled() or not db.enable end,
-						get = function(info)
-							local hb = db.tab[ info[#info] ]
-							return hb.r, hb.g, hb.b
-						end,
-						set = function(info, r, g, b)
-							db.tab[ info[#info] ] = {}
-							local hb = db.tab[ info[#info] ]
-							hb.r, hb.g, hb.b = r, g, b
-							StaticPopup_Show("BASICUI_CFG_RELOAD")
-						end,
-					},
-					selectedColor = {
-						type = "color",
-						order = 4,
-						name = L["Tab Selected Color"],
-						desc = L["Picks the Selected Color of the Chat Tab."],
-						hasAlpha = false,
-						disabled = function() return isModuleDisabled() or not db.enable end,
-						get = function(info)
-							local hb = db.tab[ info[#info] ]
-							return hb.r, hb.g, hb.b
-						end,
-						set = function(info, r, g, b)
-							db.tab[ info[#info] ] = {}
-							local hb = db.tab[ info[#info] ]
-							hb.r, hb.g, hb.b = r, g, b
-							StaticPopup_Show("BASICUI_CFG_RELOAD")
-						end,
-					},
-				},
 			},
 		},
 	}

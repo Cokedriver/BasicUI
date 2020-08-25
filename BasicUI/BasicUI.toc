@@ -1,29 +1,24 @@
-## Interface: 60000
-## Title: BasicUI
-## Author: Cokedriver 
-## Version: 6.0.1
+## Interface: 80300
+## Title:|cff00B4FFBasic|rUI
+## Author: SiDuB 
+## Version: 8.3.0
+## Notes: SiDuB's Version of a Basic UserIterface.
 ## SavedVariables: BasicDB
 ## SavedVariablesPerCharacter: BasicDBPerCharacter
-## X-credits: Phanx, Neav, Tuks, Elv, Baine, Treeston, and many more.
-## X-Website: http://www.wowinterface.com/downloads/info20966-BasicUI.html
+## URL: http://www.wowinterface.com/downloads/info20966-BasicUI.html
 ## OptionalDeps: Blizzard_TradeSkillUI
 
 Libs\Libs.xml
 
-BasicUI.lua
+Fonts.lua
+BasicUI.Lua
 
---Modules\Media.lua
-Modules\Actionbars.lua
---Modules\Buffs.lua
-Modules\Castbars.lua
+Modules\Actionbar.lua
+Modules\Buff.lua
 Modules\Chat.lua
-Modules\Datatext.lua
-Modules\Minimap.lua
-Modules\Miscellaneous.lua
-Modules\Nameplates.lua
+Modules\Datapanel.lua
+Modules\Misc.lua
+Modules\Nameplate.lua
 Modules\Powerbar.lua
 Modules\Tooltip.lua
-Modules\Unitframes.lua
-
-
-
+Modules\Unitframe.lua

@@ -1,6 +1,6 @@
 local MODULE_NAME = "Actionbar"
 local BasicUI = LibStub("AceAddon-3.0"):GetAddon("BasicUI")
-local Actionbars = BasicUI:NewModule(MODULE_NAME, "AceEvent-3.0")
+local MODULE = BasicUI:NewModule(MODULE_NAME, "AceEvent-3.0")
 local L = BasicUI.L
 
 ------------------------------------------------------------------------
@@ -22,18 +22,50 @@ local defaults = {
 
 local classColor
 
-function Actionbars:OnInitialize()
+function MODULE:OnInitialize()
 	self.db = BasicUI.db:RegisterNamespace(MODULE_NAME, defaults)
 	db = self.db.profile
-
-	local _, class = UnitClass("player")
-	classColor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
 
 	self:SetEnabledState(BasicUI:GetModuleEnabled(MODULE_NAME))
 end
 
-function Actionbars:OnEnable()
+function MODULE:OnEnable()
+	if InCombatLockdown() then
+		return self:RegisterEvent("PLAYER_REGEN_ENABLED", "OnEnable")
+	end
+	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+
+	local function UpdateRange( self, elapsed )
+		local rangeTimer = self.rangeTimer
+		local icon = self.icon;
+
+		if( rangeTimer == TOOLTIP_UPDATE_TIME ) then
+			local inRange = IsActionInRange( self.action );
+			if( inRange == false ) then
+				-- Red Out Button
+				icon:SetVertexColor( 1, 0, 0 );
+			else
+				local canUse, amountMana = IsUsableAction( self.action );
+				if( canUse ) then
+					icon:SetVertexColor( 1.0, 1.0, 1.0 );
+				elseif( amountMana ) then
+					icon:SetVertexColor( 0.5, 0.5, 1.0 );
+				else
+					icon:SetVertexColor( 0.4, 0.4, 0.4 );
+				end
+			end
+		end
+	end
+
+	do
+		hooksecurefunc( "ActionButton_OnUpdate", UpdateRange );
+	end
 	
+	self:Refresh()
+end
+
+function MODULE:Refresh()
+
 	local hotkeyAlpha = db.showHotKeys and 1 or 0
 	for i = 1, 12 do
 		_G["ActionButton"..i.."HotKey"]:SetAlpha(hotkeyAlpha) -- main bar
@@ -53,14 +85,12 @@ function Actionbars:OnEnable()
 	end
 end
 
-
-
 ------------------------------------------------------------------------
 --	 Module Options
 ------------------------------------------------------------------------
 
 local options
-function Actionbars:GetOptions()
+function MODULE:GetOptions()
 
 	if options then
 		return options
@@ -74,55 +104,61 @@ function Actionbars:GetOptions()
 		type = "group",
 		name = L[MODULE_NAME],
 		get = function(info) return db[ info[#info] ] end,
-		set = function(info, value) db[ info[#info] ] = value end,
+		set = function(info, value) db[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
 		disabled = isModuleDisabled(),
 		args = {
-			reloadUI = {
-				type = "execute",
-				name = "Reload UI",
-				desc = " ",
-				order = 0,
-				func = 	function()
-					ReloadUI()
-				end,
-			},
-			Text = {
+			---------------------------
+			--Option Type Seperators
+			sep1 = {
 				type = "description",
-				order = 0,
-				name = "When changes are made a reload of the UI is needed.",
-				width = "full",
+				order = 2,
+				name = " ",
 			},
+			sep2 = {
+				type = "description",
+				order = 3,
+				name = " ",
+			},
+			sep3 = {
+				type = "description",
+				order = 4,
+				name = " ",
+			},
+			sep4 = {
+				type = "description",
+				order = 5,
+				name = " ",
+			},
+			---------------------------
 			Text1 = {
 				type = "description",
 				order = 1,
 				name = " ",
 				width = "full",
-			},		
+			},			
 			enable = {
 				type = "toggle",
 				order = 1,
-				name = L["Enable Actionbar Module"],
+				name = L["Enable"],
+				desc = L["Enables the Actionbar Module for |cff00B4FFBasic|rUI."],
 				width = "full",
 				disabled = false,
-			},
-			Text2 = {
-				type = "description",
-				name = " ",
-				width = "full",
-			},
+			},			
 			showHotKeys = {
 				type = "toggle",
+				order = 2,
 				name = L["Show Hot Keys"],
 				desc = L["Show key bindings on action buttons."],
 				disabled = function() return isModuleDisabled() or not db.enable end,
 			},
 			showMacronames = {
 				type = "toggle",
+				order = 2,
 				name = L["Show Macro Names"],
 				desc = L["Show macro names on action buttons."],
 				disabled = function() return isModuleDisabled() or not db.enable end,
 			},
-		},
-	},
+		}
+	}
 	return options
 end

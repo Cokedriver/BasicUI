@@ -1,46 +1,56 @@
 local MODULE_NAME = "Tooltip"
 local BasicUI = LibStub("AceAddon-3.0"):GetAddon("BasicUI")
-local Tooltip = BasicUI:NewModule(MODULE_NAME, "AceEvent-3.0")
+local MODULE = BasicUI:NewModule(MODULE_NAME, "AceEvent-3.0")
 local L = BasicUI.L
 
 ------------------------------------------------------------------------
 --	 Module Database
 ------------------------------------------------------------------------
 
+local BASIC_BORDER = [[Interface\Tooltips\UI-Tooltip-Border]]
+local BASIC_BACKGROUND = [[Interface\DialogFrame\UI-DialogBox-Background-Dark]]
+local BASIC_STATUSBAR = [[Interface\TargetingFrame\UI-StatusBar]]
+
 local db
 local defaults = {
 	profile = {
 		enable = true,
 		fontSize = 15,
-		fontOutline = true,
-		disableFade = false,                     		-- Can cause errors or a buggy tooltip!
-		abbrevRealmNames = true, 	
+		fontOutline = false,
 
-		hideInCombat = false,                       -- Hide unit frame tooltips during combat	
-		hideRealmText = true,                      -- Hide the coalesced/interactive realm text	
-		reactionBorderColor = true,
-		itemqualityBorderColor = true,
-		
-		showPlayerTitles = true,
-		showPVPIcons = false,                        	-- Show pvp icons instead of just a prefix
-		showMouseoverTarget = true,
 		showOnMouseover = false,
+		hideInCombat = false,                       -- Hide unit frame tooltips during combat
+
+		reactionBorderColor = false,
+		itemqualityBorderColor = true,
+
+		abbrevRealmNames = false,
+		showPlayerTitles = true,
 		showUnitRole = true,
-		showItemLevel = true,
-		showSpecializationIcon = false,
-		
+		showPVPIcons = false,                       -- Show pvp icons instead of just a prefix
+		showMouseoverTarget = true,
+		showSpecializationIcon = true,
+
 		healthbar = {
 			showHealthValue = true,
+
+			healthFormat = "$cur / $max",           -- Possible: $cur, $max, $deficit, $perc, $smartperc, $smartcolorperc, $colorperc
+			healthFullFormat = "$cur",              -- if the tooltip unit has 100% hp
+
+			fontSize = 13,
+			font = STANDARD_TEXT_FONT,
 			showOutline = true,
-			healthFormat = '$cur / $max',           -- Possible: $cur, $max, $deficit, $perc, $smartperc, $smartcolorperc, $colorperc
-			healthFullFormat = '$cur',              -- if the tooltip unit has 100% hp 		
-			textPos = "CENTER",                     -- Possible "TOP" "BOTTOM" "CENTER"	
-			reactionColoring = false,
-			custom = {
+			textPos = "CENTER",                     -- Possible "TOP" "BOTTOM" "CENTER"
+
+			reactionColoring = false,               -- Overrides customColor
+			customColor = {
 				apply = false,
-				color =	{ r = 1, g = 1, b = 0},
-			},		
-			fontSize = 15,
+				color = {
+					r = 0,
+					g = 1,
+					b = 1,
+				}
+			},
 		},		
 	}
 }
@@ -51,7 +61,7 @@ local defaults = {
 
 local classColor
 
-function Tooltip:OnInitialize()
+function MODULE:OnInitialize()
 	self.db = BasicUI.db:RegisterNamespace(MODULE_NAME, defaults)
 	db = self.db.profile	
 
@@ -62,7 +72,7 @@ function Tooltip:OnInitialize()
 end
 
 
-function Tooltip:OnEnable()
+function MODULE:OnEnable()
 	
 	if db.enable ~= true then return end
 
@@ -74,96 +84,26 @@ function Tooltip:OnEnable()
 		
 	]]
 
-	local _G = _G
-	local select = select
-	local format = string.format
-
-	local UnitName = UnitName
-	local UnitLevel = UnitLevel
-	local UnitExists = UnitExists
-	local UnitIsDead = UnitIsDead
-	local UnitIsGhost = UnitIsGhost
-	local UnitFactionGroup = UnitFactionGroup
-	local UnitCreatureType = UnitCreatureType
-	local GetQuestDifficultyColor = GetQuestDifficultyColor
-
-	local tankIcon = '|TInterface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES.blp:13:13:0:0:64:64:0:19:22:41|t'
-	local healIcon = '|TInterface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES.blp:13:13:0:0:64:64:20:39:1:20|t'
-	local damagerIcon = '|TInterface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES.blp:13:13:0:0:64:64:20:39:22:41|t'
-
-	local symbiosis = {
-		gain = {
-			['DEATHKNIGHT'] = { ['DK_BLOOD']            = 113072, ['DK_FROST']          = 113516, ['DK_UNHOLY']         = 113516, },
-			['HUNTER']      = { ['HUNTER_BM']           = 113073, ['HUNTER_MM']         = 113073, ['HUNTER_SV']         = 113073, },
-			['MAGE']        = { ['MAGE_ARCANE']         = 113074, ['MAGE_FIRE']         = 113074, ['MAGE_FROST']        = 113074, },
-			['MONK']        = { ['MONK_BREW']           = 113306, ['MONK_MIST']         = 127361, ['MONK_WIND']         = 113275, },
-			['PALADIN']     = { ['PALADIN_HOLY']        = 113269, ['PALADIN_PROT']      = 122287, ['PALADIN_RET']       = 113075, },
-			['PRIEST']      = { ['PRIEST_DISC']         = 113506, ['PRIEST_HOLY']       = 113506, ['PRIEST_SHADOW']     = 113277, },
-			['ROGUE']       = { ['ROGUE_ASS']           = 113613, ['ROGUE_COMBAT']      = 113613, ['ROGUE_SUB']         = 113613, },
-			['SHAMAN']      = { ['SHAMAN_ELE']          = 113286, ['SHAMAN_ENHANCE']    = 113286, ['SHAMAN_RESTO']      = 113289, },
-			['WARLOCK']     = { ['WARLOCK_AFFLICTION']  = 113295, ['WARLOCK_DEMO']      = 113295, ['WARLOCK_DESTRO']    = 113295, },
-			['WARRIOR']     = { ['WARRIOR_ARMS']        = 122294, ['WARRIOR_FURY']      = 122294, ['WARRIOR_PROT']      = 122286, },
-		},
-		grant = {
-			['DEATHKNIGHT'] =   { ['DRUID_BALANCE'] = 110570, ['DRUID_FERAL'] = 122282, ['DRUID_GUARDIAN'] = 122285, ['DRUID_RESTO'] = 110575, },
-			['HUNTER'] =        { ['DRUID_BALANCE'] = 110588, ['DRUID_FERAL'] = 110597, ['DRUID_GUARDIAN'] = 110600, ['DRUID_RESTO'] = 19263, },
-			['MAGE'] =          { ['DRUID_BALANCE'] = 110621, ['DRUID_FERAL'] = 110693, ['DRUID_GUARDIAN'] = 110694, ['DRUID_RESTO'] = 110696, },
-			['MONK'] =          { ['DRUID_BALANCE'] = 126458, ['DRUID_FERAL'] = 128844, ['DRUID_GUARDIAN'] = 126453, ['DRUID_RESTO'] = 126456, },
-			['PALADIN'] =       { ['DRUID_BALANCE'] = 110698, ['DRUID_FERAL'] = 110700, ['DRUID_GUARDIAN'] = 110701, ['DRUID_RESTO'] = 122288, },
-			['PRIEST'] =        { ['DRUID_BALANCE'] = 110707, ['DRUID_FERAL'] = 110715, ['DRUID_GUARDIAN'] = 110717, ['DRUID_RESTO'] = 110718, },
-			['ROGUE'] =         { ['DRUID_BALANCE'] = 110788, ['DRUID_FERAL'] = 110730, ['DRUID_GUARDIAN'] = 122289, ['DRUID_RESTO'] = 110791, },
-			['SHAMAN'] =        { ['DRUID_BALANCE'] = 110802, ['DRUID_FERAL'] = 110807, ['DRUID_GUARDIAN'] = 110803, ['DRUID_RESTO'] = 110806, },
-			['WARLOCK'] =       { ['DRUID_BALANCE'] = 122291, ['DRUID_FERAL'] = 110810, ['DRUID_GUARDIAN'] = 122290, ['DRUID_RESTO'] = 112970, },
-			['WARRIOR'] =       { ['DRUID_BALANCE'] = 122292, ['DRUID_FERAL'] = 112997, ['DRUID_GUARDIAN'] = 113002, ['DRUID_RESTO'] = 113004, },
-		}
-	}
-
-	-- _G.TOOLTIP_DEFAULT_BACKGROUND_COLOR = {r = 0, g = 0, b = 0}
-
-		-- Some tooltip changes
-
-	if (db.fontOutline) then
-		GameTooltipHeaderText:SetFont(BasicUI.media.fontBold, (db.fontSize + 2), 'THINOUTLINE')
-		GameTooltipHeaderText:SetShadowOffset(0, 0)
-
-		GameTooltipText:SetFont(BasicUI.media.fontNormal, (db.fontSize), 'THINOUTLINE')
-		GameTooltipText:SetShadowOffset(0, 0)
-
-		GameTooltipTextSmall:SetFont(BasicUI.media.fontNormal, (db.fontSize), 'THINOUTLINE')
-		GameTooltipTextSmall:SetShadowOffset(0, 0)
-	else
-		GameTooltipHeaderText:SetFont(BasicUI.media.fontBold, (db.fontSize + 2))
-		GameTooltipText:SetFont(BasicUI.media.fontNormal, (db.fontSize))
-		GameTooltipTextSmall:SetFont(BasicUI.media.fontNormal, (db.fontSize))
-	end
-
-	GameTooltipStatusBar:SetHeight(7)
-	GameTooltipStatusBar:SetBackdrop({bgFile = 'Interface\\Buttons\\WHITE8x8'})
-	GameTooltipStatusBar:SetBackdropColor(0, 1, 0, 0.3)
-
-	CUSTOM_FACTION_BAR_COLORS = {
-		[1] = {r = 1, g = 0, b = 0},
-		[2] = {r = 1, g = 0, b = 0},
-		[3] = {r = 1, g = 1, b = 0},
-		[4] = {r = 1, g = 1, b = 0},
-		[5] = {r = 0, g = 1, b = 0},
-		[6] = {r = 0, g = 1, b = 0},
-		[7] = {r = 0, g = 1, b = 0},
-		[8] = {r = 0, g = 1, b = 0},
-	}
 	function GameTooltip_UnitColor(unit)
+
 		local r, g, b
 
-		if (UnitIsDead(unit) or UnitIsGhost(unit) or UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit)) then
+		if (UnitIsDead(unit) or UnitIsGhost(unit) or UnitIsTapDenied(unit)) then
 			r = 0.5
 			g = 0.5
-			b = 0.5 
+			b = 0.5
 		elseif (UnitIsPlayer(unit)) then
 			if (UnitIsFriend(unit, 'player')) then
 				local _, class = UnitClass(unit)
-				r = RAID_CLASS_COLORS[class].r
-				g = RAID_CLASS_COLORS[class].g
-				b = RAID_CLASS_COLORS[class].b
+				if ( class ) then
+					r = RAID_CLASS_COLORS[class].r
+					g = RAID_CLASS_COLORS[class].g
+					b = RAID_CLASS_COLORS[class].b
+				else
+					r = 0.60
+					g = 0.60
+					b = 0.60
+				end
 			elseif (not UnitIsFriend(unit, 'player')) then
 				r = 1
 				g = 0
@@ -197,9 +137,9 @@ function Tooltip:OnEnable()
 			local reaction = UnitReaction(unit, 'player')
 
 			if (reaction) then
-				r = CUSTOM_FACTION_BAR_COLORS[reaction].r
-				g = CUSTOM_FACTION_BAR_COLORS[reaction].g
-				b = CUSTOM_FACTION_BAR_COLORS[reaction].b
+				r = FACTION_BAR_COLORS[reaction].r
+				g = FACTION_BAR_COLORS[reaction].g
+				b = FACTION_BAR_COLORS[reaction].b
 			else
 				r = 157/255
 				g = 197/255
@@ -209,63 +149,119 @@ function Tooltip:OnEnable()
 
 		return r, g, b
 	end
-	  
-	UnitSelectionColor = GameTooltip_UnitColor
+
+	hooksecurefunc("TargetFrame_CheckFaction", function(self)
+		if ( UnitPlayerControlled(self.unit) ) then
+			self.nameBackground:SetVertexColor(GameTooltip_UnitColor(self.unit));
+		end
+	end)
+
+	local select = select
+	local tonumber = tonumber
+	local format = string.format
+	local floor = floor
+	local upper = string.upper
+	local sub = sub
+	local modf = math.modf
+	local gsub = string.gsub
+	local find = find
+
+
+	local UnitName = UnitName
+	local UnitLevel = UnitLevel
+	local UnitExists = UnitExists
+	local UnitIsDead = UnitIsDead
+	local UnitIsGhost = UnitIsGhost
+	local UnitFactionGroup = UnitFactionGroup
+	local UnitCreatureType = UnitCreatureType
+	local GetQuestDifficultyColor = GetQuestDifficultyColor
+
+	local tankIcon = "|TInterface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES.blp:13:13:0:0:64:64:0:19:22:41|t"
+	local healIcon = "|TInterface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES.blp:13:13:0:0:64:64:20:39:1:20|t"
+	local damagerIcon = "|TInterface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES.blp:13:13:0:0:64:64:20:39:22:41|t"
+
+		-- Some tooltip changes
+
+	if db.fontOutline then
+		GameTooltipText:SetFont(STANDARD_TEXT_FONT, (db.fontSize), "OUTLINE")
+		GameTooltipText:SetShadowOffset(0, 0)
+
+		GameTooltipTextSmall:SetFont(STANDARD_TEXT_FONT, (db.fontSize), "OUTLINE")
+		GameTooltipTextSmall:SetShadowOffset(0, 0)
+	else
+		GameTooltipText:SetFont(STANDARD_TEXT_FONT, (db.fontSize))
+		GameTooltipTextSmall:SetFont(STANDARD_TEXT_FONT, (db.fontSize))
+	end
+
+	GameTooltipStatusBar:SetHeight(7)
+	GameTooltipStatusBar:SetBackdrop({bgFile = [[Interface\Buttons\WHITE8x8]]})
+	GameTooltipStatusBar:SetBackdropColor(0, 1, 0, 0.3)
 
 	local function ApplyTooltipStyle(self)
 		local bgsize, bsize
-		if (self == ConsolidatedBuffsTooltip) then
+		if self == ConsolidatedBuffsTooltip then
 			bgsize = 1
 			bsize = 8
-		elseif (self == FriendsTooltip) then
+		elseif self == FriendsTooltip then
 			FriendsTooltip:SetScale(1.1)
 
-			bgsize = 1
-			bsize = 9
+			bgsize = 4
+			bsize = 16
+		elseif self == FloatingBattlePetTooltip or self == BattlePetTooltip then
+			bgsize = 4
+			bsize = 16
 		else
 			bgsize = 3
 			bsize = 12
 		end
 
-		self:SetBackdrop({
-			bgFile = [[Interface\AddOns\BasicUI\Media\Textures\BLACK8X8]]    -- 'Interface\\Tooltips\\UI-Tooltip-Background',
-			edgeFile = [[Interface\Tooltips\UI-Tooltip-Border]],
-			tile = true, tileSize = 16, edgeSize = 18,
-
-			insets = {
-				left = bgsize, right = bgsize, top = bgsize, bottom = bgsize
-			}
-		})
+		if not self.Background then
+			self.Background = self:CreateTexture(nil, "BACKGROUND", nil, 1)
+			self.Background:SetTexture([[Interface\Buttons\WHITE8x8]])
+			self.Background:SetPoint("TOPLEFT", self, bgsize, -bgsize)
+			self.Background:SetPoint("BOTTOMRIGHT", self, -bgsize, bgsize)
+			self.Background:SetVertexColor(0.0, 0.0, 0.0, 0.60)
+		end
 	end
 
 	for _, tooltip in pairs({
 		GameTooltip,
+		BattlePetTooltip,
+		EmbeddedItemTooltip,
 		ItemRefTooltip,
-
+		ItemRefShoppingTooltip1,
+		ItemRefShoppingTooltip2,
+		ItemRefShoppingTooltip3,
 		ShoppingTooltip1,
 		ShoppingTooltip2,
 		ShoppingTooltip3,
-
 		WorldMapTooltip,
-
+		WorldMapCompareTooltip1,
+		WorldMapCompareTooltip2,
+		WorldMapCompareTooltip3,
 		DropDownList1MenuBackdrop,
 		DropDownList2MenuBackdrop,
-
 		ConsolidatedBuffsTooltip,
-
+		AutoCompleteBox,
 		ChatMenu,
 		EmoteMenu,
 		LanguageMenu,
 		VoiceMacroMenu,
-
 		FriendsTooltip,
+		FloatingGarrisonFollowerTooltip,
+		FloatingBattlePetTooltip,
+		FloatingPetBattleAbilityTooltip,
+		ReputationParagonTooltip,
+		LibDBIconTooltip,
+		SmallTextTooltip,
+		LibItemUpdateInfoTooltip,
 	}) do
 		ApplyTooltipStyle(tooltip)
 	end
 
-		-- Itemquaility border
+		-- Itemquaility border, we use our beautycase functions
 
-	if (db.itemqualityBorderColor) then
+	if db.itemqualityBorderColor then
 		for _, tooltip in pairs({
 			GameTooltip,
 			ItemRefTooltip,
@@ -284,111 +280,61 @@ function Tooltip:OnEnable()
 					end
 				end
 			end)
-
+			
 			tooltip:HookScript('OnTooltipCleared', function(self)
 				self:SetBackdropBorderColor(1, 1, 1)
 			end)
 		end
 	end
 
-		-- Itemlvl (by Gsuz) - http://www.tukui.org/forums/topic.php?id=10151
-
-	local function GetItemLevel(unit)
-		local total, item = 0, 0
-		for i, v in pairs({
-			'Head',
-			'Neck',
-			'Shoulder',
-			'Back',
-			'Chest',
-			'Wrist',
-			'Hands',
-			'Waist',
-			'Legs',
-			'Feet',
-			'Finger0',
-			'Finger1',
-			'Trinket0',
-			'Trinket1',
-			'MainHand',
-			'SecondaryHand',
-		}) do
-			local slot = GetInventoryItemLink(unit, GetInventorySlotInfo(v..'Slot'))
-			if (slot ~= nil) then
-				item = item + 1
-				total = total + select(4, GetItemInfo(slot))
-			end
-		end
-
-		if (item > 0) then
-			return floor(total / item + 0.5)
-		end
-
-		return 0
-	end
-
-		-- Make sure we get a correct unit
-
-	local function GetRealUnit(self)
-		if (GetMouseFocus() and not GetMouseFocus():GetAttribute('unit') and GetMouseFocus() ~= WorldFrame) then
-			return select(2, self:GetUnit())
-		elseif (GetMouseFocus() and GetMouseFocus():GetAttribute('unit')) then
-			return GetMouseFocus():GetAttribute('unit')
-		elseif (select(2, self:GetUnit())) then
-			return select(2, self:GetUnit())
-		else
-			return 'mouseover'
-		end
-	end
-
 	local function GetFormattedUnitType(unit)
 		local creaturetype = UnitCreatureType(unit)
-		if (creaturetype) then
+		if creaturetype then
 			return creaturetype
 		else
-			return ''
+			return ""
 		end
 	end
 
 	local function GetFormattedUnitClassification(unit)
 		local class = UnitClassification(unit)
-		if (class == 'worldboss') then
-			return '|cffFF0000'..BOSS..'|r '
-		elseif (class == 'rareelite') then
-			return '|cffFF66CCRare|r |cffFFFF00'..ELITE..'|r '
-		elseif (class == 'rare') then
-			return '|cffFF66CCRare|r '
-		elseif (class == 'elite') then
-			return '|cffFFFF00'..ELITE..'|r '
+		if class == "worldboss" then
+			return "|cffFF0000"..BOSS.."|r "
+		elseif class == "rareelite" then
+			return "|cffFF66CCRare|r |cffFFFF00"..ELITE.."|r "
+		elseif class == "rare" then
+			return "|cffFF66CCRare|r "
+		elseif class == "elite" then
+			return "|cffFFFF00"..ELITE.."|r "
 		else
-			return ''
+			return ""
 		end
 	end
 
 	local function GetFormattedUnitLevel(unit)
 		local diff = GetQuestDifficultyColor(UnitLevel(unit))
-		if (UnitLevel(unit) == -1) then
-			return '|cffff0000??|r '
-		elseif (UnitLevel(unit) == 0) then
-			return '? '
+		if UnitLevel(unit) == -1 then
+			return "|cffff0000??|r "
+		elseif UnitLevel(unit) == 0 then
+			return "? "
 		else
-			return format('|cff%02x%02x%02x%s|r ', diff.r*255, diff.g*255, diff.b*255, UnitLevel(unit))
+			return format("|cff%02x%02x%02x%s|r ", diff.r*255, diff.g*255, diff.b*255, UnitLevel(unit))
 		end
 	end
 
 	local function GetFormattedUnitClass(unit)
 		local color = RAID_CLASS_COLORS[select(2, UnitClass(unit))]
-		if (color) then
-			return format(' |cff%02x%02x%02x%s|r', color.r*255, color.g*255, color.b*255, UnitClass(unit))
+		if color then
+			return format(" |cff%02x%02x%02x%s|r", color.r*255, color.g*255, color.b*255, UnitClass(unit))
 		end
 	end
 
 	local function GetFormattedUnitString(unit, specIcon)
-		if (UnitIsPlayer(unit)) then
-			if (not UnitRace(unit)) then
+		if UnitIsPlayer(unit) then
+			if not UnitRace(unit) then
 				return nil
 			end
-			return GetFormattedUnitLevel(unit)..UnitRace(unit)..GetFormattedUnitClass(unit)..(db.showSpecializationIcon and specIcon or '')
+			return GetFormattedUnitLevel(unit)..UnitRace(unit)..GetFormattedUnitClass(unit)..(db.showSpecializationIcon and specIcon or "")
 		else
 			return GetFormattedUnitLevel(unit)..GetFormattedUnitClassification(unit)..GetFormattedUnitType(unit)
 		end
@@ -398,12 +344,12 @@ function Tooltip:OnEnable()
 		local role = UnitGroupRolesAssigned(unit)
 		local roleList = nil
 
-		if (role == 'TANK') then
-			roleList = '   '..tankIcon..' '..TANK
-		elseif (role == 'HEALER') then
-			roleList = '   '..healIcon..' '..HEALER
-		elseif (role == 'DAMAGER') then
-			roleList = '   '..damagerIcon..' '..DAMAGER
+		if role == "TANK" then
+			roleList = "   "..tankIcon.." "..TANK
+		elseif role == "HEALER" then
+			roleList = "   "..healIcon.." "..HEALER
+		elseif role == "DAMAGER" then
+			roleList = "   "..damagerIcon.." "..DAMAGER
 		end
 
 		return roleList
@@ -413,10 +359,16 @@ function Tooltip:OnEnable()
 
 	local function SetHealthBarColor(unit)
 		local r, g, b
-		if (db.healthbar.custom.apply and not db.healthbar.reactionColoring) then
-			r, g, b = db.healthbar.custom.color.r, db.healthbar.custom.color.g, db.healthbar.custom.color.b
-		elseif (db.healthbar.reactionColoring and unit) then
-			r, g, b = UnitSelectionColor(unit)
+		if db.healthbar.customColor.apply and not db.healthbar.reactionColoring then
+			r, g, b = db.healthbar.customColor.color.r, db.healthbar.customColor.color.g, db.healthbar.customColor.color.b
+		elseif db.healthbar.reactionColoring and unit then
+			if unit == "player" then
+				local _, class = UnitClass("player")
+				local ccolor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
+				r, g, b = ccolor.r, ccolor.g, ccolor.b
+			else
+				r, g, b = UnitSelectionColor(unit)
+			end
 		else
 			r, g, b = 0, 1, 0
 		end
@@ -427,52 +379,53 @@ function Tooltip:OnEnable()
 
 	local function GetUnitRaidIcon(unit)
 		local index = GetRaidTargetIndex(unit)
+		local icon = ICON_LIST[index] or ""
 
-		if (index) then
-			if (UnitIsPVP(unit) and db.showPVPIcons) then
-				return ICON_LIST[index]..'11|t'
+		if index then
+			if UnitIsPVP(unit) and db.showPVPIcons then
+				return icon.."11|t"
 			else
-				return ICON_LIST[index]..'11|t '
+				return icon.."11|t "
 			end
 		else
-			return ''
+			return ""
 		end
 	end
 
 	local function GetUnitPVPIcon(unit)
 		local factionGroup = UnitFactionGroup(unit)
 
-		if (UnitIsPVPFreeForAll(unit)) then
-			if (db.showPVPIcons) then
-				return '|TInterface\\AddOns\\MyCore\\Media\\UI-PVP-FFA:12|t'
+		if UnitIsPVPFreeForAll(unit) then
+			if db.showPVPIcons then
+				return CreateTextureMarkup([[Interface\AddOns\BasicUI\Media\UI-PVP-FFA]], 32,32, 16,16, 0,1,0,1, -2,-1)
 			else
-				return '|cffFF0000# |r'
+				return "|cffFF0000# |r"
 			end
-		elseif (factionGroup and UnitIsPVP(unit)) then
-			if (db.showPVPIcons) then
-				return '|TInterface\\AddOns\\MyCore\\Media\\UI-PVP-'..factionGroup..':12|t'
+		elseif factionGroup and UnitIsPVP(unit) then
+			if db.showPVPIcons then
+				return CreateTextureMarkup([[Interface\AddOns\BasicUI\Media\UI-PVP-]]..factionGroup, 32,32, 14,14, 0,1,0,1, -2,-1)
 			else
-				return '|cff00FF00# |r'
+				return "|cff00FF00# |r"
 			end
 		else
-			return ''
+			return ""
 		end
 	end
 
 	local function AddMouseoverTarget(self, unit)
-		local unitTargetName = UnitName(unit..'target')
-		local unitTargetClassColor = RAID_CLASS_COLORS[select(2, UnitClass(unit..'target'))] or { r = 1, g = 0, b = 1 }
+		local unitTargetName = UnitName(unit.."target")
+		local unitTargetClassColor = RAID_CLASS_COLORS[select(2, UnitClass(unit.."target"))] or { r = 1, g = 0, b = 1 }
 		local unitTargetReactionColor = {
-			r = select(1, UnitSelectionColor(unit..'target')),
-			g = select(2, UnitSelectionColor(unit..'target')),
-			b = select(3, UnitSelectionColor(unit..'target'))
+			r = select(1, GameTooltip_UnitColor(unit.."target")),
+			g = select(2, GameTooltip_UnitColor(unit.."target")),
+			b = select(3, GameTooltip_UnitColor(unit.."target"))
 		}
 
-		if (UnitExists(unit..'target')) then
-			if (UnitName('player') == unitTargetName) then
+		if UnitExists(unit.."target") then
+			if UnitName('player') == unitTargetName then
 				self:AddLine(format('|cffFFFF00Target|r: '..GetUnitRaidIcon(unit..'target')..'|cffff00ff%s|r', string.upper("** YOU **")), 1, 1, 1)
 			else
-				if (UnitIsPlayer(unit..'target')) then
+				if UnitIsPlayer(unit..'target') then
 					self:AddLine(format('|cffFFFF00Target|r: '..GetUnitRaidIcon(unit..'target')..'|cff%02x%02x%02x%s|r', unitTargetClassColor.r*255, unitTargetClassColor.g*255, unitTargetClassColor.b*255, unitTargetName:sub(1, 40)), 1, 1, 1)
 				else
 					self:AddLine(format('|cffFFFF00Target|r: '..GetUnitRaidIcon(unit..'target')..'|cff%02x%02x%02x%s|r', unitTargetReactionColor.r*255, unitTargetReactionColor.g*255, unitTargetReactionColor.b*255, unitTargetName:sub(1, 40)), 1, 1, 1)
@@ -483,33 +436,30 @@ function Tooltip:OnEnable()
 
 	GameTooltip.inspectCache = {}
 
-	GameTooltip:HookScript('OnTooltipSetUnit', function(self, ...)
-		local unit = GetRealUnit(self)
+	GameTooltip:HookScript("OnTooltipSetUnit", function(self, ...)
+		local _, unit = self:GetUnit()
 
-		if (db.hideInCombat and InCombatLockdown()) then
+		if db.hideInCombat and InCombatLockdown() then
 			self:Hide()
 			return
 		end
 
-		if (UnitExists(unit) and UnitName(unit) ~= UNKNOWN) then
-
-			local ilvl = 0
-			local specIcon = ''
+		if UnitExists(unit) and UnitName(unit) ~= UNKNOWN then
+			local specIcon = ""
 			local lastUpdate = 30
 			for index, _ in pairs(self.inspectCache) do
 				local inspectCache = self.inspectCache[index]
-				if (inspectCache.GUID == UnitGUID(unit)) then
-					ilvl = inspectCache.itemLevel or 0
-					specIcon = inspectCache.specIcon or ''
-					lastUpdate = inspectCache.lastUpdate and math.abs(inspectCache.lastUpdate - math.floor(GetTime())) or 30
+				if inspectCache.GUID == UnitGUID(unit) then
+					specIcon = inspectCache.specIcon or ""
+					lastUpdate = inspectCache.lastUpdate and math.abs(inspectCache.lastUpdate - floor(GetTime())) or 30
 				end
 			end
 
-				-- Fetch inspect information (ilvl and spec)
+				-- Fetch Inspect Information
 
-			if (unit and CanInspect(unit)) then
-				if (not self.inspectRefresh and lastUpdate >= 30 and not self.blockInspectRequests) then
-					if (not self.blockInspectRequests) then
+			if unit and CanInspect(unit) then
+				if not self.inspectRefresh and lastUpdate >= 30 and not self.blockInspectRequests then
+					if not self.blockInspectRequests then
 						self.inspectRequestSent = true
 						NotifyInspect(unit)
 					end
@@ -520,10 +470,10 @@ function Tooltip:OnEnable()
 
 			local name, realm = UnitName(unit)
 
-				-- Hide player titles
+				-- Player Titles
 
-			if (db.showPlayerTitles) then
-				if (UnitPVPName(unit)) then
+			if db.showPlayerTitles then
+				if UnitPVPName(unit) then
 					name = UnitPVPName(unit)
 				end
 			end
@@ -532,37 +482,37 @@ function Tooltip:OnEnable()
 
 				-- Color guildnames
 
-			if (GetGuildInfo(unit)) then
-				if (GetGuildInfo(unit) == GetGuildInfo('player') and IsInGuild('player')) then
-				   GameTooltipTextLeft2:SetText('|cffFF66CC'..GameTooltipTextLeft2:GetText()..'|r')
+			if GetGuildInfo(unit) then
+				if GetGuildInfo(unit) == GetGuildInfo("player") and IsInGuild("player") then
+				   GameTooltipTextLeft2:SetText("|cffFF66CC"..GameTooltipTextLeft2:GetText().."|r")
 				end
 			end
 
-				-- Tooltip level text
+				-- Level
 
 			for i = 2, GameTooltip:NumLines() do
-				if (_G['GameTooltipTextLeft'..i]:GetText():find('^'..TOOLTIP_UNIT_LEVEL:gsub('%%s', '.+'))) then
-					_G['GameTooltipTextLeft'..i]:SetText(GetFormattedUnitString(unit, specIcon))
+				if _G["GameTooltipTextLeft"..i]:GetText():find("^"..TOOLTIP_UNIT_LEVEL:gsub("%%s", ".+")) then
+					_G["GameTooltipTextLeft"..i]:SetText(GetFormattedUnitString(unit, specIcon))
 				end
 			end
 
-				-- Role text
+				-- Role
 
-			if (db.showUnitRole) then
+			if db.showUnitRole then
 				self:AddLine(GetUnitRoleString(unit), 1, 1, 1)
 			end
 
-				-- Mouse over target with raidicon support
+				-- Mouseover Target
 
-			if (db.showMouseoverTarget) then
+			if db.showMouseoverTarget then
 				AddMouseoverTarget(self, unit)
 			end
 
-				-- Pvp flag prefix
+				-- PvP Flag Prefix
 
 			for i = 3, GameTooltip:NumLines() do
-				if (_G['GameTooltipTextLeft'..i]:GetText():find(PVP_ENABLED)) then
-					_G['GameTooltipTextLeft'..i]:SetText(nil)
+				if _G["GameTooltipTextLeft"..i]:GetText():find(PVP_ENABLED) then
+					_G["GameTooltipTextLeft"..i]:SetText(nil)
 					GameTooltipTextLeft1:SetText(GetUnitPVPIcon(unit)..GameTooltipTextLeft1:GetText())
 				end
 			end
@@ -571,322 +521,299 @@ function Tooltip:OnEnable()
 
 			GameTooltipTextLeft1:SetText(GetUnitRaidIcon(unit)..GameTooltipTextLeft1:GetText())
 
-				-- Afk and dnd prefix
+				-- Away and DND
 
-			if (UnitIsAFK(unit)) then
-				self:AppendText('|cff00ff00 <AFK>|r')
-			elseif (UnitIsDND(unit)) then
-				self:AppendText('|cff00ff00 <DND>|r')
+			if UnitIsAFK(unit) then
+				self:AppendText("|cff00ff00 <"..CHAT_MSG_AFK..">|r")
+			elseif UnitIsDND(unit) then
+				self:AppendText("|cff00ff00 <"..DEFAULT_DND_MESSAGE..">|r")
 			end
 
 				-- Player realm names
 
-			if (realm and realm ~= '') then
-				if (db.abbrevRealmNames)   then
-					self:AppendText(' (*)')
+			if realm and realm ~= "" then
+				if db.abbrevRealmNames then
+					self:AppendText(" (*)")
 				else
-					self:AppendText(' - '..realm)
+					self:AppendText(" - "..realm)
 				end
 			end
 
 				-- Move the healthbar inside the tooltip
 
-			self:AddLine(' ')
-			GameTooltipStatusBar:ClearAllPoints()
-			GameTooltipStatusBar:SetPoint('LEFT', self:GetName()..'TextLeft'..self:NumLines(), 1, -3)
-			GameTooltipStatusBar:SetPoint('RIGHT', self, -10, 0)
+			if GameTooltipStatusBar:IsShown() then
+				self:AddLine(" ")
+				GameTooltipStatusBar:ClearAllPoints()
+				GameTooltipStatusBar:SetPoint("LEFT", self:GetName().."TextLeft"..self:NumLines(), 1, -3)
+				GameTooltipStatusBar:SetPoint("RIGHT", self, -10, 0)
+			end
 
 				-- Border coloring
 
-			if (db.reactionBorderColor) then
-				local r, g, b = UnitSelectionColor(unit)
+			if db.reactionBorderColor then
+				if unit == "player" then
+					local _, class = UnitClass("player")
+					local ccolor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
+					self:SetBackdropBorderColor(ccolor.r, ccolor.g, ccolor.b)
+				else
+					local r, g, b = UnitSelectionColor(unit)
 					self:SetBackdropBorderColor(r, g, b)
+				end
 			end
 
 				-- Dead or ghost recoloring
 
-			if (UnitIsDead(unit) or UnitIsGhost(unit)) then
+			if UnitIsDead(unit) or UnitIsGhost(unit) then
 				GameTooltipStatusBar:SetBackdropColor(0.5, 0.5, 0.5, 0.3)
 			else
-				if (not db.healthbar.custom.apply and not db.healthbar.reactionColoring) then
+				if not db.healthbar.customColor.apply and not db.healthbar.reactionColoring then
 					GameTooltipStatusBar:SetBackdropColor(27/255, 243/255, 27/255, 0.3)
 				else
 					SetHealthBarColor(unit)
 				end
 			end
-
-				-- Custom healthbar coloring
-
-			if (db.healthbar.reactionColoring or db.healthbar.custom.apply) then
-				GameTooltipStatusBar:HookScript('OnValueChanged', function()
-					SetHealthBarColor(unit)
-				end)
-			end
-
-				-- Show player item lvl
-
-			if (db.showItemLevel and ilvl > 1) then
-				GameTooltip:AddLine(STAT_AVERAGE_ITEM_LEVEL .. ': ' .. '|cffFFFFFF'..ilvl..'|r')
-			end
-
-				-- Symbiosis
-
-			if (UnitIsPlayer(unit) and not UnitIsEnemy(unit, 'player')) then
-				local hasSymbiosisBuff = false
-				for i = 1, 40 do
-					if select(11, UnitAura(unit, i, 'HELPFUL')) == 110309 then
-						hasSymbiosisBuff = true
-						break
-					end
-				end
-
-				local _, playerClass = UnitClass('player')
-				local _, unitClass = UnitClass(unit)
-				local spec = SPEC_CORE_ABILITY_TEXT[GetSpecializationInfo(GetSpecialization() or 1)]
-				local spellID = (playerClass == 'DRUID' and unitClass ~= 'DRUID') and symbiosis.grant[unitClass][spec] or (playerClass ~= 'DRUID' and unitClass == 'DRUID') and symbiosis.grant[playerClass][spec]
-				local name, _, icon = GetSpellInfo(spellID)
-
-				if (hasSymbiosisBuff) then
-					GameTooltip:AddLine(' ')
-					GameTooltip:AddLine('|cff3eea23'..GetSpellInfo(110309)..' already buffed|r')
-				end
-
-				if (icon) then
-					GameTooltip:AddLine(' ')
-					GameTooltip:AddDoubleLine('|T'..icon..':16:16:0:0:64:64:4:60:4:60|t '..name, '|cff3eea23'..GetSpellInfo(110309)..'|r')
-				end
-			end
 		end
 	end)
 
-	GameTooltip:HookScript('OnTooltipCleared', function(self)
+	GameTooltip:HookScript("OnTooltipCleared", function(self)
 		GameTooltipStatusBar:ClearAllPoints()
-		GameTooltipStatusBar:SetPoint('BOTTOMLEFT', self, 'TOPLEFT', 0.5, 3)
-		GameTooltipStatusBar:SetPoint('BOTTOMRIGHT', self, 'TOPRIGHT', -1, 3)
+		GameTooltipStatusBar:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 0.5, 3)
+		GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", self, "TOPRIGHT", -1, 3)
 		GameTooltipStatusBar:SetBackdropColor(0, 1, 0, 0.3)
 
 		if (db.reactionBorderColor) then
-			self:SetBackdropColor(1, 1, 1)
+			self:SetBackdropBorderColor(1, 1, 1)
 		end
 	end)
 
+		-- Custom healthbar coloring
 
-		-- Hide coalesced/interactive realm information
-
-	if (db.hideRealmText) then
-		local COALESCED_REALM_TOOLTIP1 = string.split(FOREIGN_SERVER_LABEL, COALESCED_REALM_TOOLTIP)
-		local INTERACTIVE_REALM_TOOLTIP1 = string.split(INTERACTIVE_SERVER_LABEL, INTERACTIVE_REALM_TOOLTIP)
-		-- Dirty checking of the coalesced realm text because it's added
-		-- after the initial OnShow
-		GameTooltip:HookScript('OnUpdate', function(self)
-			for i = 3, self:NumLines() do
-				local row = _G['GameTooltipTextLeft'..i]
-				local rowText = row:GetText()
-
-				if (rowText) then
-					if (rowText:find(COALESCED_REALM_TOOLTIP1) or rowText:find(INTERACTIVE_REALM_TOOLTIP1)) then
-						row:SetText(nil)
-						row:Hide()
-
-						local previousRow = _G['GameTooltipTextLeft'..(i - 1)]
-						previousRow:SetText(nil)
-						previousRow:Hide()
-
-						self:Show()
-					end
-				end
-			end
+	if db.healthbar.reactionColoring or db.healthbar.customColor.apply then
+		GameTooltipStatusBar:HookScript("OnValueChanged", function(self)
+			local _, unit = self:GetParent():GetUnit()
+			SetHealthBarColor(unit)
 		end)
 	end
 
-	hooksecurefunc('GameTooltip_SetDefaultAnchor', function(self, parent)
-		if (db.showOnMouseover) then
-			self:SetOwner(parent, 'ANCHOR_CURSOR')
+	local function CreateAnchor()
+		local anchorFrame = CreateFrame("Frame", "addon_Anchor", UIParent)
+		anchorFrame:SetSize(50, 50)
+		anchorFrame:SetScale(1.2)
+		anchorFrame:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -75, 75)
+		anchorFrame:SetFrameStrata("HIGH")
+		anchorFrame:SetMovable(true)
+		anchorFrame:SetClampedToScreen(true)
+		anchorFrame:SetUserPlaced(true)
+		anchorFrame:SetBackdrop({bgFile = [[Interface\MINIMAP\TooltipBackdrop-Background]],})
+		anchorFrame:EnableMouse(true)
+		anchorFrame:RegisterForDrag("LeftButton")
+		anchorFrame:Hide()
+
+		anchorFrame.text = anchorFrame:CreateFontString(nil, "OVERLAY")
+		anchorFrame.text:SetAllPoints(anchorFrame)
+		anchorFrame.text:SetFont(STANDARD_TEXT_FONT, 12)
+		anchorFrame.text:SetText("addon")
+
+		anchorFrame:SetScript("OnDragStart", function(self)
+			self:StartMoving()
+		end)
+
+		anchorFrame:SetScript("OnDragStop", function(self)
+			self:StopMovingOrSizing()
+		end)
+
+		return anchorFrame
+	end
+
+	local addonAnchor = CreateAnchor()
+
+	hooksecurefunc("GameTooltip_SetDefaultAnchor", function(self, parent)
+		if db.showOnMouseover then
+			self:SetOwner(parent, "ANCHOR_CURSOR")
+		else
+			self:SetOwner(parent, "ANCHOR_NONE")
+			self:ClearAllPoints()
+			self:SetPoint("BOTTOMRIGHT", addonAnchor)
 		end
 	end)
 
-
-	GameTooltip:RegisterEvent('INSPECT_READY')
-	GameTooltip:SetScript('OnEvent', function(self, event, GUID)
-		if (not self:IsShown()) then
+	GameTooltip:RegisterEvent("INSPECT_READY")
+	GameTooltip:SetScript("OnEvent", function(self, event, GUID)
+		if not self:IsShown() then
 			return
 		end
 
 		local _, unit = self:GetUnit()
 
-		if (not unit) then
+		if not unit then
 			return
 		end
 
-		if (self.blockInspectRequests) then
+		if self.blockInspectRequests then
 			self.inspectRequestSent = false
 		end
 
-		if (UnitGUID(unit) ~= GUID or not self.inspectRequestSent) then
-			if (not self.blockInspectRequests) then
+		if UnitGUID(unit) ~= GUID or not self.inspectRequestSent then
+			if not self.blockInspectRequests then
 				ClearInspectPlayer()
 			end
 			return
 		end
 
 		local _, _, _, icon = GetSpecializationInfoByID(GetInspectSpecialization(unit))
-		local ilvl = GetItemLevel(unit)
 		local now = GetTime()
+
+		local iconMarkup = CreateTextureMarkup(icon, 64,64, 12,12, 0.10,.90,0.10,0.90, 0,0)
 
 		local matchFound
 		for index, _ in pairs(self.inspectCache) do
 			local inspectCache = self.inspectCache[index]
-			if (inspectCache.GUID == GUID) then
-				inspectCache.itemLevel = ilvl
-				inspectCache.specIcon = icon and ' |T'..icon..':0|t' or ''
-				inspectCache.lastUpdate = math.floor(now)
+			if inspectCache.GUID == GUID then
+				inspectCache.specIcon = icon and " "..iconMarkup or ""
+				inspectCache.lastUpdate = floor(now)
 				matchFound = true
 			end
 		end
 
 		if not matchFound then
 			local GUIDInfo = {
-				['GUID'] = GUID,
-				['itemLevel'] = ilvl,
-				['specIcon'] = icon and ' |T'..icon..':0|t' or '',
-				['lastUpdate'] = math.floor(now)
+				["GUID"] = GUID,
+				["specIcon"] = icon and " "..iconMarkup or "",
+				["lastUpdate"] = floor(now)
 			}
 			table.insert(self.inspectCache, GUIDInfo)
 		end
 
-		if (#self.inspectCache > 30) then
+		if #self.inspectCache > 30 then
 			table.remove(self.inspectCache, 1)
 		end
 
 		self.inspectRefresh = true
-		GameTooltip:SetUnit('mouseover')
+		GameTooltip:SetUnit("mouseover")
 
-		if (not self.blockInspectRequests) then
+		if not self.blockInspectRequests then
 			ClearInspectPlayer()
 		end
 		self.inspectRequestSent = false
 	end)
 
-	local f = CreateFrame('Frame')
-	f:RegisterEvent('ADDON_LOADED')
-	f:SetScript('OnEvent', function(self, event)
-		if IsAddOnLoaded('Blizzard_InspectUI') then
-			hooksecurefunc('InspectFrame_Show', function(unit)
+	local f = CreateFrame("Frame")
+	f:RegisterEvent("ADDON_LOADED")
+	f:SetScript("OnEvent", function(self, event)
+		if IsAddOnLoaded("Blizzard_InspectUI") then
+			hooksecurefunc("InspectFrame_Show", function(unit)
 				GameTooltip.blockInspectRequests = true
 			end)
 
-			InspectFrame:HookScript('OnHide', function()
+			InspectFrame:HookScript("OnHide", function()
 				GameTooltip.blockInspectRequests = false
 			end)
 
-			self:UnregisterEvent('ADDON_LOADED')
+			self:UnregisterEvent("ADDON_LOADED")
 		end
 	end)
 
-	local select = select
-	local tonumber = tonumber
+	if db.healthbar.showHealthValue then
 
-	local modf = math.modf
-	local gsub = string.gsub
-	local format = string.format
+		local HP_Bar = GameTooltipStatusBar
+		HP_Bar.Text = HP_Bar:CreateFontString(nil, "OVERLAY")
+		HP_Bar.Text:SetPoint("CENTER", HP_Bar, db.healthbar.textPos, 0, 1)
 
-	local bar = GameTooltipStatusBar
-	bar.Text = bar:CreateFontString(nil, 'OVERLAY')
-	bar.Text:SetPoint('CENTER', bar, db.healthbar.textPos, 0, 1)
-
-	if (db.healthbar.showOutline) then
-		bar.Text:SetFont(BasicUI.media.fontNormal, db.healthbar.fontSize, 'THINOUTLINE')
-		bar.Text:SetShadowOffset(0, 0)
-	else
-		bar.Text:SetFont(BasicUI.media.fontNormal, db.healthbar.fontSize)
-		bar.Text:SetShadowOffset(1, -1)
-	end
-
-	local function ColorGradient(perc, ...)
-		if (perc >= 1) then
-			local r, g, b = select(select('#', ...) - 2, ...)
-			return r, g, b
-		elseif (perc <= 0) then
-			local r, g, b = ...
-			return r, g, b
-		end
-
-		local num = select('#', ...) / 3
-
-		local segment, relperc = modf(perc*(num-1))
-		local r1, g1, b1, r2, g2, b2 = select((segment*3)+1, ...)
-
-		return r1 + (r2-r1)*relperc, g1 + (g2-g1)*relperc, b1 + (b2-b1)*relperc
-	end
-
-	local function FormatValue(value)
-		if (value >= 1e6) then
-			return tonumber(format('%.1f', value/1e6))..'m'
-		elseif (value >= 1e3) then
-			return tonumber(format('%.1f', value/1e3))..'k'
+		if db.healthbar.showOutline then
+			HP_Bar.Text:SetFont(db.healthbar.font, db.healthbar.fontSize, "THINOUTLINE")
+			HP_Bar.Text:SetShadowOffset(0, 0)
 		else
-			return value
+			HP_Bar.Text:SetFont(db.healthbar.font, db.healthbar.fontSize)
+			HP_Bar.Text:SetShadowOffset(1, -1)
 		end
+
+		local function ColorGradient(perc, ...)
+			if perc >= 1 then
+				local r, g, b = select(select("#", ...) - 2, ...)
+				return r, g, b
+			elseif perc <= 0 then
+				local r, g, b = ...
+				return r, g, b
+			end
+
+			local num = select("#", ...) / 3
+
+			local segment, relperc = modf(perc*(num-1))
+			local r1, g1, b1, r2, g2, b2 = select((segment*3)+1, ...)
+
+			return r1 + (r2-r1)*relperc, g1 + (g2-g1)*relperc, b1 + (b2-b1)*relperc
+		end
+
+		local function FormatValue(value)
+			if value >= 1e6 then
+				return tonumber(format("%.1f", value/1e6)).."m"
+			elseif value >= 1e3 then
+				return tonumber(format("%.1f", value/1e3)).."k"
+			else
+				return value
+			end
+		end
+
+		local function DeficitValue(value)
+			if value == 0 then
+				return ""
+			else
+				return "-"..FormatValue(value)
+			end
+		end
+
+		local function GetHealthTag(text, cur, max)
+			local perc = format("%d", (cur/max)*100)
+
+			if max == 1 then
+				return perc
+			end
+
+			local r, g, b = ColorGradient(cur/max, 1, 0, 0, 1, 1, 0, 0, 1, 0)
+			text = gsub(text, "$cur", format("%s", FormatValue(cur)))
+			text = gsub(text, "$max", format("%s", FormatValue(max)))
+			text = gsub(text, "$deficit", format("%s", DeficitValue(max-cur)))
+			text = gsub(text, "$perc", format("%d", perc).."%%")
+			text = gsub(text, "$smartperc", format("%d", perc))
+			text = gsub(text, "$smartcolorperc", format("|cff%02x%02x%02x%d|r", r*255, g*255, b*255, perc))
+			text = gsub(text, "$colorperc", format("|cff%02x%02x%02x%d", r*255, g*255, b*255, perc).."%%|r")
+
+			return text
+		end
+
+		GameTooltipStatusBar:HookScript("OnValueChanged", function(self, value)
+			if self.Text then
+				self.Text:SetText("")
+			end
+
+			if not value then
+				return
+			end
+
+			local min, max = self:GetMinMaxValues()
+
+			if (value < min) or (value > max) or (value == 0) or (value == 1) then
+				return
+			end
+
+			if not self.Text then
+				CreateHealthString(self)
+			end
+
+			local fullString = GetHealthTag(db.healthbar.healthFullFormat, value, max)
+			local normalString = GetHealthTag(db.healthbar.healthFormat, value, max)
+
+			local perc = (value/max)*100
+			if perc >= 100 and currentValue ~= 1 then
+				self.Text:SetText(fullString)
+			elseif perc < 100 and currentValue ~= 1 then
+				self.Text:SetText(normalString)
+			else
+				self.Text:SetText("")
+			end
+		end)
+
 	end
-
-	local function DeficitValue(value)
-		if (value == 0) then
-			return ''
-		else
-			return '-'..FormatValue(value)
-		end
-	end
-
-	local function GetHealthTag(text, cur, max)
-		local perc = format('%d', (cur/max)*100)
-
-		if (max == 1) then
-			return perc
-		end
-
-		local r, g, b = ColorGradient(cur/max, 1, 0, 0, 1, 1, 0, 0, 1, 0)
-		text = gsub(text, '$cur', format('%s', FormatValue(cur)))
-		text = gsub(text, '$max', format('%s', FormatValue(max)))
-		text = gsub(text, '$deficit', format('%s', DeficitValue(max-cur)))
-		text = gsub(text, '$perc', format('%d', perc)..'%%')
-		text = gsub(text, '$smartperc', format('%d', perc))
-		text = gsub(text, '$smartcolorperc', format('|cff%02x%02x%02x%d|r', r*255, g*255, b*255, perc))
-		text = gsub(text, '$colorperc', format('|cff%02x%02x%02x%d', r*255, g*255, b*255, perc)..'%%|r')
-
-		return text
-	end
-
-	GameTooltipStatusBar:HookScript('OnValueChanged', function(self, value)
-		if (self.Text) then
-			self.Text:SetText('')
-		end
-
-		if (not value) then
-			return
-		end
-
-		local min, max = self:GetMinMaxValues()
-
-		if ((value < min) or (value > max) or (value == 0) or (value == 1)) then
-			return
-		end
-
-		if (not self.Text) then
-			CreateHealthString(self)
-		end
-
-		local fullString = GetHealthTag(db.healthbar.healthFullFormat, value, max)
-		local normalString = GetHealthTag(db.healthbar.healthFormat, value, max)
-
-		local perc = (value/max)*100 
-		if (perc >= 100 and currentValue ~= 1) then
-			self.Text:SetText(fullString)
-		elseif (perc < 100 and currentValue ~= 1) then
-			self.Text:SetText(normalString)
-		else
-			self.Text:SetText('')
-		end
-	end)	
 end
 
 
@@ -895,7 +822,7 @@ end
 ------------------------------------------------------------------------
 
 local options
-function Tooltip:GetOptions()
+function MODULE:GetOptions()
 	if options then
 		return options
 	end
@@ -920,7 +847,7 @@ function Tooltip:GetOptions()
 		type = "group",
 		name = L[MODULE_NAME],
 		get = function(info) return db[ info[#info] ] end,
-		set = function(info, value) db[ info[#info] ] = value;   end,
+		set = function(info, value) db[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
 		disabled = isModuleDisabled(),
 		args = {
 			---------------------------
@@ -946,21 +873,6 @@ function Tooltip:GetOptions()
 				name = " ",
 			},
 			---------------------------
-			reloadUI = {
-				type = "execute",
-				name = "Reload UI",
-				desc = " ",
-				order = 0,
-				func = 	function()
-					ReloadUI()
-				end,
-			},
-			Text = {
-				type = "description",
-				order = 0,
-				name = "When changes are made a reload of the UI is needed.",
-				width = "full",
-			},
 			Text1 = {
 				type = "description",
 				order = 1,
@@ -970,15 +882,10 @@ function Tooltip:GetOptions()
 			enable = {
 				type = "toggle",
 				order = 1,
-				name = L["Enable Tooltip Module"],
+				name = L["Enable"],
+				desc = L["Enables the Tooltip Module for |cff00B4FFBasic|rUI."],
 				width = "full",
-			},
-			disableFade = {
-				type = "toggle",
-				order = 2,
-				name = L["Disable Fade"],
-				desc = L["Disables Tooltip Fade."],
-				disabled = function() return isModuleDisabled() or not db.enable end,
+				disabled = false,
 			},
 			reactionBorderColor = {
 				type = "toggle",
@@ -1029,11 +936,11 @@ function Tooltip:GetOptions()
 				desc = L["Shows mouseover target."],
 				disabled = function() return isModuleDisabled() or not db.enable end,
 			},
-			showItemLevel = {
+			showSpecializationIcon = {
 				type = "toggle",
 				order = 2,
-				name = L["Item Level"],
-				desc = L["Shows targets average item level."],
+				name = L["Specialization"],
+				desc = L["Shows Specialization In Tooltip."],
 				disabled = function() return isModuleDisabled() or not db.enable end,
 			},
 			hideInCombat = {
@@ -1052,13 +959,13 @@ function Tooltip:GetOptions()
 			},
 			healthbar = {
 				type = "group",
-				order = 6,
+				order = 3,
 				name = L["Healthbar"],
 				desc = L["Players Healthbar Options."],
 				guiInline  = true,
 				disabled = function() return isModuleDisabled() or not db.enable end,
 				get = function(info) return db.healthbar[ info[#info] ] end,
-				set = function(info, value) db.healthbar[ info[#info] ] = value;   end,
+				set = function(info, value) db.healthbar[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
 				args = {
 					---------------------------
 					--Option Type Seperators
@@ -1103,65 +1010,6 @@ function Tooltip:GetOptions()
 						name = L["Reaction Coloring"],
 						desc = L["Change healthbar color to targets classcolor. (Overides Custom Color)"],
 						disabled = function() return isModuleDisabled() or not db.enable end,
-					},
-					custom = {
-						type = "group",
-						order = 6,
-						name = L["Custom"],
-						desc = L["Custom Coloring"],
-						childGroups = "tree",
-						disabled = function() return isModuleDisabled() or not db.enable end,
-						get = function(info) return db.healthbar.custom[ info[#info] ] end,
-						set = function(info, value) db.healthbar.custom[ info[#info] ] = value;   end,
-						args = {
-							---------------------------
-							--Option Type Seperators
-							sep1 = {
-								type = "description",
-								name = " ",
-								order = 2,
-							},
-							sep2 = {
-								type = "description",
-								name = " ",
-								order = 3,
-							},
-							sep3 = {
-								type = "description",
-								name = " ",
-								order = 4,
-							},
-							sep4 = {
-								type = "description",
-								name = " ",
-								order = 5,
-							},
-							---------------------------
-							apply = {
-								type = "toggle",
-								order = 2,
-								name = L["Apply Custom Color"],
-								desc = L["Use the Custom Color you have chosen."],
-								disabled = function() return isModuleDisabled() or not db.enable end,
-							},
-							color = {
-								type = "color",
-								order = 4,
-								name = L["Custom Color"],
-								desc = L["Picks a Custom Color for the tooltip border."],
-								hasAlpha = false,
-								disabled = function() return isModuleDisabled() or not db.healthbar.custom.apply or not db.enable end,
-								get = function(info)
-									local hb = db.healthbar.custom[ info[#info] ]
-									return hb.r, hb.g, hb.b
-								end,
-								set = function(info, r, g, b)
-									db.healthbar.custom[ info[#info] ] = {}
-									local hb = db.healthbar.custom[ info[#info] ]
-									hb.r, hb.g, hb.b = r, g, b
-								end,
-							},
-						},
 					},
 					textPos = {
 						type = "select",
