@@ -11,7 +11,7 @@ All addons that are in this UI I was given permission to use.
 - Stand Alone UI (there are integration of other addons to work with BasicUI).
 - Custom Unitframe Scaleing.
 - AutoSell all Grey items at a vendor.
-- Datatext bar below actionbars or can be moved to top of screen.
+- Datatext Panels to the left of actionbars.
 - Detail Tooltip
 - User Friendly Chat
 
