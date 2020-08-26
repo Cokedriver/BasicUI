@@ -1990,8 +1990,8 @@ function MODULE:CreateStats()
 			end
 			int = 2
 
-			-- disable script	
-			--self:SetScript('OnUpdate', nil)
+			--disable script	
+			self:SetScript('OnUpdate', nil)
 			
 		end
 

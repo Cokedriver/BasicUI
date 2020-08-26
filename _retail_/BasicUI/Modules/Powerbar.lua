@@ -115,36 +115,36 @@ function MODULE:OnEnable()
 
 	local playerClass = select(2, UnitClass('player'))
 
-	local PBFrame = CreateFrame('Frame', nil, UIParent)
+	local BPF = CreateFrame('Frame', nil, UIParent) -- BPF = Basic Powerbar Frame
 
-	PBFrame:SetScale(db.scale)
-	PBFrame:SetSize(18, 18)
-	PBFrame:SetPoint(db.position.selfAnchor, db.position.frameParent, db.position.offSetX, db.position.offSetY)
-	PBFrame:EnableMouse(false)
+	BPF:SetScale(db.scale)
+	BPF:SetSize(18, 18)
+	BPF:SetPoint(db.position.selfAnchor, db.position.frameParent, db.position.offSetX, db.position.offSetY)
+	BPF:EnableMouse(false)
 
-	PBFrame:RegisterEvent('PLAYER_REGEN_ENABLED')
-	PBFrame:RegisterEvent('PLAYER_REGEN_DISABLED')
-	PBFrame:RegisterEvent('PLAYER_ENTERING_WORLD')
-	PBFrame:RegisterEvent('PLAYER_TARGET_CHANGED')
-	PBFrame:RegisterUnitEvent('UNIT_DISPLAYPOWER', 'player')
-	PBFrame:RegisterUnitEvent('UNIT_POWER_UPDATE', 'player')
-	PBFrame:RegisterUnitEvent('UNIT_POWER_FREQUENT', 'player')
-	PBFrame:RegisterEvent('UPDATE_SHAPESHIFT_FORM')
+	BPF:RegisterEvent('PLAYER_REGEN_ENABLED')
+	BPF:RegisterEvent('PLAYER_REGEN_DISABLED')
+	BPF:RegisterEvent('PLAYER_ENTERING_WORLD')
+	BPF:RegisterEvent('PLAYER_TARGET_CHANGED')
+	BPF:RegisterUnitEvent('UNIT_DISPLAYPOWER', 'player')
+	BPF:RegisterUnitEvent('UNIT_POWER_UPDATE', 'player')
+	BPF:RegisterUnitEvent('UNIT_POWER_FREQUENT', 'player')
+	BPF:RegisterEvent('UPDATE_SHAPESHIFT_FORM')
 
 	if (db.showCombatRegen) then
-		PBFrame:RegisterUnitEvent('UNIT_AURA', 'player')
+		BPF:RegisterUnitEvent('UNIT_AURA', 'player')
 	end
 
 	if (db.hp.show) then
-		PBFrame:RegisterUnitEvent('UNIT_HEALTH', 'player')
-		PBFrame:RegisterUnitEvent('UNIT_MAX_HEALTH', 'player')
-		PBFrame:RegisterUnitEvent('UNIT_HEALTH_FREQUENT', 'player')
+		BPF:RegisterUnitEvent('UNIT_HEALTH', 'player')
+		BPF:RegisterUnitEvent('UNIT_MAX_HEALTH', 'player')
+		BPF:RegisterUnitEvent('UNIT_HEALTH_FREQUENT', 'player')
 	end
 
-	PBFrame:RegisterUnitEvent('UNIT_ENTERED_VEHICLE', 'player')
-	PBFrame:RegisterUnitEvent('UNIT_ENTERING_VEHICLE', 'player')
-	PBFrame:RegisterUnitEvent('UNIT_EXITED_VEHICLE', 'player')
-	PBFrame:RegisterUnitEvent('UNIT_EXITING_VEHICLE', 'player')
+	BPF:RegisterUnitEvent('UNIT_ENTERED_VEHICLE', 'player')
+	BPF:RegisterUnitEvent('UNIT_ENTERING_VEHICLE', 'player')
+	BPF:RegisterUnitEvent('UNIT_EXITED_VEHICLE', 'player')
+	BPF:RegisterUnitEvent('UNIT_EXITING_VEHICLE', 'player')
 
 	if (playerClass == 'WARLOCK' and db.showSoulshards
 		or playerClass == 'PALADIN' and db.showHolypower
@@ -153,18 +153,18 @@ function MODULE:OnEnable()
 		or playerClass == 'MONK' and db.showChi
 		or playerClass == 'MAGE' and db.showArcaneCharges) then
 
-		PBFrame.extraPoints = PBFrame:CreateFontString(nil, 'ARTWORK')
+		BPF.extraPoints = BPF:CreateFontString(nil, 'ARTWORK')
 
 		if (db.extraFontOutline) then
-			PBFrame.extraPoints:SetFont(db.extraFont, db.extraFontSize, 'THINOUTLINE')
-			PBFrame.extraPoints:SetShadowOffset(0, 0)
+			BPF.extraPoints:SetFont(db.extraFont, db.extraFontSize, 'THINOUTLINE')
+			BPF.extraPoints:SetShadowOffset(0, 0)
 		else
-			PBFrame.extraPoints:SetFont(db.extraFont, db.extraFontSize)
-			PBFrame.extraPoints:SetShadowOffset(1, -1)
+			BPF.extraPoints:SetFont(db.extraFont, db.extraFontSize)
+			BPF.extraPoints:SetShadowOffset(1, -1)
 		end
 
-		PBFrame.extraPoints:SetParent(PBFrame)
-		PBFrame.extraPoints:SetPoint('CENTER', 0, 0)
+		BPF.extraPoints:SetParent(BPF)
+		BPF.extraPoints:SetPoint('CENTER', 0, 0)
 	end
 
 	if (playerClass == 'DEATHKNIGHT' and db.showRunes) then
@@ -177,92 +177,92 @@ function MODULE:OnEnable()
 		RuneFrame.Rune5:Hide()
 		RuneFrame.Rune6:Hide()
 		
-		PBFrame.Rune = {}
+		BPF.Rune = {}
 
 		for i = 1, 6 do
-			PBFrame.Rune[i] = PBFrame:CreateFontString(nil, 'ARTWORK')
+			BPF.Rune[i] = BPF:CreateFontString(nil, 'ARTWORK')
 
 			if (db.rune.runeFontOutline) then
-				PBFrame.Rune[i]:SetFont(db.rune.runeFont, db.rune.runeFontSize, 'THINOUTLINE')
-				PBFrame.Rune[i]:SetShadowOffset(0, 0)
+				BPF.Rune[i]:SetFont(db.rune.runeFont, db.rune.runeFontSize, 'THINOUTLINE')
+				BPF.Rune[i]:SetShadowOffset(0, 0)
 			else
-				PBFrame.Rune[i]:SetFont(db.rune.runeFont, db.rune.runeFontSize)
-				PBFrame.Rune[i]:SetShadowOffset(1, -1)
+				BPF.Rune[i]:SetFont(db.rune.runeFont, db.rune.runeFontSize)
+				BPF.Rune[i]:SetShadowOffset(1, -1)
 			end
 
-			PBFrame.Rune[i]:SetShadowOffset(0, 0)
-			PBFrame.Rune[i]:SetParent(PBFrame)
+			BPF.Rune[i]:SetShadowOffset(0, 0)
+			BPF.Rune[i]:SetParent(BPF)
 		end
 
-		PBFrame.Rune[1]:SetPoint('CENTER', -65, 0) 
-		PBFrame.Rune[2]:SetPoint('CENTER', -39, 0) 
-		PBFrame.Rune[3]:SetPoint('CENTER', 39, 0) 
-		PBFrame.Rune[4]:SetPoint('CENTER', 65, 0) 
-		PBFrame.Rune[5]:SetPoint('CENTER', -13, 0) 
-		PBFrame.Rune[6]:SetPoint('CENTER', 13, 0) 
+		BPF.Rune[1]:SetPoint('CENTER', -65, 0) 
+		BPF.Rune[2]:SetPoint('CENTER', -39, 0) 
+		BPF.Rune[3]:SetPoint('CENTER', 39, 0) 
+		BPF.Rune[4]:SetPoint('CENTER', 65, 0) 
+		BPF.Rune[5]:SetPoint('CENTER', -13, 0) 
+		BPF.Rune[6]:SetPoint('CENTER', 13, 0) 
 	end
 
 	if (db.hp.show) then
-		PBFrame.HPText = PBFrame:CreateFontString(nil, 'ARTWORK')
+		BPF.HPText = BPF:CreateFontString(nil, 'ARTWORK')
 		if (db.hp.hpFontOutline) then
-			PBFrame.HPText:SetFont(db.hp.hpFont, db.hp.hpFontSize, 'THINOUTLINE')
-			PBFrame.HPText:SetShadowOffset(0, 0)
+			BPF.HPText:SetFont(db.hp.hpFont, db.hp.hpFontSize, 'THINOUTLINE')
+			BPF.HPText:SetShadowOffset(0, 0)
 		else
-			PBFrame.HPText:SetFont(db.hp.hpFont, db.hp.hpFontSize)
-			PBFrame.HPText:SetShadowOffset(1, -1)
+			BPF.HPText:SetFont(db.hp.hpFont, db.hp.hpFontSize)
+			BPF.HPText:SetShadowOffset(1, -1)
 		end
-		PBFrame.HPText:SetParent(PBFrame)
-		if (PBFrame.extraPoints) then
-			PBFrame.HPText:SetPoint('CENTER', 0, db.extraFontSize + db.hp.hpFontHeightAdjustment)
+		BPF.HPText:SetParent(BPF)
+		if (BPF.extraPoints) then
+			BPF.HPText:SetPoint('CENTER', 0, db.extraFontSize + db.hp.hpFontHeightAdjustment)
 		else
-			PBFrame.HPText:SetPoint('CENTER', 0, 0)
+			BPF.HPText:SetPoint('CENTER', 0, 0)
 		end
 
 	end
 
-	PBFrame.Power = CreateFrame('StatusBar', nil, UIParent)
-	PBFrame.Power:SetScale(PBFrame:GetScale())
-	PBFrame.Power:SetSize(db.sizeWidth, 8)
-	PBFrame.Power:SetPoint('CENTER', PBFrame, 0, -28)
-	PBFrame.Power:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
-	PBFrame.Power:SetAlpha(0)
+	BPF.Power = CreateFrame('StatusBar', nil, UIParent)
+	BPF.Power:SetScale(BPF:GetScale())
+	BPF.Power:SetSize(db.sizeWidth, 8)
+	BPF.Power:SetPoint('CENTER', BPF, 0, -28)
+	BPF.Power:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
+	BPF.Power:SetAlpha(0)
 
-	PBFrame.Power.Value = PBFrame.Power:CreateFontString(nil, 'ARTWORK')
+	BPF.Power.Value = BPF.Power:CreateFontString(nil, 'ARTWORK')
 
 	if (db.valueFontOutline) then
-		PBFrame.Power.Value:SetFont(db.valueFont, db.valueFontSize, 'THINOUTLINE')
-		PBFrame.Power.Value:SetShadowOffset(0, 0)
+		BPF.Power.Value:SetFont(db.valueFont, db.valueFontSize, 'THINOUTLINE')
+		BPF.Power.Value:SetShadowOffset(0, 0)
 	else
-		PBFrame.Power.Value:SetFont(db.valueFont, db.valueFontSize)
-		PBFrame.Power.Value:SetShadowOffset(1, -1)
+		BPF.Power.Value:SetFont(db.valueFont, db.valueFontSize)
+		BPF.Power.Value:SetShadowOffset(1, -1)
 	end
 
-	PBFrame.Power.Value:SetPoint('CENTER', PBFrame.Power, 0, db.valueFontAdjustmentX)
-	PBFrame.Power.Value:SetVertexColor(1, 1, 1)
+	BPF.Power.Value:SetPoint('CENTER', BPF.Power, 0, db.valueFontAdjustmentX)
+	BPF.Power.Value:SetVertexColor(1, 1, 1)
 
-	PBFrame.Power.Background = PBFrame.Power:CreateTexture(nil, 'BACKGROUND')
-	PBFrame.Power.Background:SetAllPoints(PBFrame.Power)
-	PBFrame.Power.Background:SetTexture([[Interface\DialogFrame\UI-DialogBox-Background]])
-	PBFrame.Power.Background:SetVertexColor(0.25, 0.25, 0.25, 1)
+	BPF.Power.Background = BPF.Power:CreateTexture(nil, 'BACKGROUND')
+	BPF.Power.Background:SetAllPoints(BPF.Power)
+	BPF.Power.Background:SetTexture([[Interface\DialogFrame\UI-DialogBox-Background]])
+	BPF.Power.Background:SetVertexColor(0.25, 0.25, 0.25, 1)
 
-	PBFrame.Power.Below = PBFrame.Power:CreateTexture(nil, 'BACKGROUND')
-	PBFrame.Power.Below:SetHeight(14)
-	PBFrame.Power.Below:SetWidth(14)
-	PBFrame.Power.Below:SetTexture([[Interface\AddOns\BasicUI\Media\textureArrowBelow]])
+	BPF.Power.Below = BPF.Power:CreateTexture(nil, 'BACKGROUND')
+	BPF.Power.Below:SetHeight(14)
+	BPF.Power.Below:SetWidth(14)
+	BPF.Power.Below:SetTexture([[Interface\AddOns\BasicUI\Media\textureArrowBelow]])
 
-	PBFrame.Power.Above = PBFrame.Power:CreateTexture(nil, 'BACKGROUND')
-	PBFrame.Power.Above:SetHeight(14)
-	PBFrame.Power.Above:SetWidth(14)
-	PBFrame.Power.Above:SetTexture([[Interface\AddOns\BasicUI\Media\textureArrowAbove]])
-	PBFrame.Power.Above:SetPoint('BOTTOM', PBFrame.Power.Below, 'TOP', 0, PBFrame.Power:GetHeight())
+	BPF.Power.Above = BPF.Power:CreateTexture(nil, 'BACKGROUND')
+	BPF.Power.Above:SetHeight(14)
+	BPF.Power.Above:SetWidth(14)
+	BPF.Power.Above:SetTexture([[Interface\AddOns\BasicUI\Media\textureArrowAbove]])
+	BPF.Power.Above:SetPoint('BOTTOM', BPF.Power.Below, 'TOP', 0, BPF.Power:GetHeight())
 
 	if (db.showCombatRegen) then
-		PBFrame.mpreg = PBFrame.Power:CreateFontString(nil, 'ARTWORK')
-		PBFrame.mpreg:SetFont(db.valueFont, 12, 'THINOUTLINE')
-		PBFrame.mpreg:SetShadowOffset(0, 0)
-		PBFrame.mpreg:SetPoint('TOP', PBFrame.Power.Below, 'BOTTOM', 0, 4)
-		PBFrame.mpreg:SetParent(PBFrame.Power)
-		PBFrame.mpreg:Show()
+		BPF.mpreg = BPF.Power:CreateFontString(nil, 'ARTWORK')
+		BPF.mpreg:SetFont(db.valueFont, 12, 'THINOUTLINE')
+		BPF.mpreg:SetShadowOffset(0, 0)
+		BPF.mpreg:SetPoint('TOP', BPF.Power.Below, 'BOTTOM', 0, 4)
+		BPF.mpreg:SetParent(BPF.Power)
+		BPF.mpreg:Show()
 	end
 
 	local function GetRealMpFive()
@@ -313,13 +313,15 @@ function MODULE:OnEnable()
 
 
 	local function CalcRuneCooldown(self)
+		local cooldown
 		local start, duration, runeReady = GetRuneCooldown(self)
-		local time = floor(GetTime() - start)
-		local cooldown = ceil(duration - time)
-
-		if (runeReady or UnitIsDeadOrGhost('player')) then
-			return '#'
-		elseif (not UnitIsDeadOrGhost('player') and cooldown) then
+		if start then
+			local time = floor(GetTime() - start)
+			cooldown = ceil(duration - time)
+		end     
+		if (runeReady or UnitIsDeadOrGhost("player")) then
+			return "#"
+		elseif (not UnitIsDeadOrGhost("player") and cooldown) then
 			return cooldown
 		end
 	end
@@ -339,7 +341,7 @@ function MODULE:OnEnable()
 			or (not db.showInsanity and powerType == 'INSANITY')
 			or (not db.showMaelstrom and powerType == 'MAELSTROM')
 			or UnitIsDeadOrGhost('player') or UnitHasVehicleUI('player')) then
-			PBFrame.Power:SetAlpha(0)
+			BPF.Power:SetAlpha(0)
 		elseif (InCombatLockdown()) then
 			newAlpha = db.activeAlpha
 		elseif (not InCombatLockdown() and UnitPower('player') > 0) then
@@ -349,32 +351,32 @@ function MODULE:OnEnable()
 		end
 
 		if (newAlpha) then
-			PowerFade(PBFrame.Power, 0.3, PBFrame.Power:GetAlpha(), newAlpha)
+			PowerFade(BPF.Power, 0.3, BPF.Power:GetAlpha(), newAlpha)
 		end
 	end
 
 	local function UpdateArrow()
 		if (UnitPower('player') == 0) then
-			PBFrame.Power.Below:SetAlpha(0.3)
-			PBFrame.Power.Above:SetAlpha(0.3)
+			BPF.Power.Below:SetAlpha(0.3)
+			BPF.Power.Above:SetAlpha(0.3)
 		else
-			PBFrame.Power.Below:SetAlpha(1)
-			PBFrame.Power.Above:SetAlpha(1)
+			BPF.Power.Below:SetAlpha(1)
+			BPF.Power.Above:SetAlpha(1)
 		end
 
-		local newPosition = UnitPower('player') / UnitPowerMax('player') * PBFrame.Power:GetWidth()
-		PBFrame.Power.Below:SetPoint('TOP', PBFrame.Power, 'BOTTOMLEFT', newPosition, 0)
+		local newPosition = UnitPower('player') / UnitPowerMax('player') * BPF.Power:GetWidth()
+		BPF.Power.Below:SetPoint('TOP', BPF.Power, 'BOTTOMLEFT', newPosition, 0)
 	end
 
 	local function UpdateBarValue()
 		local min = UnitPower('player')
-		PBFrame.Power:SetMinMaxValues(0, UnitPowerMax('player'))
-		PBFrame.Power:SetValue(min)
+		BPF.Power:SetMinMaxValues(0, UnitPowerMax('player'))
+		BPF.Power:SetValue(min)
 
 		if (db.valueAbbrev) then
-			PBFrame.Power.Value:SetText(min > 0 and FormatValue(min) or '')
+			BPF.Power.Value:SetText(min > 0 and FormatValue(min) or '')
 		else
-			PBFrame.Power.Value:SetText(min > 0 and min or '')
+			BPF.Power.Value:SetText(min > 0 and min or '')
 		end
 	end
 
@@ -384,12 +386,12 @@ function MODULE:OnEnable()
 
 		if (unitPower) then
 			if ( powerType == 0 ) then
-				PBFrame.Power:SetStatusBarColor(0,0.55,1)
+				BPF.Power:SetStatusBarColor(0,0.55,1)
 			else
-				PBFrame.Power:SetStatusBarColor(unitPower.r, unitPower.g, unitPower.b)
+				BPF.Power:SetStatusBarColor(unitPower.r, unitPower.g, unitPower.b)
 			end
 		else
-			PBFrame.Power:SetStatusBarColor(altR, altG, altB)
+			BPF.Power:SetStatusBarColor(altR, altG, altB)
 		end
 	end
 
@@ -399,11 +401,11 @@ function MODULE:OnEnable()
 		UpdateArrow()
 	end
 
-	PBFrame:SetScript('OnEvent', function(self, event, arg1)
-		if (PBFrame.extraPoints) then
+	BPF:SetScript('OnEvent', function(self, event, arg1)
+		if (BPF.extraPoints) then
 			if (UnitHasVehicleUI('player')) then
-				if (PBFrame.extraPoints:IsShown()) then
-					PBFrame.extraPoints:Hide()
+				if (BPF.extraPoints:IsShown()) then
+					BPF.extraPoints:Hide()
 				end
 			else
 				local nump
@@ -419,39 +421,39 @@ function MODULE:OnEnable()
 					nump = UnitPower('player', Enum.PowerType.ArcaneCharges)
 				end
 
-				PBFrame.extraPoints:SetTextColor(SetPowerColor())
-				PBFrame.extraPoints:SetText(nump == 0 and '' or nump)
+				BPF.extraPoints:SetTextColor(SetPowerColor())
+				BPF.extraPoints:SetText(nump == 0 and '' or nump)
 
-				if (not PBFrame.extraPoints:IsShown()) then
-					PBFrame.extraPoints:Show()
+				if (not BPF.extraPoints:IsShown()) then
+					BPF.extraPoints:Show()
 				end
 
 				-- move the hp text if no points
-				if (PBFrame.HPText) then
+				if (BPF.HPText) then
 					if (nump == 0) then
-						PBFrame.HPText:SetPoint('CENTER', 0, 0)
+						BPF.HPText:SetPoint('CENTER', 0, 0)
 					else
-						PBFrame.HPText:SetPoint('CENTER', 0, db.extraFontSize + db.hp.hpFontHeightAdjustment)
+						BPF.HPText:SetPoint('CENTER', 0, db.extraFontSize + db.hp.hpFontHeightAdjustment)
 					end
 				end
 			end
 		end
 
-		if (PBFrame.mpreg and (event == 'UNIT_AURA' or event == 'PLAYER_ENTERING_WORLD')) then
-			PBFrame.mpreg:SetText(GetRealMpFive())
+		if (BPF.mpreg and (event == 'UNIT_AURA' or event == 'PLAYER_ENTERING_WORLD')) then
+			BPF.mpreg:SetText(GetRealMpFive())
 		end
 
-		if (PBFrame.HPText) then
+		if (BPF.HPText) then
 			if (UnitHasVehicleUI('player')) then
-				if (PBFrame.HPText:IsShown()) then
-					PBFrame.HPText:Hide()
+				if (BPF.HPText:IsShown()) then
+					BPF.HPText:Hide()
 				end
 			else
-				PBFrame.HPText:SetTextColor(unpack(db.hp.hpFontColor))
-				PBFrame.HPText:SetText(GetHPPercentage())
+				BPF.HPText:SetTextColor(unpack(db.hp.hpFontColor))
+				BPF.HPText:SetText(GetHPPercentage())
 
-				if (not PBFrame.HPText:IsShown()) then
-					PBFrame.HPText:Show()
+				if (not BPF.HPText:IsShown()) then
+					BPF.HPText:Show()
 				end
 			end
 		end
@@ -461,40 +463,40 @@ function MODULE:OnEnable()
 
 		if (event == 'PLAYER_ENTERING_WORLD') then
 			if (InCombatLockdown()) then
-				securecall('UIFrameFadeIn', f, 0.35, PBFrame:GetAlpha(), 1)
+				securecall('UIFrameFadeIn', f, 0.35, BPF:GetAlpha(), 1)
 			else
-				securecall('UIFrameFadeOut', f, 0.35, PBFrame:GetAlpha(), db.inactiveAlpha)
+				securecall('UIFrameFadeOut', f, 0.35, BPF:GetAlpha(), db.inactiveAlpha)
 			end
 		end
 
 		if (event == 'PLAYER_REGEN_DISABLED') then
-			securecall('UIFrameFadeIn', f, 0.35, PBFrame:GetAlpha(), 1)
+			securecall('UIFrameFadeIn', f, 0.35, BPF:GetAlpha(), 1)
 		end
 
 		if (event == 'PLAYER_REGEN_ENABLED') then
-			securecall('UIFrameFadeOut', f, 0.35, PBFrame:GetAlpha(), db.inactiveAlpha)
+			securecall('UIFrameFadeOut', f, 0.35, BPF:GetAlpha(), db.inactiveAlpha)
 		end
 	end)
 
-	if (PBFrame.Rune) then
+	if (BPF.Rune) then
 		local updateTimer = 0
-		PBFrame:SetScript('OnUpdate', function(self, elapsed)
+		BPF:SetScript('OnUpdate', function(self, elapsed)
 			updateTimer = updateTimer + elapsed
 
 			if (updateTimer > 0.1) then
 				for i = 1, 6 do
 					if (UnitHasVehicleUI('player')) then
-						if (PBFrame.Rune[i]:IsShown()) then
-							PBFrame.Rune[i]:Hide()
+						if (BPF.Rune[i]:IsShown()) then
+							BPF.Rune[i]:Hide()
 						end
 					else
-						if (not PBFrame.Rune[i]:IsShown()) then
-							PBFrame.Rune[i]:Show()
+						if (not BPF.Rune[i]:IsShown()) then
+							BPF.Rune[i]:Show()
 						end
 					end
 
-					PBFrame.Rune[i]:SetText(CalcRuneCooldown(i))
-					PBFrame.Rune[i]:SetTextColor(0.0, 0.6, 0.8)
+					BPF.Rune[i]:SetText(CalcRuneCooldown(i))
+					BPF.Rune[i]:SetTextColor(0.0, 0.6, 0.8)
 				end
 
 				updateTimer = 0
