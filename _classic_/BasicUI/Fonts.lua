@@ -110,4 +110,4 @@ for i=1,20 do
 	-- function f:SetFont(...) error("Attempt to set font on ChannelButton"..i) end
 end]]
 
-for _,butt in pairs(PaperDollTitlesPane.buttons) do butt.text:SetFontObject(GameFontHighlightSmallLeft) end
+--for _,butt in pairs(PaperDollTitlesPane.buttons) do butt.text:SetFontObject(GameFontHighlightSmallLeft) end
