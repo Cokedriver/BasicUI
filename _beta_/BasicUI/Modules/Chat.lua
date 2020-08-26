@@ -167,7 +167,8 @@ function MODULE:OnEnable()
 	end
 
 		-- Modify the editbox
-
+	
+	Mixin(ChatFrame1EditBox, BackdropTemplateMixin)
 	ChatFrame1EditBox:SetAltArrowKeyMode(false)
 	ChatFrame1EditBox:ClearAllPoints()
 	ChatFrame1EditBox:SetPoint('BOTTOMLEFT', ChatFrame1, 'TOPLEFT', 2, 33)

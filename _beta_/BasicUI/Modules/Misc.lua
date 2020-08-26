@@ -467,67 +467,6 @@ function MODULE:Minimap()
 end
 
 ----------------------------------------------------------------------
--- Order Hall Resource In Tooltip from Neb
-----------------------------------------------------------------------
-function MODULE:OrderHall()
-	if db.orderhall ~= true then return end
-	-- Order Resources
-	local currencyId = C_Garrison.GetCurrencyTypes(LE_GARRISON_TYPE_7_0)
-
-	-- follower info is async and ephemeral, so cache it
-	local categoryInfo = {}
-	do
-		local frame = CreateFrame("Frame")
-		frame:SetScript("OnEvent", function(self, event)
-			if C_Garrison.GetLandingPageGarrisonType() ~= LE_GARRISON_TYPE_7_0 then return end
-
-			if event == "GARRISON_FOLLOWER_CATEGORIES_UPDATED" then
-				categoryInfo = C_Garrison.GetClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
-			else
-				C_Garrison.RequestClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
-			end
-		end)
-		frame:RegisterEvent("GARRISON_FOLLOWER_CATEGORIES_UPDATED")
-		frame:RegisterEvent("GARRISON_FOLLOWER_ADDED")
-		frame:RegisterEvent("GARRISON_FOLLOWER_REMOVED")
-		frame:RegisterEvent("GARRISON_TALENT_COMPLETE")
-		frame:RegisterEvent("GARRISON_TALENT_UPDATE")
-		frame:RegisterEvent("GARRISON_SHOW_LANDING_PAGE")
-	end
-
-	-- from LibLDBIcon-1.0
-	local function getAnchors(frame)
-		local x, y = frame:GetCenter()
-		if not x or not y then return "CENTER" end
-		local hhalf = (x > UIParent:GetWidth()*2/3) and "RIGHT" or (x < UIParent:GetWidth()/3) and "LEFT" or ""
-		local vhalf = (y > UIParent:GetHeight()/2) and "TOP" or "BOTTOM"
-		return vhalf..hhalf, frame, (vhalf == "TOP" and "BOTTOM" or "TOP")..hhalf
-	end
-
-	GarrisonLandingPageMinimapButton:HookScript("OnEnter", function(self)
-		if C_Garrison.GetLandingPageGarrisonType() ~= LE_GARRISON_TYPE_7_0 then return end
-
-		GameTooltip:SetOwner(self, "ANCHOR_NONE")
-		GameTooltip:SetPoint(getAnchors(self))
-		GameTooltip:SetText(self.title, 1, 1, 1)
-		GameTooltip:AddLine(self.description, nil, nil, nil, true)
-		GameTooltip:AddLine(" ")
-
-		local currency, amount, icon = GetCurrencyInfo(currencyId)
-		GameTooltip:AddDoubleLine(currency, ("%s |T%s:0:0:0:2:64:64:4:60:4:60|t"):format(BreakUpLargeNumbers(amount), icon), 1, 1, 1, 1, 1, 1)
-
-		if #categoryInfo > 0 then
-			GameTooltip:AddLine(" ")
-			for _, info in ipairs(categoryInfo) do
-				GameTooltip:AddDoubleLine(info.name, ("%d/%d |T%d:0|t"):format(info.count, info.limit, info.icon), 1, 1, 1, 1, 1, 1)
-			end
-		end
-
-		GameTooltip:Show()
-	end)
-end
-
-----------------------------------------------------------------------
 -- Rare Alert borrowed from
 ----------------------------------------------------------------------
 function MODULE:RareAlert()
@@ -588,7 +527,6 @@ function MODULE:OnEnable()
 	self:MassProspect()
 	self:Merchant()
 	self:Minimap()
-	self:OrderHall()
 	self:RareAlert()
 end
 

@@ -155,7 +155,7 @@ function MODULE:OnEnable()
 	--[[ Castbar Scaling ]]--
 	----------------------------------------------------------
 	-- Player Castbar
-	CastingBarFrame:SetScale(UnitScale)
+	CastingBarFrame:SetScale(db.UnitScale)
 	--CastingBarFrame:ClearAllPoints()
 	--CastingBarFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
 
@@ -232,19 +232,6 @@ end
 -- Leave this out if the module doesn't have any options:
 local options
 function MODULE:GetOptions()
-
-
-	local regions = {
-		['BOTTOM'] = L['Bottom'],
-		['BOTTOMLEFT'] = L['Bottom Left'],
-		['BOTTOMRIGHT'] = L['Bottom Right'],
-		['CENTER'] = L['Center'],
-		['LEFT'] = L['Left'],
-		['RIGHT'] = L['Right'],
-		['TOP'] = L['Top'],
-		['TOPLEFT'] = L['Top Left'],
-		['TOPRIGHT'] = L['Top Right'],
-	}
 
 	if options then
 		return options

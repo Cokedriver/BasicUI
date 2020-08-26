@@ -189,6 +189,7 @@ function MODULE:CreatePanels()
 	
 	-- Stat Panel 1 Settings
 	------------------------------------------------------------------------
+	Mixin(DataP1, BackdropTemplateMixin)
 	DataP1:SetPoint("BOTTOM", DataP2, "TOP", 0, 0)
 	DataP1:SetWidth(1200 / 3)
 	DataP1:SetBackdrop({ 
@@ -209,6 +210,7 @@ function MODULE:CreatePanels()
 	
 	-- Stat Panel 2 Settings
 	-----------------------------------------------------------------------
+	Mixin(DataP2, BackdropTemplateMixin)
 	DataP2:SetPoint("BOTTOM", DataP3, "TOP", 0, 0)
 	DataP2:SetWidth(1200 / 3)
 	DataP2:SetBackdrop({ 
@@ -218,6 +220,7 @@ function MODULE:CreatePanels()
 	
 	-- Stat Panel 3 Settings
 	-----------------------------------------------------------------------
+	Mixin(DataP3, BackdropTemplateMixin)
 	DataP3:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 15, 5)
 	DataP3:SetWidth(1200 / 3)
 	DataP3:SetBackdrop({ 
@@ -227,6 +230,7 @@ function MODULE:CreatePanels()
 	
 	-- Battleground Stat Panel Settings
 	-----------------------------------------------------------------------
+	Mixin(DataBGP, BackdropTemplateMixin)
 	DataBGP:SetAllPoints(DataP1)
 	DataBGP:SetBackdrop({ 
 		bgFile = [[Interface\DialogFrame\UI-DialogBox-Background-Dark]], 
@@ -1990,8 +1994,8 @@ function MODULE:CreateStats()
 			end
 			int = 2
 
-			-- disable script	
-			--self:SetScript('OnUpdate', nil)
+			--disable script	
+			self:SetScript('OnUpdate', nil)
 			
 		end
 

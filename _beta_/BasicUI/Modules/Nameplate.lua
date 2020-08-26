@@ -49,7 +49,7 @@ function MODULE:OnEnable()
 	-------------------------------------------------
 	-- Borrowerd from nPlates by Grimsbain
 	-------------------------------------------------
-	local nameplates = CreateFrame("Frame")
+	local BNF = CreateFrame("Frame") -- BNF = Basic Nameplate Frame
 
 	local len = string.len
 	local gsub = string.gsub
@@ -78,7 +78,7 @@ function MODULE:OnEnable()
 		Horde = "\124TInterface/PVPFrame/PVP-Currency-Horde:16\124t",
 	}
 
-	nameplates.PvPIcon = function(unit)
+	BNF.PvPIcon = function(unit)
 		if ( db.ShowPvP and UnitIsPlayer(unit) ) then
 			local isPVP = UnitIsPVP(unit)
 			local faction = UnitFactionGroup(unit)
@@ -91,14 +91,14 @@ function MODULE:OnEnable()
 
 		-- Check for "Larger Nameplates"
 
-	nameplates.IsUsingLargerNamePlateStyle = function()
+	BNF.IsUsingLargerNamePlateStyle = function()
 		local namePlateVerticalScale = tonumber(GetCVar("NamePlateVerticalScale"))
 		return namePlateVerticalScale > 1.0
 	end
 
 		-- Check if the frame is a nameplate.
 
-	nameplates.FrameIsNameplate = function(frame)
+	BNF.FrameIsNameplate = function(frame)
 		if ( string.match(frame.displayedUnit,"nameplate") ~= "nameplate") then
 			return false
 		else
@@ -108,7 +108,7 @@ function MODULE:OnEnable()
 
 		-- Checks to see if target has tank role.
 
-	nameplates.PlayerIsTank = function(target)
+	BNF.PlayerIsTank = function(target)
 		local assignedRole = UnitGroupRolesAssigned(target)
 
 		return assignedRole == "TANK"
@@ -116,7 +116,7 @@ function MODULE:OnEnable()
 
 		-- Abbreviate Function
 
-	nameplates.Abbrev = function(str,length)
+	BNF.Abbrev = function(str,length)
 		if ( str ~= nil and length ~= nil ) then
 			str = (len(str) > length) and gsub(str, "%s?(.[\128-\191]*)%S+%s", "%1. ") or str
 			return str
@@ -126,7 +126,7 @@ function MODULE:OnEnable()
 
 		-- RBG to Hex Colors
 
-	nameplates.RGBHex = function(r, g, b)
+	BNF.RGBHex = function(r, g, b)
 		if ( type(r) == "table" ) then
 			if ( r.r ) then
 				r, g, b = r.r, r.g, r.b
@@ -140,9 +140,9 @@ function MODULE:OnEnable()
 
 	-- Off Tank Color Checks
 
-	nameplates.UseOffTankColor = function(target)
+	BNF.UseOffTankColor = function(target)
 		if ( db.UseOffTankColor and (UnitPlayerOrPetInRaid(target) or UnitPlayerOrPetInParty(target)) ) then
-			if ( not UnitIsUnit("player",target) and nameplates.PlayerIsTank(target) and nameplates.PlayerIsTank("player") ) then
+			if ( not UnitIsUnit("player",target) and BNF.PlayerIsTank(target) and BNF.PlayerIsTank("player") ) then
 				return true
 			end
 		end
@@ -183,8 +183,8 @@ function MODULE:OnEnable()
 		[TotemName(210660)] = [[Interface\Icons\spell_nature_invisibilitytotem]],   -- Tailwind Totem
 	}
 
-	nameplates.UpdateTotemIcon = function(frame)
-		if ( not nameplates.FrameIsNameplate(frame) ) then return end
+	BNF.UpdateTotemIcon = function(frame)
+		if ( not BNF.FrameIsNameplate(frame) ) then return end
 
 		local name = UnitName(frame.displayedUnit)
 
@@ -250,12 +250,12 @@ function MODULE:OnEnable()
 	-- Update Name
 	-----------------
 	hooksecurefunc("CompactUnitFrame_UpdateName", function(frame)
-		if ( not nameplates.FrameIsNameplate(frame) ) then return end
+		if ( not BNF.FrameIsNameplate(frame) ) then return end
 
 			-- Totem Icon
 
 		if ( db.ShowTotemIcon ) then
-			nameplates.UpdateTotemIcon(frame)
+			BNF.UpdateTotemIcon(frame)
 		end
 
 			-- Hide Friendly Nameplates
@@ -272,7 +272,7 @@ function MODULE:OnEnable()
 
 				-- PvP Icon
 
-			local pvpIcon = nameplates.PvPIcon(frame.displayedUnit)
+			local pvpIcon = BNF.PvPIcon(frame.displayedUnit)
 
 				-- Class Color Names
 
@@ -289,7 +289,7 @@ function MODULE:OnEnable()
 				name = name.." - "..realm
 			end
 			if ( db.AbrrevLongNames ) then
-				newName = nameplates.Abbrev(newName,20)
+				newName = BNF.Abbrev(newName,20)
 			end
 
 				-- Level
@@ -298,7 +298,7 @@ function MODULE:OnEnable()
 				local playerLevel = UnitLevel("player")
 				local targetLevel = UnitLevel(frame.displayedUnit)
 				local difficultyColor = GetRelativeDifficultyColor(playerLevel, targetLevel)
-				local levelColor = nameplates.RGBHex(difficultyColor.r, difficultyColor.g, difficultyColor.b)
+				local levelColor = BNF.RGBHex(difficultyColor.r, difficultyColor.g, difficultyColor.b)
 
 				if ( targetLevel == -1 ) then
 					frame.name:SetText(pvpIcon..newName)
@@ -321,7 +321,7 @@ function MODULE:OnEnable()
 					end
 				else
 					local target = frame.displayedUnit.."target"
-					if ( nameplates.UseOffTankColor(target) ) then
+					if ( BNF.UseOffTankColor(target) ) then
 						frame.name:SetTextColor(db.OffTankColor.r, db.OffTankColor.g, db.OffTankColor.b)
 					end
 				end
@@ -332,7 +332,7 @@ function MODULE:OnEnable()
 		-- Updated Health Text
 
 	hooksecurefunc("CompactUnitFrame_UpdateStatusText", function(frame)
-		if ( not nameplates.FrameIsNameplate(frame) ) then return end
+		if ( not BNF.FrameIsNameplate(frame) ) then return end
 
 		local font = select(1,frame.name:GetFont())
 		local hexa = ("|cff%.2x%.2x%.2x"):format(255, 255, 51)
