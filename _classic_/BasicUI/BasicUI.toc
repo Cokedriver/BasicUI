@@ -1,4 +1,4 @@
-## Interface: 11304
+## Interface: 11305
 ## Title:|cff00B4FFBasic|rUI
 ## Author: SiDuB 
 ## Version: 1.0.1
@@ -23,7 +23,6 @@ Libs\AceConfig-3.0\AceConfig-3.0.xml
 Libs\AceComm-3.0\AceComm-3.0.xml
 Libs\AceTab-3.0\AceTab-3.0.xml
 Libs\AceSerializer-3.0\AceSerializer-3.0.xml
-Libs\tekShiner.lua
 #@end-no-lib-strip@
 
 Fonts.lua
