@@ -1,0 +1,24 @@
+## Interface: 80300
+## Title:|cff00B4FFBasic|rUI
+## Author: SiDuB 
+## Version: 8.3.0
+## Notes: SiDuB's Version of a Basic UserIterface.
+## SavedVariables: BasicDB
+## SavedVariablesPerCharacter: BasicDBPerCharacter
+## URL: http://www.wowinterface.com/downloads/info20966-BasicUI.html
+## OptionalDeps: Blizzard_TradeSkillUI
+
+Libs\Libs.xml
+
+Fonts.lua
+BasicUI.Lua
+
+Modules\Actionbar.lua
+Modules\Buff.lua
+Modules\Chat.lua
+Modules\Datapanel.lua
+Modules\Misc.lua
+Modules\Nameplate.lua
+Modules\Powerbar.lua
+Modules\Tooltip.lua
+Modules\Unitframe.lua
