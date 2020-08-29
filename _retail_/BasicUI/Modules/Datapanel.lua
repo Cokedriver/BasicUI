@@ -1991,7 +1991,7 @@ function MODULE:CreateStats()
 			int = 2
 
 			--disable script	
-			self:SetScript('OnUpdate', nil)
+			--self:SetScript('OnUpdate', nil)
 			
 		end
 
@@ -2055,7 +2055,6 @@ function MODULE:CreateStats()
 	if db.stats then
 
 		local statsPlugin = CreateFrame('Frame', nil, Datapanel)
-		statsPlugin:RegisterEvent("PLAYER_ENTERING_WORLD")
 		statsPlugin:SetFrameStrata("BACKGROUND")
 		statsPlugin:SetFrameLevel(3)
 		statsPlugin:EnableMouse(true)
@@ -2187,8 +2186,8 @@ function MODULE:CreateStats()
 			Text:SetFormattedText(displayNumberString, hexa.."AP: "..hexb, pwr)      
 			--Setup Tooltip
 			self:SetAllPoints(Text)
-		end
-
+		end	
+		
 		-- initial delay for update (let the ui load)
 		local int = 5	
 		local function Update(self, t)
@@ -2207,9 +2206,10 @@ function MODULE:CreateStats()
 			end
 			int = 2
 		end
-
+		statsPlugin:RegisterEvent("PLAYER_ENTERING_WORLD")
 		statsPlugin:SetScript("OnEnter", function() ShowTooltip(statsPlugin) end)
 		statsPlugin:SetScript("OnLeave", function() GameTooltip:Hide() end)
+		statsPlugin:SetScript('OnEvent', OnEvent)
 		statsPlugin:SetScript("OnUpdate", Update)
 		Update(statsPlugin, 10)
 	end
@@ -2363,23 +2363,24 @@ end
 function MODULE:OnInitialize()
 	self.db = BasicUI.db:RegisterNamespace(MODULE_NAME, defaults)
 	db = self.db.profile	
+	
+	if not db.enable then return end
 
 	local _, class = UnitClass("player")
 	classColor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
 
 	self:SetEnabledState(BasicUI:GetModuleEnabled(MODULE_NAME))
+	
+	self:CreatePanels(); -- factor this giant blob out into its own function to keep things clean
+	self:CreateStats()
+	self:SetBattlegroundPanel();
 end
 
 
 function MODULE:OnEnable()
-	-- This line should not be needed if you're using modules correctly:
-	if not db.enable then return end
-
-	if db.enable then -- How is this different than "enable" ? If the panel is not enabled, what's the point of doing anything else?
-		self:CreatePanels(); -- factor this giant blob out into its own function to keep things clean
-		self:SetBattlegroundPanel();
-		self:Refresh()
-	end
+	self:UpdatePlayerRole();
+	self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", "UpdatePlayerRole");	
+	self:Refresh()
 end
 
 function MODULE:Refresh()
@@ -2387,8 +2388,7 @@ function MODULE:Refresh()
 		return self:RegisterEvent("PLAYER_REGEN_ENABLED", "OnEnable")
 	end
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
-	self:UpdatePlayerRole()	
-	self:CreateStats()
+
 end
 
 function MODULE:SetFontString(parent, file, size, flags)
