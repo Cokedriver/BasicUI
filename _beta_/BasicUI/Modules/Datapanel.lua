@@ -1197,7 +1197,7 @@ function MODULE:CreateStats()
 		friendsPlugin:SetScript("OnEvent", function(self, event, ...)
 
 			local BNTotal = BNGetNumFriends()
-			local Total = GetNumFriends()
+			local Total = C_FriendList.GetNumFriends()
 
 			if BNTotal == #BNTable then
 				UpdateBNTable(BNTotal)

@@ -189,7 +189,7 @@ if db.coords ~= true then return end
 
 			if mx then
 				if mx >= 0 and my >= 0 and mx <= 1 and my <= 1 then
-					self.Mouse:SetText(MOUSE_LABEL..format(': %.0f x %.0f', mx * 100, my * 100))
+					self.Mouse:SetText(" Mouse"..format(': %.0f x %.0f', mx * 100, my * 100))
 				else
 					self.Mouse:SetText("")
 				end
