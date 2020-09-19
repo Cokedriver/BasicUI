@@ -34,9 +34,9 @@ local defaults = {
 		coords 			= "P0",		-- show your current coords on panel.
 		pro 			= "P7",		-- shows your professions and tradeskills
 		stats 			= "P3",		-- Stat Based on your Role (Avoidance-Tank, AP-Melee, SP/HP-Caster)
-		recount 		= "P2",		-- Stat Based on Recount"s DPS	
+		--recount 		= "P2",		-- Stat Based on Recount"s DPS	
 		calltoarms 		= "P0",		-- Show Current Call to Arms.
-		dps				= "P0",		-- Show total dps.	
+		dps				= "P2",		-- Show total dps.	
 	}
 }
 
@@ -469,7 +469,7 @@ function MODULE:CreateStats()
 	--------
 
 	if db.bags then
-		local bagsPlugin = CreateFrame('Frame', nil, Datapanel)
+		local bagsPlugin = CreateFrame('Frame')
 		bagsPlugin:EnableMouse(true)
 		bagsPlugin:SetFrameStrata('BACKGROUND')
 		bagsPlugin:SetFrameLevel(3)
@@ -661,7 +661,7 @@ function MODULE:CreateStats()
 	-- Call To Arms
 	----------------
 	if db.calltoarms then
-		local ctaPlugin = CreateFrame('Frame', nil, Datapanel)
+		local ctaPlugin = CreateFrame('Frame')
 		ctaPlugin:EnableMouse(true)
 		ctaPlugin:SetFrameStrata("MEDIUM")
 		ctaPlugin:SetFrameLevel(3)
@@ -771,10 +771,10 @@ function MODULE:CreateStats()
 		ctaPlugin:RegisterEvent("LFG_UPDATE_RANDOM_INFO")
 		ctaPlugin:RegisterEvent("PLAYER_LOGIN")
 		ctaPlugin:SetScript("OnEvent", OnEvent)
-		ctaPlugin:SetScript("OnMouseDown", function(self, btn)
-			if btn == "LeftButton" then
+		ctaPlugin:SetScript("OnMouseDown", function(self, button)
+			if button == "LeftButton" then
 				ToggleLFDParentFrame(1)
-			elseif btn == "RightButton" then
+			elseif button == "RightButton" then
 				TogglePVPUI(1)
 			end
 		end)		
@@ -786,7 +786,7 @@ function MODULE:CreateStats()
 	-- Damage Per Second
 	---------------------
 	if db.dps then
-		local dpsPlugin = CreateFrame('Frame', nil, Datapanel)
+		local dpsPlugin = CreateFrame('Frame')
 		dpsPlugin:EnableMouse(true)
 		dpsPlugin:SetFrameStrata('BACKGROUND')
 		dpsPlugin:SetFrameLevel(3)
@@ -898,7 +898,7 @@ function MODULE:CreateStats()
 		}
 
 
-		local durPlugin = CreateFrame('Frame', nil, Datapanel)
+		local durPlugin = CreateFrame('Frame')
 		durPlugin:EnableMouse(true)
 		durPlugin:SetFrameStrata("MEDIUM")
 		durPlugin:SetFrameLevel(3)
@@ -935,10 +935,10 @@ function MODULE:CreateStats()
 		durPlugin:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
 		durPlugin:RegisterEvent("MERCHANT_SHOW")
 		durPlugin:RegisterEvent("PLAYER_ENTERING_WORLD")
-		durPlugin:SetScript("OnMouseDown",function(self,btn)
-			if btn == "LeftButton" then
+		durPlugin:SetScript("OnMouseDown",function(self,button)
+			if button == "LeftButton" then
 				ToggleCharacter("PaperDollFrame")
-			elseif btn == "RightButton" then
+			elseif button == "RightButton" then
 				if not IsShiftKeyDown() then
 					CastSpellByName("Traveler's Tundra Mammoth")
 				else
@@ -1085,7 +1085,7 @@ function MODULE:CreateStats()
 		end
 	end
 
-	local friendsPlugin = CreateFrame('Frame', nil, Datapanel)
+	local friendsPlugin = CreateFrame('Frame')
 	friendsPlugin:EnableMouse(true)
 	friendsPlugin:SetFrameStrata("MEDIUM")
 	friendsPlugin:SetFrameLevel(3)
@@ -1205,11 +1205,11 @@ function MODULE:CreateStats()
 			self:SetAllPoints(Text)
 		end)
 
-		friendsPlugin:SetScript("OnMouseDown", function(self, btn)
+		friendsPlugin:SetScript("OnMouseDown", function(self, button)
 		
 			GameTooltip:Hide()
 			
-			if btn == "RightButton" then
+			if button == "RightButton" then
 
 			if not BNConnected() then
 				return
@@ -1426,7 +1426,7 @@ function MODULE:CreateStats()
 	---------
 	if db.guild then
 
-		local guildPlugin = CreateFrame('Frame', nil, Datapanel)
+		local guildPlugin = CreateFrame('Frame')
 		guildPlugin:EnableMouse(true)
 		guildPlugin:SetFrameStrata("MEDIUM")
 		guildPlugin:SetFrameLevel(3)
@@ -1591,8 +1591,8 @@ function MODULE:CreateStats()
 			end
 		end
 
-		guildPlugin:SetScript("OnMouseUp", function(self, btn)
-			if btn ~= "RightButton" or not IsInGuild() then return end
+		guildPlugin:SetScript("OnMouseDown", function(self, button)
+			if button ~= "RightButton" or not IsInGuild() then return end
 			
 			GameTooltip:Hide()
 
@@ -1694,8 +1694,8 @@ function MODULE:CreateStats()
 		end)
 
 		guildPlugin:SetScript("OnLeave", function() GameTooltip:Hide() end)
-		guildPlugin:SetScript("OnMouseDown", function(self, btn)
-			if btn ~= "LeftButton" then return end
+		guildPlugin:SetScript("OnMouseDown", function(self, button)
+			if button ~= "LeftButton" then return end
 			ToggleGuildFrame()
 		end)
 
@@ -1711,12 +1711,10 @@ function MODULE:CreateStats()
 	---------------
 	if db.pro then
 
-		local proPlugin = CreateFrame('Button', nil, Datapanel)
-		proPlugin:RegisterEvent('PLAYER_ENTERING_WORLD')
+		local proPlugin = CreateFrame('Frame')
 		proPlugin:SetFrameStrata('BACKGROUND')
 		proPlugin:SetFrameLevel(3)
 		proPlugin:EnableMouse(true)
-		proPlugin.tooltip = false
 
 		local Text = proPlugin:CreateFontString(nil, 'OVERLAY')
 		Text:SetFont(db.font, db.fontSize,'THINOUTLINE')
@@ -1736,8 +1734,8 @@ function MODULE:CreateStats()
 			for i = 1, select("#", GetProfessions()) do
 				local v = select(i, GetProfessions());
 				if v ~= nil then
-					local name, texture, rank, maxRank = GetProfessionInfo(v)
-					GameTooltip:AddDoubleLine(name, rank..' / '..maxRank,.75,.9,1,.3,1,.3)
+					local name, icon, skillLevel, maxSkillLevel, numAbilities, spelloffset, skillLine, skillModifier, specializationIndex, specializationOffset = GetProfessionInfo(v)
+					GameTooltip:AddDoubleLine(name, skillLevel..' / '..maxSkillLevel,.75,.9,1,.3,1,.3)
 				end
 			end
 			GameTooltip:AddLine' '
@@ -1749,43 +1747,26 @@ function MODULE:CreateStats()
 		end)
 
 
-		proPlugin:SetScript("OnClick",function(self,btn)
-			local prof1, prof2 = GetProfessions()
-			if btn == "LeftButton" then
-				if prof1 then
-					if(GetProfessionInfo(prof1) == ('Skinning')) then
-						CastSpellByName("Skinning Skills")
-					elseif(GetProfessionInfo(prof1) == ('Mining')) then
-						CastSpellByName("Mining Skills")
-					elseif(GetProfessionInfo(prof1) == ('Herbalism')) then
-						CastSpellByName("Herbalism Skills")					
-					else	
-						CastSpellByName((GetProfessionInfo(prof1)))
-					end
+		proPlugin:SetScript("OnMouseDown", function(self, button)
+			local prof1, prof2, _, _, _ = GetProfessions()
+			if button == "LeftButton" then
+				if prof1 then	
+					CastSpellByName((GetProfessionInfo(prof1)))
 				else
 					print('|cff33ff99BasicUI:|r |cffFF0000No Profession Found!|r')
 				end
-			elseif btn == 'MiddleButton' then
+			elseif button == 'MiddleButton' then
 				ToggleSpellBook(BOOKTYPE_PROFESSION)	
-			elseif btn == "RightButton" then
+			elseif button == "RightButton" then
 				if prof2 then
-					if(GetProfessionInfo(prof2) == ('Skinning')) then
-						CastSpellByName("Skinning Skills")
-					elseif(GetProfessionInfo(prof2) == ('Mining')) then
-						CastSpellByName("Mining Skills")
-					elseif(GetProfessionInfo(prof2) == ('Herbalism')) then
-						CastSpellByName("Herbalism Skills")						
-					else
-						CastSpellByName((GetProfessionInfo(prof2)))
-					end
+					CastSpellByName((GetProfessionInfo(prof2)))
 				else
 					print('|cff33ff99BasicUI:|r |cffFF0000No Profession Found!|r')
 				end
 			end
 		end)
-
-
-		proPlugin:RegisterForClicks("AnyUp")
+		
+		proPlugin:RegisterEvent('PLAYER_ENTERING_WORLD')
 		proPlugin:SetScript('OnUpdate', Update)
 		proPlugin:SetScript('OnLeave', function() GameTooltip:Hide() end)
 	end
@@ -1813,7 +1794,7 @@ function MODULE:CreateStats()
 		end
 
 		
-		local recountPlugin = CreateFrame('Frame', nil, Datapanel)
+		local recountPlugin = CreateFrame('Frame')
 		recountPlugin:EnableMouse(true)
 		recountPlugin:SetFrameStrata("MEDIUM")
 		recountPlugin:SetFrameLevel(3)
@@ -1918,7 +1899,7 @@ function MODULE:CreateStats()
 			end
 			GameTooltip:Show()
 		end)
-		recountPlugin:SetScript("OnMouseUp", function(self, button)
+		recountPlugin:SetScript("OnMouseDown", function(self, button)
 			if button == "RightButton" then
 				if not IsShiftKeyDown() then
 					Recount:ShowReset()
@@ -1951,7 +1932,7 @@ function MODULE:CreateStats()
 	--------------------
 	if db.spec then
 
-		local specPlugin = CreateFrame('Frame', nil, Datapanel)
+		local specPlugin = CreateFrame('Frame')
 		specPlugin:EnableMouse(true)
 		specPlugin:SetFrameStrata('BACKGROUND')
 		specPlugin:SetFrameLevel(3)
@@ -2054,7 +2035,7 @@ function MODULE:CreateStats()
 	-----------------
 	if db.stats then
 
-		local statsPlugin = CreateFrame('Frame', nil, Datapanel)
+		local statsPlugin = CreateFrame('Frame')
 		statsPlugin:SetFrameStrata("BACKGROUND")
 		statsPlugin:SetFrameLevel(3)
 		statsPlugin:EnableMouse(true)
@@ -2219,7 +2200,7 @@ function MODULE:CreateStats()
 	-------------------
 	if db.system then
 
-		local systemPlugin = CreateFrame('Frame', nil, Datapanel)
+		local systemPlugin = CreateFrame('Frame')
 		systemPlugin:RegisterEvent("PLAYER_ENTERING_WORLD")
 		systemPlugin:SetFrameStrata("BACKGROUND")
 		systemPlugin:SetFrameLevel(3)
@@ -2372,7 +2353,6 @@ function MODULE:OnInitialize()
 	self:SetEnabledState(BasicUI:GetModuleEnabled(MODULE_NAME))
 	
 	self:CreatePanels(); -- factor this giant blob out into its own function to keep things clean
-	self:CreateStats()
 	self:SetBattlegroundPanel();
 end
 
@@ -2380,6 +2360,7 @@ end
 function MODULE:OnEnable()
 	self:UpdatePlayerRole();
 	self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", "UpdatePlayerRole");	
+	self:CreateStats()
 	self:Refresh()
 end
 
@@ -2389,12 +2370,6 @@ function MODULE:Refresh()
 	end
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 
-end
-
-function MODULE:SetFontString(parent, file, size, flags)
-	local fs = parent:CreateFontString(nil, "OVERLAY")
-	fs:SetFont(file, size, flags)
-	return fs
 end
 
 
