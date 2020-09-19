@@ -27,4 +27,4 @@ Cokedriver
 I would just like to thank all those who created the addons I have used to create this UI.
 
 ### Special Thanks goes to:
-Phanx - WoWInterface, Neal - NeavUI, Tuks and Programers - Tukui, Nightcracker - ncQuest and all the others.
+Neal - NeavUI, Tuks and Programmer's - Tukui, Elv - ElvUI, Phanx - WoWInterface, Treeston over at MMO-Champion for codeing help and all the others.
