@@ -1157,9 +1157,10 @@ function MODULE:CreateStats()
 			wipe(BNTable)
 
 			for i = 1, total do
-				local accountInfo = C_BattleNet.GetFriendAccountInfo(i)
-				if accountInfo then
-					local class = accountInfo.gameAccountInfo.className
+				local presenceID, presenceName, battleTag, isBattleTagPresence, toonName, toonID, client, isOnline, lastOnline, isAFK, isDND, messageText, noteText, isRIDFriend, messageTime, canSoR = BNGetFriendInfo(i)
+
+				if (toonID or presenceID) then
+					local hasFocus, _, _, realmName, realmID, faction, race, class, guild, zoneName, level, gameText, broadcastText, broadcastTime, canSoR, toonID, bnetIDAccount, isGameAFK, isGameBusy, guid, wowProjectID, mobile = BNGetGameAccountInfo(toonID or presenceID)
 
 					for k,v in pairs(LOCALIZED_CLASS_NAMES_MALE) do
 						if class == v then
@@ -1167,9 +1168,9 @@ function MODULE:CreateStats()
 						end
 					end
 
-					BNTable[i] = { accountInfo.bnetAccountID, accountInfo.accountName, accountInfo.battleTag, accountInfo.gameAccountInfo.characterName, accountInfo.gameAccountInfo.gameAccountID, accountInfo.gameAccountInfo.clientProgram, accountInfo.gameAccountInfo.isOnline, accountInfo.isAFK, accountInfo.isDND, accountInfo.note, accountInfo.gameAccountInfo.realmName, accountInfo.gameAccountInfo.factionName, accountInfo.gameAccountInfo.raceName, class, accountInfo.gameAccountInfo.areaName, accountInfo.gameAccountInfo.characterLevel }
+					BNTable[i] = { presenceID, presenceName, battleTag, toonName, toonID, client, isOnline, isAFK, isDND, noteText, realmName, faction, race, class, zoneName, level, isBattleTagPresence, wowProjectID}
 
-					if accountInfo.gameAccountInfo.isOnline then
+					if isOnline then
 						BNTotalOnline = BNTotalOnline + 1
 					end
 				end
@@ -1180,7 +1181,7 @@ function MODULE:CreateStats()
 		friendsPlugin:SetScript("OnEvent", function(self, event, ...)
 
 			local BNTotal = BNGetNumFriends()
-			local Total = GetNumFriends()
+			local Total = C_FriendList.GetNumFriends()
 
 			if BNTotal == #BNTable then
 				UpdateBNTable(BNTotal)
