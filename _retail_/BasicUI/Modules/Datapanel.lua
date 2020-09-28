@@ -34,9 +34,9 @@ local defaults = {
 		coords 			= "P0",		-- show your current coords on panel.
 		pro 			= "P7",		-- shows your professions and tradeskills
 		stats 			= "P3",		-- Stat Based on your Role (Avoidance-Tank, AP-Melee, SP/HP-Caster)
-		--recount 		= "P2",		-- Stat Based on Recount"s DPS	
+		recount 		= "P2",		-- Stat Based on Recount"s DPS	
 		calltoarms 		= "P0",		-- Show Current Call to Arms.
-		dps				= "P2",		-- Show total dps.	
+		dps				= "P0",		-- Show total dps.	
 	}
 }
 
@@ -1819,7 +1819,7 @@ function MODULE:CreateStats()
 				recountPlugin:UnregisterEvent("PLAYER_LOGIN")
 				
 			elseif event == "PLAYER_ENTERING_WORLD" then
-				self.updateDPS()
+				--self.updateDPS()
 				recountPlugin:UnregisterEvent("PLAYER_ENTERING_WORLD")
 			end
 		end
