@@ -16,10 +16,8 @@ local defaults = {
 		coords = true,
 		ilvlchange = true,
 		hdt = true,
-		massprospect = true,
 		merchant = true,
 		minimap = true,
-		orderhall = true,
 		rarealert = true,
 	}
 }
@@ -203,26 +201,30 @@ end
 ----------------------------------------------------------------------
 -- Item Level Change by 
 ----------------------------------------------------------------------
-local ilvl = -1
+function MODULE:ItemLevelChange()
 
-local f = CreateFrame("Frame")
-f:RegisterEvent("PLAYER_LOGIN")
-f:RegisterEvent("PLAYER_AVG_ITEM_LEVEL_UPDATE")
-f:SetScript("OnEvent", function()
-	local total, equipped = GetAverageItemLevel()
-	total = math.floor(total)
-	if total == ilvl then
-		return
-	end
-	local color = ChatTypeInfo["SYSTEM"]
-	if total > ilvl then
-		DEFAULT_CHAT_FRAME:AddMessage("|cff00B4FFBasic|r|cff33ff99UI:|r Your average item level is now |cff99ff99" .. total .. "|r, up from " .. ilvl, color.r, color.g, color.b)
-	else
-		DEFAULT_CHAT_FRAME:AddMessage("|cff00B4FFBasic|r|cff33ff99UI:|r Your average item level is now |cffff9999" .. total .. "|r, down from " .. ilvl, color.r, color.g, color.b)
-	end
-	ilvl = total
-end)
+	if db.ilvlchange ~= true then return end
+	
+	local ilvl = -1
 
+	local f = CreateFrame("Frame")
+	f:RegisterEvent("PLAYER_LOGIN")
+	f:RegisterEvent("PLAYER_AVG_ITEM_LEVEL_UPDATE")
+	f:SetScript("OnEvent", function()
+		local total, equipped = GetAverageItemLevel()
+		total = math.floor(total)
+		if total == ilvl then
+			return
+		end
+		local color = ChatTypeInfo["SYSTEM"]
+		if total > ilvl then
+			DEFAULT_CHAT_FRAME:AddMessage("|cff00B4FFBasic|r|cff33ff99UI:|r Your average item level is now |cff99ff99" .. total .. "|r, up from " .. ilvl, color.r, color.g, color.b)
+		else
+			DEFAULT_CHAT_FRAME:AddMessage("|cff00B4FFBasic|r|cff33ff99UI:|r Your average item level is now |cffff9999" .. total .. "|r, down from " .. ilvl, color.r, color.g, color.b)
+		end
+		ilvl = total
+	end)
+end
 ----------------------------------------------------------------------
 -- borrowed from Leatrix.Plus
 ----------------------------------------------------------------------
@@ -233,88 +235,6 @@ function MODULE:HideDamageText()
 	hooksecurefunc(PlayerHitIndicator, "Show", PlayerHitIndicator.Hide)
 	hooksecurefunc(PetHitIndicator, "Show", PetHitIndicator.Hide)
 	
-end
-
-----------------------------------------------------------------------
--- Mass Prospect by Kaemin
-----------------------------------------------------------------------
-function MODULE:MassProspect()
-	if db.massprospect ~= true then return end
-	SLASH_MassProspect1 = '/mp';
-
-	-- by Kaemin
-
-	function SlashCmdList.MassProspect(msg, editbox)
-		if msg == nil or msg == "" or msg == "menu" or msg == "options" or msg == "?" or msg == "help" then
-			MassProspect_Define();
-		end
-		if msg == "reset" then
-			DeleteMacro("MassProspect");
-			BasicDBPerCharacter = false;
-	--		MassProspect_Define();
-		end
-	end
-
-	function MassProspect_Define()
-		local prof1, prof2, archaeology, fishing, cooking, firstAid = GetProfessions();
-		local name, icon, skillLevel, maxSkillLevel, numAbilities, spelloffset, skillLine, skillModifier, specializationIndex, specializationOffset = GetProfessionInfo(prof1);
-		local aname, aicon, askillLevel, amaxSkillLevel, anumAbilities, aspelloffset, askillLine, askillModifier, aspecializationIndex, aspecializationOffset = GetProfessionInfo(prof2);
-		if aname=="Jewelcrafting" then name=aname end
-		if name == "Jewelcrafting" then
-			SPProfCheck = "true";
-			MPMacroString = "/run local f,l,n=MPB or CreateFrame(".."\"".."Button".."\""..",".."\"".."MPB".."\""..",nil,".."\"".."SecureActionButtonTemplate".."\""..") f:SetAttribute(".."\"".."type".."\""..",".."\"".."macro".."\""..") l,n=MassProspect_Ore() if l then f:SetAttribute(".."\"".."macrotext".."\""..",".."\"".."/cast Prospecting\\n/use ".."\"".."..l) SetMacroItem(".."\"".."MassProspect".."\""..",n) end\n/click MPB"
-			if BasicDBPerCharacter == false then
-				local index = CreateMacro("MassProspect", "Inv_misc_gem_bloodgem_01", MPMacroString, 1);
-				BasicDBPerCharacter = true;
-			else
-			local newIndex = EditMacro("MassProspect", "MassProspect", "Inv_misc_gem_bloodgem_01", MPMacroString);
-			end
-		else
-			SPProfCheck = "false";
-			DEFAULT_CHAT_FRAME:AddMessage("|cff00B4FFBasic|r|cff33ff99UI:|r|cffffff00 You are |r|cffff0000NOT|r |cffffff00a jewelcrafter! Please disable Mass Prospect for this character.|r");
-		end
-	end
-
-	function MassProspect_Ore()
-		OreInBags = 0;
-		for i=0,4 do 
-			for j=1,GetContainerNumSlots(i) do local t={GetItemInfo(GetContainerItemLink(i,j) or 0)}
-				if t[7]=="Metal & Stone" and select(2,GetContainerItemInfo(i,j))>=5 then
-					OreInBags = OreInBags + 1;
-					return i.." "..j,t[1]
-				end 
-			end 
-		end
-		if OreInBags == 0 and SPProfCheck == "true" then
-			DEFAULT_CHAT_FRAME:AddMessage("|cff00B4FFBasic|r|cff33ff99UI:|rr|cffffff00 There is |r|cffff0000NOT ENOUGH|r |cffffff00ore in your bags!|r");
-		end
-	end
-
-	function MassProspect_OnLoad()
-		local fframe = CreateFrame("Frame")
-			fframe:RegisterEvent("ADDON_LOADED");
-			fframe:SetScript("OnEvent", function(self, event, arg1)
-			if event == "ADDON_LOADED" and arg1 == "_addon" then
-				local prof1, prof2, archaeology, fishing, cooking, firstAid = GetProfessions();
-				local name, icon, skillLevel, maxSkillLevel, numAbilities, spelloffset, skillLine, skillModifier, specializationIndex, specializationOffset = GetProfessionInfo(prof1);
-				local aname, aicon, askillLevel, amaxSkillLevel, anumAbilities, aspelloffset, askillLine, askillModifier, aspecializationIndex, aspecializationOffset = GetProfessionInfo(prof2);
-				if aname == "Jewelcrafting" then name = aname end
-				if name == "Jewelcrafting" then
-					SPProfCheck = "true";
-					MPMacroString = "/run local f,l,n=MPB or CreateFrame(".."\"".."Button".."\""..",".."\"".."MPB".."\""..",nil,".."\"".."SecureActionButtonTemplate".."\""..") f:SetAttribute(".."\"".."type".."\""..",".."\"".."macro".."\""..") l,n=MassProspect_Ore() if l then f:SetAttribute(".."\"".."macrotext".."\""..",".."\"".."/cast Prospecting\\n/use ".."\"".."..l) SetMacroItem(".."\"".."MassProspect".."\""..",n) end\n/click MPB"
-					if BasicDBPerCharacter == false then
-						local index = CreateMacro("MassProspect", "Inv_misc_gem_bloodgem_01", MPMacroString, 1);
-						BasicDBPerCharacter = true;
-					else
-					local newIndex = EditMacro("MassProspect", "MassProspect", "Inv_misc_gem_bloodgem_01", MPMacroString);
-					end
-				else
-					SPProfCheck = "false";
-					DEFAULT_CHAT_FRAME:AddMessage("|cff00B4FFBasic|r|cff33ff99UI:|rr|cffffff00 You are |r|cffff0000NOT|r |cffffff00a jewelcrafter! Please disable Mass Prospect for this character.|r");
-				end
-			end
-		end)
-	end
 end
 
 ----------------------------------------------------------------------
@@ -467,67 +387,6 @@ function MODULE:Minimap()
 end
 
 ----------------------------------------------------------------------
--- Order Hall Resource In Tooltip from Neb
-----------------------------------------------------------------------
-function MODULE:OrderHall()
-	if db.orderhall ~= true then return end
-	-- Order Resources
-	local currencyId = C_Garrison.GetCurrencyTypes(LE_GARRISON_TYPE_7_0)
-
-	-- follower info is async and ephemeral, so cache it
-	local categoryInfo = {}
-	do
-		local frame = CreateFrame("Frame")
-		frame:SetScript("OnEvent", function(self, event)
-			if C_Garrison.GetLandingPageGarrisonType() ~= LE_GARRISON_TYPE_7_0 then return end
-
-			if event == "GARRISON_FOLLOWER_CATEGORIES_UPDATED" then
-				categoryInfo = C_Garrison.GetClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
-			else
-				C_Garrison.RequestClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0)
-			end
-		end)
-		frame:RegisterEvent("GARRISON_FOLLOWER_CATEGORIES_UPDATED")
-		frame:RegisterEvent("GARRISON_FOLLOWER_ADDED")
-		frame:RegisterEvent("GARRISON_FOLLOWER_REMOVED")
-		frame:RegisterEvent("GARRISON_TALENT_COMPLETE")
-		frame:RegisterEvent("GARRISON_TALENT_UPDATE")
-		frame:RegisterEvent("GARRISON_SHOW_LANDING_PAGE")
-	end
-
-	-- from LibLDBIcon-1.0
-	local function getAnchors(frame)
-		local x, y = frame:GetCenter()
-		if not x or not y then return "CENTER" end
-		local hhalf = (x > UIParent:GetWidth()*2/3) and "RIGHT" or (x < UIParent:GetWidth()/3) and "LEFT" or ""
-		local vhalf = (y > UIParent:GetHeight()/2) and "TOP" or "BOTTOM"
-		return vhalf..hhalf, frame, (vhalf == "TOP" and "BOTTOM" or "TOP")..hhalf
-	end
-
-	GarrisonLandingPageMinimapButton:HookScript("OnEnter", function(self)
-		if C_Garrison.GetLandingPageGarrisonType() ~= LE_GARRISON_TYPE_7_0 then return end
-
-		GameTooltip:SetOwner(self, "ANCHOR_NONE")
-		GameTooltip:SetPoint(getAnchors(self))
-		GameTooltip:SetText(self.title, 1, 1, 1)
-		GameTooltip:AddLine(self.description, nil, nil, nil, true)
-		GameTooltip:AddLine(" ")
-
-		local currency, amount, icon = GetCurrencyInfo(currencyId)
-		GameTooltip:AddDoubleLine(currency, ("%s |T%s:0:0:0:2:64:64:4:60:4:60|t"):format(BreakUpLargeNumbers(amount), icon), 1, 1, 1, 1, 1, 1)
-
-		if #categoryInfo > 0 then
-			GameTooltip:AddLine(" ")
-			for _, info in ipairs(categoryInfo) do
-				GameTooltip:AddDoubleLine(info.name, ("%d/%d |T%d:0|t"):format(info.count, info.limit, info.icon), 1, 1, 1, 1, 1, 1)
-			end
-		end
-
-		GameTooltip:Show()
-	end)
-end
-
-----------------------------------------------------------------------
 -- Rare Alert borrowed from
 ----------------------------------------------------------------------
 function MODULE:RareAlert()
@@ -585,10 +444,9 @@ function MODULE:OnEnable()
 	self:Autogreed()
 	self:Coords()
 	self:HideDamageText()
-	self:MassProspect()
+	self:ItemLevelChange()
 	self:Merchant()
 	self:Minimap()
-	self:OrderHall()
 	self:RareAlert()
 end
 
@@ -694,13 +552,6 @@ function MODULE:GetOptions()
 				desc = L["Hide the damage text on player frame."],
 				disabled = function() return isModuleDisabled() or not db.enable end,
 			},
-			massprospect = {
-				type = "toggle",
-				order = 2,						
-				name = L["Mass Prospect"],
-				desc = L["If Checked creates a macro to massprospect all ore in your bags."],
-				disabled = function() return isModuleDisabled() or not db.enable end,
-			},
 			merchant = {
 				type = "toggle",
 				order = 2,						
@@ -715,13 +566,6 @@ function MODULE:GetOptions()
 				desc = L["Changes scale of Minimap Cluster."],
 				disabled = function() return isModuleDisabled() or not db.enable end,
 			},			
-			orderhall = {
-				type = "toggle",
-				order = 2,						
-				name = L["Orderhall"],
-				desc = L["Shows Orehall Resources in icons tooltip."],
-				disabled = function() return isModuleDisabled() or not db.enable end,
-			},
 			rarealert = {
 				type = "toggle",
 				order = 2,						

@@ -156,16 +156,16 @@ function MODULE:OnEnable()
 	----------------------------------------------------------
 	-- Player Castbar
 	CastingBarFrame:SetScale(db.UnitScale)
-	--CastingBarFrame:ClearAllPoints()
-	--CastingBarFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
 
-	-- Target Castbar
-	Target_Spellbar_AdjustPosition = function() end
-	TargetFrameSpellBar:SetParent(UIParent)
-	TargetFrameSpellBar:ClearAllPoints()
-	TargetFrameSpellBar:SetPoint("CENTER", UIParent, "CENTER", 0, 40)
+	-- Target Castbar	
+	hooksecurefunc("Target_Spellbar_AdjustPosition", function(self)
+		if self == TargetFrameSpellBar then
+			self:ClearAllPoints()
+			self:SetPoint("CENTER", UIParent, "CENTER", 0, 40)
+		end
+	end)
+	TargetFrameSpellBar:SetScript("OnShow", Target_Spellbar_AdjustPosition)
 	TargetFrameSpellBar:SetScale(2)
-	TargetFrameSpellBar:SetScript("OnShow", nil)
 
 	----------------------------------------------------------
 

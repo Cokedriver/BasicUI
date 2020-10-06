@@ -49,6 +49,7 @@ local currentFightDPS
 local _, class = UnitClass("player")
 local ccolor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
 local _G = _G
+local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo or nil
 
 local function RGBToHex(r, g, b)
 	if r > 1 then r = 1 elseif r < 0 then r = 0 end
@@ -642,16 +643,17 @@ function MODULE:CreateStats()
 			local totalServerGold = totalAllianceGold + totalHordeGold + totalNeutralGold
 			GameTooltip:AddDoubleLine("Total Gold for "..myPlayerRealm, formatMoney(totalServerGold))     --server total			
 
-			for i = 1, GetNumWatchedTokens() do
-				local name, count, extraCurrencyType, icon, itemID = GetBackpackCurrencyInfo(i)
-				if name and i == 1 then
-					GameTooltip:AddLine(" ")
-					GameTooltip:AddLine(CURRENCY..":")
-				end
-				local r, g, b = 1,1,1
-				if itemID then r, g, b = GetItemQualityColor(select(3, GetItemInfo(itemID))) end
-				if name and count then GameTooltip:AddDoubleLine(name, count, r, g, b, 1, 1, 1) end
-			end
+			--for i = 1, GetNumWatchedTokens() do
+				--local GetBackpackCurrencyInfo = C_CurrencyInfo.GetBackpackCurrencyInfo
+				--local name, count, extraCurrencyType, icon, itemID = GetBackpackCurrencyInfo(i)
+				--if name and i == 1 then
+					--GameTooltip:AddLine(" ")
+					--GameTooltip:AddLine(CURRENCY..":")
+				--end
+				--local r, g, b = 1,1,1
+				--if itemID then r, g, b = GetItemQualityColor(select(3, GetItemInfo(itemID))) end
+				--if name and count then GameTooltip:AddDoubleLine(name, count, r, g, b, 1, 1, 1) end
+			--end
 			GameTooltip:AddLine' '
 			GameTooltip:AddLine("|cffeda55fClick|r to Open Bags")			
 			GameTooltip:Show()

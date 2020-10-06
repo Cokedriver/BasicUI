@@ -104,15 +104,13 @@ function MODULE:OnEnable()
 	----------------------------------------------------------
 	for _, region in pairs({
 		TargetFrameNameBackground,
-		FocusFrameNameBackground,
-		Boss1TargetFrameNameBackground, 
-		Boss2TargetFrameNameBackground, 
-		Boss3TargetFrameNameBackground, 
-		Boss4TargetFrameNameBackground,
-		Boss5TargetFrameNameBackground, 
-		
+		FocusFrameNameBackground,		
 	}) do
 		region:SetColorTexture(0, 0, 0, 0.5)
+	end
+	
+	for i = 1, MAX_BOSS_FRAMES do
+		_G["Boss"..i.."TargetFrameNameBackground"]:SetColorTexture(0, 0, 0, 0.5)
 	end
 	----------------------------------------------------------
 
@@ -156,16 +154,17 @@ function MODULE:OnEnable()
 	----------------------------------------------------------
 	-- Player Castbar
 	CastingBarFrame:SetScale(db.UnitScale)
-	--CastingBarFrame:ClearAllPoints()
-	--CastingBarFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
 
-	-- Target Castbar
-	Target_Spellbar_AdjustPosition = function() end
-	TargetFrameSpellBar:SetParent(UIParent)
-	TargetFrameSpellBar:ClearAllPoints()
-	TargetFrameSpellBar:SetPoint("CENTER", UIParent, "CENTER", 0, 40)
+	-- Target Castbar	
+	hooksecurefunc("Target_Spellbar_AdjustPosition", function(self)
+		if self == TargetFrameSpellBar then
+			self:ClearAllPoints()
+			self:SetPoint("CENTER", UIParent, "CENTER", 0, 40)
+		end
+	end)
+	TargetFrameSpellBar:SetScript("OnShow", Target_Spellbar_AdjustPosition)
 	TargetFrameSpellBar:SetScale(2)
-	TargetFrameSpellBar:SetScript("OnShow", nil)
+
 
 	----------------------------------------------------------
 
