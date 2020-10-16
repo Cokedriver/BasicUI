@@ -115,7 +115,7 @@ function MODULE:OnEnable()
 
 	local playerClass = select(2, UnitClass('player'))
 
-	local BPF = CreateFrame('Frame', nil, UIParent) -- BPF = Basic Powerbar Frame
+	local BPF = CreateFrame('Frame', nil, UIParent, BackdropTemplateMixin and "BackdropTemplate") -- BPF = Basic Powerbar Frame
 
 	BPF:SetScale(db.scale)
 	BPF:SetSize(18, 18)
@@ -138,7 +138,6 @@ function MODULE:OnEnable()
 	if (db.hp.show) then
 		BPF:RegisterUnitEvent('UNIT_HEALTH', 'player')
 		BPF:RegisterUnitEvent('UNIT_MAX_HEALTH', 'player')
-		BPF:RegisterUnitEvent('UNIT_HEALTH_FREQUENT', 'player')
 	end
 
 	BPF:RegisterUnitEvent('UNIT_ENTERED_VEHICLE', 'player')
@@ -220,7 +219,7 @@ function MODULE:OnEnable()
 
 	end
 
-	BPF.Power = CreateFrame('StatusBar', nil, UIParent)
+	BPF.Power = CreateFrame('StatusBar', nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 	BPF.Power:SetScale(BPF:GetScale())
 	BPF.Power:SetSize(db.sizeWidth, 8)
 	BPF.Power:SetPoint('CENTER', BPF, 0, -28)
@@ -313,15 +312,13 @@ function MODULE:OnEnable()
 
 
 	local function CalcRuneCooldown(self)
-		local cooldown
 		local start, duration, runeReady = GetRuneCooldown(self)
-		if start then
-			local time = floor(GetTime() - start)
-			cooldown = ceil(duration - time)
-		end     
-		if (runeReady or UnitIsDeadOrGhost("player")) then
-			return "#"
-		elseif (not UnitIsDeadOrGhost("player") and cooldown) then
+		local time = floor(GetTime() - start)
+		local cooldown = ceil(duration - time)
+
+		if (runeReady or UnitIsDeadOrGhost('player')) then
+			return '#'
+		elseif (not UnitIsDeadOrGhost('player') and cooldown) then
 			return cooldown
 		end
 	end

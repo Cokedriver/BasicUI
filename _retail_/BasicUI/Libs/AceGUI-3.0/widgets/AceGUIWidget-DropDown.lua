@@ -258,7 +258,7 @@ do
 	
 	local function Constructor()
 		local count = AceGUI:GetNextWidgetNum(widgetType)
-		local frame = CreateFrame("Frame", "AceGUI30Pullout"..count, UIParent)
+		local frame = CreateFrame("Frame", "AceGUI30Pullout"..count, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		local self = {}
 		self.count = count
 		self.type = widgetType
@@ -300,8 +300,8 @@ do
 		--frame:SetToplevel(true)
 	
 		-- NOTE: The whole scroll frame code is copied from the AceGUI-3.0 widget ScrollFrame
-		local scrollFrame = CreateFrame("ScrollFrame", nil, frame)
-		local itemFrame = CreateFrame("Frame", nil, scrollFrame)
+		local scrollFrame = CreateFrame("ScrollFrame", nil, frame, BackdropTemplateMixin and "BackdropTemplate")
+		local itemFrame = CreateFrame("Frame", nil, scrollFrame, BackdropTemplateMixin and "BackdropTemplate")
 		
 		self.scrollFrame = scrollFrame
 		self.itemFrame = itemFrame
@@ -309,7 +309,7 @@ do
 		scrollFrame.obj = self
 		itemFrame.obj = self
 		
-		local slider = CreateFrame("Slider", "AceGUI30PulloutScrollbar"..count, scrollFrame)
+		local slider = CreateFrame("Slider", "AceGUI30PulloutScrollbar"..count, scrollFrame, BackdropTemplateMixin and "BackdropTemplate")
 		slider:SetOrientation("VERTICAL")
 		slider:SetHitRectInsets(0, 0, -10, 0)
 		slider:SetBackdrop(sliderBackdrop)
@@ -649,8 +649,8 @@ do
 	
 	local function Constructor()
 		local count = AceGUI:GetNextWidgetNum(widgetType)
-		local frame = CreateFrame("Frame", nil, UIParent)
-		local dropdown = CreateFrame("Frame", "AceGUI30DropDown"..count, frame, "UIDropDownMenuTemplate")
+		local frame = CreateFrame("Frame", nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
+		local dropdown = CreateFrame("Frame", "AceGUI30DropDown"..count, frame, "UIDropDownMenuTemplate", BackdropTemplateMixin and "BackdropTemplate")
 		
 		local self = {}
 		self.type = widgetType
@@ -705,7 +705,7 @@ do
 		button:SetScript("OnLeave",Control_OnLeave)
 		button:SetScript("OnClick",Dropdown_TogglePullout)
 		
-		local button_cover = CreateFrame("BUTTON",nil,self.frame)
+		local button_cover = CreateFrame("BUTTON",nil,self.frame, BackdropTemplateMixin and "BackdropTemplate")
 		self.button_cover = button_cover
 		button_cover.obj = self
 		button_cover:SetPoint("TOPLEFT",self.frame,"BOTTOMLEFT",0,25)

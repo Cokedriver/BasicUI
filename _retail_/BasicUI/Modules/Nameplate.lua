@@ -49,7 +49,7 @@ function MODULE:OnEnable()
 	-------------------------------------------------
 	-- Borrowerd from nPlates by Grimsbain
 	-------------------------------------------------
-	local BNF = CreateFrame("Frame") -- BNF = Basic Nameplate Frame
+	local BNF = CreateFrame("Frame", nil, UIParent, BackdropTemplateMixin and "BackdropTemplate") -- BNF = Basic Nameplate Frame
 
 	local len = string.len
 	local gsub = string.gsub
@@ -191,7 +191,7 @@ function MODULE:OnEnable()
 		if name == nil then return end
 		if (totemData[name] and db.ShowTotemIcon ) then
 			if (not frame.TotemIcon) then
-				frame.TotemIcon = CreateFrame("Frame", "$parentTotem", frame)
+				frame.TotemIcon = CreateFrame("Frame", "$parentTotem", frame, BackdropTemplateMixin and "BackdropTemplate")
 				frame.TotemIcon:EnableMouse(false)
 				frame.TotemIcon:SetSize(24, 24)
 				frame.TotemIcon:SetPoint("BOTTOM", frame.BuffFrame, "TOP", 0, 10)

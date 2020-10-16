@@ -49,6 +49,7 @@ local currentFightDPS
 local _, class = UnitClass("player")
 local ccolor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
 local _G = _G
+local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo or nil
 
 local function RGBToHex(r, g, b)
 	if r > 1 then r = 1 elseif r < 0 then r = 0 end
@@ -167,10 +168,10 @@ function MODULE:CreatePanels()
 	
 	-- Create All Panels
 	------------------------------------------------------------------------
-	DataP1 = CreateFrame("Frame", "DataP1", UIParent)
-	DataP2 = CreateFrame("Frame", "DataP2", UIParent)
-	DataP3 = CreateFrame("Frame", "DataP3", UIParent)
-	DataBGP = CreateFrame("Frame", "DataBGP", UIParent)
+	DataP1 = CreateFrame("Frame", "DataP1", UIParent, BackdropTemplateMixin and "BackdropTemplate")
+	DataP2 = CreateFrame("Frame", "DataP2", UIParent, BackdropTemplateMixin and "BackdropTemplate")
+	DataP3 = CreateFrame("Frame", "DataP3", UIParent, BackdropTemplateMixin and "BackdropTemplate")
+	DataBGP = CreateFrame("Frame", "DataBGP", UIParent, BackdropTemplateMixin and "BackdropTemplate")
 	
 	
 	-- Multi Panel Settings
@@ -305,7 +306,7 @@ function MODULE:SetBattlegroundPanel()
 	end) 
 	DataBGP:SetScript('OnLeave', function(self) GameTooltip:Hide() end)
 
-	local f = CreateFrame('Frame', nil)
+	local f = CreateFrame('Frame', nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 	f:EnableMouse(true)
 
 	local Text1  = DataBGP:CreateFontString(nil, 'OVERLAY')
@@ -469,7 +470,7 @@ function MODULE:CreateStats()
 	--------
 
 	if db.bags then
-		local bagsPlugin = CreateFrame('Frame')
+		local bagsPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
 		bagsPlugin:EnableMouse(true)
 		bagsPlugin:SetFrameStrata('BACKGROUND')
 		bagsPlugin:SetFrameLevel(3)
@@ -638,16 +639,23 @@ function MODULE:CreateStats()
 			local totalServerGold = totalAllianceGold + totalHordeGold + totalNeutralGold
 			GameTooltip:AddDoubleLine("Total Gold for "..myPlayerRealm, formatMoney(totalServerGold))     --server total			
 
+			local currencyInfo;
+			local r, g, b = 1, 1, 1;
+			 
 			for i = 1, GetNumWatchedTokens() do
-				local name, count, extraCurrencyType, icon, itemID = GetBackpackCurrencyInfo(i)
-				if name and i == 1 then
-					GameTooltip:AddLine(" ")
-					GameTooltip:AddLine(CURRENCY..":")
+				currencyInfo = C_CurrencyInfo.GetBackpackCurrencyInfo(i);
+			 
+				if currencyInfo and currencyInfo.name then
+					if i == 1 then
+						GameTooltip:AddLine(' ');
+						GameTooltip:AddLine(CURRENCY .. ':');
+					end
+			 
+					r, g, b = GetItemQualityColor(C_CurrencyInfo.GetCurrencyInfo(currencyInfo.currencyTypesID).quality);
+					GameTooltip:AddDoubleLine(currencyInfo.name, currencyInfo.quantity, r, g, b, 1, 1, 1);
 				end
-				local r, g, b = 1,1,1
-				if itemID then r, g, b = GetItemQualityColor(select(3, GetItemInfo(itemID))) end
-				if name and count then GameTooltip:AddDoubleLine(name, count, r, g, b, 1, 1, 1) end
 			end
+			
 			GameTooltip:AddLine' '
 			GameTooltip:AddLine("|cffeda55fClick|r to Open Bags")			
 			GameTooltip:Show()
@@ -661,7 +669,7 @@ function MODULE:CreateStats()
 	-- Call To Arms
 	----------------
 	if db.calltoarms then
-		local ctaPlugin = CreateFrame('Frame')
+		local ctaPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
 		ctaPlugin:EnableMouse(true)
 		ctaPlugin:SetFrameStrata("MEDIUM")
 		ctaPlugin:SetFrameLevel(3)
@@ -771,10 +779,10 @@ function MODULE:CreateStats()
 		ctaPlugin:RegisterEvent("LFG_UPDATE_RANDOM_INFO")
 		ctaPlugin:RegisterEvent("PLAYER_LOGIN")
 		ctaPlugin:SetScript("OnEvent", OnEvent)
-		ctaPlugin:SetScript("OnMouseDown", function(self, button)
-			if button == "LeftButton" then
+		ctaPlugin:SetScript("OnMouseDown", function(self, btn)
+			if btn == "LeftButton" then
 				ToggleLFDParentFrame(1)
-			elseif button == "RightButton" then
+			elseif btn == "RightButton" then
 				TogglePVPUI(1)
 			end
 		end)		
@@ -786,7 +794,7 @@ function MODULE:CreateStats()
 	-- Damage Per Second
 	---------------------
 	if db.dps then
-		local dpsPlugin = CreateFrame('Frame')
+		local dpsPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
 		dpsPlugin:EnableMouse(true)
 		dpsPlugin:SetFrameStrata('BACKGROUND')
 		dpsPlugin:SetFrameLevel(3)
@@ -898,7 +906,7 @@ function MODULE:CreateStats()
 		}
 
 
-		local durPlugin = CreateFrame('Frame')
+		local durPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
 		durPlugin:EnableMouse(true)
 		durPlugin:SetFrameStrata("MEDIUM")
 		durPlugin:SetFrameLevel(3)
@@ -935,10 +943,10 @@ function MODULE:CreateStats()
 		durPlugin:RegisterEvent("UPDATE_INVENTORY_DURABILITY")
 		durPlugin:RegisterEvent("MERCHANT_SHOW")
 		durPlugin:RegisterEvent("PLAYER_ENTERING_WORLD")
-		durPlugin:SetScript("OnMouseDown",function(self,button)
-			if button == "LeftButton" then
+		durPlugin:SetScript("OnMouseDown",function(self,btn)
+			if btn == "LeftButton" then
 				ToggleCharacter("PaperDollFrame")
-			elseif button == "RightButton" then
+			elseif btn == "RightButton" then
 				if not IsShiftKeyDown() then
 					CastSpellByName("Traveler's Tundra Mammoth")
 				else
@@ -1085,7 +1093,7 @@ function MODULE:CreateStats()
 		end
 	end
 
-	local friendsPlugin = CreateFrame('Frame')
+	local friendsPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
 	friendsPlugin:EnableMouse(true)
 	friendsPlugin:SetFrameStrata("MEDIUM")
 	friendsPlugin:SetFrameLevel(3)
@@ -1193,7 +1201,7 @@ function MODULE:CreateStats()
 		friendsPlugin:SetScript("OnEvent", function(self, event, ...)
 
 			local BNTotal = BNGetNumFriends()
-			local Total = GetNumFriends()
+			local Total = C_FriendList.GetNumFriends()
 
 			if BNTotal == #BNTable then
 				UpdateBNTable(BNTotal)
@@ -1205,11 +1213,11 @@ function MODULE:CreateStats()
 			self:SetAllPoints(Text)
 		end)
 
-		friendsPlugin:SetScript("OnMouseDown", function(self, button)
+		friendsPlugin:SetScript("OnMouseDown", function(self, btn)
 		
 			GameTooltip:Hide()
 			
-			if button == "RightButton" then
+			if btn == "RightButton" then
 
 			if not BNConnected() then
 				return
@@ -1426,7 +1434,7 @@ function MODULE:CreateStats()
 	---------
 	if db.guild then
 
-		local guildPlugin = CreateFrame('Frame')
+		local guildPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
 		guildPlugin:EnableMouse(true)
 		guildPlugin:SetFrameStrata("MEDIUM")
 		guildPlugin:SetFrameLevel(3)
@@ -1523,14 +1531,14 @@ function MODULE:CreateStats()
 			
 				if not GuildFrame and IsInGuild() then 
 					LoadAddOn("Blizzard_GuildUI")
-					GuildRoster() 
+					C_GuildInfo.GuildRoster() 
 				end
 			end,
 			-- Guild Roster updated, so rebuild the guild table
 			["GUILD_ROSTER_UPDATE"] = function (self)
 				if(resendRequest) then
 					resendRequest = false;
-					return GuildRoster()
+					return C_GuildInfo.GuildRoster()
 				else
 					BuildGuildTable()
 					UpdateGuildMessage()
@@ -1541,7 +1549,7 @@ function MODULE:CreateStats()
 			end,
 			-- our guild xp changed, recalculate it	
 			["PLAYER_GUILD_UPDATE"] = function (self, arg1)
-				GuildRoster()
+				C_GuildInfo.GuildRoster()
 			end,
 			-- our guild message of the day changed
 			["GUILD_MOTD"] = function (self, arg1)
@@ -1591,8 +1599,8 @@ function MODULE:CreateStats()
 			end
 		end
 
-		guildPlugin:SetScript("OnMouseDown", function(self, button)
-			if button ~= "RightButton" or not IsInGuild() then return end
+		guildPlugin:SetScript("OnMouseUp", function(self, btn)
+			if btn ~= "RightButton" or not IsInGuild() then return end
 			
 			GameTooltip:Hide()
 
@@ -1684,7 +1692,7 @@ function MODULE:CreateStats()
 			GameTooltip:Show()
 			
 			if not noUpdate then
-				GuildRoster()
+				C_GuildInfo.GuildRoster()
 			end		
 			GameTooltip:AddLine' '
 			GameTooltip:AddLine("|cffeda55fLeft Click|r to Open Guild Roster")
@@ -1694,8 +1702,8 @@ function MODULE:CreateStats()
 		end)
 
 		guildPlugin:SetScript("OnLeave", function() GameTooltip:Hide() end)
-		guildPlugin:SetScript("OnMouseDown", function(self, button)
-			if button ~= "LeftButton" then return end
+		guildPlugin:SetScript("OnMouseDown", function(self, btn)
+			if btn ~= "LeftButton" then return end
 			ToggleGuildFrame()
 		end)
 
@@ -1711,10 +1719,12 @@ function MODULE:CreateStats()
 	---------------
 	if db.pro then
 
-		local proPlugin = CreateFrame('Frame')
+		local proPlugin = CreateFrame('Button', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
+		proPlugin:RegisterEvent('PLAYER_ENTERING_WORLD')
 		proPlugin:SetFrameStrata('BACKGROUND')
 		proPlugin:SetFrameLevel(3)
 		proPlugin:EnableMouse(true)
+		proPlugin.tooltip = false
 
 		local Text = proPlugin:CreateFontString(nil, 'OVERLAY')
 		Text:SetFont(db.font, db.fontSize,'THINOUTLINE')
@@ -1734,8 +1744,8 @@ function MODULE:CreateStats()
 			for i = 1, select("#", GetProfessions()) do
 				local v = select(i, GetProfessions());
 				if v ~= nil then
-					local name, icon, skillLevel, maxSkillLevel, numAbilities, spelloffset, skillLine, skillModifier, specializationIndex, specializationOffset = GetProfessionInfo(v)
-					GameTooltip:AddDoubleLine(name, skillLevel..' / '..maxSkillLevel,.75,.9,1,.3,1,.3)
+					local name, texture, rank, maxRank = GetProfessionInfo(v)
+					GameTooltip:AddDoubleLine(name, rank..' / '..maxRank,.75,.9,1,.3,1,.3)
 				end
 			end
 			GameTooltip:AddLine' '
@@ -1747,26 +1757,43 @@ function MODULE:CreateStats()
 		end)
 
 
-		proPlugin:SetScript("OnMouseDown", function(self, button)
-			local prof1, prof2, _, _, _ = GetProfessions()
-			if button == "LeftButton" then
-				if prof1 then	
-					CastSpellByName((GetProfessionInfo(prof1)))
+		proPlugin:SetScript("OnClick",function(self,btn)
+			local prof1, prof2 = GetProfessions()
+			if btn == "LeftButton" then
+				if prof1 then
+					if(GetProfessionInfo(prof1) == ('Skinning')) then
+						CastSpellByName("Skinning Skills")
+					elseif(GetProfessionInfo(prof1) == ('Mining')) then
+						CastSpellByName("Mining Skills")
+					elseif(GetProfessionInfo(prof1) == ('Herbalism')) then
+						CastSpellByName("Herbalism Skills")					
+					else	
+						CastSpellByName((GetProfessionInfo(prof1)))
+					end
 				else
 					print('|cff33ff99BasicUI:|r |cffFF0000No Profession Found!|r')
 				end
-			elseif button == 'MiddleButton' then
+			elseif btn == 'MiddleButton' then
 				ToggleSpellBook(BOOKTYPE_PROFESSION)	
-			elseif button == "RightButton" then
+			elseif btn == "RightButton" then
 				if prof2 then
-					CastSpellByName((GetProfessionInfo(prof2)))
+					if(GetProfessionInfo(prof2) == ('Skinning')) then
+						CastSpellByName("Skinning Skills")
+					elseif(GetProfessionInfo(prof2) == ('Mining')) then
+						CastSpellByName("Mining Skills")
+					elseif(GetProfessionInfo(prof2) == ('Herbalism')) then
+						CastSpellByName("Herbalism Skills")						
+					else
+						CastSpellByName((GetProfessionInfo(prof2)))
+					end
 				else
 					print('|cff33ff99BasicUI:|r |cffFF0000No Profession Found!|r')
 				end
 			end
 		end)
-		
-		proPlugin:RegisterEvent('PLAYER_ENTERING_WORLD')
+
+
+		proPlugin:RegisterForClicks("AnyUp")
 		proPlugin:SetScript('OnUpdate', Update)
 		proPlugin:SetScript('OnLeave', function() GameTooltip:Hide() end)
 	end
@@ -1794,7 +1821,7 @@ function MODULE:CreateStats()
 		end
 
 		
-		local recountPlugin = CreateFrame('Frame')
+		local recountPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
 		recountPlugin:EnableMouse(true)
 		recountPlugin:SetFrameStrata("MEDIUM")
 		recountPlugin:SetFrameLevel(3)
@@ -1819,7 +1846,7 @@ function MODULE:CreateStats()
 				recountPlugin:UnregisterEvent("PLAYER_LOGIN")
 				
 			elseif event == "PLAYER_ENTERING_WORLD" then
-				--self.updateDPS()
+				self.updateDPS()
 				recountPlugin:UnregisterEvent("PLAYER_ENTERING_WORLD")
 			end
 		end
@@ -1899,7 +1926,7 @@ function MODULE:CreateStats()
 			end
 			GameTooltip:Show()
 		end)
-		recountPlugin:SetScript("OnMouseDown", function(self, button)
+		recountPlugin:SetScript("OnMouseUp", function(self, button)
 			if button == "RightButton" then
 				if not IsShiftKeyDown() then
 					Recount:ShowReset()
@@ -1932,7 +1959,7 @@ function MODULE:CreateStats()
 	--------------------
 	if db.spec then
 
-		local specPlugin = CreateFrame('Frame')
+		local specPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
 		specPlugin:EnableMouse(true)
 		specPlugin:SetFrameStrata('BACKGROUND')
 		specPlugin:SetFrameLevel(3)
@@ -1971,7 +1998,7 @@ function MODULE:CreateStats()
 			end
 			int = 2
 
-			-- disable script	
+			--disable script	
 			self:SetScript('OnUpdate', nil)
 			
 		end
@@ -2035,7 +2062,8 @@ function MODULE:CreateStats()
 	-----------------
 	if db.stats then
 
-		local statsPlugin = CreateFrame('Frame')
+		local statsPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
+		statsPlugin:RegisterEvent("PLAYER_ENTERING_WORLD")
 		statsPlugin:SetFrameStrata("BACKGROUND")
 		statsPlugin:SetFrameLevel(3)
 		statsPlugin:EnableMouse(true)
@@ -2167,8 +2195,8 @@ function MODULE:CreateStats()
 			Text:SetFormattedText(displayNumberString, hexa.."AP: "..hexb, pwr)      
 			--Setup Tooltip
 			self:SetAllPoints(Text)
-		end	
-		
+		end
+
 		-- initial delay for update (let the ui load)
 		local int = 5	
 		local function Update(self, t)
@@ -2187,10 +2215,9 @@ function MODULE:CreateStats()
 			end
 			int = 2
 		end
-		statsPlugin:RegisterEvent("PLAYER_ENTERING_WORLD")
+
 		statsPlugin:SetScript("OnEnter", function() ShowTooltip(statsPlugin) end)
 		statsPlugin:SetScript("OnLeave", function() GameTooltip:Hide() end)
-		statsPlugin:SetScript('OnEvent', OnEvent)
 		statsPlugin:SetScript("OnUpdate", Update)
 		Update(statsPlugin, 10)
 	end
@@ -2200,7 +2227,7 @@ function MODULE:CreateStats()
 	-------------------
 	if db.system then
 
-		local systemPlugin = CreateFrame('Frame')
+		local systemPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
 		systemPlugin:RegisterEvent("PLAYER_ENTERING_WORLD")
 		systemPlugin:SetFrameStrata("BACKGROUND")
 		systemPlugin:SetFrameLevel(3)
@@ -2344,24 +2371,23 @@ end
 function MODULE:OnInitialize()
 	self.db = BasicUI.db:RegisterNamespace(MODULE_NAME, defaults)
 	db = self.db.profile	
-	
-	if not db.enable then return end
 
 	local _, class = UnitClass("player")
 	classColor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]
 
 	self:SetEnabledState(BasicUI:GetModuleEnabled(MODULE_NAME))
-	
-	self:CreatePanels(); -- factor this giant blob out into its own function to keep things clean
-	self:SetBattlegroundPanel();
 end
 
 
 function MODULE:OnEnable()
-	self:UpdatePlayerRole();
-	self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", "UpdatePlayerRole");	
-	self:CreateStats()
-	self:Refresh()
+	-- This line should not be needed if you're using modules correctly:
+	if not db.enable then return end
+
+	if db.enable then -- How is this different than "enable" ? If the panel is not enabled, what's the point of doing anything else?
+		self:CreatePanels(); -- factor this giant blob out into its own function to keep things clean
+		self:SetBattlegroundPanel();
+		self:Refresh()
+	end
 end
 
 function MODULE:Refresh()
@@ -2369,7 +2395,14 @@ function MODULE:Refresh()
 		return self:RegisterEvent("PLAYER_REGEN_ENABLED", "OnEnable")
 	end
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
+	self:UpdatePlayerRole()	
+	self:CreateStats()
+end
 
+function MODULE:SetFontString(parent, file, size, flags)
+	local fs = parent:CreateFontString(nil, "OVERLAY")
+	fs:SetFont(file, size, flags)
+	return fs
 end
 
 

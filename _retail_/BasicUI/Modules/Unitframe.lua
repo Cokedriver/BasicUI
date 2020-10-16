@@ -104,13 +104,15 @@ function MODULE:OnEnable()
 	----------------------------------------------------------
 	for _, region in pairs({
 		TargetFrameNameBackground,
-		FocusFrameNameBackground,		
+		FocusFrameNameBackground,
+		Boss1TargetFrameNameBackground, 
+		Boss2TargetFrameNameBackground, 
+		Boss3TargetFrameNameBackground, 
+		Boss4TargetFrameNameBackground,
+		Boss5TargetFrameNameBackground, 
+		
 	}) do
 		region:SetColorTexture(0, 0, 0, 0.5)
-	end
-	
-	for i = 1, MAX_BOSS_FRAMES do
-		_G["Boss"..i.."TargetFrameNameBackground"]:SetColorTexture(0, 0, 0, 0.5)
 	end
 	----------------------------------------------------------
 
@@ -163,8 +165,7 @@ function MODULE:OnEnable()
 		end
 	end)
 	TargetFrameSpellBar:SetScript("OnShow", Target_Spellbar_AdjustPosition)
-	TargetFrameSpellBar:SetScale(2)
-
+	TargetFrameSpellBar:SetScale(1.5)
 
 	----------------------------------------------------------
 

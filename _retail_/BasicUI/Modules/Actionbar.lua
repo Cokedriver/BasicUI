@@ -35,30 +35,42 @@ function MODULE:OnEnable()
 	end
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 
-	local function UpdateRange( self, elapsed )
-		local rangeTimer = self.rangeTimer
-		local icon = self.icon;
+	local function UpdateRange(self, hasrange, inrange)
+		local Icon = self.icon
+		local NormalTexture = self.NormalTexture
+		local ID = self.action
+		
+		if not ID then
+			return
+		end
+		
+		local IsUsable, NotEnoughMana = IsUsableAction(ID)
+		local HasRange = hasrange
+		local InRange = inrange
 
-		if( rangeTimer == TOOLTIP_UPDATE_TIME ) then
-			local inRange = IsActionInRange( self.action );
-			if( inRange == false ) then
-				-- Red Out Button
-				icon:SetVertexColor( 1, 0, 0 );
+		if IsUsable then
+			if (HasRange and InRange == false) then
+				Icon:SetVertexColor(0.8, 0.1, 0.1)
+				
+				NormalTexture:SetVertexColor(0.8, 0.1, 0.1)
 			else
-				local canUse, amountMana = IsUsableAction( self.action );
-				if( canUse ) then
-					icon:SetVertexColor( 1.0, 1.0, 1.0 );
-				elseif( amountMana ) then
-					icon:SetVertexColor( 0.5, 0.5, 1.0 );
-				else
-					icon:SetVertexColor( 0.4, 0.4, 0.4 );
-				end
+				Icon:SetVertexColor(1.0, 1.0, 1.0)
+				
+				NormalTexture:SetVertexColor(1.0, 1.0, 1.0)
 			end
+		elseif NotEnoughMana then
+			Icon:SetVertexColor(0.1, 0.3, 1.0)
+			
+			NormalTexture:SetVertexColor(0.1, 0.3, 1.0)
+		else
+			Icon:SetVertexColor(0.3, 0.3, 0.3)
+			
+			NormalTexture:SetVertexColor(0.3, 0.3, 0.3)
 		end
 	end
 
 	do
-		hooksecurefunc( "ActionButton_OnUpdate", UpdateRange );
+		hooksecurefunc( "ActionButton_UpdateRangeIndicator", UpdateRange );
 	end
 	
 	self:Refresh()

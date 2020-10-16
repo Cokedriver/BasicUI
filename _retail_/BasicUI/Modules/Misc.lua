@@ -16,8 +16,10 @@ local defaults = {
 		coords = true,
 		ilvlchange = true,
 		hdt = true,
+		massprospect = true,
 		merchant = true,
 		minimap = true,
+		orderhall = true,
 		rarealert = true,
 	}
 }
@@ -117,7 +119,7 @@ function MODULE:Autogreed()
 		--['Silver Scarab'] = true,
 	}
 
-	local AutoGreedFrame = CreateFrame('Frame')
+	local AutoGreedFrame = CreateFrame('Frame', nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 	AutoGreedFrame:RegisterEvent('START_LOOT_ROLL')
 	AutoGreedFrame:SetScript('OnEvent', function(_, _, rollID)
 		if (maxLevelOnly and UnitLevel('player') == MAX_PLAYER_LEVEL) then
@@ -153,7 +155,7 @@ if db.coords ~= true then return end
 		return (1/R[2].y)*P.y, (1/R[2].x)*P.x;
 	end
 	
-	local CoordsFrame = CreateFrame('Frame', nil, WorldMapFrame)
+	local CoordsFrame = CreateFrame('Frame', nil, WorldMapFrame, BackdropTemplateMixin and "BackdropTemplate")
 	CoordsFrame:SetParent(WorldMapFrame.BorderFrame)
 
 	CoordsFrame.Player = CoordsFrame:CreateFontString(nil, 'OVERLAY')
@@ -187,7 +189,7 @@ if db.coords ~= true then return end
 
 			if mx then
 				if mx >= 0 and my >= 0 and mx <= 1 and my <= 1 then
-					self.Mouse:SetText(MOUSE_LABEL..format(': %.0f x %.0f', mx * 100, my * 100))
+					self.Mouse:SetText(" Mouse"..format(': %.0f x %.0f', mx * 100, my * 100))
 				else
 					self.Mouse:SetText("")
 				end
@@ -201,30 +203,26 @@ end
 ----------------------------------------------------------------------
 -- Item Level Change by 
 ----------------------------------------------------------------------
-function MODULE:ItemLevelChange()
+local ilvl = -1
 
-	if db.ilvlchange ~= true then return end
-	
-	local ilvl = -1
+local f = CreateFrame("Frame", nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
+f:RegisterEvent("PLAYER_LOGIN")
+f:RegisterEvent("PLAYER_AVG_ITEM_LEVEL_UPDATE")
+f:SetScript("OnEvent", function()
+	local total, equipped = GetAverageItemLevel()
+	total = math.floor(total)
+	if total == ilvl then
+		return
+	end
+	local color = ChatTypeInfo["SYSTEM"]
+	if total > ilvl then
+		DEFAULT_CHAT_FRAME:AddMessage("|cff00B4FFBasic|r|cff33ff99UI:|r Your average item level is now |cff99ff99" .. total .. "|r, up from " .. ilvl, color.r, color.g, color.b)
+	else
+		DEFAULT_CHAT_FRAME:AddMessage("|cff00B4FFBasic|r|cff33ff99UI:|r Your average item level is now |cffff9999" .. total .. "|r, down from " .. ilvl, color.r, color.g, color.b)
+	end
+	ilvl = total
+end)
 
-	local f = CreateFrame("Frame")
-	f:RegisterEvent("PLAYER_LOGIN")
-	f:RegisterEvent("PLAYER_AVG_ITEM_LEVEL_UPDATE")
-	f:SetScript("OnEvent", function()
-		local total, equipped = GetAverageItemLevel()
-		total = math.floor(total)
-		if total == ilvl then
-			return
-		end
-		local color = ChatTypeInfo["SYSTEM"]
-		if total > ilvl then
-			DEFAULT_CHAT_FRAME:AddMessage("|cff00B4FFBasic|r|cff33ff99UI:|r Your average item level is now |cff99ff99" .. total .. "|r, up from " .. ilvl, color.r, color.g, color.b)
-		else
-			DEFAULT_CHAT_FRAME:AddMessage("|cff00B4FFBasic|r|cff33ff99UI:|r Your average item level is now |cffff9999" .. total .. "|r, down from " .. ilvl, color.r, color.g, color.b)
-		end
-		ilvl = total
-	end)
-end
 ----------------------------------------------------------------------
 -- borrowed from Leatrix.Plus
 ----------------------------------------------------------------------
@@ -235,6 +233,88 @@ function MODULE:HideDamageText()
 	hooksecurefunc(PlayerHitIndicator, "Show", PlayerHitIndicator.Hide)
 	hooksecurefunc(PetHitIndicator, "Show", PetHitIndicator.Hide)
 	
+end
+
+----------------------------------------------------------------------
+-- Mass Prospect by Kaemin
+----------------------------------------------------------------------
+function MODULE:MassProspect()
+	if db.massprospect ~= true then return end
+	SLASH_MassProspect1 = '/mp';
+
+	-- by Kaemin
+
+	function SlashCmdList.MassProspect(msg, editbox)
+		if msg == nil or msg == "" or msg == "menu" or msg == "options" or msg == "?" or msg == "help" then
+			MassProspect_Define();
+		end
+		if msg == "reset" then
+			DeleteMacro("MassProspect");
+			BasicDBPerCharacter = false;
+	--		MassProspect_Define();
+		end
+	end
+
+	function MassProspect_Define()
+		local prof1, prof2, archaeology, fishing, cooking, firstAid = GetProfessions();
+		local name, icon, skillLevel, maxSkillLevel, numAbilities, spelloffset, skillLine, skillModifier, specializationIndex, specializationOffset = GetProfessionInfo(prof1);
+		local aname, aicon, askillLevel, amaxSkillLevel, anumAbilities, aspelloffset, askillLine, askillModifier, aspecializationIndex, aspecializationOffset = GetProfessionInfo(prof2);
+		if aname=="Jewelcrafting" then name=aname end
+		if name == "Jewelcrafting" then
+			SPProfCheck = "true";
+			MPMacroString = "/run local f,l,n=MPB or CreateFrame(".."\"".."Button".."\""..",".."\"".."MPB".."\""..",nil,".."\"".."SecureActionButtonTemplate".."\""..") f:SetAttribute(".."\"".."type".."\""..",".."\"".."macro".."\""..") l,n=MassProspect_Ore() if l then f:SetAttribute(".."\"".."macrotext".."\""..",".."\"".."/cast Prospecting\\n/use ".."\"".."..l) SetMacroItem(".."\"".."MassProspect".."\""..",n) end\n/click MPB"
+			if BasicDBPerCharacter == false then
+				local index = CreateMacro("MassProspect", "Inv_misc_gem_bloodgem_01", MPMacroString, 1);
+				BasicDBPerCharacter = true;
+			else
+			local newIndex = EditMacro("MassProspect", "MassProspect", "Inv_misc_gem_bloodgem_01", MPMacroString);
+			end
+		else
+			SPProfCheck = "false";
+			DEFAULT_CHAT_FRAME:AddMessage("|cff00B4FFBasic|r|cff33ff99UI:|r|cffffff00 You are |r|cffff0000NOT|r |cffffff00a jewelcrafter! Please disable Mass Prospect for this character.|r");
+		end
+	end
+
+	function MassProspect_Ore()
+		OreInBags = 0;
+		for i=0,4 do 
+			for j=1,GetContainerNumSlots(i) do local t={GetItemInfo(GetContainerItemLink(i,j) or 0)}
+				if t[7]=="Metal & Stone" and select(2,GetContainerItemInfo(i,j))>=5 then
+					OreInBags = OreInBags + 1;
+					return i.." "..j,t[1]
+				end 
+			end 
+		end
+		if OreInBags == 0 and SPProfCheck == "true" then
+			DEFAULT_CHAT_FRAME:AddMessage("|cff00B4FFBasic|r|cff33ff99UI:|rr|cffffff00 There is |r|cffff0000NOT ENOUGH|r |cffffff00ore in your bags!|r");
+		end
+	end
+
+	function MassProspect_OnLoad()
+		local fframe = CreateFrame("Frame", nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
+			fframe:RegisterEvent("ADDON_LOADED");
+			fframe:SetScript("OnEvent", function(self, event, arg1)
+			if event == "ADDON_LOADED" and arg1 == "_addon" then
+				local prof1, prof2, archaeology, fishing, cooking, firstAid = GetProfessions();
+				local name, icon, skillLevel, maxSkillLevel, numAbilities, spelloffset, skillLine, skillModifier, specializationIndex, specializationOffset = GetProfessionInfo(prof1);
+				local aname, aicon, askillLevel, amaxSkillLevel, anumAbilities, aspelloffset, askillLine, askillModifier, aspecializationIndex, aspecializationOffset = GetProfessionInfo(prof2);
+				if aname == "Jewelcrafting" then name = aname end
+				if name == "Jewelcrafting" then
+					SPProfCheck = "true";
+					MPMacroString = "/run local f,l,n=MPB or CreateFrame(".."\"".."Button".."\""..",".."\"".."MPB".."\""..",nil,".."\"".."SecureActionButtonTemplate".."\""..") f:SetAttribute(".."\"".."type".."\""..",".."\"".."macro".."\""..") l,n=MassProspect_Ore() if l then f:SetAttribute(".."\"".."macrotext".."\""..",".."\"".."/cast Prospecting\\n/use ".."\"".."..l) SetMacroItem(".."\"".."MassProspect".."\""..",n) end\n/click MPB"
+					if BasicDBPerCharacter == false then
+						local index = CreateMacro("MassProspect", "Inv_misc_gem_bloodgem_01", MPMacroString, 1);
+						BasicDBPerCharacter = true;
+					else
+					local newIndex = EditMacro("MassProspect", "MassProspect", "Inv_misc_gem_bloodgem_01", MPMacroString);
+					end
+				else
+					SPProfCheck = "false";
+					DEFAULT_CHAT_FRAME:AddMessage("|cff00B4FFBasic|r|cff33ff99UI:|rr|cffffff00 You are |r|cffff0000NOT|r |cffffff00a jewelcrafter! Please disable Mass Prospect for this character.|r");
+				end
+			end
+		end)
+	end
 end
 
 ----------------------------------------------------------------------
@@ -260,7 +340,7 @@ function MODULE:Merchant()
 		[43572] = true, -- Magic Eater		
 	}
 
-	local Merchant_Frame = CreateFrame("Frame")
+	local Merchant_Frame = CreateFrame("Frame", nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 	Merchant_Frame:SetScript("OnEvent", function()
 		local Cost = 0
 		
@@ -391,7 +471,7 @@ end
 ----------------------------------------------------------------------
 function MODULE:RareAlert()
 	if db.rarealert ~= true then return end
-	local RareFrame = CreateFrame("Frame")
+	local RareFrame = CreateFrame("Frame", nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 	RareFrame:RegisterEvent("VIGNETTE_MINIMAP_UPDATED")
 	RareFrame:SetScript("OnEvent", function(self, event, vignetteInstanceID, onMiniMap)
 		if vignetteInstanceID and onMiniMap then
@@ -444,7 +524,7 @@ function MODULE:OnEnable()
 	self:Autogreed()
 	self:Coords()
 	self:HideDamageText()
-	self:ItemLevelChange()
+	self:MassProspect()
 	self:Merchant()
 	self:Minimap()
 	self:RareAlert()
@@ -552,6 +632,13 @@ function MODULE:GetOptions()
 				desc = L["Hide the damage text on player frame."],
 				disabled = function() return isModuleDisabled() or not db.enable end,
 			},
+			massprospect = {
+				type = "toggle",
+				order = 2,						
+				name = L["Mass Prospect"],
+				desc = L["If Checked creates a macro to massprospect all ore in your bags."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
 			merchant = {
 				type = "toggle",
 				order = 2,						
@@ -566,6 +653,13 @@ function MODULE:GetOptions()
 				desc = L["Changes scale of Minimap Cluster."],
 				disabled = function() return isModuleDisabled() or not db.enable end,
 			},			
+			orderhall = {
+				type = "toggle",
+				order = 2,						
+				name = L["Orderhall"],
+				desc = L["Shows Orehall Resources in icons tooltip."],
+				disabled = function() return isModuleDisabled() or not db.enable end,
+			},
 			rarealert = {
 				type = "toggle",
 				order = 2,						

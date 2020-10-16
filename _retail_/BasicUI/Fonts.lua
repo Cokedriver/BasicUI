@@ -8,17 +8,19 @@ BASICFONT["I"] = [[Interface\AddOns\BasicUI\Media\Expressway_Sb_ITALIC.ttf]] 	or
 ----- Begin code taken by "http://www.wowinterface.com/downloads/info8786-tekticles.html"
 -- by Tekkub: http://www.tekkub.net/addons
 
-local function SetFont(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)
+
+
+--[[local function SetFont(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)
 	obj:SetFont(font, size, style)
 	if sr and sg and sb then obj:SetShadowColor(sr, sg, sb) end
 	if sox and soy then obj:SetShadowOffset(sox, soy) end
 	if r and g and b then obj:SetTextColor(r, g, b)
 	elseif r then obj:SetAlpha(r) end
-end
+end]]
 
 
-UIDROPDOWNMENU_DEFAULT_TEXT_HEIGHT = 14
-CHAT_FONT_HEIGHTS = {12, 13, 14, 15, 16, 17}
+--UIDROPDOWNMENU_DEFAULT_TEXT_HEIGHT = 14
+--CHAT_FONT_HEIGHTS = {12, 13, 14, 15, 16, 17}
 
 local FONTZ = false -- Set to true only if you have not changed your master fonts.
 
@@ -31,68 +33,68 @@ end
 
 
 -- Font Normally Used FRIZQT__.TTF
-SetFont(SystemFont_Tiny,                	BASICFONT["N"], 11);
-SetFont(SystemFont_Small,                	BASICFONT["N"], 13);
-SetFont(SystemFont_Outline_Small,           BASICFONT["N"], 13, "OUTLINE");
-SetFont(SystemFont_Outline,                	BASICFONT["N"], 15);					-- Pet level on World map
-SetFont(SystemFont_Shadow_Small,            BASICFONT["N"], 13);
-SetFont(SystemFont_InverseShadow_Small,		BASICFONT["N"], 13);
-SetFont(SystemFont_Med1,                	BASICFONT["N"], 15);
-SetFont(SystemFont_Shadow_Med1,             BASICFONT["N"], 15);
-SetFont(SystemFont_Med2,                	BASICFONT["N"], 15, nil, 0.15, 0.09, 0.04);
-SetFont(SystemFont_Shadow_Med2,             BASICFONT["N"], 15);
-SetFont(SystemFont_Med3,                	BASICFONT["N"], 15);
-SetFont(SystemFont_Shadow_Med3,             BASICFONT["N"], 15);
-SetFont(SystemFont_Large,                	BASICFONT["B"], 	17);
-SetFont(SystemFont_Shadow_Large,            BASICFONT["B"], 	17);
-SetFont(SystemFont_Huge1,                	BASICFONT["B"], 	20);
-SetFont(SystemFont_Shadow_Huge1,            BASICFONT["B"], 	20);
-SetFont(SystemFont_OutlineThick_Huge2,      BASICFONT["B"], 	22, "THICKOUTLINE");
-SetFont(SystemFont_Shadow_Outline_Huge2,    BASICFONT["B"], 	22, "OUTLINE");
-SetFont(SystemFont_Shadow_Huge3,            BASICFONT["B"], 	25);
-SetFont(SystemFont_OutlineThick_Huge4,      BASICFONT["B"], 	26, "THICKOUTLINE");
-SetFont(SystemFont_OutlineThick_WTF,        BASICFONT["B"], 	32, "THICKOUTLINE");	-- World Map
-SetFont(SubZoneTextFont,					BASICFONT["B"], 	26, "OUTLINE");			-- World Map(SubZone)
-SetFont(GameTooltipHeader,                	BASICFONT["B"], 	18);
-SetFont(SpellFont_Small,                	BASICFONT["N"], 13);
-SetFont(InvoiceFont_Med,                	BASICFONT["N"], 15, nil, 0.15, 0.09, 0.04);
-SetFont(InvoiceFont_Small,                	BASICFONT["N"], 13, nil, 0.15, 0.09, 0.04);
-SetFont(Tooltip_Med,                		BASICFONT["N"], 15);
-SetFont(Tooltip_Small,                		BASICFONT["N"], 13);
-SetFont(AchievementFont_Small,              BASICFONT["N"], 13);
-SetFont(ReputationDetailFont,               BASICFONT["N"], 12, nil, nil, nil, nil, 0, 0, 0, 1, -1);
-SetFont(GameFont_Gigantic,                	BASICFONT["B"], 	32, nil, nil, nil, nil, 0, 0, 0, 1, -1);
+SystemFont_Tiny:SetFont(					BASICFONT["N"], 11);
+SystemFont_Small:SetFont(					BASICFONT["N"], 13);
+SystemFont_Outline_Small:SetFont(			BASICFONT["N"], 13, "OUTLINE");
+SystemFont_Outline:SetFont(					BASICFONT["N"], 15);					-- Pet level on World map
+SystemFont_Shadow_Small:SetFont(			BASICFONT["N"], 13);
+SystemFont_InverseShadow_Small:SetFont(		BASICFONT["N"], 13);
+SystemFont_Med1:SetFont(					BASICFONT["N"], 15);
+SystemFont_Shadow_Med1:SetFont(             BASICFONT["N"], 15);
+SystemFont_Med2:SetFont(                	BASICFONT["N"], 15, nil, 0.15, 0.09, 0.04);
+SystemFont_Shadow_Med2:SetFont(             BASICFONT["N"], 15);
+SystemFont_Med3:SetFont(                	BASICFONT["N"], 15);
+SystemFont_Shadow_Med3:SetFont(             BASICFONT["N"], 15);
+SystemFont_Large:SetFont(                	BASICFONT["B"], 17);
+SystemFont_Shadow_Large:SetFont(            BASICFONT["B"], 17);
+SystemFont_Huge1:SetFont(                	BASICFONT["B"], 20);
+SystemFont_Shadow_Huge1:SetFont(            BASICFONT["B"], 20);
+SystemFont_OutlineThick_Huge2:SetFont(      BASICFONT["B"], 22, "THICKOUTLINE");
+--SystemFont_Shadow_Outline_Huge2:SetFont(    BASICFONT["B"], 22, "OUTLINE");
+SystemFont_Shadow_Huge3:SetFont(            BASICFONT["B"], 25);
+SystemFont_OutlineThick_Huge4:SetFont(      BASICFONT["B"], 26, "THICKOUTLINE");
+SystemFont_OutlineThick_WTF:SetFont(        BASICFONT["B"], 32, "THICKOUTLINE");	-- World Map
+SubZoneTextFont:SetFont(					BASICFONT["B"], 26, "OUTLINE");			-- World Map(SubZone)
+GameTooltipHeader:SetFont(                	BASICFONT["B"], 18);
+SpellFont_Small:SetFont(                	BASICFONT["N"], 13);
+InvoiceFont_Med:SetFont(                	BASICFONT["N"], 15, nil, 0.15, 0.09, 0.04);
+InvoiceFont_Small:SetFont(                	BASICFONT["N"], 13, nil, 0.15, 0.09, 0.04);
+Tooltip_Med:SetFont(                		BASICFONT["N"], 15);
+Tooltip_Small:SetFont(                		BASICFONT["N"], 13);
+AchievementFont_Small:SetFont(              BASICFONT["N"], 13);
+ReputationDetailFont:SetFont(               BASICFONT["N"], 12, nil, nil, nil, nil, 0, 0, 0, 1, -1);
+GameFont_Gigantic:SetFont(                	BASICFONT["B"], 	32, nil, nil, nil, nil, 0, 0, 0, 1, -1);
 
 -- Font Normally Used ARIALN.TTF
-SetFont(NumberFont_Shadow_Small,			BASICFONT["B"], 13);
-SetFont(NumberFont_OutlineThick_Mono_Small,	BASICFONT["B"], 13, "OUTLINE");
-SetFont(NumberFont_Shadow_Med,              BASICFONT["B"], 15);
-SetFont(NumberFont_Outline_Med,             BASICFONT["B"], 15, "OUTLINE");
-SetFont(NumberFont_Outline_Large,           BASICFONT["B"], 17, "OUTLINE");
-SetFont(NumberFont_GameNormal,				BASICFONT["B"], 13);
-SetFont(FriendsFont_UserText,               BASICFONT["B"], 15);
+NumberFont_Shadow_Small:SetFont(			BASICFONT["B"], 13);
+NumberFont_OutlineThick_Mono_Small:SetFont(	BASICFONT["B"], 13, "OUTLINE");
+NumberFont_Shadow_Med:SetFont(              BASICFONT["B"], 15);
+NumberFont_Outline_Med:SetFont(             BASICFONT["B"], 15, "OUTLINE");
+NumberFont_Outline_Large:SetFont(           BASICFONT["B"], 17, "OUTLINE");
+NumberFont_GameNormal:SetFont(				BASICFONT["B"], 13);
+FriendsFont_UserText:SetFont(               BASICFONT["B"], 15);
 
 -- Font Normally Used skurri.ttf
-SetFont(NumberFont_Outline_Huge,            BASICFONT["B"], 30, "THICKOUTLINE");
+NumberFont_Outline_Huge:SetFont(            BASICFONT["B"], 30, "THICKOUTLINE");
 
 -- Font Normally Used MORPHEUS.ttf
-SetFont(QuestFont_Large,                	BASICFONT["I"], 17)
-SetFont(QuestFont_Shadow_Huge,              BASICFONT["I"], 18, nil, nil, nil, nil, 0.54, 0.4, 0.1);
-SetFont(QuestFont_Shadow_Small,             BASICFONT["I"], 13)
-SetFont(MailFont_Large,                		BASICFONT["I"], 17, nil, 0.15, 0.09, 0.04, 0.54, 0.4, 0.1, 1, -1);
+QuestFont_Large:SetFont(                	BASICFONT["I"], 17)
+QuestFont_Shadow_Huge:SetFont(              BASICFONT["I"], 18, nil, nil, nil, nil, 0.54, 0.4, 0.1);
+QuestFont_Shadow_Small:SetFont(             BASICFONT["I"], 13)
+MailFont_Large:SetFont(                		BASICFONT["I"], 17, nil, 0.15, 0.09, 0.04, 0.54, 0.4, 0.1, 1, -1);
 
 -- Font Normally Used FRIENDS.TTF
-SetFont(FriendsFont_Normal,                	BASICFONT["N"], 15, nil, nil, nil, nil, 0, 0, 0, 1, -1);
-SetFont(FriendsFont_Small,                	BASICFONT["N"], 13, nil, nil, nil, nil, 0, 0, 0, 1, -1);
-SetFont(FriendsFont_Large,                	BASICFONT["B"], 	17, nil, nil, nil, nil, 0, 0, 0, 1, -1);
+FriendsFont_Normal:SetFont(                	BASICFONT["N"], 15, nil, nil, nil, nil, 0, 0, 0, 1, -1);
+FriendsFont_Small:SetFont(                	BASICFONT["N"], 13, nil, nil, nil, nil, 0, 0, 0, 1, -1);
+FriendsFont_Large:SetFont(                	BASICFONT["B"], 17, nil, nil, nil, nil, 0, 0, 0, 1, -1);
 
 
-SetFont(GameFontNormalSmall,                BASICFONT["B"], 	13);
-SetFont(GameFontNormal,                		BASICFONT["N"], 15);
-SetFont(GameFontNormalLarge,                BASICFONT["B"], 	17);
-SetFont(GameFontNormalHuge,                	BASICFONT["B"], 	20);
-SetFont(GameFontHighlightSmallLeft,			BASICFONT["N"], 15);
-SetFont(GameNormalNumberFont,               BASICFONT["B"], 	13);
+GameFontNormalSmall:SetFont(                BASICFONT["B"], 	13);
+GameFontNormal:SetFont(                		BASICFONT["N"], 15);
+GameFontNormalLarge:SetFont(                BASICFONT["B"], 	17);
+GameFontNormalHuge:SetFont(                	BASICFONT["B"], 	20);
+GameFontHighlightSmallLeft:SetFont(			BASICFONT["N"], 15);
+GameNormalNumberFont:SetFont(               BASICFONT["B"], 	13);
 
 
 

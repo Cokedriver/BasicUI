@@ -66,7 +66,7 @@ local PaneBackdrop  = {
 }
 
 local function Constructor()
-	local frame = CreateFrame("Frame", nil, UIParent)
+	local frame = CreateFrame("Frame", nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 	frame:SetFrameStrata("FULLSCREEN_DIALOG")
 
 	local titletext = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -75,7 +75,7 @@ local function Constructor()
 	titletext:SetJustifyH("LEFT")
 	titletext:SetHeight(18)
 
-	local border = CreateFrame("Frame", nil, frame)
+	local border = CreateFrame("Frame", nil, frame, BackdropTemplateMixin and "BackdropTemplate")
 	border:SetPoint("TOPLEFT", 0, -17)
 	border:SetPoint("BOTTOMRIGHT", -1, 3)
 	border:SetBackdrop(PaneBackdrop)
@@ -83,7 +83,7 @@ local function Constructor()
 	border:SetBackdropBorderColor(0.4, 0.4, 0.4)
 
 	--Container Support
-	local content = CreateFrame("Frame", nil, border)
+	local content = CreateFrame("Frame", nil, border, BackdropTemplateMixin and "BackdropTemplate")
 	content:SetPoint("TOPLEFT", 10, -10)
 	content:SetPoint("BOTTOMRIGHT", -10, 10)
 

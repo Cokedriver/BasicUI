@@ -71,7 +71,7 @@ local function RegisterFrame(frame)
 	frame:SetScript("OnHyperlinkLeave", OnHyperlinkLeave)
 end
  
-local cHyperLink = CreateFrame("Frame")
+local cHyperLink = CreateFrame('Frame',nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 cHyperLink:RegisterEvent("PLAYER_LOGIN")
 cHyperLink:SetScript("OnEvent", function(self, event, name)
 	if event == "PLAYER_LOGIN" then
@@ -167,7 +167,8 @@ function MODULE:OnEnable()
 	end
 
 		-- Modify the editbox
-
+	
+	Mixin(ChatFrame1EditBox, BackdropTemplateMixin)
 	ChatFrame1EditBox:SetAltArrowKeyMode(false)
 	ChatFrame1EditBox:ClearAllPoints()
 	ChatFrame1EditBox:SetPoint('BOTTOMLEFT', ChatFrame1, 'TOPLEFT', 2, 33)
@@ -285,7 +286,7 @@ function MODULE:OnEnable()
 	------------------------------------------------------------------------
 	--	 add a sound notification on incoming whispers
 	------------------------------------------------------------------------
-	local SoundFrame = CreateFrame('Frame')
+	local SoundFrame = CreateFrame('Frame', nil, UIParent, BackdropTemplateMixin and "BackdropTemplate" )
 	SoundFrame:RegisterEvent('ADDON_LOADED')
 	SoundFrame:RegisterEvent('CHAT_MSG_WHISPER')
 	SoundFrame:RegisterEvent('CHAT_MSG_BN_WHISPER')
@@ -298,58 +299,58 @@ function MODULE:OnEnable()
 	------------------------------------------------------------------------
 	--	 Skin the Chat Bubbles
 	------------------------------------------------------------------------
-	local select, pairs = select, pairs
-	local format = string.format
-	local CreateFrame = CreateFrame
-	local C_ChatBubbles_GetAllChatBubbles = C_ChatBubbles.GetAllChatBubbles
-	local RAID_CLASS_COLORS = RAID_CLASS_COLORS
-
-	local function StyleBubble(frame)
-		for i=1, frame:GetNumRegions() do
-			local region = select(i, frame:GetRegions())
-			if region:GetObjectType() == "Texture" then
-				region:SetTexture(nil)
-			elseif region:GetObjectType() == "FontString" then
-				frame.text = region
-			end
-		end
-		
-		frame.text:SetFontObject('SystemFont_Small')
-		frame.text:SetJustifyH('LEFT')
-
-		frame:ClearAllPoints()
-		frame:SetPoint('TOPLEFT', frame.text, -7, 7)
-		frame:SetPoint('BOTTOMRIGHT', frame.text, 7, -7)
-		frame:SetBackdrop({
-			bgFile = [[Interface\Tooltips\UI-Tooltip-Background]],
-			edgeFile = [[Interface\Tooltips\UI-Tooltip-Border]],
-			tile = true,
-			tileSize = 16,
-			edgeSize = 12,
-			insets = {left=3, right=3, top=3, bottom=3},
-		})
-		frame:SetBackdropColor(0, 0, 0, 1)
-		
-		local r, g, b = frame.text:GetTextColor()
-		frame:SetBackdropBorderColor(r, g, b, .8)
-				
-		frame.isSkinned = true
-	end
-
-	local frame = CreateFrame('Frame')
-	frame.lastupdate = -2 -- wait 2 seconds before hooking frames
-	local numChildren = 0
-	frame:SetScript('OnUpdate', function(self, elapsed, guid, name)
-		self.lastupdate = self.lastupdate + elapsed
-		if (self.lastupdate < .1) then return end
-		self.lastupdate = 0	
-		
-		for _, chatBubble in pairs(C_ChatBubbles_GetAllChatBubbles()) do
-			if not chatBubble.isSkinned then				
-				StyleBubble(chatBubble)
-			end
-		end
-	end)
+--	local select, pairs = select, pairs
+--	local format = string.format
+--	local CreateFrame = CreateFrame
+--	local C_ChatBubbles_GetAllChatBubbles = C_ChatBubbles.GetAllChatBubbles
+--	local RAID_CLASS_COLORS = RAID_CLASS_COLORS
+--
+--	local function StyleBubble(frame)
+--		for i=1, frame:GetNumRegions() do
+--			local region = select(i, frame:GetRegions())
+--			if region:GetObjectType() == "Texture" then
+--				region:SetTexture(nil)
+--			elseif region:GetObjectType() == "FontString" then
+--				frame.text = region
+--			end
+--		end
+--		
+--		frame.text:SetFont([[Fonts\ARIALN.ttf]])
+--		frame.text:SetJustifyH('LEFT')
+--
+--		frame:ClearAllPoints()
+--		frame:SetPoint('TOPLEFT', frame.text, -7, 7)
+--		frame:SetPoint('BOTTOMRIGHT', frame.text, 7, -7)
+--		frame:SetBackdrop({
+--			bgFile = [[Interface\Tooltips\UI-Tooltip-Background]],
+--			edgeFile = [[Interface\Tooltips\UI-Tooltip-Border]],
+--			tile = true,
+--			tileSize = 16,
+--			edgeSize = 12,
+--			insets = {left=3, right=3, top=3, bottom=3},
+--		})
+--		frame:SetBackdropColor(0, 0, 0, 1)
+--		
+--		local r, g, b = frame.text:GetTextColor()
+--		frame:SetBackdropBorderColor(r, g, b, .8)
+--				
+--		frame.isSkinned = true
+--	end
+--
+--	local frame = CreateFrame('Frame', nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
+--	frame.lastupdate = -2 -- wait 2 seconds before hooking frames
+--	local numChildren = 0
+--	frame:SetScript('OnUpdate', function(self, elapsed, guid, name)
+--		self.lastupdate = self.lastupdate + elapsed
+--		if (self.lastupdate < .1) then return end
+--		self.lastupdate = 0	
+--		
+--		for _, chatBubble in pairs(C_ChatBubbles_GetAllChatBubbles()) do
+--			if not chatBubble.isSkinned then				
+--				StyleBubble(chatBubble)
+--			end
+--		end
+--	end)
 end
 ------------------------------------------------------------------------
 --	 Module options

@@ -193,6 +193,7 @@ function MODULE:OnEnable()
 		GameTooltipTextSmall:SetFont(STANDARD_TEXT_FONT, (db.fontSize))
 	end
 
+	Mixin(GameTooltipStatusBar, BackdropTemplateMixin)
 	GameTooltipStatusBar:SetHeight(7)
 	GameTooltipStatusBar:SetBackdrop({bgFile = [[Interface\Buttons\WHITE8x8]]})
 	GameTooltipStatusBar:SetBackdropColor(0, 1, 0, 0.3)
@@ -596,7 +597,7 @@ function MODULE:OnEnable()
 	end
 
 	local function CreateAnchor()
-		local anchorFrame = CreateFrame("Frame", "addon_Anchor", UIParent)
+		local anchorFrame = CreateFrame("Frame", "addon_Anchor", UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		anchorFrame:SetSize(50, 50)
 		anchorFrame:SetScale(1.2)
 		anchorFrame:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -75, 75)
