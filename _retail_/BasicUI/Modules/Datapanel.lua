@@ -563,7 +563,7 @@ function MODULE:CreateStats()
 		if not db['Gold'][myPlayerRealm][myPlayerFaction] then db['Gold'][myPlayerRealm][myPlayerFaction] = {} end
 		db['Gold'][myPlayerRealm][myPlayerFaction][myPlayerName] = GetMoney()	
 			
-		OldMoney = NewMoney	
+		local OldMoney = NewMoney	
 				
 		end
 

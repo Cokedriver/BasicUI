@@ -10,6 +10,12 @@ local defaults = {
 		enable = true,
 		UnitScale = 1.2,
 		UnitframeFont = [[Interface\AddOns\BasicUI\Media\Expressway_Rg_BOLD.ttf]],
+		
+		castbars = {
+			playerscale = 1.2,
+			targetmove = true,
+			targetscale = 1.5,
+		},
 	},
 }
 
@@ -155,18 +161,20 @@ function MODULE:OnEnable()
 	--[[ Castbar Scaling ]]--
 	----------------------------------------------------------
 	-- Player Castbar
-	CastingBarFrame:SetScale(db.UnitScale)
 
-	-- Target Castbar	
-	hooksecurefunc("Target_Spellbar_AdjustPosition", function(self)
-		if self == TargetFrameSpellBar then
-			self:ClearAllPoints()
-			self:SetPoint("CENTER", UIParent, "CENTER", 0, 40)
-		end
-	end)
-	TargetFrameSpellBar:SetScript("OnShow", Target_Spellbar_AdjustPosition)
-	TargetFrameSpellBar:SetScale(1.5)
+	CastingBarFrame:SetScale(db.castbars.playerscale)
 
+	-- Target Castbar
+	if db.castbars.targetmove == true then	
+		hooksecurefunc("Target_Spellbar_AdjustPosition", function(self)
+			if self == TargetFrameSpellBar then
+				self:ClearAllPoints()
+				self:SetPoint("CENTER", UIParent, "CENTER", 0, 40)
+			end
+		end)
+		TargetFrameSpellBar:SetScript("OnShow", Target_Spellbar_AdjustPosition)
+		TargetFrameSpellBar:SetScale(db.castbars.targetscale)
+	end
 	----------------------------------------------------------
 
 
@@ -288,11 +296,69 @@ function MODULE:GetOptions()
 			UnitScale = {
 				type = "range",
 				order = 2,
-				name = L["Frame Scale"],
-				desc = L["Controls the scaling of Blizzard Unit Frames "],
+				name = L["Player, Target, and Focus Frames Scale"],
+				desc = L["Controls the scaling of Player, Target, and Focus Frames."],
 				min = 0.5, max = 2, step = 0.05,
 				disabled = function() return isModuleDisabled() or not db.enable end,																
-			},			
+			},
+			castbars = {
+				type = "group",
+				order = 3,
+				name = L["Castbar Frame"],
+				desc = L["Castbar Frame Options."],
+				guiInline  = true,
+				disabled = function() return isModuleDisabled() or not db.enable end,
+				get = function(info) return db.castbars[ info[#info] ] end,
+				set = function(info, value) db.castbars[ info[#info] ] = value; StaticPopup_Show("CFG_RELOAD") end,
+				args = {
+					---------------------------
+					--Option Type Seperators
+					sep1 = {
+						type = "description",
+						order = 2,
+						name = " ",
+					},
+					sep2 = {
+						type = "description",
+						order = 3,
+						name = " ",
+					},
+					sep3 = {
+						type = "description",
+						order = 4,
+						name = " ",
+					},
+					sep4 = {
+						type = "description",
+						order = 5,
+						name = " ",
+					},
+					---------------------------
+					playerscale = {
+						type = "range",
+						order = 1,
+						name = L["Scale the Player's Castbar"],
+						desc = L["Controls the scaling of the Player's Castbar"],
+						min = 0.5, max = 2, step = 0.05,
+						disabled = function() return isModuleDisabled() or not db.enable end,																
+					},
+					targetmove = {
+						type = "toggle",
+						order = 2,
+						name = L["Move Target Castbar"],
+						desc = L["Moves the Target's Castbar to the middle of the screen."],
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					targetscale = {
+						type = "range",
+						order = 3,
+						name = L["Scale the Target's Castbar"],
+						desc = L["Controls the scaling of the target's Castbar"],
+						min = 0.5, max = 2, step = 0.05,
+						disabled = function() return isModuleDisabled() or not db.enable or not db.castbars.targetmove end,																
+					},					
+				},
+			},
 		},
 	}
 	return options
