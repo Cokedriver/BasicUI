@@ -1,7 +1,7 @@
 ## Interface: 90001
 ## Title:|cff00B4FFBasic|rUI
 ## Author: SiDuB 
-## Version: 9.0.1
+## Version: 9.0.2
 ## Notes: SiDuB's Version of a Basic UserIterface.
 ## SavedVariables: BasicDB
 ## SavedVariablesPerCharacter: BasicDBPerCharacter
