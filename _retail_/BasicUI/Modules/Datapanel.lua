@@ -481,7 +481,6 @@ function MODULE:CreateStats()
 
 		local Profit	= 0
 		local Spent		= 0
-		local OldMoney	= 0
 		local myPlayerName  = UnitName("player");
 		local myPlayerRealm = GetRealmName();
 		local myPlayerFaction = UnitFactionGroup('player')
@@ -541,29 +540,27 @@ function MODULE:CreateStats()
 				self:SetAllPoints(Text)
 				
 			end
-		if event == "PLAYER_ENTERING_WORLD" then
-			OldMoney = GetMoney()
-		end
-		
-		local NewMoney	= GetMoney()
-		
-		local Change = NewMoney - OldMoney -- Positive if we gain money
-		
-		if OldMoney>NewMoney then		-- Lost Money
-			Spent = Spent - Change
-		else							-- Gained Money
-			Profit = Profit + Change
-		end
-		
-		self:SetAllPoints(Text)
-
-		if not db then db = {} end					
-		if not db['Gold'] then db['Gold'] = {} end
-		if not db['Gold'][myPlayerRealm] then db['Gold'][myPlayerRealm] = {} end
-		if not db['Gold'][myPlayerRealm][myPlayerFaction] then db['Gold'][myPlayerRealm][myPlayerFaction] = {} end
-		db['Gold'][myPlayerRealm][myPlayerFaction][myPlayerName] = GetMoney()	
 			
-		local OldMoney = NewMoney	
+			local NewMoney	= GetMoney()
+			
+			if not db then db = {} end					
+			if not db['Gold'] then db['Gold'] = {} end
+			if not db['Gold'][myPlayerRealm] then db['Gold'][myPlayerRealm] = {} end
+			if not db['Gold'][myPlayerRealm][myPlayerFaction] then db['Gold'][myPlayerRealm][myPlayerFaction] = {} end
+
+			local OldMoney = db['Gold'][myPlayerRealm][myPlayerFaction][myPlayerName] or NewMoney			
+			
+			local Change = NewMoney - OldMoney -- Positive if we gain money
+			
+			if (OldMoney > NewMoney) then		-- Lost Money
+				Spent = Spent - Change
+			else							-- Gained Money
+				Profit = Profit + Change
+			end
+			
+			self:SetAllPoints(Text)
+			
+			db['Gold'][myPlayerRealm][myPlayerFaction][myPlayerName] = NewMoney
 				
 		end
 
@@ -601,7 +598,6 @@ function MODULE:CreateStats()
 			end
 			GameTooltip:AddLine(" ")
 			
-			local totalGold = 0
 			local totalAllianceGold = 0
 			local totalHordeGold = 0
 			local totalNeutralGold = 0

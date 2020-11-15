@@ -310,15 +310,20 @@ function MODULE:OnEnable()
 		return math.floor(100*currentHP/maxHP)
 	end
 
+	local function CalcRuneCooldown(num)
+		local start, duration, runeReady = GetRuneCooldown(num)
 
-	local function CalcRuneCooldown(self)
-		local start, duration, runeReady = GetRuneCooldown(self)
+		-- Sometimes GetRuneCooldown returns nil for some reason.
+		if not start then
+			return
+		end
+
 		local time = floor(GetTime() - start)
 		local cooldown = ceil(duration - time)
 
-		if (runeReady or UnitIsDeadOrGhost('player')) then
-			return '#'
-		elseif (not UnitIsDeadOrGhost('player') and cooldown) then
+		if runeReady or UnitIsDeadOrGhost("player") then
+			return "#"
+		elseif not UnitIsDeadOrGhost("player") and cooldown then
 			return cooldown
 		end
 	end
