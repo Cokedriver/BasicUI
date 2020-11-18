@@ -1,7 +1,7 @@
 ## Interface: 90002
 ## Title:|cff00B4FFBasic|rUI
 ## Author: Cokedriver 
-## Version: 9.0.3
+## Version: 9.0.2-1
 ## Notes: Cokedriver's Version of a Basic User Interface.
 ## SavedVariables: BasicDB
 ## SavedVariablesPerCharacter: BasicDBPerCharacter
