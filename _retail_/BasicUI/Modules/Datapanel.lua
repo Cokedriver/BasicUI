@@ -14,6 +14,13 @@ local defaults = {
 		enable = true,
 		
 		font = [[Fonts\ARIALN.ttf]],
+		
+		-- Show Panels
+		tpShow = true,
+		mpShow = true,
+		bpShow = true,
+
+		
 		fontSize = 17,
 			
 		battleground = false,                            	-- enable 3 stats in battleground only that replace stat1,stat2,stat3.
@@ -164,7 +171,7 @@ end
 ------------------------------------------------------------------------
 
 function MODULE:CreatePanels()
-	if DataP1 then return end -- already done
+	--if DataP1 then return end -- already done
 	
 	-- Create All Panels
 	------------------------------------------------------------------------
@@ -190,32 +197,33 @@ function MODULE:CreatePanels()
 	
 	-- Stat Panel 1 Settings
 	------------------------------------------------------------------------
-	DataP1:SetPoint("BOTTOM", DataP2, "TOP", 0, 0)
+	DataP1:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 15, 65)
 	DataP1:SetWidth(1200 / 3)
 	DataP1:SetBackdrop({ 
 		bgFile = [[Interface\DialogFrame\UI-DialogBox-Background-Dark]], 
 	})
 	DataP1:SetBackdropColor(0, 0, 0, 0.60)
-	DataP1:RegisterEvent("PLAYER_ENTERING_WORLD")
-	DataP1:SetScript("OnEvent", function(self, event, ...)
-		if event == 'PLAYER_ENTERING_WORLD' then
-			local inInstance, instanceType = IsInInstance()
-			if inInstance and (instanceType == 'pvp') then			
-				self:Hide()
-			else
-				self:Show()
-			end
-		end
-	end)	
+	
+	if db.tpShow == false then
+		DataP1:Hide()	
+	else
+		DataP1:Show()
+	end
 	
 	-- Stat Panel 2 Settings
 	-----------------------------------------------------------------------
-	DataP2:SetPoint("BOTTOM", DataP3, "TOP", 0, 0)
+	DataP2:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 15, 35)
 	DataP2:SetWidth(1200 / 3)
 	DataP2:SetBackdrop({ 
 		bgFile = [[Interface\DialogFrame\UI-DialogBox-Background-Dark]], 
 	})
 	DataP2:SetBackdropColor(0, 0, 0, 0.60)
+	
+	if db.mpShow == false then
+		DataP2:Hide()	
+	else
+		DataP2:Show()
+	end
 	
 	-- Stat Panel 3 Settings
 	-----------------------------------------------------------------------
@@ -226,13 +234,19 @@ function MODULE:CreatePanels()
 	})
 	DataP3:SetBackdropColor(0, 0, 0, 0.60)
 	
+	if db.bpShow == false then
+		DataP3:Hide()	
+	else
+		DataP3:Show()
+	end	
+	
 	-- Battleground Stat Panel Settings
 	-----------------------------------------------------------------------
-	DataBGP:SetAllPoints(DataP1)
-	DataBGP:SetBackdrop({ 
-		bgFile = [[Interface\DialogFrame\UI-DialogBox-Background-Dark]], 
-	})
-	DataBGP:SetBackdropColor(0, 0, 0, 0.60)
+	--DataBGP:SetAllPoints(DataP1)
+	--DataBGP:SetBackdrop({ 
+		--bgFile = [[Interface\DialogFrame\UI-DialogBox-Background-Dark]], 
+	--})
+	--DataBGP:SetBackdropColor(0, 0, 0, 0.60)
 
 
 end
@@ -470,7 +484,7 @@ function MODULE:CreateStats()
 	--------
 
 	if db.bags then
-		local bagsPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
+		local bagsPlugin = CreateFrame('Frame', nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		bagsPlugin:EnableMouse(true)
 		bagsPlugin:SetFrameStrata('BACKGROUND')
 		bagsPlugin:SetFrameLevel(3)
@@ -665,7 +679,7 @@ function MODULE:CreateStats()
 	-- Call To Arms
 	----------------
 	if db.calltoarms then
-		local ctaPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
+		local ctaPlugin = CreateFrame('Frame', nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		ctaPlugin:EnableMouse(true)
 		ctaPlugin:SetFrameStrata("MEDIUM")
 		ctaPlugin:SetFrameLevel(3)
@@ -790,7 +804,7 @@ function MODULE:CreateStats()
 	-- Damage Per Second
 	---------------------
 	if db.dps then
-		local dpsPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
+		local dpsPlugin = CreateFrame('Frame', nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		dpsPlugin:EnableMouse(true)
 		dpsPlugin:SetFrameStrata('BACKGROUND')
 		dpsPlugin:SetFrameLevel(3)
@@ -902,7 +916,7 @@ function MODULE:CreateStats()
 		}
 
 
-		local durPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
+		local durPlugin = CreateFrame('Frame', nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		durPlugin:EnableMouse(true)
 		durPlugin:SetFrameStrata("MEDIUM")
 		durPlugin:SetFrameLevel(3)
@@ -1089,7 +1103,7 @@ function MODULE:CreateStats()
 		end
 	end
 
-	local friendsPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
+	local friendsPlugin = CreateFrame('Frame', nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 	friendsPlugin:EnableMouse(true)
 	friendsPlugin:SetFrameStrata("MEDIUM")
 	friendsPlugin:SetFrameLevel(3)
@@ -1430,7 +1444,7 @@ function MODULE:CreateStats()
 	---------
 	if db.guild then
 
-		local guildPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
+		local guildPlugin = CreateFrame('Frame', nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		guildPlugin:EnableMouse(true)
 		guildPlugin:SetFrameStrata("MEDIUM")
 		guildPlugin:SetFrameLevel(3)
@@ -1715,7 +1729,7 @@ function MODULE:CreateStats()
 	---------------
 	if db.pro then
 
-		local proPlugin = CreateFrame('Button', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
+		local proPlugin = CreateFrame('Button', nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		proPlugin:RegisterEvent('PLAYER_ENTERING_WORLD')
 		proPlugin:SetFrameStrata('BACKGROUND')
 		proPlugin:SetFrameLevel(3)
@@ -1817,7 +1831,7 @@ function MODULE:CreateStats()
 		end
 
 		
-		local recountPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
+		local recountPlugin = CreateFrame('Frame', nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		recountPlugin:EnableMouse(true)
 		recountPlugin:SetFrameStrata("MEDIUM")
 		recountPlugin:SetFrameLevel(3)
@@ -1955,7 +1969,7 @@ function MODULE:CreateStats()
 	--------------------
 	if db.spec then
 
-		local specPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
+		local specPlugin = CreateFrame('Frame', nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		specPlugin:EnableMouse(true)
 		specPlugin:SetFrameStrata('BACKGROUND')
 		specPlugin:SetFrameLevel(3)
@@ -2058,7 +2072,7 @@ function MODULE:CreateStats()
 	-----------------
 	if db.stats then
 
-		local statsPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
+		local statsPlugin = CreateFrame('Frame', nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		statsPlugin:RegisterEvent("PLAYER_ENTERING_WORLD")
 		statsPlugin:SetFrameStrata("BACKGROUND")
 		statsPlugin:SetFrameLevel(3)
@@ -2223,7 +2237,7 @@ function MODULE:CreateStats()
 	-------------------
 	if db.system then
 
-		local systemPlugin = CreateFrame('Frame', nil, DataP1, BackdropTemplateMixin and "BackdropTemplate")
+		local systemPlugin = CreateFrame('Frame', nil, UIParent, BackdropTemplateMixin and "BackdropTemplate")
 		systemPlugin:RegisterEvent("PLAYER_ENTERING_WORLD")
 		systemPlugin:SetFrameStrata("BACKGROUND")
 		systemPlugin:SetFrameLevel(3)
@@ -2418,15 +2432,15 @@ function MODULE:GetOptions()
 
 	local statposition = {
 		["P0"] = L["Not Shown"],
-		["P1"] = L["Position #1"],
-		["P2"] = L["Position #2"],
-		["P3"] = L["Position #3"],
-		["P4"] = L["Position #4"],
-		["P5"] = L["Position #5"],
-		["P6"] = L["Position #6"],
-		["P7"] = L["Position #7"],
-		["P8"] = L["Position #8"],
-		["P9"] = L["Position #9"],
+		["P1"] = L["Top Panel Left"],
+		["P2"] = L["Top Panel Middle"],
+		["P3"] = L["Top Panel Right"],
+		["P4"] = L["Middle Panel Left"],
+		["P5"] = L["Middle Panel Middle"],
+		["P6"] = L["Middle Panel Right"],
+		["P7"] = L["Bottom Panel Left"],
+		["P8"] = L["Bottom Panel Middle"],
+		["P9"] = L["Bottom Panel Right"],
 	}
 	
 	options = {
@@ -2512,20 +2526,44 @@ function MODULE:GetOptions()
 				step = 1,
 				disabled = function() return isModuleDisabled() or not db.enable end,
 			},
-			DataGroup = {
+			DataGroup1 = {
+				type = "group",
+				order = 5,
+				name = L["Show or Hide Panels"],
+				guiInline  = true,
+				disabled = function() return isModuleDisabled() or not db.enable end,
+				args = {
+					tpShow = {
+						type = "toggle",
+						order = 2,
+						name = L["Top Panel"],
+						desc = L["If checked the top panel will show."],
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					mpShow = {
+						type = "toggle",
+						order = 2,
+						name = L["Middle Panel"],
+						desc = L["If checked the middle panel will show."],
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+					bpShow = {
+						type = "toggle",
+						order = 2,
+						name = L["Bottom Panel"],
+						desc = L["If checked the bottom panel will show."],
+						disabled = function() return isModuleDisabled() or not db.enable end,
+					},
+				},
+			},	
+			
+			DataGroup2 = {
 				type = "group",
 				order = 5,
 				name = L["Text Positions"],
 				guiInline  = true,
 				disabled = function() return isModuleDisabled() or not db.enable end,
 				args = {
-					GroupDesc = {
-						type = "description",
-						order = 0,
-						name = " ",
-						desc = L["Chose wich location you would like each stat."],
-						width = "full",
-					},
 					bags = {
 						type = "select",
 						order = 2,
